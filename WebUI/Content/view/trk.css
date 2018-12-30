@@ -1,0 +1,157 @@
+﻿body {
+    padding: 10px;
+    font-size: 14px;
+}
+
+div {
+    border-radius: 3px;
+}
+
+fieldset {
+    padding: 3px;
+    margin: 3px;
+    border: 1px solid #c0c0c0;
+}
+
+legend {
+    padding: 0;
+    border: 0;
+    width: auto;
+    font-size: inherit;
+    margin-bottom: 0;
+}
+
+.trk {
+    border: 1px solid #808080;
+    width: 1030px;
+}
+
+.trk-left {
+    width: 500px;
+    float: left;
+    border: 1px solid #808080;
+}
+
+.trk-right {
+    margin-left:10px;
+    width: 500px;
+    float: left;
+    border: 1px solid #808080;
+}
+
+.trk-rfid {
+    height:30px;
+    padding: 0px 5px;
+    background-color:#eeeaea;
+}
+
+.button-rfid {
+    margin: 3px;
+    height: 25px;
+    font-size:12px;
+}
+
+.button-deliver {
+    margin: 3px;
+    height: 25px;
+    font-size:12px;
+}
+
+.button-rfid-active {
+    background-color: #b6ff00;
+}
+
+    .button-rfid-active:hover {
+        background-color: #9cd905;
+    }
+
+.button-rfid-not-active {
+    background-color: #fe9a7f;
+}
+
+    .button-rfid-not-active:hover {
+        background-color: #ff7259;
+    }
+
+.label-rfid {
+    font-weight: normal;
+    font-style:italic;
+    color:crimson;
+}
+
+.table {
+    margin:0;
+}
+
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+    padding:0;
+}
+
+.table-gun th {
+    font-size:12px;
+    font-weight: normal;
+    text-align:center
+}
+
+.input-gun-volume {
+    width:100px;
+    height:25px;
+    margin:3px;
+}
+
+td.active {
+    /*width: 20px;
+    height: 20px;*/
+    background: url('../../Images/active.png') no-repeat center center;
+}
+
+td.not_active {
+    /*width: 20px;
+    height: 20px;*/
+    background: url('../../Images/not_active.png') no-repeat center center;
+}
+
+td.null_active {
+    /*width: 20px;
+    height: 20px;*/
+    background: url('../../Images/null_active.png') no-repeat center center;
+}
+
+.error {
+    background: #fddfdf
+}
+
+#table-confirm-rfid-card th {
+    width:250px;
+    text-align:right;
+}
+
+#table-confirm-rfid-card td {
+    width:300px;
+    text-align:left
+}
+
+    #table-confirm-rfid-card td input, #table-confirm-rfid-card td textarea {
+        width: 95%;
+    }
+
+
+.ui-progressbar {
+    position: relative;
+}
+
+
+.progressbar-deliver {
+    width: 95%;
+    margin: 3px;
+    height: 25px;
+}
+.progress-label {
+    font-size:13px;
+    margin:2px;
+    position: absolute;
+    left: 50%;
+    font-weight: normal;
+    font-style:italic;
+    text-shadow: 1px 1px 0 #fff;
+}
