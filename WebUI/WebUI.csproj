@@ -64,6 +64,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -191,6 +194,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\api\azsCardsController.cs" />
+    <Compile Include="Controllers\api\SAPController.cs" />
     <Compile Include="Controllers\api\TRKController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -277,6 +281,10 @@
     <ProjectReference Include="..\ClientOPCTRK\ClientOPCTRK.csproj">
       <Project>{cc3ab0de-73ad-44dd-ac2d-366c45f36555}</Project>
       <Name>ClientOPCTRK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClientSAPTRK\ClientSAPTRK.csproj">
+      <Project>{8377fb48-350b-47c5-8035-36f4516019ad}</Project>
+      <Name>ClientSAPTRK</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

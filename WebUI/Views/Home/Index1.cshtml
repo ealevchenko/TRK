@@ -222,3 +222,258 @@
 </body>
 
 </html>
+
+<div id="confirm-deliver-fuel" title="" style="display:none">
+    <form id="form-deliver-fuel">
+        <table>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend>Выдача топлива</legend>
+                        <table id="delivery-fuel">
+                            <tr>
+                                <th><label for="deliver-Active" id="label-active-cards">Карта активная:</label></th>
+                                <td><input id="deliver-Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th><label for="deliver-Number" id="label-number-cards">Номер карты:</label></th>
+                                <td><input id="deliver-Number" name="Number" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th><label for="deliver-AutoNumber" id="label-autonumber-cards">Номер авто:</label></th>
+                                <td><input id="deliver-AutoNumber" name="AutoNumber" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th><label for="deliver-Taken" id="label-taken">Пистолет снят:</label></th>
+                                <td><input id="deliver-Taken" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th><label for="deliver-Capacity" id="label-capacitys">Емкость:</label></th>
+                                <td><select id="deliver-Capacity" name="Capacity" class="ui-widget-content ui-corner-all"></select></td>
+                            </tr>
+                            <tr>
+                                <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива:</label></th>
+                                <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            @*<tr>
+                                    <th><label for="AutoModel" id="label-automodel-cards"></label></th>
+                                    <td><input id="AutoModel" name="AutoModel" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                </tr>*@
+
+                            <tr>
+                                <th><label for="deliver-Passage" id="label-passage">Технический пролив</label></th>
+                                <td><input id="deliver-Passage" name="Passage" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            @*<tr>
+                                    <td></td>
+                                    <td><button id="start" type="button" class="ui-button ui-widget ui-corner-all">Начать выдачу</button></td>
+                                </tr>*@
+                        </table>
+
+                    </fieldset>
+                </td>
+                <td>
+                    <fieldset>
+                        <legend>САП</legend>
+                        Вариант выдачи:<select id="deliver-variant-sap" name="variant-sap" class="ui-widget-content ui-corner-all"></select>
+                        <table id="delivery-sap">
+                            <tr id="sap-num-ishod-postavki">
+                                <th>
+                                    Номер исх.поставки:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-ishod-postavki" name="sap-num-ishod-postavki" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+
+                            <tr id="sap-num-position-ip">
+                                <th>
+                                    Номер позиции ИП:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-position-ip" name="sap-num-position-ip" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-num-rezerv">
+                                <th>
+                                    Номер резервирования:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-rezerv" name="sap-num-rezerv" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-num-m11">
+                                <th>
+                                    Номер требования М-11:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-m11" name="sap-num-m11" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+
+                            <tr id="sap-num-TC">
+                                <th>
+                                    Номер ТС фактический:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-TC" name="sap-num-rezerv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-num-kpp">
+                                <th>
+                                    № КПП:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-num-kpp" name="sap-num-kpp" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-fio-exp">
+                                <th>
+                                    ФИО экспедитора:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-fio-exp" name="sap-fio-exp" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-ozm-rezerv">
+                                <th>
+                                    ОЗМ из резервирования:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-ozm-rezerv" name="sap-ozm-rezerv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+
+                            <tr id="sap-ozm-postavka">
+                                <th>
+                                    ОЗМ из поставки:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-ozm-postavka" name="sap-ozm-postavka" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-ozm">
+                                <th>
+                                    ОЗМ:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-ozm" name="sap-ozm" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-ozm-bak">
+                                <th>
+                                    ОЗМ согласно бака:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-ozm-bak" name="sap-ozm-bak" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-sklad-pol-reserv">
+                                <th>
+                                    Склад получателя из резервирования:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-sklad-pol-reserv" name="sap-sklad-pol-reserv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-sklad-pol">
+                                <th>
+                                    Склад получателя:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-sklad-pol" name="sap-sklad-pol" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-sklad-pol-mat-ip">
+                                <th>
+                                    Получатель материала в ИП:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-sklad-pol-mat-ip" name="sap-sklad-pol-mat-ip" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-zavod-pol">
+                                <th>
+                                    Завод-получатель:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-zavod-pol" name="sap-zavod-pol" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            <tr id="sap-id-card">
+                                <th>
+                                    ИД карта:
+                                </th>
+                                <td>
+                                <td>
+                                    <input id="sap-id-card" name="sap-id-card" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                </td>
+                            </tr>
+                            @*•	Номер резервирования (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
+                                •	Номер позиции – открыт для ввода – импорт при вызове вебсервиса
+                                •	Номер ТС фактический (открыто для ввода, справочника нет)
+                                •	№ КПП (открыто для ввода, справочника нет)
+                                •	ФИО экспедитора (открыто для ввода, справочника нет)
+                                •	ОЗМ из резервирования (в режиме просмотра) – экспорт из SAP MII
+                                •	ОЗМ согласно бака (в режиме просмотра) - Код ОЗМ+ название ОЗМ (на основании справочника в АСУ)
+                                •	Склад получателя из резервирования (в режиме просмотра) – экспорт из SAP MII (код склада+наименование склада)
+                                •	Завод-получатель (в режиме просмотра) – экспорт из SAP MII
+                                                        •	ИД карта (открыто для ввода, справочник в АСУ)*@
+
+                            @*•	Номер исх.поставки (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
+                                •	Номер позиции ИП (просмотр) – экспорт из SAP MII
+                                •	Номер ТС фактический (открыто для ввода, справочника нет)
+                                •	№ КПП (в режиме изменения) – ввод вручную
+                                •	ФИО экспедитора (в режиме изменения) – ввод вручную
+                                •	ОЗМ из поставки (в режиме просмотра) – экспорт из SAP MII
+                                •	ОЗМ согласно бака (колонки) (в режиме просмотра)  (на основании справочника в АСУ)
+                                •	Склад получателя = Получатель материала в ИП (в режиме просмотра) – экспорт из SAP MII (вывести номер дебитора + Наименование дебитора)*@
+
+                            @*•	Номер требования М-11 (открыто для ввода, справочника нет)
+                                •	Номер ТС фактический (открыто для ввода, справочника нет)
+                                •	№ КПП (открыто для ввода, справочника нет)
+                                •	ФИО экспедитора (открыто для ввода, справочника нет)
+                                •	ОЗМ (открыто для ввода, справочник есть, ввод только из справочника АСУ) + название ОЗМ
+                                •	ОЗМ согласно бака (в режиме просмотра) + название ОЗМ (вывод из справочника в АСУ)
+                                •	Склад получателя (открыто для ввода, справочник есть, ввод только из справочника) +Наименование склада
+                                •	Завод получателя (открыто для ввода, справочник есть, ввод только из справочника)*@
+
+                            @*•	Номер резервирования (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
+                                •	Номер позиции – открыт для ввода – импорт при вызове вебсервиса
+                                •	Номер ТС фактический (справочник дебиторов, загруженный в базу АСУ из SAP)  - номер дебитора, номер ТС, марка ТС. – подтягивается автоматически по ИД карте.
+                                •	№ КПП (открыто для ввода, справочника нет)
+                                •	ФИО экспедитора (открыто для ввода, справочника нет)
+                                •	ОЗМ из резервирования (в режиме просмотра) – экспорт из SAP MII
+                                •	ОЗМ согласно бака (в режиме просмотра) - Код ОЗМ+ название ОЗМ (на основании справочника в АСУ)
+                                •	Склад получателя из резервирования (в режиме просмотра) – экспорт из SAP MII (код склада+наименование склада)
+                                •	Завод-получатель (в режиме просмотра) – экспорт из SAP MII
+                                •	ИД карта (открыто для ввода, справочник в АСУ) – сканирование ИД карты, контроль на наличие в справочнике.*@
+
+
+
+
+                        </table>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+
+    </form>
+</div>
