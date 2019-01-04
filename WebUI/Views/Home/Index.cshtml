@@ -66,7 +66,30 @@
                     </div>
                     <fieldset>
                         <legend> Пистолет №: 12 (A92) </legend>
-
+                        <table class="table table-gun">
+                            <tr>
+                                <th>Связь</th>
+                                <th>Снят</th>
+                                <th>Всего, м3</th>
+                                <th>Заданно, л</th>
+                                <th>Выдано, л</th>
+                            </tr>
+                            <tr>
+                                <td id="gun-12-online"></td>
+                                <td id="gun-12-taken"></td>
+                                <td><input id="gun-12-total_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                <td><input id="gun-12-volume_to_write" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                <td><input id="gun-12-last_out_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button id="button-gun-12-deliver" data-gun="12" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                </td>
+                                <td colspan="3">
+                                    <div id="progressbar-gun-12" class="progressbar-deliver"><div id="progress-label-gun-12" class="progress-label">Заправка...</div></div>
+                                </td>
+                            </tr>
+                        </table>
                     </fieldset>
                 </div>
             </fieldset>
@@ -101,10 +124,6 @@
                         <th><label for="Sn1" id="label-sn1-cards"></label>Код транспортного средства :</th>
                         <td><input id="Sn1" name="Sn1" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
-                    @*<tr>
-                            <th><label for="Sn2" id="label-sn2-cards"></label>Sn2 :</th>
-                            <td><input id="Sn2" name="Sn1" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                        </tr>*@
                     <tr>
                         <th><label for="AutoModel" id="label-automodel-cards">Модель автомобиля :</label></th>
                         <td><input id="AutoModel" name="AutoModel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
@@ -126,11 +145,6 @@
                         <td><input id="Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                 </table>
-                @*<input id="id-nodes" name="id-nodes" type="hidden" />
-                    <p>
-                        <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-                        <label id="delete-confirm-text" name="delete-confirm-text"></label>
-                    </p>*@
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
             </fieldset>
@@ -144,296 +158,187 @@
                     <td style="text-align:left; vertical-align:top">
                         <fieldset>
                             <legend>Выдача топлива</legend>
-                            <table id="delivery-fuel">
-                                <tr>
-                                    <th><label for="deliver-Active" id="label-active-cards">Карта активная:</label></th>
-                                    <td><input id="deliver-Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="deliver-Number" id="label-number-cards">Номер карты:</label></th>
-                                    <td><input id="deliver-Number" name="Number" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="deliver-AutoNumber" id="label-autonumber-cards">Номер авто:</label></th>
-                                    <td><input id="deliver-AutoNumber" name="AutoNumber" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="deliver-Taken" id="label-taken">Пистолет снят:</label></th>
-                                    <td><input id="deliver-Taken" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="deliver-Capacity" id="label-capacitys">Емкость:</label></th>
-                                    <td><select id="deliver-Capacity" name="Capacity" class="ui-widget-content ui-corner-all"></select></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива:</label></th>
-                                    <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                @*<tr>
-                                        <th><label for="AutoModel" id="label-automodel-cards"></label></th>
-                                        <td><input id="AutoModel" name="AutoModel" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                    </tr>*@
+                            <fieldset>
+                                <legend>RFID-карта</legend>
+                                <table id="table-delivery-fuel">
+                                    <tr>
+                                        <th><label for="deliver-Active" id="label-active-cards">Карта активная:</label></th>
+                                        <td><input id="deliver-Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="deliver-Number" id="label-number-cards">Номер карты:</label></th>
+                                        <td><input id="deliver-Number" name="Number" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="deliver-AutoNumber" id="label-autonumber-cards">Номер авто:</label></th>
+                                        <td><input id="deliver-AutoNumber" name="AutoNumber" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                            <fieldset>
+                                <legend>ГСМ/Бак</legend>
+                                <table id="table-delivery-fuel">
+                                    <tr>
+                                        <th><label for="deliver-type-fuel" id="label-type-fuel">Тип топлива:</label></th>
+                                        <td><input id="deliver-type-fuel" name="type-fuel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="deliver-Capacity" id="label-capacitys">Емкость:</label></th>
+                                        <td><select id="deliver-Capacity" name="Capacity" class="ui-widget-content ui-corner-all"></select></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Уровень ГСМ в баке:</th>
+                                        <td><input id="deliver-take-level" name="take-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Объем ГСМ в баке:</th>
+                                        <td><input id="deliver-take-volume" name="take-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Плотность ГСМ в баке:</th>
+                                        <td><input id="deliver-take-dens" name="take-dens" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Масса ГСМ в баке:</th>
+                                        <td><input id="deliver-take-mass" name="take-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Температура ГСМ в баке:</th>
+                                        <td><input id="deliver-take-temp" name="take-temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Колонка\пистолет</legend>
+                                <table id="table-delivery-fuel">
+                                    <tr>
+                                        <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива:</label></th>
+                                        <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
 
-                                <tr>
-                                    <th><label for="deliver-Passage" id="label-passage">Технический пролив</label></th>
-                                    <td><input id="deliver-Passage" name="Passage" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                                </tr>
-                                @*<tr>
-                                        <td></td>
-                                        <td><button id="start" type="button" class="ui-button ui-widget ui-corner-all">Начать выдачу</button></td>
-                                    </tr>*@
-                            </table>
-
+                                    <tr>
+                                        <th><label for="deliver-Taken" id="label-taken">Пистолет снят:</label></th>
+                                        <td><input id="deliver-Taken" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="deliver-Passage" id="label-passage">Технический пролив</label></th>
+                                        <td><input id="deliver-Passage" name="Passage" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
                         </fieldset>
                     </td>
                     <td style="text-align:left; vertical-align:top">
                         <fieldset>
                             <legend>САП</legend>
                             Вариант выдачи:<select id="deliver-variant-sap" name="variant-sap" class="ui-widget-content ui-corner-all"></select>
-                            <table id="delivery-sap">
-                                <tr id="sap-num">
-                                    <th>
-                                        <label for="sap-num" id="label-sap-num"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-num" name="sap-num" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-                                <tr id="sap-num-pos">
-                                    <th>
-                                        <label for="sap-num-pos" id="label-sap-num-pos"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-num-pos" name="sap-num-pos" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-                                <tr id="sap-num-ts">
-                                    <th>
-                                        <label for="sap-num-ts" id="label-sap-num-ts"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-num-ts" name="sap-num-ts" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-                                <tr id="sap-num-kpp">
-                                    <th>
-                                        <label for="sap-num-kpp" id="label-sap-num-kpp"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-num-kpp" name="sap-num-kpp" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-                                <tr id="sap-name-forwarder">
-                                    <th>
-                                        <label for="sap-name-forwarder" id="label-sap-name-forwarder"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-name-forwarder" name="sap-name-forwarder" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-                                <tr id="sap-ozm">
-                                    <th>
-                                        <label for="sap-ozm" id="label-sap-ozm"></label>
-                                    </th>
-                                    <td>
-                                        <input id="sap-ozm" name="sap-ozm" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />
-                                    </td>
-                                </tr>
-
-                                <tr id="button-sap">
-                                    <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
-                                </tr>
-                                @*<tr id="sap-num-ishod-postavki">
+                            <fieldset>
+                                <legend>Ручной ввод</legend>
+                                <table id="table-delivery-sap">
+                                    <tr id="button-sap">
+                                        <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
+                                    </tr>
+                                    <tr id="sap-num">
                                         <th>
-                                            Номер исх.поставки:
+                                            <label for="sap-num" id="label-sap-num"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-num-ishod-postavki" name="sap-num-ishod-postavki" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-num" name="sap-num" type="number" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
                                     </tr>
-
-                                    <tr id="sap-num-position-ip">
+                                    <tr id="sap-num-pos">
                                         <th>
-                                            Номер позиции ИП:
+                                            <label for="sap-num-pos" id="label-sap-num-pos"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-num-position-ip" name="sap-num-position-ip" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-num-pos" name="sap-num-pos" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <select id="sap-num-pos" name="sap-num-pos" class="ui-widget-content ui-corner-all"></select>
                                         </td>
                                     </tr>
-                                    <tr id="sap-num-rezerv">
+                                    <tr id="sap-num-ts">
                                         <th>
-                                            Номер резервирования:
+                                            <label for="sap-num-ts" id="label-sap-num-ts"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-num-rezerv" name="sap-num-rezerv" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
-                                    <tr id="sap-num-m11">
-                                        <th>
-                                            Номер требования М-11:
-                                        </th>
-                                        <td>
-                                        <td>
-                                            <input id="sap-num-m11" name="sap-num-m11" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
-
-                                    <tr id="sap-num-TC">
-                                        <th>
-                                            Номер ТС фактический:
-                                        </th>
-                                        <td>
-                                        <td>
-                                            <input id="sap-num-TC" name="sap-num-rezerv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-num-ts" name="sap-num-ts" type="text" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
                                     </tr>
                                     <tr id="sap-num-kpp">
                                         <th>
-                                            № КПП:
+                                            <label for="sap-num-kpp" id="label-sap-num-kpp"></label>
                                         </th>
-                                        <td>
                                         <td>
                                             <input id="sap-num-kpp" name="sap-num-kpp" type="text" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
                                     </tr>
-                                    <tr id="sap-fio-exp">
+                                    <tr id="sap-name-forwarder">
                                         <th>
-                                            ФИО экспедитора:
+                                            <label for="sap-name-forwarder" id="label-sap-name-forwarder"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-fio-exp" name="sap-fio-exp" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-name-forwarder" name="sap-name-forwarder" type="text" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
                                     </tr>
-                                    <tr id="sap-ozm-rezerv">
-                                        <th>
-                                            ОЗМ из резервирования:
-                                        </th>
-                                        <td>
-                                        <td>
-                                            <input id="sap-ozm-rezerv" name="sap-ozm-rezerv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
-
-                                    <tr id="sap-ozm-postavka">
-                                        <th>
-                                            ОЗМ из поставки:
-                                        </th>
-                                        <td>
-                                        <td>
-                                            <input id="sap-ozm-postavka" name="sap-ozm-postavka" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
+                                </table>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Справочные данные САП(АСУ)</legend>
+                                <table id="table-delivery-sap">
                                     <tr id="sap-ozm">
                                         <th>
-                                            ОЗМ:
+                                            <label for="sap-ozm" id="label-sap-ozm"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-ozm" name="sap-ozm" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-ozm" name="sap-ozm" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <select id="sap-ozm" name="sap-ozm" class="ui-widget-content ui-corner-all"></select>
                                         </td>
                                     </tr>
                                     <tr id="sap-ozm-bak">
                                         <th>
-                                            ОЗМ согласно бака:
+                                            <label for="sap-ozm-bak" id="label-sap-ozm-bak"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-ozm-bak" name="sap-ozm-bak" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <textarea id="sap-ozm-bak" rows="2" name="sap-ozm-bak" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all"></textarea>
+                                            @*<input id="sap-ozm-bak" name="sap-ozm-bak" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />*@
                                         </td>
                                     </tr>
-                                    <tr id="sap-sklad-pol-reserv">
+                                    <tr id="sap-ozm-amount">
                                         <th>
-                                            Склад получателя из резервирования:
+                                            <label for="sap-ozm-amount" id="label-sap-ozm-amount"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-sklad-pol-reserv" name="sap-sklad-pol-reserv" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-ozm-amount" name="sap-ozm-amount" type="number" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
                                     </tr>
-                                    <tr id="sap-sklad-pol">
+                                    <tr id="sap-stock-recipient">
                                         <th>
-                                            Склад получателя:
+                                            <label for="sap-stock-recipient" id="label-sap-stock-recipient"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-sklad-pol" name="sap-sklad-pol" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <textarea id="sap-stock-recipient" rows="2" name="sap-stock-recipient" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all"></textarea>
+                                            <select id="sap-stock-recipient" name="sap-stock-recipient" class="ui-widget-content ui-corner-all"></select>
                                         </td>
                                     </tr>
-                                    <tr id="sap-sklad-pol-mat-ip">
+                                    <tr id="sap-factory-recipient">
                                         <th>
-                                            Получатель материала в ИП:
+                                            <label for="sap-factory-recipient" id="label-sap-factory-recipient"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-sklad-pol-mat-ip" name="sap-sklad-pol-mat-ip" type="text" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
-                                    <tr id="sap-zavod-pol">
-                                        <th>
-                                            Завод-получатель:
-                                        </th>
-                                        <td>
-                                        <td>
-                                            <input id="sap-zavod-pol" name="sap-zavod-pol" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-factory-recipient" name="sap-factory-recipient" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <select id="sap-factory-recipient" name="sap-factory-recipient" class="ui-widget-content ui-corner-all"></select>
                                         </td>
                                     </tr>
                                     <tr id="sap-id-card">
                                         <th>
-                                            ИД карта:
+                                            <label for="sap-id-card" id="label-sap-id-card"></label>
                                         </th>
                                         <td>
-                                        <td>
-                                            <input id="sap-id-card" name="sap-id-card" type="text" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <input id="sap-id-card" name="sap-id-card" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" />
                                         </td>
-                                    </tr>*@
-                                @*•	Номер резервирования (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
-                                    •	Номер позиции – открыт для ввода – импорт при вызове вебсервиса
-                                    •	Номер ТС фактический (открыто для ввода, справочника нет)
-                                    •	№ КПП (открыто для ввода, справочника нет)
-                                    •	ФИО экспедитора (открыто для ввода, справочника нет)
-                                    •	ОЗМ из резервирования (в режиме просмотра) – экспорт из SAP MII
-                                    •	ОЗМ согласно бака (в режиме просмотра) - Код ОЗМ+ название ОЗМ (на основании справочника в АСУ)
-                                    •	Склад получателя из резервирования (в режиме просмотра) – экспорт из SAP MII (код склада+наименование склада)
-                                    •	Завод-получатель (в режиме просмотра) – экспорт из SAP MII
-                                                            •	ИД карта (открыто для ввода, справочник в АСУ)*@
+                                    </tr>
+                                </table>
+                            </fieldset>
 
-                                @*•	Номер исх.поставки (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
-                                    •	Номер позиции ИП (просмотр) – экспорт из SAP MII
-                                    •	Номер ТС фактический (открыто для ввода, справочника нет)
-                                    •	№ КПП (в режиме изменения) – ввод вручную
-                                    •	ФИО экспедитора (в режиме изменения) – ввод вручную
-                                    •	ОЗМ из поставки (в режиме просмотра) – экспорт из SAP MII
-                                    •	ОЗМ согласно бака (колонки) (в режиме просмотра)  (на основании справочника в АСУ)
-                                    •	Склад получателя = Получатель материала в ИП (в режиме просмотра) – экспорт из SAP MII (вывести номер дебитора + Наименование дебитора)*@
-
-                                @*•	Номер требования М-11 (открыто для ввода, справочника нет)
-                                    •	Номер ТС фактический (открыто для ввода, справочника нет)
-                                    •	№ КПП (открыто для ввода, справочника нет)
-                                    •	ФИО экспедитора (открыто для ввода, справочника нет)
-                                    •	ОЗМ (открыто для ввода, справочник есть, ввод только из справочника АСУ) + название ОЗМ
-                                    •	ОЗМ согласно бака (в режиме просмотра) + название ОЗМ (вывод из справочника в АСУ)
-                                    •	Склад получателя (открыто для ввода, справочник есть, ввод только из справочника) +Наименование склада
-                                    •	Завод получателя (открыто для ввода, справочник есть, ввод только из справочника)*@
-
-                                @*•	Номер резервирования (открыто для ввода, справочника нет) – импорт при вызове вебсервиса
-                                    •	Номер позиции – открыт для ввода – импорт при вызове вебсервиса
-                                    •	Номер ТС фактический (справочник дебиторов, загруженный в базу АСУ из SAP)  - номер дебитора, номер ТС, марка ТС. – подтягивается автоматически по ИД карте.
-                                    •	№ КПП (открыто для ввода, справочника нет)
-                                    •	ФИО экспедитора (открыто для ввода, справочника нет)
-                                    •	ОЗМ из резервирования (в режиме просмотра) – экспорт из SAP MII
-                                    •	ОЗМ согласно бака (в режиме просмотра) - Код ОЗМ+ название ОЗМ (на основании справочника в АСУ)
-                                    •	Склад получателя из резервирования (в режиме просмотра) – экспорт из SAP MII (код склада+наименование склада)
-                                    •	Завод-получатель (в режиме просмотра) – экспорт из SAP MII
-                                    •	ИД карта (открыто для ввода, справочник в АСУ) – сканирование ИД карты, контроль на наличие в справочнике.*@
-
-
-
-
-                            </table>
                         </fieldset>
                     </td>
                 </tr>
@@ -512,6 +417,10 @@
         <tr>
             <th><label id="write_price" for="write_price-value">write_price :</label></th>
             <td><label id="write_price-value"></label></td>
+        </tr>
+        <tr>
+            <th><label id="type_fuel" for="type_fuel-value">type_fuel :</label></th>
+            <td><label id="type_fuel-value"></label></td>
         </tr>
     </table>
 

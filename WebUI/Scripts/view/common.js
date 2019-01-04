@@ -6,7 +6,7 @@ var getAllObjects = function (obj, key, val) {
     var objects = [];
     for (var i in obj) {
         if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
+        if (typeof obj[i] === 'object') {
             objects = objects.concat(getAllObjects(obj[i], key, val));
         } else if (i == key && obj[key] == val) {
             objects.push(obj);
@@ -19,7 +19,7 @@ var getObjects = function (obj, key, val) {
     var objects = [];
     for (var i in obj) {
         if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
+        if (typeof obj[i] === 'object') {
             objects = objects.concat(getChildObjects(obj[i], key, val));
         } else
             if (i == key && obj[key] == val) {
@@ -33,7 +33,7 @@ var getChildObjects = function (obj, key, val) {
     var objects = [];
     for (var i in obj) {
         if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object' & false == true) {
+        if (typeof obj[i] === 'object' & false == true) {
             objects = objects.concat(getObjects(obj[i], key, val));
         } else
             if (i == key && obj[key] == val) {
@@ -99,6 +99,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
     obj_select.append(options.join(""))
         .val(value_select)
         .selectmenu("refresh");
+    return obj_select;
 }
 
 /* ----------------------------------------------------------
@@ -120,6 +121,7 @@ var OnAJAXError = function (x, y, z) {
 var AJAXComplete = function () {
     //LockScreenOff();
 }
+
 var getTRKTags= function (callback) {
     $.ajax({
         type: 'GET',
@@ -142,11 +144,57 @@ var getTRKTags= function (callback) {
         },
     });
 }
-
-var getTRK= function (callback) {
+// Прочесть теги бака
+var getTankTags= function (num, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/trk',
+        url: '/api/trk/tank/num/'+num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Прочесть теги пистолетов
+var getGunTags= function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/guns',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Считать считаные карты по ТРК из буфера БД
+var getRFIDDB= function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/rfid/db',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -166,10 +214,149 @@ var getTRK= function (callback) {
     });
 }
 
-var getTRKOfID = function (id, callback) {
+// Резервирование
+var getReservation = function (num, pos, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/trk/' + id,
+        url: '/api/sap/reservation/num/'+num+'/pos/'+pos,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Поставки
+var getSupply = function (post, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/sap/supply/post/' + post,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//Получить OZM из внутрененго справочника
+var getCatalogOfOZM = function (id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/catalog/ozm/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//Получить список всех OZM из внутрененго справочника
+var getCatalogOZM = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/catalog/ozm/all',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить склад
+var getCatalogOfDepots = function (id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/catalog/depots/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+var getCatalogDepots = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/catalog/depots/all',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+var getCatalogWerks = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/catalog/werks/all',
         async: true,
         dataType: 'json',
         beforeSend: function () {

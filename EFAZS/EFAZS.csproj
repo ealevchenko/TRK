@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC22CED7-74FA-4227-91E4-00DB1F86CA6A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>test</RootNamespace>
-    <AssemblyName>test</AssemblyName>
+    <ProjectGuid>{6E9369B5-CF09-43E5-ACDF-01E4ADBF4B6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EFAZS</RootNamespace>
+    <AssemblyName>EFAZS</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,12 +36,11 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,33 +49,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Abstract\ICat_Werks.cs" />
+    <Compile Include="Abstract\IOPC_RFID.cs" />
+    <Compile Include="Abstract\ICat_Depots.cs" />
+    <Compile Include="Abstract\ICat_OZM.cs" />
+    <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFCat_Werks.cs" />
+    <Compile Include="Concrete\EFOPC_RFID.cs" />
+    <Compile Include="Concrete\EFCat_Depots.cs" />
+    <Compile Include="Concrete\EFCat_OZM.cs" />
+    <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Concrete\EFRepository.cs" />
+    <Compile Include="Entities\Cat_OZM.cs" />
+    <Compile Include="Entities\Cat_Depots.cs" />
+    <Compile Include="Entities\Cat_Werks.cs" />
+    <Compile Include="Entities\OPC_RFID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="testOPC.cs" />
-    <Compile Include="testSAP.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FuelControl\EFFC\EFFC.csproj">
-      <Project>{b73ca8e1-6727-4dfb-a4fa-deeb4c901b06}</Project>
-      <Name>EFFC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClientOPCTRK\ClientOPCTRK.csproj">
-      <Project>{cc3ab0de-73ad-44dd-ac2d-366c45f36555}</Project>
-      <Name>ClientOPCTRK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClientSAPTRK\ClientSAPTRK.csproj">
-      <Project>{8377fb48-350b-47c5-8035-36f4516019ad}</Project>
-      <Name>ClientSAPTRK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EFAZS\EFAZS.csproj">
-      <Project>{6e9369b5-cf09-43e5-acdf-01e4adbf4b6e}</Project>
-      <Name>EFAZS</Name>
+    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogFile\LogFile.csproj">
+      <Project>{2ae0080b-7e15-4c79-842c-35e52fc945fa}</Project>
+      <Name>LogFile</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

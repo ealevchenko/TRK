@@ -16,6 +16,8 @@ namespace WebUI.App_Start
     using EFFC.Abstract;
     using EFFC.Entities;
     using EFFC.Concrete;
+    using EFAZS.Abstract;
+    using EFAZS.Concrete;
 
     public static class NinjectWebCommon 
     {
@@ -68,7 +70,11 @@ namespace WebUI.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<IRepository<azsCards>>().To<EFazsCards>();
+            kernel.Bind<EFFC.Abstract.IRepository<azsCards>>().To<EFazsCards>();
+            kernel.Bind<ICat_OZM>().To<EFCat_OZM>();
+            kernel.Bind<ICat_Depots>().To<EFCat_Depots>();
+            kernel.Bind<IOPC_RFID>().To<EFOPC_RFID>();
+            kernel.Bind<ICat_Werks>().To<EFCat_Werks>();
         }
     }
 }

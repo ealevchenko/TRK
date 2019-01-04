@@ -204,9 +204,9 @@ function getGun(num_gun, gun) {
     return result;
 }
 
-function viewGuns(num_gun) {
+//function viewGuns(num_gun) {
 
-}
+//}
 
 function viewGun(num_gun, gun, card) {
     if (gun != null) {

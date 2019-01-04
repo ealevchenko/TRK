@@ -33,28 +33,28 @@ legend {
 }
 
 .trk-right {
-    margin-left:10px;
+    margin-left: 10px;
     width: 500px;
     float: left;
     border: 1px solid #808080;
 }
 
 .trk-rfid {
-    height:30px;
+    height: 30px;
     padding: 0px 5px;
-    background-color:#eeeaea;
+    background-color: #eeeaea;
 }
 
 .button-rfid {
     margin: 3px;
     height: 25px;
-    font-size:12px;
+    font-size: 12px;
 }
 
 .button-deliver {
     margin: 3px;
     height: 25px;
-    font-size:12px;
+    font-size: 12px;
 }
 
 .button-rfid-active {
@@ -75,28 +75,28 @@ legend {
 
 .label-rfid {
     font-weight: normal;
-    font-style:italic;
-    color:crimson;
+    font-style: italic;
+    color: crimson;
 }
 
 .table {
-    margin:0;
+    margin: 0;
 }
 
-.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
-    padding:0;
-}
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 0;
+    }
 
 .table-gun th {
-    font-size:12px;
+    font-size: 12px;
     font-weight: normal;
-    text-align:center
+    text-align: center
 }
 
 .input-gun-volume {
-    width:100px;
-    height:25px;
-    margin:3px;
+    width: 100px;
+    height: 25px;
+    margin: 3px;
 }
 
 td.active {
@@ -122,19 +122,35 @@ td.null_active {
 }
 
 #table-confirm-rfid-card th {
-    width:250px;
-    text-align:right;
+    width: 250px;
+    text-align: right;
 }
 
 #table-confirm-rfid-card td {
-    width:300px;
-    text-align:left
+    width: 300px;
+    text-align: left
 }
 
     #table-confirm-rfid-card td input, #table-confirm-rfid-card td textarea {
         width: 95%;
     }
 
+/*#table-delivery-sap {
+}*/
+
+    #table-delivery-sap th {
+        width: 250px;
+        text-align: right;
+    }
+
+    #table-delivery-sap td {
+        width: 300px;
+        text-align: left
+    }
+
+        #table-delivery-sap td input, #table-delivery-sap td textarea {
+            width: 95%;
+        }
 
 .ui-progressbar {
     position: relative;
@@ -146,12 +162,18 @@ td.null_active {
     margin: 3px;
     height: 25px;
 }
+
 .progress-label {
-    font-size:13px;
-    margin:2px;
+    font-size: 13px;
+    margin: 2px;
     position: absolute;
     left: 50%;
     font-weight: normal;
-    font-style:italic;
+    font-style: italic;
     text-shadow: 1px 1px 0 #fff;
 }
+
+.overflow {
+    height: 200px;
+}
+

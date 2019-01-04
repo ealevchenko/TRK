@@ -38,13 +38,34 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // GET: api/trk
-        [ResponseType(typeof(TRK_))]
-        public IHttpActionResult GetTRK()
+        // GET: api/trk/tank/num/B2
+        [Route("tank/num/{num}")]
+        [ResponseType(typeof(Tank))]
+        public IHttpActionResult GetTagsOPSOfTank(string num)
         {
             try
             {
-                List<TRK_>list = client.ReadOPC();
+                Tank tank = client.ReadTagsOPSOfTank(num);
+                if (tank == null)
+                {
+                    return NotFound();
+                }
+                return Ok(tank);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+        // GET: api/trk/guns
+        [Route("guns")]
+        [ResponseType(typeof(Gun))]
+        public IHttpActionResult GetReadTagOPCOfGun()
+        {
+            try
+            {
+                List<Gun> list = client.ReadTagOPCOfGun();
                 if (list == null)
                 {
                     return NotFound();
@@ -56,28 +77,6 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
-
-        // GET: api/trk/6
-        [Route("{id:int}")]
-        [ResponseType(typeof(ItemValueResult))]
-        public IHttpActionResult GetTRK(int id)
-        {
-            try
-            {
-                ItemValueResult[] list = client.ReadOPC(id);
-                if (list == null)
-                {
-                    return NotFound();
-                }
-                return Ok(list);
-            }
-            catch (Exception e)
-            {
-                return NotFound();
-            }
-        }
-
-
 
     }
 }
