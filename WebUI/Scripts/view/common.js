@@ -1,4 +1,45 @@
-﻿/* ----------------------------------------------------------
+﻿var supply_out =
+    [
+    {
+        "vbeln": "8000000020",
+        "posnr": "000001",
+        "MATNR": "000000000000000259",
+        "WERKS": "0010",
+        "LGORT": "706G",
+        "KUNNR": "4000000600",
+        "LFIMG": "3542.01",
+        "LGOBE": "",
+        "MEINS": "TO"
+    },
+    {
+        "vbeln": "8000000020",
+        "posnr": "000011",
+        "MATNR": "000000000000000122",
+        "WERKS": "0010",
+        "LGORT": "",
+        "KUNNR": "4000000600",
+        "LFIMG": "3542.01",
+        "LGOBE": "",
+        "MEINS": "TO"
+    },
+    {
+        "vbeln": "8000000020",
+        "posnr": "000021",
+        "MATNR": "000000000000000123",
+        "WERKS": "0010",
+        "LGORT": "",
+        "KUNNR": "4000000600",
+        "LFIMG": "3542.01",
+        "LGOBE": "",
+        "MEINS": "TO"
+    }
+    ]
+
+var reservation_out = { "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
+
+var bunk_out = { "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
+
+/* ----------------------------------------------------------
     Функции работы с масивами
 -------------------------------------------------------------*/
 // Поиск элемента массива по ключу по всем объектам включая и вложенные
@@ -102,6 +143,38 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
     return obj_select;
 }
 
+var updateOptionSelect = function (obj_select, data, callback_option, value_select, exceptions_value) {
+    var options = [];
+    var lang = 'ru';
+    // Проверка выбор неопределен
+    if (value_select == -1) {
+        options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
+    }
+    if (data != null) {
+        for (i = 0; i < data.length; i++) {
+            var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled }
+            // Преобразовать формат
+            if (typeof callback_option === 'function') {
+                option = callback_option(data[i]);
+            }
+            if (option != null) {
+                if (exceptions_value != null) {
+                    if (exceptions_value.indexOf(option.value) == -1) {
+                        options.push("<option value='" + option.value + "' " + (option.disabled ? "disabled='disabled'" : "") + ">" + option.text + "</option>");
+                    }
+                } else {
+                    options.push("<option value='" + option.value + "' " + (option.disabled ? "disabled='disabled'" : "") + ">" + option.text + "</option>");
+                }
+            }
+        }
+    }
+    // Заполним селект 
+    obj_select.empty()
+        .append(options.join(""))
+        .val(value_select)
+        .selectmenu("refresh");
+}
+
 /* ----------------------------------------------------------
     Обработчики ajax - функций
 -------------------------------------------------------------*/
@@ -156,7 +229,8 @@ var getTankTags= function (num, callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
+                //callback(data);
+                callback(bunk_out);
             }
         },
         error: function (x, y, z) {
@@ -230,7 +304,11 @@ var getReservation = function (num, pos, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            //OnAJAXError(x, y, z);
+            // на время теста
+            if (typeof callback === 'function') {
+                callback(reservation_out);
+            }
         },
         complete: function () {
             AJAXComplete();
@@ -253,7 +331,12 @@ var getSupply = function (post, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            //OnAJAXError(x, y, z);
+            // на время теста
+            if (typeof callback === 'function') {
+                callback(supply_out);
+            }
+            
         },
         complete: function () {
             AJAXComplete();
