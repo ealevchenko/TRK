@@ -383,6 +383,70 @@ var confirm_df = {
     select_sap_factory_recipient: null, // Завод получатель выбор
     input_sap_factory_recipient: null,  // Завод получатель ответ справочника
     input_sap_id_card: null,            // ИД карта
+
+    allFields: null, 
+
+    updateTips: function (t) {
+        $(".validateTips")
+            .text(t)
+            .addClass("ui-state-highlight");
+        setTimeout(function () {
+            $(".validateTips").removeClass("ui-state-highlight", 1500);
+        }, 500);
+    },
+
+    checkLengthOfMessage: function (o, message, min, max) {
+        if (o.val().length > max || o.val().length < min) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips(message);
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    checkLength: function (o, n, min, max) {
+        if (o.val().length > max || o.val().length < min) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips("Размер поля [" + n + "] должен быть в диапазоне от " +
+                min + " до " + max + ".");
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    checkSelect: function (o, n, min, max) {
+        if (o.val() > max || o.val() < min) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips("Length of " + n + " must be between " +
+                min + " and " + max + ".");
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    checkSelectOfMessage: function (o, message, min, max) {
+        if (o.val() > max || o.val() < min) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips(message);
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    checkIsNullOfMessage: function (o, message) {
+        if (o.val() == '' || o.val() == null) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips(message);
+            return false;
+        } else {
+            return true;
+        }
+    },
+
     init: function () {
         confirm_df.obj = $("#confirm-deliver-fuel").dialog({
             resizable: false,
@@ -392,13 +456,20 @@ var confirm_df = {
             width: 1000,
             buttons: {
                 'Начать выдачу': function () {
+                    var valid = true;
+                    confirm_df.allFields.removeClass("ui-state-error");
+                    valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
                     var variant = confirm_df.select_variant.val();
-                    if (variant < 1 && variant > 6) {
-                        $('div#message').append(replaceWith('Заполните вариант выдачи'));
-                        return;
+                    valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
+                    if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
+                    if (variant == 3) valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
+                    valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
+                    valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
+                    valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
+
+                    if (valid) { 
+                        $(this).dialog("close");
                     }
-                    
-                    $(this).dialog("close");
                 },
                 'Отмена': function () {
                     $(this).dialog("close");
@@ -437,8 +508,8 @@ var confirm_df = {
         // основные параметры емкости
         confirm_df.input_deliver_take_level = $('#deliver-take-level');
         confirm_df.input_deliver_take_mass = $('#deliver-take-mass');
-        confirm_df.input_deliver_take_temp =$('#deliver-take-temp');
-        confirm_df.input_deliver_take_volume =$('#deliver-take-volume');
+        confirm_df.input_deliver_take_temp = $('#deliver-take-temp');
+        confirm_df.input_deliver_take_volume = $('#deliver-take-volume');
         confirm_df.input_deliver_take_dens = $('#deliver-take-dens');
         // доза топлива
         confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel');
@@ -577,7 +648,7 @@ var confirm_df = {
             var i = confirm_df.select_variant.val();
 
             // Покажем позиции
-            confirm_df.select_sap_num_pos.selectmenu("widget").hide(); 
+            confirm_df.select_sap_num_pos.selectmenu("widget").hide();
             confirm_df.input_sap_ozm.val('');
             confirm_df.input_sap_ozm_amount.val('');
             confirm_df.input_sap_stock_recipient.val('')
@@ -625,7 +696,7 @@ var confirm_df = {
                                 // Обновим перечень позиций
                                 updateOptionSelect(confirm_df.select_sap_num_pos, pos, null, -1, null);
                                 // Покажем позиции
-                                confirm_df.select_sap_num_pos.selectmenu("widget").show(); 
+                                confirm_df.select_sap_num_pos.selectmenu("widget").show();
                             }
                         }
                     );
@@ -692,8 +763,8 @@ var confirm_df = {
             },
             null);
         // завод получателя
-        confirm_df.input_sap_factory_recipient = $('input#sap-factory-recipient');     
-        confirm_df.select_sap_factory_recipient =  initSelect(
+        confirm_df.input_sap_factory_recipient = $('input#sap-factory-recipient');
+        confirm_df.select_sap_factory_recipient = initSelect(
             $('select[name ="sap-factory-recipient"]'),
             { width: 250 },
             catalog_werks.list,
@@ -706,6 +777,24 @@ var confirm_df = {
             },
             null);
         confirm_df.input_sap_id_card = $('input#sap-id-card');
+
+        confirm_df.allFields = $([])
+            .add(confirm_df.select_variant)
+            .add(confirm_df.input_sap_num)
+            .add(confirm_df.input_sap_num_pos)
+            .add(confirm_df.select_sap_num_pos)
+            .add(confirm_df.input_sap_num_ts)
+            .add(confirm_df.input_sap_num_kpp)
+            .add(confirm_df.input_sap_name_forwarder)
+            .add(confirm_df.select_sap_ozm)
+            .add(confirm_df.input_sap_ozm)
+            .add(confirm_df.input_sap_ozm_bak)
+            .add(confirm_df.input_sap_ozm_amount)
+            .add(confirm_df.select_sap_stock_recipient)
+            .add(confirm_df.input_sap_stock_recipient)
+            .add(confirm_df.select_sap_factory_recipient)
+            .add(confirm_df.input_sap_factory_recipient)
+            .add(confirm_df.input_sap_id_card);
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num_gun) {
