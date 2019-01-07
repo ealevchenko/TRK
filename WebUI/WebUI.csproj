@@ -194,6 +194,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\api\azsCardsController.cs" />
+    <Compile Include="Controllers\api\AZSController.cs" />
     <Compile Include="Controllers\api\CatalogController.cs" />
     <Compile Include="Controllers\api\RFIDController.cs" />
     <Compile Include="Controllers\api\SAPController.cs" />
@@ -291,6 +292,10 @@
     <ProjectReference Include="..\EFAZS\EFAZS.csproj">
       <Project>{6e9369b5-cf09-43e5-acdf-01e4adbf4b6e}</Project>
       <Name>EFAZS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogFile\LogFile.csproj">
+      <Project>{2AE0080B-7E15-4C79-842C-35E52FC945FA}</Project>
+      <Name>LogFile</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

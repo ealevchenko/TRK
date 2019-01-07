@@ -50,11 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\ICat_Werks.cs" />
+    <Compile Include="Abstract\ISAP_Buffer.cs" />
     <Compile Include="Abstract\IOPC_RFID.cs" />
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFCat_Werks.cs" />
+    <Compile Include="Concrete\EFFuelSale.cs" />
+    <Compile Include="Concrete\EFSAP_Buffer.cs" />
     <Compile Include="Concrete\EFOPC_RFID.cs" />
     <Compile Include="Concrete\EFCat_Depots.cs" />
     <Compile Include="Concrete\EFCat_OZM.cs" />
@@ -64,6 +67,8 @@
     <Compile Include="Entities\Cat_Depots.cs" />
     <Compile Include="Entities\Cat_Werks.cs" />
     <Compile Include="Entities\OPC_RFID.cs" />
+    <Compile Include="Entities\FuelSale.cs" />
+    <Compile Include="Entities\SAP_Buffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

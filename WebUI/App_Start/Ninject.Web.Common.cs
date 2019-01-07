@@ -18,6 +18,7 @@ namespace WebUI.App_Start
     using EFFC.Concrete;
     using EFAZS.Abstract;
     using EFAZS.Concrete;
+    using EFAZS.Entities;
 
     public static class NinjectWebCommon 
     {
@@ -75,6 +76,8 @@ namespace WebUI.App_Start
             kernel.Bind<ICat_Depots>().To<EFCat_Depots>();
             kernel.Bind<IOPC_RFID>().To<EFOPC_RFID>();
             kernel.Bind<ICat_Werks>().To<EFCat_Werks>();
+            kernel.Bind<EFAZS.Abstract.IRepository<SAP_Buffer>>().To<EFSAP_Buffer>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.FuelSale>>().To<EFAZS.Concrete.EFFuelSale>();
         }
     }
 }

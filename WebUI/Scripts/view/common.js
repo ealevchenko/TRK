@@ -229,8 +229,8 @@ var getTankTags= function (num, callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                //callback(data);
-                callback(bunk_out);
+                callback(data);
+                //callback(bunk_out);
             }
         },
         error: function (x, y, z) {
@@ -304,11 +304,11 @@ var getReservation = function (num, pos, callback) {
             }
         },
         error: function (x, y, z) {
-            //OnAJAXError(x, y, z);
+            OnAJAXError(x, y, z);
             // на время теста
-            if (typeof callback === 'function') {
-                callback(reservation_out);
-            }
+            //if (typeof callback === 'function') {
+            //    callback(reservation_out);
+            //}
         },
         complete: function () {
             AJAXComplete();
@@ -331,11 +331,11 @@ var getSupply = function (post, callback) {
             }
         },
         error: function (x, y, z) {
-            //OnAJAXError(x, y, z);
+            OnAJAXError(x, y, z);
             // на время теста
-            if (typeof callback === 'function') {
-                callback(supply_out);
-            }
+            //if (typeof callback === 'function') {
+            //    callback(supply_out);
+            //}
             
         },
         complete: function () {
@@ -459,6 +459,30 @@ var getCatalogWerks = function (callback) {
     });
 }
 
+//Добавить sap_buffer
+var postAsyncSAP_Buffer = function (sap_buffer, callback) {
+    $.ajax({
+        url: '/api/azs/sap_buffer',
+        type: 'POST',
+        data: JSON.stringify(sap_buffer),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {
