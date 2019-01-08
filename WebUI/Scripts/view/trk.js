@@ -373,9 +373,66 @@ var confirm_df = {
     input_sap_factory_recipient: null,  // Завод получатель ответ справочника
     input_sap_id_card: null,            // ИД карта
 
-    allFields: null, 
-
-    // Вернуть позицию поставки
+    allFields: null,
+    //сохраним данные в локальной базе fuelSale
+    save_fuelSale: function (id) {
+        alert('id=' + id);
+        confirm_df.obj.dialog("close");
+    },
+    // Форма подтверждения сохранения данных в САП
+    fsap : {
+        obj: null,
+        init: function () {
+            confirm_df.fsap.obj = $("#dialog-message").dialog({
+                modal: true,
+                title: 'Отправить в SAP?',
+                autoOpen: false,
+                height: "auto",
+                width: "auto",
+                buttons: {
+                    Ok: function () {
+                        postAsyncSAP_Buffer(
+                            sap_buffer,
+                            function (id) {
+                                // Данные в САП сохранились?
+                                if (id > 0) {
+                                    // Запись в базу локальную
+                                    confirm_df.save_fuelSale(id);
+                                }
+                            }
+                        );
+                        $(this).dialog("close");
+                    },
+                    'Отмена': function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        },
+        open: function (sap_buffer) {
+            confirm_df.fsap.obj.dialog("open");
+            if (sap_buffer) {
+                $('label#SAP-DATE').text(sap_buffer.DATE);
+                $('label#SAP-TIME').text(sap_buffer.TIME);
+                $('label#SAP-LOGIN_R').text(sap_buffer.LOGIN_R);
+                $('label#SAP-N_BAK').text(sap_buffer.N_BAK);
+                $('label#SAP-OZM_BAK').text(sap_buffer.OZM_BAK);
+                $('label#SAP-OZM_TREB').text(sap_buffer.OZM_TREB);
+                $('label#SAP-FLAG_R').text(sap_buffer.FLAG_R);
+                $('label#SAP-PLOTNOST').text(sap_buffer.PLOTNOST);
+                $('label#SAP-VOLUME').text(sap_buffer.VOLUME);
+                $('label#SAP-MASS').text(sap_buffer.MASS);
+                $('label#SAP-LOGIN_EXP').text(sap_buffer.LOGIN_EXP);
+                $('label#SAP-N_POST').text(sap_buffer.N_POST);
+                $('label#SAP-TRANSP_FAKT').text(sap_buffer.TRANSP_FAKT);
+                $('label#SAP-N_DEB').text(sap_buffer.N_DEB);
+                $('label#SAP-N_TREB').text(sap_buffer.N_TREB);
+                $('label#SAP-LGORT').text(sap_buffer.LGORT);
+                $('label#SAP-WERKS').text(sap_buffer.WERKS);
+            }
+        }
+    },
+        // Вернуть позицию поставки
     getPosSupply: function (pos) {
         var sup = getObjects(confirm_df.supply, 'posnr', pos)
         if (sup != null && sup.length > 0) {
@@ -383,7 +440,7 @@ var confirm_df = {
         };
         return null;
     },
-
+    //
     updateTips: function (t) {
         $(".validateTips")
             .text(t)
@@ -392,7 +449,7 @@ var confirm_df = {
             $(".validateTips").removeClass("ui-state-highlight", 1500);
         }, 500);
     },
-
+    //
     checkLengthOfMessage: function (o, message, min, max) {
         if (o.val().length > max || o.val().length < min) {
             o.addClass("ui-state-error");
@@ -402,7 +459,7 @@ var confirm_df = {
             return true;
         }
     },
-
+    //
     checkLength: function (o, n, min, max) {
         if (o.val().length > max || o.val().length < min) {
             o.addClass("ui-state-error");
@@ -413,7 +470,7 @@ var confirm_df = {
             return true;
         }
     },
-
+    //
     checkSelect: function (o, n, min, max) {
         if (o.val() > max || o.val() < min) {
             o.addClass("ui-state-error");
@@ -454,7 +511,6 @@ var confirm_df = {
             return true;
         }
     },
-
     // Проверка на пустой объект
     checkCheckboxOfMessage: function (o, condition, message) {
         if (o.prop('checked') != condition) {
@@ -465,7 +521,7 @@ var confirm_df = {
             return true;
         }
     },
-
+    // инициализация формы
     init: function () {
         confirm_df.obj = $("#confirm-deliver-fuel").dialog({
             resizable: false,
@@ -478,12 +534,14 @@ var confirm_df = {
                     var valid = true;
                     confirm_df.allFields.removeClass("ui-state-error");
 
-                    if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!")}
+                    //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!")}
+
+                    var variant = confirm_df.select_variant.val();
 
                     if (!confirm_df.checkbox_deliver_Passage.prop('checked')) {
                         // режим не пролив
                         valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
-                        var variant = confirm_df.select_variant.val();
+                        
                         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
                         if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
                         if (variant == 3) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
@@ -509,15 +567,17 @@ var confirm_df = {
                     valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_volume, "Нет значения объема ГСМ в баке");
                     // Проверка колонки
                     valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
+                    // Все заполненно?
                     if (valid) {
-                        var sap_buffer = confirm_df.getNewSAP_Buffer();
-                        postAsyncSAP_Buffer(
-                            sap_buffer,
-                            function (id) {
-                                if (id > 0) $(this).dialog("close");
-                            }
-                        );
-                        
+                        if (variant >= 1 && variant <= 6) {
+                            var sap_buffer = confirm_df.getNewSAP_Buffer();
+                            confirm_df.fsap.init();
+                            confirm_df.fsap.open(sap_buffer);
+                        } else {
+                            // Запись в базу локальную
+                            confirm_df.save_fuelSale(null);
+                        }
+
                     }
                 },
                 'Отмена': function () {
@@ -887,7 +947,9 @@ var confirm_df = {
         confirm_df.clear();
         confirm_df.card = null; // Обнулим карту
         confirm_df.gun = null;  // Обнулим теги пистолета
-        confirm_df.select_variant.val(-1).selectmenu("refresh"); // Сбросили выбор вариантов
+        confirm_df.select_variant.val(-1).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
+        confirm_df.checkbox_deliver_Passage.prop('checked', false); // Сбросили технический пролив
+
         if (num_gun) {
             confirm_df.obj.dialog("option", "title", 'Выдать топливо (пистолет-' + num_gun + ')');
             confirm_df.obj.dialog("open");
@@ -989,6 +1051,24 @@ var confirm_df = {
     },
 
 };
+
+//var confirm_sap = {
+//    obj: null,
+//    init: function () {
+//        confirm_sap.obj = $("#dialog-message").dialog({
+//            modal: true,
+//            title:'mt',
+//            buttons: {
+//                Ok: function () {
+//                    $(this).dialog("close");
+//                }
+//            }
+//        });
+//    },
+//    open: function () {
+//        confirm_sap.obj.dialog("open");
+//    }
+//};
 
 $(function () {
 

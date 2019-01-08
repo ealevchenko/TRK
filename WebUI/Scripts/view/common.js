@@ -229,8 +229,8 @@ var getTankTags= function (num, callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
-                //callback(bunk_out);
+                //callback(data);
+                callback(bunk_out);
             }
         },
         error: function (x, y, z) {
@@ -304,11 +304,11 @@ var getReservation = function (num, pos, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            //OnAJAXError(x, y, z);
             // на время теста
-            //if (typeof callback === 'function') {
-            //    callback(reservation_out);
-            //}
+            if (typeof callback === 'function') {
+                callback(reservation_out);
+            }
         },
         complete: function () {
             AJAXComplete();
@@ -331,11 +331,11 @@ var getSupply = function (post, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            //OnAJAXError(x, y, z);
             // на время теста
-            //if (typeof callback === 'function') {
-            //    callback(supply_out);
-            //}
+            if (typeof callback === 'function') {
+                callback(supply_out);
+            }
             
         },
         complete: function () {
