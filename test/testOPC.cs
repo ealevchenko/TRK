@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MessageLog;
 
 namespace test
 {
@@ -56,6 +57,7 @@ namespace test
                         Console.WriteLine("rfid.card - {0}", rfid.card);
                         Console.WriteLine("rfid.card.Id - {0}", rfid.card.Id);
                         Console.WriteLine("rfid.card.Name - {0}", rfid.card.Name);
+
                     }
 
 
@@ -78,14 +80,28 @@ namespace test
 
                 List<RFID> list = client.ReadTagsOPSOfRFID();
 
-                foreach (RFID rfid in list)
+                if (list != null)
                 {
-                    if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0) {
-                        OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo).OrderByDescending(o => o.id).FirstOrDefault();
-                        if (rfid_old == null) {
-                            int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ?  (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
+
+                    foreach (RFID rfid in list)
+                    {
+                        Console.WriteLine("rfid.num_trk - {0}", rfid.num_trk);
+                        Console.WriteLine("rfid.side - {0}", rfid.side);
+                        Console.WriteLine("rfid.lo - {0}", rfid.lo);
+                        Console.WriteLine("rfid.hi - {0}", rfid.hi);
+
+                        if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0)
+                        {
+                            OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo).OrderByDescending(o => o.id).FirstOrDefault();
+                            if (rfid_old == null)
+                            {
+                                int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
+                            }
                         }
                     }
+                }
+                else {
+                    String.Format("Список считаных RFID-карт = null").SaveWarning();
                 }
             }
             catch (Exception e)

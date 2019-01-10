@@ -84,18 +84,26 @@ namespace TRKServices
                 EFOPC_RFID ef_opc_rfid = new EFOPC_RFID();
 
                 List<RFID> list = client.ReadTagsOPSOfRFID();
-
-                foreach (RFID rfid in list)
+                if (list != null)
                 {
-                    if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0)
+                    // String.Format("Список считаных RFID-карт = {0}",list.Count()).SaveWarning();
+                    foreach (RFID rfid in list)
                     {
-                        OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo).OrderByDescending(o => o.id).FirstOrDefault();
-                        if (rfid_old == null)
+                        if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0)
                         {
-                            int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
-                            String.Format("Сервис TRKServices - добавлена новая RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4} - id строки - {5}",rfid.num_trk,rfid.side,rfid.card != null ? (int?)rfid.card.Id : null,rfid.hi,rfid.lo, res).SaveInformation();
+                            String.Format("Сервис TRKServices - Считана RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo).SaveInformation();
+                            OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo).OrderByDescending(o => o.id).FirstOrDefault();
+                            if (rfid_old == null)
+                            {
+                                int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
+                                String.Format("Сервис TRKServices - добавлена новая RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4} - id строки - {5}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo, res).SaveInformation();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    String.Format("Список считаных RFID-карт = null").SaveWarning();
                 }
             }
             catch (Exception e)
