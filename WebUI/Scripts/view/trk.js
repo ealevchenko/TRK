@@ -91,14 +91,30 @@ var catalog_werks = {
 var openFuelSale = {
     list: null,
     init: function () {
-        var list = openFuelSale.list;
-        for (i = 0; i < list.length; i++) {
-            if (list[i].trk_num > 0 && list[i].trk_num< 20) {
-                $('#button-gun-'+list[i].gun_num+'-deliver').hide();
-                $('#button-gun-'+list[i].gun_num+'-close').show().attr("data-id", list[i].id);
+        openFuelSale.list = null;
+        // Загрузка (common.js)
+        getAsyncOpenFuelSale(function (result) {
+            openFuelSale.list = result;
+        });
+    },
+    getFuelSaleID: function (trk_num, side, num) {
+        // Считаем карту
+        var fs_trk = getObjects(openFuelSale.list, 'num_trk', trk_num)
+        if (fs_trk) {
+            var fs_num = getObjects(openFuelSale.list, 'gun_num', num)
+            if (fs_num && fs_num.length > 0) {
+                return fs_num[0].id;
             }
-
         }
+        return null
+    },
+    getFuelSale: function (id) {
+        // Считаем карту
+        var fs = getObjects(openFuelSale.list, 'id', id)
+        if (fs && fs.length > 0 ) {
+            return fs[0];
+        }
+        return null
     }
 };
 // Список rfid-карт
@@ -207,7 +223,16 @@ function viewGuns() {
                 if (gun.num_gun == confirm_tags_gun.current) {
                     confirm_tags_gun.out(gun);
                 }
-
+                // Проверим сотояние TRK
+                var id_ofs = openFuelSale.getFuelSaleID(gun.num_trk, gun.side, gun.num_gun);
+                // Отобразим кнопки выдать\закрыть
+                if (id_ofs != null) {
+                    $('#button-gun-' + gun.num_gun + '-deliver').hide();
+                    $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                } else {
+                    $('#button-gun-' + gun.num_gun + '-deliver').show();
+                    $('#button-gun-' + gun.num_gun + '-close').hide().attr("data-id", '');
+                }
                 // Вывод связь
                 if (gun.online != null) {
                     if (gun.online) {
@@ -374,6 +399,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         alert(id);
+        openFuelSale.init()
         confirm_df.obj.dialog("close");
     },
     //сохраним данные в локальной базе fuelSale
@@ -545,7 +571,7 @@ var confirm_df = {
         var valid = true;
         confirm_df.allFields.removeClass("ui-state-error");
 
-        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -678,14 +704,6 @@ var confirm_df = {
             $('select[name ="variant-sap"]'),
             { width: 300 },
             null,
-            //[
-            //    { value: 1, text: 'По резервированию (керосин)' },
-            //    { value: 2, text: 'По резервированию (ГСМ)' },
-            //    { value: 3, text: 'По исходящей поставке' },
-            //    { value: 4, text: 'По требованию (самовывоз)' },
-            //    { value: 5, text: 'Заправка в баки ТС' },
-            //    { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-            //],
             null,
             -1,
             function (event, ui) {
@@ -1235,12 +1253,110 @@ var confirm_tags_gun = {
     }
 };
 
+var confirm_close_fuel = {
+    obj: null,
+    fs: null,
+    init: function () {
+        confirm_close_fuel.obj = $("#dialog-close-fuel").dialog({
+            modal: true,
+            autoOpen: false,
+            height: "auto",
+            width: 700,
+            buttons: {
+                'Закрыть': function () {
+                    if (confirm_close_fuel.fs) {
+                        putAsyncFuelSales(
+                            confirm_close_fuel.fs,
+                            function (id) {
+                                if (id > 0) {
+                                    // Инициализация открытых выдач
+                                    openFuelSale.init();
+                                    confirm_close_fuel.obj.dialog("close");
+                                }
+
+                            }
+                        );
+                        
+                    }
+
+                },
+                'Отмена': function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+    },
+    open: function (id) {
+        if (id) {
+            confirm_close_fuel.obj.dialog("open");
+            confirm_close_fuel.fs = null;
+            var fs = openFuelSale.getFuelSale(id);
+            if (fs) {
+                var now = new Date();
+                confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + fs.gun_num + ')');
+                var gun = guns.getGun(fs.gun_num);
+                if (gun) {
+                    fs.volume = gun.last_out_volume; // выдано
+                    fs.stop_counter = gun.total_volume; // по счетчику
+                    fs.close = toISOStringTZ(now);
+                    getTankTags(fs.tank_num,
+                        function (result) {
+                            // Обновим информацию по баку
+
+                            fs.stop_datetime = toISOStringTZ(now);
+                            fs.stop_level = result.level;
+                            fs.stop_mass = result.mass;
+                            fs.stop_temp = result.temp;
+                            fs.stop_volume = result.volume;
+                            fs.stop_density = result.dens;
+                            fs.stop_water_level = 0;
+
+                            $('input#close-operator_name').val(fs.operator_name);
+                            $('input#close-smena_num').val(fs.smena_num);
+                            $('input#close-smena_datetime').val(fs.smena_datetime);
+                            $('input#close-trk_num').val(fs.trk_num);
+                            $('input#close-gun_num').val(fs.gun_num);
+                            $('input#close-fuel_type').val(fs.fuel_type);
+                            $('input#close-tank_num').val(fs.tank_num);
+                            $('input#close-id_card').val(fs.id_card);
+                            $('input#close-dose').val(fs.dose);
+                            $('input#close-passage').val(fs.passage);
+                            $('input#close-volume').val(fs.volume);
+                            $('input#close-mass').val(fs.mass);
+                            $('input#close-start_datetime').val(fs.start_datetime);
+                            $('input#close-start_level').val(fs.start_level);
+                            $('input#close-start_volume').val(fs.start_volume);
+                            $('input#close-start_density').val(fs.start_density);
+                            $('input#close-start_mass').val(fs.start_mass);
+                            $('input#close-start_temp').val(fs.start_temp);
+                            $('input#close-start_water_level').val(fs.start_water_level);
+                            $('input#close-start_counter').val(fs.start_counter);
+                            $('input#close-stop_datetime').val(fs.stop_datetime);
+                            $('input#close-stop_level').val(fs.stop_level);
+                            $('input#close-stop_volume').val(fs.stop_volume);
+                            $('input#close-stop_density').val(fs.stop_density);
+                            $('input#close-stop_mass').val(fs.stop_mass);
+                            $('input#close-stop_temp').val(fs.stop_temp);
+                            $('input#close-stop_water_level').val(fs.stop_water_level);
+                            $('input#close-stop_counter').val(fs.stop_counter);
+                            //$('input#close-close').val(fs.close);
+                            $('input#close-id_sap').val(fs.id_sap);
+                        }
+                    );
+                }
+                confirm_close_fuel.fs = fs;
+            };
+        };
+    },
+};
+
 $(function () {
 
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
-        var count = 4;
+        var count = 3;
         // Загрузка (common.js)
         getCatalogOZM(function (result) {
             catalog_ozm.list = result;
@@ -1275,19 +1391,6 @@ $(function () {
                 }
             }
         });
-        // Загрузка (common.js)
-        getAsyncOpenFuelSale(function (result) {
-            openFuelSale.list = result;
-            count -= 1;
-            if (count <= 0) {
-                if (typeof callback === 'function') {
-                    LockScreenOff();
-                    callback();
-
-                }
-            }
-        });
-
     };
 
     // Инициализаия кнопки вывода панели "Информация по RFID-карте"
@@ -1312,24 +1415,29 @@ $(function () {
         var risers = $(this).attr('data-risers');
         confirm_df.Open(risers, 1);
     });
-
+    // Инициализаия кнопки вывода панели "Текущее значение тегов"
     $('th.button-online').on('click', function () {
         var num = $(this).attr('data-num');
         confirm_tags_gun.init(num);
         confirm_tags_gun.open();
-        //confirm_df.Open(risers, 1);
+    });
+    // Инициализаия кнопки вывода панели "Закрытия выдачи"
+    $('button.button-close').on('click', function () {
+        var id = $(this).attr('data-id');
+        confirm_close_fuel.open(id);
     });
 
     pb_deliver.init();
-
+    // Инициализация открытых выдач
+    openFuelSale.init();
     // Загрузка библиотек
     loadReference(function (result) {
-
-        openFuelSale.init();
         // Инициализаия панели  "Информация по RFID-карте"
         confirm_rfid_card.init();
         // Инициализаия панели  "Задания выдачи и работе с SAP MII"
         confirm_df.init();
+        // Инициализаия панели  "Закрытия выдачи и SAP MII"
+        confirm_close_fuel.init();
         // Загрузка документа
         $(document).ready(function () {
             show();

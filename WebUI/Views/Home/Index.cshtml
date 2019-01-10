@@ -372,13 +372,13 @@
         <form id="form-deliver-fuel">
             <table class="tab-content">
                 @*<tr>
-                    <th><label id="number" for="number-value">Номер карточки :</label></th>
-                    <td><label id="number-value"></label></td>
-                </tr>
-                <tr>
-                    <th><label id="autonumber" for="autonumber-value">Номер автомобиля :</label></th>
-                    <td><label id="autonumber-value"></label></td>
-                </tr>*@
+                        <th><label id="number" for="number-value">Номер карточки :</label></th>
+                        <td><label id="number-value"></label></td>
+                    </tr>
+                    <tr>
+                        <th><label id="autonumber" for="autonumber-value">Номер автомобиля :</label></th>
+                        <td><label id="autonumber-value"></label></td>
+                    </tr>*@
                 <tr>
                     <th><label id="current_volume" for="current_volume-value">current_volume :</label></th>
                     <td><label id="current_volume-value"></label></td>
@@ -535,6 +535,104 @@
                 <td><label id="SAP-WERKS"></label></td>
             </tr>
         </table>
+    </div>
+
+    <div id="dialog-close-fuel" title="" style="display:none">
+        <form id="form-close-fuel">
+            <table class="table-striped table-bordered">
+                <tr>
+                    <th>Имя оператора:</th>
+                    <td><input id="close-operator_name" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <th>Номер смены:</th>
+                    <td><input id="close-smena_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Дата начала смены:</th>
+                    <td><input id="close-smena_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>№ ТРК:</th>
+                    <td><input id="close-trk_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>№ пистолета:</th>
+                    <td><input id="close-gun_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Тип топлива:</th>
+                    <td><input id="close-fuel_type" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Номер бака:</th>
+                    <td><input id="close-tank_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>id RFID-карты:</th>
+                    <td><input id="close-id_card" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>id строки SAP:</th>
+                    <td><input id="close-id_sap" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+            @*</table>
+            <table class="table-striped table-bordered">*@
+                <tr>
+                    <th>Доза:</th>
+                    <td><input id="close-dose" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Тип выдача:</th>
+                    <td><input id="close-passage" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Объем выдачи:</th>
+                    <td><input id="close-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Масса выдачи:</th>
+                    <td><input id="close-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Начало выдачи:</th>
+                    <td><input id="close-start_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Конец выдачи:</th>
+                    <td><input id="close-stop_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Уровень в начале:</th>
+                    <td><input id="close-start_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Уровень в конце:</th>
+                    <td><input id="close-stop_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Объем в начале:<</th>
+                    <td><input id="close-start_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Объем в конце:</th>
+                    <td><input id="close-stop_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Плотность в начале:</th>
+                    <td><input id="close-start_density" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Плотность в конце:</th>
+                    <td><input id="close-stop_density" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Масса в начале:</th>
+                    <td><input id="close-start_mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Масса в конце:</th>
+                    <td><input id="close-stop_mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Температура в начале:</th>
+                    <td><input id="close-start_temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Температура в конце:</th>
+                    <td><input id="close-stop_temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Уровень воды в начале:</th>
+                    <td><input id="close-start_water_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Уровень воды в конце:</th>
+                    <td><input id="close-stop_water_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th>Счетчик в начале:</th>
+                    <td><input id="close-start_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Счетчик в конце:</th>
+                    <td><input id="close-stop_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+            </table>
+        </form>
     </div>
 
 </body>

@@ -605,6 +605,30 @@ var getAsyncOpenFuelSale = function (callback) {
         },
     });
 }
+//Обновить FuelSale
+var putAsyncFuelSales = function (fuel_sale, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/azs/fuel_sale/' + fuel_sale.id,
+        data: JSON.stringify(fuel_sale),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {

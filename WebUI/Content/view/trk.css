@@ -79,7 +79,15 @@ legend {
     margin: 3px;
     height: 25px;
     font-size: 12px;
+    background-color:aquamarine;
 }
+.button-close {
+    margin: 3px;
+    height: 25px;
+    font-size: 12px;
+    background-color:khaki;
+}
+
 
 .button-rfid-active {
     background-color: #b6ff00;

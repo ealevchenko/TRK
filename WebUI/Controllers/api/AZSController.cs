@@ -125,11 +125,29 @@ namespace WebUI.Controllers.api
             {
                 this.ef_fs.Add(value);
                 this.ef_fs.Save();
+                this.ef_fs.Refresh(value);
                 return value.id;
             }
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:PostFuelSale(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
+        // PUT api/azs/fuel_sale/5
+        [HttpPut]
+        [Route("fuel_sale/{id:int}")]
+        public int PutFuelSale(int id, [FromBody]FuelSale value)
+        {
+            try
+            {
+                this.ef_fs.Update(value);
+                return this.ef_fs.Save();
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PutFuelSale(id={0}, value={1})", id, value).SaveError(e);
                 return -1;
             }
         }
