@@ -10,19 +10,6 @@ using MessageLog;
 
 namespace ClientOPCTRK
 {
-    //public class Guns
-    //{
-    //    public int gun_num { get; set; }
-    //    public ItemValueResult[] item_gun { get; set; }
-    //}
-
-    //public class TRK_
-    //{
-    //    public int trk_num { get; set; }
-    //    public ItemValueResult[] leftRFID { get; set; }
-    //    public ItemValueResult[] reghtRFID { get; set; }
-    //    public Guns[] trk_guns { get; set; }
-    //}
 
     public class RFID
     {
@@ -239,28 +226,28 @@ namespace ClientOPCTRK
                         if (card != null)
                         {
                             departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
+                            Cards cards = new Cards()
+                            {
+                                Id = card.Id,
+                                Number = card.Number,
+                                DriverName = card.DriverName,
+                                AutoNumber = card.AutoNumber,
+                                Debitor = card.Debitor,
+                                Sn1 = card.Sn1,
+                                Sn2 = card.Sn2,
+                                AutoModel = card.AutoModel,
+                                Street = card.Street,
+                                House = card.House,
+                                CreateDate = card.CreateDate,
+                                CreateTime = card.CreateTime,
+                                UpdateDate = card.UpdateDate,
+                                UpdateTime = card.UpdateTime,
+                                Owner = card.Owner,
+                                Active = card.Active,
+                                Name = departs != null && departs.name != null ? departs.name : "?",
+                            };
+                            rfid.card = cards;
                         }
-                        Cards cards = new Cards()
-                        {
-                            Id = card.Id,
-                            Number = card.Number,
-                            DriverName = card.DriverName,
-                            AutoNumber = card.AutoNumber,
-                            Debitor = card.Debitor,
-                            Sn1 = card.Sn1,
-                            Sn2 = card.Sn2,
-                            AutoModel = card.AutoModel,
-                            Street = card.Street,
-                            House = card.House,
-                            CreateDate = card.CreateDate,
-                            CreateTime = card.CreateTime,
-                            UpdateDate = card.UpdateDate,
-                            UpdateTime = card.UpdateTime,
-                            Owner = card.Owner,
-                            Active = card.Active,
-                            Name = departs != null && departs.name != null ? departs.name : "?",
-                        };
-                        rfid.card = cards;
                     }
                 }
                 return rfid;

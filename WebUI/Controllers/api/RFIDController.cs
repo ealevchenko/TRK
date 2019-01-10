@@ -76,7 +76,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                List<int> list = this.ef_rfid.Database.SqlQuery<int>("SELECT max([id]) as id FROM [ASU_AZSoperations].[dbo].[OPC_RFID] group by [num_trk],[side]").ToList();
+                List<int> list = this.ef_rfid.Database.SqlQuery<int>("SELECT max([id]) as id FROM [dbo].[OPC_RFID] group by [num_trk],[side]").ToList();
                 if (list==null) return NotFound();
                 List<RFID> result_list = new List<RFID>();
                 foreach (int id in list) {

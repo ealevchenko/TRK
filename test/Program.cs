@@ -17,17 +17,17 @@ namespace test
         {
             try
             {
-                //int hi = 10006;
-                //int lo = 54273;
+                int hi = 29550;
+                int lo = 56833;
 
-                //byte[] data_hi = BitConverter.GetBytes(hi);
-                //byte[] data_lo = BitConverter.GetBytes(lo);
+                byte[] data_hi = BitConverter.GetBytes(hi);
+                byte[] data_lo = BitConverter.GetBytes(lo);
 
-                //if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
-                //{
-                //    int z1 = data_hi[1];
-                //    int z2 = (data_hi[0] * 256) + data_lo[1];
-                //}
+                if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
+                {
+                    int z1 = data_hi[1];
+                    int z2 = (data_hi[0] * 256) + data_lo[1];
+                }
 
 
 
@@ -37,7 +37,7 @@ namespace test
                 //test_opc.Test_ClientTRK_ReadTagOPC();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfTank();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
-                test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
+                //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
                 #endregion
 

@@ -11,6 +11,7 @@
         public EFDbContext()
             : base("name=AZS")
         {
+
         }
 
         public virtual DbSet<Cat_Depots> Cat_Depots { get; set; }
