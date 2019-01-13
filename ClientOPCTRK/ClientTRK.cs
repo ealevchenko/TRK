@@ -17,6 +17,9 @@ namespace ClientOPCTRK
         public int side { get; set; }
         public uint? hi { get; set; }
         public uint? lo { get; set; }
+        public bool? online { get; set; }
+        public bool? ready { get; set; }
+        public int? status { get; set; }
         public Cards card { get; set; }
     }
 
@@ -135,130 +138,221 @@ namespace ClientOPCTRK
                 String.Format("Ошибка выполнения метода AddGun(items={0}, i={1}, num_trk={2}, num_gun={3})", items, i, num_trk, num_gun).SaveError(e);
             }
         }
-
         /// <summary>
-        /// Вернуть карту
+        /// Добавить строки тегов RFID
         /// </summary>
-        /// <param name="hi"></param>
-        /// <param name="lo"></param>
-        /// <returns></returns>
-        private Cards GetCardsOfNum(object hi, object lo)
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        /// <param name="num"></param>
+        /// <param name="side"></param>
+        public void AddRFID(ref Opc.Da.Item[] items, ref int i, int num, int side)
         {
             try
             {
-                EFazsCards ef_card = new EFazsCards();
-                EFazsDeparts ef_departs = new EFazsDeparts();
-                if (hi != null && lo != null && (uint)hi > 0 && (uint)lo > 0)
+                if (num < 10)
                 {
-                    //Console.WriteLine("hi={0}, lo={1}",hi,lo);
-                    byte[] data_hi = BitConverter.GetBytes((uint)hi);
-                    byte[] data_lo = BitConverter.GetBytes((uint)lo);
-
-                    if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
-                    {
-                        int code1 = data_hi[1];
-                        int code2 = (data_hi[0] * 256) + data_lo[1];
-                        azsCards card = ef_card.Get().Where(c => c.Number == (code1).ToString("000") + "," + (code2).ToString("00000")).FirstOrDefault();
-                        azsDeparts departs = null;
-                        if (card != null)
-                        {
-                            departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
-                        }
-                        Cards cards = new Cards()
-                        {
-                            Id = card.Id,
-                            Number = card.Number,
-                            DriverName = card.DriverName,
-                            AutoNumber = card.AutoNumber,
-                            Debitor = card.Debitor,
-                            Sn1 = card.Sn1,
-                            Sn2 = card.Sn2,
-                            AutoModel = card.AutoModel,
-                            Street = card.Street,
-                            House = card.House,
-                            CreateDate = card.CreateDate,
-                            CreateTime = card.CreateTime,
-                            UpdateDate = card.UpdateDate,
-                            UpdateTime = card.UpdateTime,
-                            Owner = card.Owner,
-                            Active = card.Active,
-                            Name = departs != null && departs.name != null ? departs.name : "?",
-                        };
-                        return cards;
-                    }
-                }
-                return null;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid0" + num + "_" + side + ".IdHi";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid0" + num + "_" + side + ".IdLo";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid0" + num + "_" + side + ".Online";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid0" + num + "_" + side + ".Ready";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid0" + num + "_" + side + ".Rfid0" + num + "_" + side + "_status";
+                    i++;
+                };
+                if (num >= 10 && num <= 12)
+                {
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid" + num + ".IdHi";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid" + num + ".IdLo";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid" + num + ".Online";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid" + num + ".Ready";
+                    i++;
+                    items[i] = new Opc.Da.Item();
+                    items[i].ItemName = "RFID.Rfid" + num + ".Rfid" + num + "status";
+                    i++;
+                };
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода GetCardsOfNum(hi={0}, lo={1})", hi, lo).SaveError(e);
-                return null;
+                String.Format("Ошибка выполнения метода AddRFID(items={0}, i={1}, num={2}, side={3})", items, i, num, side).SaveError(e);
             }
         }
 
-        private RFID GetRFIDOfNum(int num_trk, int side, object hi, object lo)
+        ///// <summary>
+        ///// Вернуть карту
+        ///// </summary>
+        ///// <param name="hi"></param>
+        ///// <param name="lo"></param>
+        ///// <returns></returns>
+        //private Cards GetCardsOfNum(object hi, object lo)
+        //{
+        //    try
+        //    {
+        //        EFazsCards ef_card = new EFazsCards();
+        //        EFazsDeparts ef_departs = new EFazsDeparts();
+        //        if (hi != null && lo != null && (uint)hi > 0 && (uint)lo > 0)
+        //        {
+        //            //Console.WriteLine("hi={0}, lo={1}",hi,lo);
+        //            byte[] data_hi = BitConverter.GetBytes((uint)hi);
+        //            byte[] data_lo = BitConverter.GetBytes((uint)lo);
+
+        //            if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
+        //            {
+        //                int code1 = data_hi[1];
+        //                int code2 = (data_hi[0] * 256) + data_lo[1];
+        //                azsCards card = ef_card.Get().Where(c => c.Number == (code1).ToString("000") + "," + (code2).ToString("00000")).FirstOrDefault();
+        //                azsDeparts departs = null;
+        //                if (card != null)
+        //                {
+        //                    departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
+        //                }
+        //                Cards cards = new Cards()
+        //                {
+        //                    Id = card.Id,
+        //                    Number = card.Number,
+        //                    DriverName = card.DriverName,
+        //                    AutoNumber = card.AutoNumber,
+        //                    Debitor = card.Debitor,
+        //                    Sn1 = card.Sn1,
+        //                    Sn2 = card.Sn2,
+        //                    AutoModel = card.AutoModel,
+        //                    Street = card.Street,
+        //                    House = card.House,
+        //                    CreateDate = card.CreateDate,
+        //                    CreateTime = card.CreateTime,
+        //                    UpdateDate = card.UpdateDate,
+        //                    UpdateTime = card.UpdateTime,
+        //                    Owner = card.Owner,
+        //                    Active = card.Active,
+        //                    Name = departs != null && departs.name != null ? departs.name : "?",
+        //                };
+        //                return cards;
+        //            }
+        //        }
+        //        return null;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        String.Format("Ошибка выполнения метода GetCardsOfNum(hi={0}, lo={1})", hi, lo).SaveError(e);
+        //        return null;
+        //    }
+        //}
+        /// <summary>
+        /// Получить значение тегов RFID
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="side"></param>
+        /// <param name="hi"></param>
+        /// <param name="lo"></param>
+        /// <returns></returns>
+        private RFID GetRFIDOfNum(int num, int side, ItemValueResult[] list, ref int i, bool identify_card)
         {
             try
             {
+
                 RFID rfid = new RFID()
                 {
-                     num_trk= num_trk, side = side
+                    num_trk = num,
+                    side = side
                 };
-
-                EFazsCards ef_card = new EFazsCards();
-                EFazsDeparts ef_departs = new EFazsDeparts();
-                if (hi != null && lo != null && (uint)hi > 0 && (uint)lo > 0)
+                if (list != null)
                 {
-                    rfid.hi = (uint)hi;
-                    rfid.lo = (uint)lo;
-                    //Console.WriteLine("hi={0}, lo={1}",hi,lo);
-                    byte[] data_hi = BitConverter.GetBytes((uint)hi);
-                    byte[] data_lo = BitConverter.GetBytes((uint)lo);
-
-                    if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
+                    uint? hi = list[i].Value != null ? list[i].Value as uint? : null; //if (i == 50) { hi = 10006; }; //if (i == 55) { hi = 10006; }
+                    i++;
+                    uint? lo = list[i].Value != null ? list[i].Value as uint? : null; //if (i == 51) { lo = 54273; }; //if(i == 56) { lo = 54273; }
+                    i++;
+                    rfid.online = list[i].Value != null ? list[i].Value as bool? : null;
+                    i++;
+                    rfid.ready = list[i].Value != null ? list[i].Value as bool? : null;
+                    i++;
+                    rfid.status = list[i].Value != null ? list[i].Value as int? : null;
+                    i++;
+                    EFazsCards ef_card = new EFazsCards();
+                    EFazsDeparts ef_departs = new EFazsDeparts();
+                    if (hi != null && lo != null)
                     {
-                        int code1 = data_hi[1];
-                        int code2 = (data_hi[0] * 256) + data_lo[1];
-                        rfid.hi = (uint)code1;
-                        rfid.lo = (uint)code2;
-                        azsCards card = ef_card.Get().Where(c => c.Number == (code1).ToString("000") + "," + (code2).ToString("00000")).FirstOrDefault();
-                        azsDeparts departs = null;
-                        if (card != null)
+                        rfid.hi = (uint)hi;
+                        rfid.lo = (uint)lo;
+                        if (hi > 0 && lo > 0)
                         {
-                            departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
-                            Cards cards = new Cards()
+
+                            //Console.WriteLine("hi={0}, lo={1}",hi,lo);
+                            byte[] data_hi = BitConverter.GetBytes((uint)hi);
+                            byte[] data_lo = BitConverter.GetBytes((uint)lo);
+
+                            if (data_hi != null && data_lo != null && data_hi.Count() >= 2 && data_lo.Count() >= 2)
                             {
-                                Id = card.Id,
-                                Number = card.Number,
-                                DriverName = card.DriverName,
-                                AutoNumber = card.AutoNumber,
-                                Debitor = card.Debitor,
-                                Sn1 = card.Sn1,
-                                Sn2 = card.Sn2,
-                                AutoModel = card.AutoModel,
-                                Street = card.Street,
-                                House = card.House,
-                                CreateDate = card.CreateDate,
-                                CreateTime = card.CreateTime,
-                                UpdateDate = card.UpdateDate,
-                                UpdateTime = card.UpdateTime,
-                                Owner = card.Owner,
-                                Active = card.Active,
-                                Name = departs != null && departs.name != null ? departs.name : "?",
-                            };
-                            rfid.card = cards;
+                                int code1 = data_hi[1];
+                                int code2 = (data_hi[0] * 256) + data_lo[1];
+                                rfid.hi = (uint)code1;
+                                rfid.lo = (uint)code2;
+                                if (identify_card)
+                                {
+                                    azsCards card = ef_card.Get().Where(c => c.Number == (code1).ToString("000") + "," + (code2).ToString("00000")).FirstOrDefault();
+                                    azsDeparts departs = null;
+                                    if (card != null)
+                                    {
+                                        departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
+                                        Cards cards = new Cards()
+                                        {
+                                            Id = card.Id,
+                                            Number = card.Number,
+                                            DriverName = card.DriverName,
+                                            AutoNumber = card.AutoNumber,
+                                            Debitor = card.Debitor,
+                                            Sn1 = card.Sn1,
+                                            Sn2 = card.Sn2,
+                                            AutoModel = card.AutoModel,
+                                            Street = card.Street,
+                                            House = card.House,
+                                            CreateDate = card.CreateDate,
+                                            CreateTime = card.CreateTime,
+                                            UpdateDate = card.UpdateDate,
+                                            UpdateTime = card.UpdateTime,
+                                            Owner = card.Owner,
+                                            Active = card.Active,
+                                            Name = departs != null && departs.name != null ? departs.name : "?",
+                                        };
+                                        rfid.card = cards;
+                                    }
+                                }
+                            }
                         }
                     }
+
+
                 }
                 return rfid;
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода GetRFIDOfNum(num_trk={0}, side={1}, hi={2}, lo={3})", num_trk, side, hi, lo).SaveError(e);
+                String.Format("Ошибка выполнения метода GetRFIDOfNum(num_trk={0}, side={1}, list={3}, start={4})", num, side, list, i).SaveError(e);
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить значения тегов пистолетов
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <param name="site"></param>
+        /// <param name="list"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
         private Gun GetGun(int num_trk, int num_gun, int site, ItemValueResult[] list, int start)
         {
             try
@@ -346,167 +440,167 @@ namespace ClientOPCTRK
             }
 
         }
-        /// <summary>
-        /// Получить все теги колонки
-        /// </summary>
-        /// <returns></returns>
-        public TRK ReadTagOPC()
-        {
-            try
-            {
-                Opc.Da.Server server = null;
-                OpcCom.Factory fact = new OpcCom.Factory();
-                server = new Opc.Da.Server(fact, null);
+        ///// <summary>
+        ///// Получить все теги колонки
+        ///// </summary>
+        ///// <returns></returns>
+        //public TRK ReadTagOPC()
+        //{
+        //    try
+        //    {
+        //        Opc.Da.Server server = null;
+        //        OpcCom.Factory fact = new OpcCom.Factory();
+        //        server = new Opc.Da.Server(fact, null);
 
-                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+        //        server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
 
-                //
-                Opc.Da.Subscription group;
-                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-                groupState.Name = "group";
-                groupState.Active = true;
-                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+        //        //
+        //        Opc.Da.Subscription group;
+        //        Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+        //        groupState.Name = "group";
+        //        groupState.Active = true;
+        //        group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
-                //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[48];
-                items[0] = new Opc.Da.Item();
-                items[0].ItemName = "RFID.Rfid01_1.IdHi";
-                items[1] = new Opc.Da.Item();
-                items[1].ItemName = "RFID.Rfid01_1.IdLo";
+        //        //добавление айтемов в группу
+        //        Opc.Da.Item[] items = new Opc.Da.Item[48];
+        //        items[0] = new Opc.Da.Item();
+        //        items[0].ItemName = "RFID.Rfid01_1.IdHi";
+        //        items[1] = new Opc.Da.Item();
+        //        items[1].ItemName = "RFID.Rfid01_1.IdLo";
 
-                items[2] = new Opc.Da.Item();
-                items[2].ItemName = "RFID.Rfid01_2.IdHi";
-                items[3] = new Opc.Da.Item();
-                items[3].ItemName = "RFID.Rfid01_2.IdLo";
+        //        items[2] = new Opc.Da.Item();
+        //        items[2].ItemName = "RFID.Rfid01_2.IdHi";
+        //        items[3] = new Opc.Da.Item();
+        //        items[3].ItemName = "RFID.Rfid01_2.IdLo";
 
-                items[4] = new Opc.Da.Item();
-                items[4].ItemName = "RFID.Rfid02_1.IdHi";
-                items[5] = new Opc.Da.Item();
-                items[5].ItemName = "RFID.Rfid02_1.IdLo";
+        //        items[4] = new Opc.Da.Item();
+        //        items[4].ItemName = "RFID.Rfid02_1.IdHi";
+        //        items[5] = new Opc.Da.Item();
+        //        items[5].ItemName = "RFID.Rfid02_1.IdLo";
 
-                items[6] = new Opc.Da.Item();
-                items[6].ItemName = "RFID.Rfid02_2.IdHi";
-                items[7] = new Opc.Da.Item();
-                items[7].ItemName = "RFID.Rfid02_2.IdLo";
+        //        items[6] = new Opc.Da.Item();
+        //        items[6].ItemName = "RFID.Rfid02_2.IdHi";
+        //        items[7] = new Opc.Da.Item();
+        //        items[7].ItemName = "RFID.Rfid02_2.IdLo";
 
-                items[8] = new Opc.Da.Item();
-                items[8].ItemName = "RFID.Rfid03_1.IdHi";
-                items[9] = new Opc.Da.Item();
-                items[9].ItemName = "RFID.Rfid03_1.IdLo";
+        //        items[8] = new Opc.Da.Item();
+        //        items[8].ItemName = "RFID.Rfid03_1.IdHi";
+        //        items[9] = new Opc.Da.Item();
+        //        items[9].ItemName = "RFID.Rfid03_1.IdLo";
 
-                items[10] = new Opc.Da.Item();
-                items[10].ItemName = "RFID.Rfid03_2.IdHi";
-                items[11] = new Opc.Da.Item();
-                items[11].ItemName = "RFID.Rfid03_2.IdLo";
+        //        items[10] = new Opc.Da.Item();
+        //        items[10].ItemName = "RFID.Rfid03_2.IdHi";
+        //        items[11] = new Opc.Da.Item();
+        //        items[11].ItemName = "RFID.Rfid03_2.IdLo";
 
-                items[12] = new Opc.Da.Item();
-                items[12].ItemName = "RFID.Rfid04_1.IdHi";
-                items[13] = new Opc.Da.Item();
-                items[13].ItemName = "RFID.Rfid04_1.IdLo";
+        //        items[12] = new Opc.Da.Item();
+        //        items[12].ItemName = "RFID.Rfid04_1.IdHi";
+        //        items[13] = new Opc.Da.Item();
+        //        items[13].ItemName = "RFID.Rfid04_1.IdLo";
 
-                items[14] = new Opc.Da.Item();
-                items[14].ItemName = "RFID.Rfid04_2.IdHi";
-                items[15] = new Opc.Da.Item();
-                items[15].ItemName = "RFID.Rfid04_2.IdLo";
+        //        items[14] = new Opc.Da.Item();
+        //        items[14].ItemName = "RFID.Rfid04_2.IdHi";
+        //        items[15] = new Opc.Da.Item();
+        //        items[15].ItemName = "RFID.Rfid04_2.IdLo";
 
-                items[16] = new Opc.Da.Item();
-                items[16].ItemName = "RFID.Rfid05_1.IdHi";
-                items[17] = new Opc.Da.Item();
-                items[17].ItemName = "RFID.Rfid05_1.IdLo";
+        //        items[16] = new Opc.Da.Item();
+        //        items[16].ItemName = "RFID.Rfid05_1.IdHi";
+        //        items[17] = new Opc.Da.Item();
+        //        items[17].ItemName = "RFID.Rfid05_1.IdLo";
 
-                items[18] = new Opc.Da.Item();
-                items[18].ItemName = "RFID.Rfid05_2.IdHi";
-                items[19] = new Opc.Da.Item();
-                items[19].ItemName = "RFID.Rfid05_2.IdLo";
+        //        items[18] = new Opc.Da.Item();
+        //        items[18].ItemName = "RFID.Rfid05_2.IdHi";
+        //        items[19] = new Opc.Da.Item();
+        //        items[19].ItemName = "RFID.Rfid05_2.IdLo";
 
-                items[20] = new Opc.Da.Item();
-                items[20].ItemName = "RFID.Rfid06_1.IdHi";
-                items[21] = new Opc.Da.Item();
-                items[21].ItemName = "RFID.Rfid06_1.IdLo";
+        //        items[20] = new Opc.Da.Item();
+        //        items[20].ItemName = "RFID.Rfid06_1.IdHi";
+        //        items[21] = new Opc.Da.Item();
+        //        items[21].ItemName = "RFID.Rfid06_1.IdLo";
 
-                items[22] = new Opc.Da.Item();
-                items[22].ItemName = "RFID.Rfid06_2.IdHi";
-                items[23] = new Opc.Da.Item();
-                items[23].ItemName = "RFID.Rfid06_2.IdLo";
+        //        items[22] = new Opc.Da.Item();
+        //        items[22].ItemName = "RFID.Rfid06_2.IdHi";
+        //        items[23] = new Opc.Da.Item();
+        //        items[23].ItemName = "RFID.Rfid06_2.IdLo";
 
-                items[24] = new Opc.Da.Item();
-                items[24].ItemName = "RFID.Rfid07_1.IdHi";
-                items[25] = new Opc.Da.Item();
-                items[25].ItemName = "RFID.Rfid07_1.IdLo";
+        //        items[24] = new Opc.Da.Item();
+        //        items[24].ItemName = "RFID.Rfid07_1.IdHi";
+        //        items[25] = new Opc.Da.Item();
+        //        items[25].ItemName = "RFID.Rfid07_1.IdLo";
 
-                items[26] = new Opc.Da.Item();
-                items[26].ItemName = "RFID.Rfid07_2.IdHi";
-                items[27] = new Opc.Da.Item();
-                items[27].ItemName = "RFID.Rfid07_2.IdLo";
+        //        items[26] = new Opc.Da.Item();
+        //        items[26].ItemName = "RFID.Rfid07_2.IdHi";
+        //        items[27] = new Opc.Da.Item();
+        //        items[27].ItemName = "RFID.Rfid07_2.IdLo";
 
-                items[28] = new Opc.Da.Item();
-                items[28].ItemName = "RFID.Rfid08_1.IdHi";
-                items[29] = new Opc.Da.Item();
-                items[29].ItemName = "RFID.Rfid08_1.IdLo";
+        //        items[28] = new Opc.Da.Item();
+        //        items[28].ItemName = "RFID.Rfid08_1.IdHi";
+        //        items[29] = new Opc.Da.Item();
+        //        items[29].ItemName = "RFID.Rfid08_1.IdLo";
 
-                items[30] = new Opc.Da.Item();
-                items[30].ItemName = "RFID.Rfid08_2.IdHi";
-                items[31] = new Opc.Da.Item();
-                items[31].ItemName = "RFID.Rfid08_2.IdLo";
+        //        items[30] = new Opc.Da.Item();
+        //        items[30].ItemName = "RFID.Rfid08_2.IdHi";
+        //        items[31] = new Opc.Da.Item();
+        //        items[31].ItemName = "RFID.Rfid08_2.IdLo";
 
-                items[32] = new Opc.Da.Item();
-                items[32].ItemName = "RFID.Rfid09_1.IdHi";
-                items[33] = new Opc.Da.Item();
-                items[33].ItemName = "RFID.Rfid09_1.IdLo";
-                int i = 33;
-                AddGun(ref items, ref i, 6, 0);
+        //        items[32] = new Opc.Da.Item();
+        //        items[32].ItemName = "RFID.Rfid09_1.IdHi";
+        //        items[33] = new Opc.Da.Item();
+        //        items[33].ItemName = "RFID.Rfid09_1.IdLo";
+        //        int i = 33;
+        //        AddGun(ref items, ref i, 6, 0);
 
-                items = group.AddItems(items);
+        //        items = group.AddItems(items);
 
 
-                TRK result_list = new TRK();
+        //        TRK result_list = new TRK();
 
-                ItemValueResult[] res = group.Read(items);
-                if (res != null && res.Count() > 0)
-                {
-                    result_list.cards = new RFID[] {
-                        // trk1
-                        new RFID { num_trk = 1, side = 0, card = GetCardsOfNum(res[0].Value, res[1].Value), hi = res[0].Value != null ? res[0].Value as uint? : null, lo = res[1].Value != null ? res[1].Value as uint? : null },
-                        new RFID { num_trk = 1, side = 1, card = GetCardsOfNum(res[2].Value, res[3].Value), hi = res[2].Value != null ? res[2].Value as uint? : null, lo = res[3].Value != null ? res[3].Value as uint? : null},
-                        // trk2
-                        new RFID { num_trk = 2, side = 0, card = GetCardsOfNum(res[4].Value, res[5].Value), hi = res[4].Value != null ? res[4].Value as uint? : null, lo = res[5].Value != null ? res[5].Value as uint? : null},
-                        new RFID { num_trk = 2, side = 1, card = GetCardsOfNum(res[6].Value, res[7].Value), hi = res[6].Value != null ? res[6].Value as uint? : null, lo = res[7].Value != null ? res[7].Value as uint? : null},
-                        // trk3
-                        new RFID { num_trk = 3, side = 0, card = GetCardsOfNum(res[8].Value, res[9].Value), hi = res[8].Value != null ? res[8].Value as uint? : null, lo = res[9].Value != null ? res[9].Value as uint? : null},
-                        new RFID { num_trk = 3, side = 1, card = GetCardsOfNum(res[10].Value, res[11].Value), hi = res[10].Value != null ? res[10].Value as uint? : null, lo = res[11].Value != null ? res[11].Value as uint? : null},
-                        // trk4
-                        new RFID { num_trk = 4, side = 0, card = GetCardsOfNum(res[12].Value, res[13].Value), hi = res[12].Value != null ? res[12].Value as uint? : null, lo = res[13].Value != null ? res[13].Value as uint? : null},
-                        new RFID { num_trk = 4, side = 1, card = GetCardsOfNum(res[14].Value, res[15].Value), hi = res[14].Value != null ? res[14].Value as uint? : null, lo = res[15].Value != null ? res[15].Value as uint? : null},
-                        // trk5
-                        new RFID { num_trk = 5, side = 0, card = GetCardsOfNum(res[16].Value, res[17].Value), hi = res[16].Value != null ? res[16].Value as uint? : null, lo = res[17].Value != null ? res[17].Value as uint? : null},
-                        new RFID { num_trk = 5, side = 1, card = GetCardsOfNum(res[18].Value, res[19].Value), hi = res[18].Value != null ? res[18].Value as uint? : null, lo = res[19].Value != null ? res[19].Value as uint? : null},
-                        // trk6
-                        //new RFID { num_trk = 6, site = 0, card = GetCardsOfNum(res[20].Value, res[21].Value), hi = res[20].Value != null ? res[20].Value as uint? : null, lo = res[21].Value != null ? res[21].Value as uint? : null},
-                        new RFID { num_trk = 6, side = 0, card = GetCardsOfNum((uint)37, (uint)50907) , lo = 37, hi = 50907},
-                        new RFID { num_trk = 6, side = 1, card = GetCardsOfNum(res[22].Value, res[23].Value), hi = res[22].Value != null ? res[22].Value as uint? : null, lo = res[23].Value != null ? res[23].Value as uint? : null},
-                        // trk7
-                        new RFID { num_trk = 7, side = 0, card = GetCardsOfNum(res[24].Value, res[25].Value), hi = res[24].Value != null ? res[24].Value as uint? : null, lo = res[25].Value != null ? res[25].Value as uint? : null},
-                        new RFID { num_trk = 7, side = 1, card = GetCardsOfNum(res[26].Value, res[27].Value), hi = res[26].Value != null ? res[26].Value as uint? : null, lo = res[27].Value != null ? res[27].Value as uint? : null},
-                        // trk8
-                        new RFID { num_trk = 8, side = 0, card = GetCardsOfNum(res[28].Value, res[29].Value), hi = res[28].Value != null ? res[28].Value as uint? : null, lo = res[29].Value != null ? res[29].Value as uint? : null},
-                        new RFID { num_trk = 8, side = 1, card = GetCardsOfNum(res[30].Value, res[31].Value), hi = res[30].Value != null ? res[30].Value as uint? : null, lo = res[31].Value != null ? res[31].Value as uint? : null},
-                        // trk9
-                        new RFID { num_trk = 9, side = 0, card = GetCardsOfNum(res[32].Value, res[33].Value), hi = res[32].Value != null ? res[32].Value as uint? : null, lo = res[33].Value != null ? res[33].Value as uint? : null},
-                    };
-                    result_list.guns = new Gun[]
-                    {
-                        // пистолет 11
-                        GetGun(6,11,0,res,34),
-                    };
-                }
-                return result_list;
-            }
-            catch (Exception e)
-            {
-                String.Format("Ошибка выполнения метода ReadTagOPC()").SaveError(e);
-                return null;
-            }
-        }
+        //        ItemValueResult[] res = group.Read(items);
+        //        if (res != null && res.Count() > 0)
+        //        {
+        //            result_list.cards = new RFID[] {
+        //                // trk1
+        //                new RFID { num_trk = 1, side = 0, card = GetCardsOfNum(res[0].Value, res[1].Value), hi = res[0].Value != null ? res[0].Value as uint? : null, lo = res[1].Value != null ? res[1].Value as uint? : null },
+        //                new RFID { num_trk = 1, side = 1, card = GetCardsOfNum(res[2].Value, res[3].Value), hi = res[2].Value != null ? res[2].Value as uint? : null, lo = res[3].Value != null ? res[3].Value as uint? : null},
+        //                // trk2
+        //                new RFID { num_trk = 2, side = 0, card = GetCardsOfNum(res[4].Value, res[5].Value), hi = res[4].Value != null ? res[4].Value as uint? : null, lo = res[5].Value != null ? res[5].Value as uint? : null},
+        //                new RFID { num_trk = 2, side = 1, card = GetCardsOfNum(res[6].Value, res[7].Value), hi = res[6].Value != null ? res[6].Value as uint? : null, lo = res[7].Value != null ? res[7].Value as uint? : null},
+        //                // trk3
+        //                new RFID { num_trk = 3, side = 0, card = GetCardsOfNum(res[8].Value, res[9].Value), hi = res[8].Value != null ? res[8].Value as uint? : null, lo = res[9].Value != null ? res[9].Value as uint? : null},
+        //                new RFID { num_trk = 3, side = 1, card = GetCardsOfNum(res[10].Value, res[11].Value), hi = res[10].Value != null ? res[10].Value as uint? : null, lo = res[11].Value != null ? res[11].Value as uint? : null},
+        //                // trk4
+        //                new RFID { num_trk = 4, side = 0, card = GetCardsOfNum(res[12].Value, res[13].Value), hi = res[12].Value != null ? res[12].Value as uint? : null, lo = res[13].Value != null ? res[13].Value as uint? : null},
+        //                new RFID { num_trk = 4, side = 1, card = GetCardsOfNum(res[14].Value, res[15].Value), hi = res[14].Value != null ? res[14].Value as uint? : null, lo = res[15].Value != null ? res[15].Value as uint? : null},
+        //                // trk5
+        //                new RFID { num_trk = 5, side = 0, card = GetCardsOfNum(res[16].Value, res[17].Value), hi = res[16].Value != null ? res[16].Value as uint? : null, lo = res[17].Value != null ? res[17].Value as uint? : null},
+        //                new RFID { num_trk = 5, side = 1, card = GetCardsOfNum(res[18].Value, res[19].Value), hi = res[18].Value != null ? res[18].Value as uint? : null, lo = res[19].Value != null ? res[19].Value as uint? : null},
+        //                // trk6
+        //                //new RFID { num_trk = 6, site = 0, card = GetCardsOfNum(res[20].Value, res[21].Value), hi = res[20].Value != null ? res[20].Value as uint? : null, lo = res[21].Value != null ? res[21].Value as uint? : null},
+        //                new RFID { num_trk = 6, side = 0, card = GetCardsOfNum((uint)37, (uint)50907) , lo = 37, hi = 50907},
+        //                new RFID { num_trk = 6, side = 1, card = GetCardsOfNum(res[22].Value, res[23].Value), hi = res[22].Value != null ? res[22].Value as uint? : null, lo = res[23].Value != null ? res[23].Value as uint? : null},
+        //                // trk7
+        //                new RFID { num_trk = 7, side = 0, card = GetCardsOfNum(res[24].Value, res[25].Value), hi = res[24].Value != null ? res[24].Value as uint? : null, lo = res[25].Value != null ? res[25].Value as uint? : null},
+        //                new RFID { num_trk = 7, side = 1, card = GetCardsOfNum(res[26].Value, res[27].Value), hi = res[26].Value != null ? res[26].Value as uint? : null, lo = res[27].Value != null ? res[27].Value as uint? : null},
+        //                // trk8
+        //                new RFID { num_trk = 8, side = 0, card = GetCardsOfNum(res[28].Value, res[29].Value), hi = res[28].Value != null ? res[28].Value as uint? : null, lo = res[29].Value != null ? res[29].Value as uint? : null},
+        //                new RFID { num_trk = 8, side = 1, card = GetCardsOfNum(res[30].Value, res[31].Value), hi = res[30].Value != null ? res[30].Value as uint? : null, lo = res[31].Value != null ? res[31].Value as uint? : null},
+        //                // trk9
+        //                new RFID { num_trk = 9, side = 0, card = GetCardsOfNum(res[32].Value, res[33].Value), hi = res[32].Value != null ? res[32].Value as uint? : null, lo = res[33].Value != null ? res[33].Value as uint? : null},
+        //            };
+        //            result_list.guns = new Gun[]
+        //            {
+        //                // пистолет 11
+        //                GetGun(6,11,0,res,34),
+        //            };
+        //        }
+        //        return result_list;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        String.Format("Ошибка выполнения метода ReadTagOPC()").SaveError(e);
+        //        return null;
+        //    }
+        //}
         /// <summary>
         /// Получить теги Бака
         /// </summary>
@@ -594,7 +688,8 @@ namespace ClientOPCTRK
         /// Прочесть RFID
         /// </summary>
         /// <returns></returns>
-        public List<RFID> ReadTagsOPSOfRFID() {
+        public List<RFID> ReadTagsOPSOfRFID(bool identify_card)
+        {
             try
             {
                 Opc.Da.Server server = null;
@@ -611,123 +706,54 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[34];
-                items[0] = new Opc.Da.Item();
-                items[0].ItemName = "RFID.Rfid01_1.IdHi";
-                items[1] = new Opc.Da.Item();
-                items[1].ItemName = "RFID.Rfid01_1.IdLo";
-
-                items[2] = new Opc.Da.Item();
-                items[2].ItemName = "RFID.Rfid01_2.IdHi";
-                items[3] = new Opc.Da.Item();
-                items[3].ItemName = "RFID.Rfid01_2.IdLo";
-
-                items[4] = new Opc.Da.Item();
-                items[4].ItemName = "RFID.Rfid02_1.IdHi";
-                items[5] = new Opc.Da.Item();
-                items[5].ItemName = "RFID.Rfid02_1.IdLo";
-
-                items[6] = new Opc.Da.Item();
-                items[6].ItemName = "RFID.Rfid02_2.IdHi";
-                items[7] = new Opc.Da.Item();
-                items[7].ItemName = "RFID.Rfid02_2.IdLo";
-
-                items[8] = new Opc.Da.Item();
-                items[8].ItemName = "RFID.Rfid03_1.IdHi";
-                items[9] = new Opc.Da.Item();
-                items[9].ItemName = "RFID.Rfid03_1.IdLo";
-
-                items[10] = new Opc.Da.Item();
-                items[10].ItemName = "RFID.Rfid03_2.IdHi";
-                items[11] = new Opc.Da.Item();
-                items[11].ItemName = "RFID.Rfid03_2.IdLo";
-
-                items[12] = new Opc.Da.Item();
-                items[12].ItemName = "RFID.Rfid04_1.IdHi";
-                items[13] = new Opc.Da.Item();
-                items[13].ItemName = "RFID.Rfid04_1.IdLo";
-
-                items[14] = new Opc.Da.Item();
-                items[14].ItemName = "RFID.Rfid04_2.IdHi";
-                items[15] = new Opc.Da.Item();
-                items[15].ItemName = "RFID.Rfid04_2.IdLo";
-
-                items[16] = new Opc.Da.Item();
-                items[16].ItemName = "RFID.Rfid05_1.IdHi";
-                items[17] = new Opc.Da.Item();
-                items[17].ItemName = "RFID.Rfid05_1.IdLo";
-
-                items[18] = new Opc.Da.Item();
-                items[18].ItemName = "RFID.Rfid05_2.IdHi";
-                items[19] = new Opc.Da.Item();
-                items[19].ItemName = "RFID.Rfid05_2.IdLo";
-
-                items[20] = new Opc.Da.Item();
-                items[20].ItemName = "RFID.Rfid06_1.IdHi";
-                items[21] = new Opc.Da.Item();
-                items[21].ItemName = "RFID.Rfid06_1.IdLo";
-
-                items[22] = new Opc.Da.Item();
-                items[22].ItemName = "RFID.Rfid06_2.IdHi";
-                items[23] = new Opc.Da.Item();
-                items[23].ItemName = "RFID.Rfid06_2.IdLo";
-
-                items[24] = new Opc.Da.Item();
-                items[24].ItemName = "RFID.Rfid07_1.IdHi";
-                items[25] = new Opc.Da.Item();
-                items[25].ItemName = "RFID.Rfid07_1.IdLo";
-
-                items[26] = new Opc.Da.Item();
-                items[26].ItemName = "RFID.Rfid07_2.IdHi";
-                items[27] = new Opc.Da.Item();
-                items[27].ItemName = "RFID.Rfid07_2.IdLo";
-
-                items[28] = new Opc.Da.Item();
-                items[28].ItemName = "RFID.Rfid08_1.IdHi";
-                items[29] = new Opc.Da.Item();
-                items[29].ItemName = "RFID.Rfid08_1.IdLo";
-
-                items[30] = new Opc.Da.Item();
-                items[30].ItemName = "RFID.Rfid08_2.IdHi";
-                items[31] = new Opc.Da.Item();
-                items[31].ItemName = "RFID.Rfid08_2.IdLo";
-
-                items[32] = new Opc.Da.Item();
-                items[32].ItemName = "RFID.Rfid09_1.IdHi";
-                items[33] = new Opc.Da.Item();
-                items[33].ItemName = "RFID.Rfid09_1.IdLo";
+                Opc.Da.Item[] items = new Opc.Da.Item[20 * 5];
+                int i = 0;
+                AddRFID(ref items, ref i, 1, 1);
+                AddRFID(ref items, ref i, 1, 2);
+                AddRFID(ref items, ref i, 2, 1);
+                AddRFID(ref items, ref i, 2, 2);
+                AddRFID(ref items, ref i, 3, 1);
+                AddRFID(ref items, ref i, 3, 2);
+                AddRFID(ref items, ref i, 4, 1);
+                AddRFID(ref items, ref i, 4, 2);
+                AddRFID(ref items, ref i, 5, 1);
+                AddRFID(ref items, ref i, 5, 2);
+                AddRFID(ref items, ref i, 6, 1);
+                AddRFID(ref items, ref i, 6, 2);
+                AddRFID(ref items, ref i, 7, 1);
+                AddRFID(ref items, ref i, 7, 2);
+                AddRFID(ref items, ref i, 8, 1);
+                AddRFID(ref items, ref i, 8, 2);
+                AddRFID(ref items, ref i, 9, 1);
+                AddRFID(ref items, ref i, 10, 0);
+                AddRFID(ref items, ref i, 11, 0);
+                AddRFID(ref items, ref i, 12, 0);
 
                 items = group.AddItems(items);
                 List<RFID> result_list = new List<RFID>();
                 ItemValueResult[] res = group.Read(items);
 
-                result_list.Add(GetRFIDOfNum(1, 0, res[0].Value, res[1].Value));
-                result_list.Add(GetRFIDOfNum(1, 1, res[2].Value, res[3].Value));
-
-                result_list.Add(GetRFIDOfNum(2, 0, res[4].Value, res[5].Value));
-                result_list.Add(GetRFIDOfNum(2, 1, res[6].Value, res[7].Value));
-
-                result_list.Add(GetRFIDOfNum(3, 0, res[8].Value, res[9].Value));
-                result_list.Add(GetRFIDOfNum(3, 1, res[10].Value, res[11].Value));
-
-                result_list.Add(GetRFIDOfNum(4, 0, res[12].Value, res[13].Value));
-                result_list.Add(GetRFIDOfNum(4, 1, res[14].Value, res[15].Value));
-
-                result_list.Add(GetRFIDOfNum(5, 0, res[16].Value, res[17].Value));
-                result_list.Add(GetRFIDOfNum(5, 1, res[18].Value, res[19].Value));
-
-                result_list.Add(GetRFIDOfNum(6, 0, res[20].Value, res[21].Value));
-                //result_list.Add(GetRFIDOfNum(6, 0, (uint)10006, (uint)54273));
-                result_list.Add(GetRFIDOfNum(6, 1, res[22].Value, res[23].Value));
-
-                result_list.Add(GetRFIDOfNum(7, 0, res[24].Value, res[25].Value));
-                result_list.Add(GetRFIDOfNum(7, 1, res[26].Value, res[27].Value));
-
-                result_list.Add(GetRFIDOfNum(8, 0, res[28].Value, res[29].Value));
-                result_list.Add(GetRFIDOfNum(8, 1, res[30].Value, res[31].Value));
-
-                result_list.Add(GetRFIDOfNum(9, 0, res[32].Value, res[33].Value));
-
+                i = 0;
+                result_list.Add(GetRFIDOfNum(1, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(1, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(2, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(2, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(3, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(3, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(4, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(4, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(5, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(5, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(6, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(6, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(7, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(7, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(8, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(8, 1, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(9, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(10, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(11, 0, res, ref i, identify_card));
+                result_list.Add(GetRFIDOfNum(12, 0, res, ref i, identify_card));
                 return result_list;
             }
             catch (Exception e)
@@ -758,7 +784,7 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[14+14];
+                Opc.Da.Item[] items = new Opc.Da.Item[14 + 14];
                 int i = 0;
                 AddGun(ref items, ref i, 6, 0); // левая
                 AddGun(ref items, ref i, 6, 5); // правая
@@ -770,9 +796,9 @@ namespace ClientOPCTRK
 
                 ItemValueResult[] res = group.Read(items);
                 i = 0;
-                result_list.Add(GetGun(6,11,0,res,i)); // пистолет 11
+                result_list.Add(GetGun(6, 11, 0, res, i)); // пистолет 11
                 i += 14;
-                result_list.Add(GetGun(6,12,1,res,i)); // пистолет 12
+                result_list.Add(GetGun(6, 12, 1, res, i)); // пистолет 12
 
                 return result_list;
             }

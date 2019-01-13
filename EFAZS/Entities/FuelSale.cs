@@ -23,7 +23,7 @@ namespace EFAZS.Entities
 
         public bool side { get; set; }
 
-        public int gun_num { get; set; }
+        public int num { get; set; }
 
         public int fuel_type { get; set; }
 

@@ -32,7 +32,16 @@
                 <legend> Колонка №: 6 </legend>
                 <div id="trk-6-0" class="trk-left">
                     <div id="trk-6-0-rfid" class="trk-rfid">
-                        RFID-карта <button id="button-trk-6-0-rfid" data-trk="6" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button><label id="label-trk-6-0-rfid" class="label-rfid">: Не вставлена</label>
+                        <table class="table-rfid">
+                            <tr>
+                                <td id="trk-6-0-online"></td>
+                                <th>RFID-карта</th>
+                                <th>
+                                    <button id="button-trk-6-0-rfid" data-trk="6" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                    <label id="label-trk-6-0-rfid" class="label-rfid"></label>
+                                </th>
+                            </tr>
+                        </table>
                     </div>
                     <fieldset>
                         <legend> Пистолет №: 11 (A92) </legend>
@@ -65,7 +74,16 @@
                 </div>
                 <div id="trk-6-1" class="trk-right">
                     <div id="trk-6-1-rfid" class="trk-rfid">
-                        RFID-карта <button id="button-trk-6-1-rfid" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button><label id="label-trk-6-1-rfid" class="label-rfid">: Не вставлена</label>
+                        <table class="table-rfid">
+                            <tr>
+                                <td id="trk-6-1-online"></td>
+                                <th>RFID-карта</th>
+                                <th>
+                                    <button id="button-trk-6-1-rfid" data-trk="6" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                    <label id="label-trk-6-1-rfid" class="label-rfid"></label>
+                                </th>
+                            </tr>
+                        </table>
                     </div>
                     <fieldset>
                         <legend> Пистолет №: 12 (A92) </legend>
@@ -99,10 +117,115 @@
             </fieldset>
         </div>
         <div>
-            <button id="button-gun-11-deliver" data-kerosene="20" class="ui-button ui-widget ui-corner-all button-kerosene">Керосин</button>
-            <button id="button-gun-11-deliver" data-risers="21" class="ui-button ui-widget ui-corner-all button-risers">РС№1</button>
+            <div id="ns" class="ns">
+                <fieldset>
+                    <legend> Наливной стояк: №: 1 </legend>
+                    <div id="trk-10-0" class="trk-left">
+                        <div id="trk-10-0-rfid" class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-10-0-online"></td>
+                                    <th>RFID-карта</th>
+                                    <th>
+                                        <button id="button-trk-10-0-rfid" data-trk="10" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-10-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <fieldset>
+                            <legend> (A92) </legend>
+                            <table class="table table-ns">
+                                <tr>
+                                    <td colspan="2">
+                                        <button id="button-ns-10-deliver" data-risers="1" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                        <button id="button-ns-10-close" data-risers="1" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                    </td>
+                                    <td colspan="3">
+                                        @*<div id="progressbar-ns-10" class="progressbar-deliver"><div id="progress-label-ns-10" class="progress-label">Заправка...</div></div>*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+
+                </fieldset>
+            </div>
+            <div id="ns" class="ns">
+                <fieldset>
+                    <legend> Наливной стояк: №: 2 </legend>
+                    <div id="trk-11-0" class="trk-left">
+                        <div id="trk-11-0-rfid" class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-11-0-online"></td>
+                                    <th>RFID-карта</th>
+                                    <th>
+                                        <button id="button-trk-11-0-rfid" data-trk="11" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-11-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <fieldset>
+                            <legend> (A95) </legend>
+                            <table class="table table-ns">
+                                <tr>
+                                    <td colspan="2">
+                                        <button id="button-ns-11-deliver" data-risers="2" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                        <button id="button-ns-11-close" data-risers="2" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                    </td>
+                                    <td colspan="3">
+                                        @*<div id="progressbar-ns-11" class="progressbar-deliver"><div id="progress-label-ns-11" class="progress-label">Заправка...</div></div>*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+
+                </fieldset>
+            </div>
+            <div id="ns" class="ns">
+                <fieldset>
+                    <legend> Наливной стояк: №: 3 </legend>
+                    <div id="trk-12-0" class="trk-left">
+                        <div id="trk-12-0-rfid" class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-12-0-online"></td>
+                                    <th>RFID-карта</th>
+                                    <th>
+                                        <button id="button-trk-12-0-rfid" data-trk="12" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-12-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <fieldset>
+                            <legend> (ДТ) </legend>
+                            <table class="table table-ns">
+                                <tr>
+                                    <td colspan="2">
+                                        <button id="button-ns-12-deliver" data-risers="3" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                        <button id="button-ns-12-close" data-risers="3" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                    </td>
+                                    <td colspan="3">
+                                        @*<div id="progressbar-ns-12" class="progressbar-deliver"><div id="progress-label-ns-12" class="progress-label">Заправка...</div></div>*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+
+        <div>
+            <button id="button-gun-11-deliver" data-kerosene="1" class="ui-button ui-widget ui-corner-all button-kerosene">Керосин</button>
+            @*<button id="button-gun-11-deliver" data-risers="21" class="ui-button ui-widget ui-corner-all button-risers">РС№1</button>
             <button id="button-gun-11-deliver" data-risers="22" class="ui-button ui-widget ui-corner-all button-risers">РС№2</button>
-            <button id="button-gun-11-deliver" data-risers="23" class="ui-button ui-widget ui-corner-all button-risers">РС№3</button>
+            <button id="button-gun-11-deliver" data-risers="23" class="ui-button ui-widget ui-corner-all button-risers">РС№3</button>*@
         </div>
     </div>
 
@@ -225,10 +348,14 @@
                                         <th>Температура ГСМ в баке:</th>
                                         <td><input id="deliver-take-temp" name="take-temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
+                                    <tr>
+                                        <th>Уровень п-воды в баке:</th>
+                                        <td><input id="deliver-take-water-level" name="water-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
                                 </table>
                             </fieldset>
                             <fieldset>
-                                <legend>Колонка\пистолет</legend>
+                                <legend>Колонка\пистолет\стояк</legend>
                                 <table id="table-delivery-fuel">
                                     <tr>
                                         <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива:</label></th>
@@ -554,7 +681,7 @@
                 <tr>
                     <th>№ ТРК:</th>
                     <td><input id="close-trk_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>№ пистолета:</th>
+                    <th>№ пистолета/наливного стояка:</th>
                     <td><input id="close-gun_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
@@ -569,8 +696,8 @@
                     <th>id строки SAP:</th>
                     <td><input id="close-id_sap" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
-            @*</table>
-            <table class="table-striped table-bordered">*@
+                @*</table>
+                    <table class="table-striped table-bordered">*@
                 <tr>
                     <th>Доза:</th>
                     <td><input id="close-dose" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>

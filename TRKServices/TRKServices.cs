@@ -83,7 +83,7 @@ namespace TRKServices
                 ClientTRK client = new ClientTRK();
                 EFOPC_RFID ef_opc_rfid = new EFOPC_RFID();
 
-                List<RFID> list = client.ReadTagsOPSOfRFID();
+                List<RFID> list = client.ReadTagsOPSOfRFID(true);
                 if (list != null)
                 {
                     // String.Format("Список считаных RFID-карт = {0}",list.Count()).SaveWarning();

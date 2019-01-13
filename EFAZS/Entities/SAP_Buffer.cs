@@ -74,8 +74,6 @@ namespace EFAZS.Entities
         [StringLength(4)]
         public string WERKS { get; set; }
 
-        public DateTime? close { get; set; }
-
         public DateTime? sending { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

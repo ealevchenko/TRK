@@ -48,7 +48,7 @@
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.start_level)
-                .HasPrecision(6, 1);
+                .HasPrecision(7, 1);
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.start_volume)
@@ -72,7 +72,7 @@
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.stop_level)
-                .HasPrecision(6, 1);
+                .HasPrecision(7, 1);
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.stop_volume)

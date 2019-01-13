@@ -101,7 +101,7 @@ var openFuelSale = {
         // Считаем карту
         var fs_trk = getObjects(openFuelSale.list, 'num_trk', trk_num)
         if (fs_trk) {
-            var fs_num = getObjects(openFuelSale.list, 'gun_num', num)
+            var fs_num = getObjects(openFuelSale.list, 'num', num)
             if (fs_num && fs_num.length > 0) {
                 return fs_num[0].id;
             }
@@ -111,32 +111,58 @@ var openFuelSale = {
     getFuelSale: function (id) {
         // Считаем карту
         var fs = getObjects(openFuelSale.list, 'id', id)
-        if (fs && fs.length > 0 ) {
+        if (fs && fs.length > 0) {
             return fs[0];
         }
         return null
     }
 };
-// Список rfid-карт
+// Список rfid-карт и тегов считывателей
 var cards = {
     list: [],
     setCards: function (data) {
         cards.list = data;
     },
+    // Получить карточку
     getCardOfNumSide: function (trk_num, side) {
         // Считаем карту
-        var card = getObjects(cards.list, 'num_trk', trk_num)
-        if (card != null && card.length > 0) {
-            for (i = 0; i < card.length; i++) {
-                if (card[i].side == side) {
-                    return card[i].card;
+        if (cards.list && cards.list.length > 0) {
+            var card = getObjects(cards.list, 'num_trk', trk_num)
+            if (card && card.length > 0) {
+                for (ic = 0; ic < card.length; ic++) {
+                    if (card[ic].side == side) {
+                        return card[ic].card;
+                    }
                 }
             }
-            return null;
         }
+        return null;
+    },
+    // Получить всю запись с карточкой
+    getRFIDCardOfNumSide: function (trk_num, side) {
+        // Считаем карту
+        if (cards.list && cards.list.length > 0) {
+            var card = getObjects(cards.list, 'num_trk', trk_num)
+            if (card && card.length > 0) {
+                for (ic = 0; ic < card.length; ic++) {
+                    if (card[ic].side == side) {
+                        return card[ic];
+                    }
+                }
+            }
+        }
+        return null;
     }
+
 };
-// список пистолетов
+// Список rfid-карт и тегов считывателей
+var rfid = {
+    list: [],
+    setRFID: function (data) {
+        rfid.list = data;
+    },
+};
+// список тегов пистолетов
 var guns = {
     list: [],
     setGuns: function (data) {
@@ -147,9 +173,37 @@ var guns = {
         if (obj && obj.length > 0) {
             return obj[0];
         }
+        return null;
     }
 };
-
+// список тегов стояков
+var risers = {
+    list: [],
+    setRisers: function (data) {
+        risers.list = data;
+    },
+    getRisers: function (num) {
+        var obj = getObjects(risers.list, 'num', num)
+        if (obj && obj.length > 0) {
+            return obj[0];
+        }
+        return null
+    }
+};
+// список тегов керосина
+var kerosenes = {
+    list: [],
+    setKerosenes: function (data) {
+        kerosenes.list = data;
+    },
+    getKerosenes: function (num) {
+        var obj = getObjects(kerosenes.list, 'num', num)
+        if (obj && obj.length > 0) {
+            return obj[0];
+        }
+        return null
+    }
+};
 var pb_deliver = {
     pb: [],
     obj: null,
@@ -185,31 +239,57 @@ var pb_deliver = {
         });
     }
 }
-
-// Показать все rfid-карты
-function viewCards() {
-    if (cards) {
-        list = cards.list;
+// Вывести информацию по считывателям
+function viewRFID() {
+    if (rfid) {
+        list = rfid.list;
         if (list) {
             for (i = 0; i < list.length; i++) {
-                if (list[i].card) {
-                    $('#button-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').show();
-                    $('#button-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').text(list[i].card.Number);
-                    if (list[i].card.Active) {
-                        $('#button-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').removeClass('button-rfid-not-active').addClass('button-rfid-active');
-                    } else {
-                        $('#button-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').removeClass('button-rfid-active').addClass('button-rfid-not-active');
+                var c_rfid = list[i];
+                if (c_rfid) {
+
+                    // Покажем состояние
+                    if (c_rfid.num_trk > 0 && c_rfid.num_trk < 13) {
+                        // Вывод связь
+                        if (c_rfid.online != null) {
+                            if (c_rfid.online) {
+                                $('#trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-online').html("").removeClass().addClass('active');
+                            } else {
+                                $('#trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-online').html("").removeClass().addClass('not_active');
+                            }
+                        } else {
+                            $('#trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-online').html("").removeClass().addClass('null_active');
+                        }
                     }
-                    $('#label-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').hide();
-                } else {
-                    $('#button-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').hide();
-                    $('#label-trk-' + list[i].num_trk + '-' + list[i].side + '-rfid').show();
+                    // Показать карточки
+                    if (cards && cards.list && cards.list.length > 0) {
+                        var c_card = cards.getRFIDCardOfNumSide(c_rfid.num_trk, c_rfid.side);
+                        if (c_card) {
+                            // Карта есть в базе
+                            if (c_card.card) {
+                                // Да. карта есть в базе
+                                $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').show();
+                                $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').text(c_card.card.Number);
+                                if (c_card.card.Active) {
+                                    $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').removeClass('button-rfid-not-active').addClass('button-rfid-active');
+                                } else {
+                                    $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').removeClass('button-rfid-active').addClass('button-rfid-not-active');
+                                }
+                                $('#label-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').hide();
+                            } else {
+                                // Нет. карты нет в базе
+                                $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').hide();
+                                $('#label-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').show().text(c_card.hi > 0 && c_card.lo > 0 ? '(' + c_card.hi + ',' + c_card.lo + ') - нет в базе' : ': Нет данных');
+                            }
+                        } else {
+                            // Нет. карта не подносилась к считывтелю
+                            $('#button-trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-rfid').hide();
+                            $('#label-trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-rfid').show().text('Поднесите карту');
+                        }
+                    }
                 }
-
-
             }
         }
-
     }
 };
 // Показать все пистолеты
@@ -277,9 +357,33 @@ function viewGuns() {
                 pb_deliver.outValume(gun.num_gun, 10);
             }
         }
-
     }
 };
+
+function viewRisers() {
+    if (risers) {
+        list = risers.list;
+        if (list) {
+            for (i = 0; i < list.length; i++) {
+                var riser = list[i];
+
+                // Проверим сотояние
+                var num_riser = Number(riser.num) + 9;
+                var id_ofs = openFuelSale.getFuelSaleID(num_riser, 0, riser.num);
+                // Отобразим кнопки выдать\закрыть
+                if (id_ofs != null) {
+                    $('#button-ns-' + num_riser + '-deliver').hide();
+                    $('#button-ns-' + num_riser + '-close').show().attr("data-id", id_ofs);
+                } else {
+                    $('#button-ns-' + num_riser + '-deliver').show();
+                    $('#button-ns-' + num_riser + '-close').hide().attr("data-id", '');
+                }
+
+            }
+        }
+    }
+};
+
 // Вывод информации на экран 
 function show() {
     // Время
@@ -291,10 +395,18 @@ function show() {
         function (result_cards) {
             if (result_cards) {
                 cards.setCards(result_cards);
-                viewCards();
             }
         }
-    )
+    );
+    // Считаем RFID из буфера локальной базы
+    getRFIDTags(
+        function (result_rfid) {
+            if (result_rfid) {
+                rfid.setRFID(result_rfid);
+                viewRFID();
+            }
+        }
+    );
     // Прочтем теги пистолетов из OPC
     getGunTags(
         function (result_guns) {
@@ -304,6 +416,21 @@ function show() {
             }
         }
     );
+    // TODO:!!!ТЕСТ УБРАТЬ
+    var risers_tag = [
+        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000022 },
+        { "num": 2, "online": true, "passage": false, "taken": true, "type_fuel": 107000023 },
+        { "num": 3, "online": true, "passage": false, "taken": true, "type_fuel": 107000024 },
+    ]
+    risers.setRisers(risers_tag);
+    viewRisers();
+    // TODO:!!!ТЕСТ УБРАТЬ
+    var kerosenes_tag = [
+        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000027 },
+
+    ]
+    kerosenes.setKerosenes(kerosenes_tag);
+
 };
 
 // Панель "Информация по RFID-карте"
@@ -325,7 +452,15 @@ var confirm_rfid_card = {
     },
     Open: function (trk_num, side) {
         if (trk_num && side) {
-            confirm_rfid_card.obj.dialog("option", "title", 'RFID-карта (Колонка №' + trk_num + ', сторона :' + (side == 0 ? 'левая' : 'правая') + ')');
+            // пистолеты
+            if (trk_num > 0 && trk_num < 10) {
+                confirm_rfid_card.obj.dialog("option", "title", 'RFID-карта (Колонка №' + trk_num + ', сторона :' + (side == 0 ? 'левая' : 'правая') + ')');
+            }
+            // Наливной стояк
+            if (trk_num >= 10 && trk_num <= 12) {
+                var num = trk_num - 9;
+                confirm_rfid_card.obj.dialog("option", "title", 'RFID-карта (Наливной стояк №' + num + ')');
+            }
             confirm_rfid_card.obj.dialog("open");
             var card = cards.getCardOfNumSide(trk_num, side)
             if (card) {
@@ -360,6 +495,7 @@ var confirm_df = {
     type: null,  // текущие тип (пистолет-0, стояк-1, керосин-2)
     gun: null,  // текущие теги пистолета
     risers: null,  // текущие теги разливочного стояка
+    kerosenes: null,  // текущие теги разливочного стояка (керосин)
     card: null, // текущая карта
     supply: null, // текущая поставка возвращенная от САП
 
@@ -373,6 +509,7 @@ var confirm_df = {
     input_deliver_take_temp: null,      // температура
     input_deliver_take_volume: null,    // объем
     input_deliver_take_dens: null,      // плотность
+    input_deliver_take_water_level: null,      // уровень воды
     input_deliver_dose_fuel: null,      // доза топлива
     checkbox_deliver_Passage: null,     // Режим пролив
     // SAP ********************************************************
@@ -419,7 +556,7 @@ var confirm_df = {
                 }
             }
         );
-        
+
     },
     // Форма подтверждения сохранения данных в САП
     fsap: {
@@ -571,7 +708,7 @@ var confirm_df = {
         var valid = true;
         confirm_df.allFields.removeClass("ui-state-error");
 
-        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -602,6 +739,7 @@ var confirm_df = {
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_mass, "Нет значения массы ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_temp, "Нет значения температуры ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_volume, "Нет значения объема ГСМ в баке");
+        valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_water_level, "Нет значения уровень п-воды в баке");
         // Проверка колонки
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
         return valid;
@@ -664,15 +802,17 @@ var confirm_df = {
                 confirm_df.input_deliver_take_temp.val('');
                 confirm_df.input_deliver_take_volume.val('');
                 confirm_df.input_deliver_take_dens.val('');
+                confirm_df.input_deliver_take_water_level.val('');
                 if (ui.item.value !== '-1') {
                     getTankTags(ui.item.value,
                         function (result) {
                             // Обновим информацию по баку
                             confirm_df.input_deliver_take_level.val(result.level);
                             confirm_df.input_deliver_take_mass.val(result.mass);
-                            confirm_df.input_deliver_take_temp.val(result.temp);
+                            confirm_df.input_deliver_take_temp.val(result.temp!=null ? (Number(result.temp)/10) : result.temp);
                             confirm_df.input_deliver_take_volume.val(result.volume);
                             confirm_df.input_deliver_take_dens.val(result.dens);
+                            confirm_df.input_deliver_take_water_level.val(result.water_level);
                         }
                     );
                 }
@@ -684,6 +824,7 @@ var confirm_df = {
         confirm_df.input_deliver_take_temp = $('#deliver-take-temp');
         confirm_df.input_deliver_take_volume = $('#deliver-take-volume');
         confirm_df.input_deliver_take_dens = $('#deliver-take-dens');
+        confirm_df.input_deliver_take_water_level = $('#deliver-take-water-level');
         // доза топлива
         confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel');
         // пролив
@@ -991,8 +1132,18 @@ var confirm_df = {
         // Спрячим все поля
         confirm_df.clear();
         confirm_df.card = null; // Обнулим карту
+        confirm_df.viewCard();  // Обнулим карту
         confirm_df.gun = null;  // Обнулим теги пистолета
         confirm_df.risers = null;  // Обнулим теги РС
+        confirm_df.kerosenes = null;  // Обнулим теги РС
+        // Обновим информацию по баку
+        confirm_df.input_deliver_take_level.val('');
+        confirm_df.input_deliver_take_mass.val('');
+        confirm_df.input_deliver_take_temp.val('');
+        confirm_df.input_deliver_take_volume.val('');
+        confirm_df.input_deliver_take_dens.val('');
+        confirm_df.input_deliver_take_water_level.val('');
+
         confirm_df.select_variant.val(-1).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
         confirm_df.checkbox_deliver_Passage.prop('checked', false); // Сбросили технический пролив
 
@@ -1020,30 +1171,12 @@ var confirm_df = {
                     confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel));
                     confirm_df.input_sap_ozm_bak.val('(' + gun.type_fuel + ') ' + outFuelType(gun.type_fuel));
                     $('#deliver-Taken').prop('checked', gun.taken);
-                    // Обновим информацию по баку
-                    confirm_df.input_deliver_take_level.val('');
-                    confirm_df.input_deliver_take_mass.val('');
-                    confirm_df.input_deliver_take_temp.val('');
-                    confirm_df.input_deliver_take_volume.val('');
-                    confirm_df.input_deliver_take_dens.val('');
                     // Обновим перецень емкостей
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(gun.type_fuel), null, -1, null);
-
+                    // Получить информацию по карте
                     confirm_df.card = cards.getCardOfNumSide(gun.num_trk, gun.side);
-                    // Вывести инфу по карте
-                    if (confirm_df.card) {
-                        $('#deliver-Active').prop('checked', confirm_df.card.Active);
-                        $('#deliver-Number').val(confirm_df.card.Number);
-                        $('#deliver-AutoNumber').val(confirm_df.card.AutoNumber);
-                        $('#deliver-Debitor').val(confirm_df.card.Debitor);
-                        $('#deliver-AutoModel').val(confirm_df.card.AutoModel);
-                    } else {
-                        $('#deliver-Active').prop('checked', false);
-                        $('#deliver-Number').val('');
-                        $('#deliver-AutoNumber').val('');
-                        $('#deliver-Debitor').val('');
-                        $('#deliver-AutoModel').val('');
-                    }
+                    // Вывести информацию по карте
+                    confirm_df.viewCard();
                 }
                 break;
 
@@ -1063,6 +1196,19 @@ var confirm_df = {
                     null,
                     -1,
                     null);
+                var riser = risers.getRisers(num);
+                if (riser) {
+                    confirm_df.risers = riser;
+                    confirm_df.input_deliver_type_fuel.val(outFuelType(riser.type_fuel));
+                    confirm_df.input_sap_ozm_bak.val('(' + riser.type_fuel + ') ' + outFuelType(riser.type_fuel));
+                    //$('#deliver-Taken').prop('checked', riser.taken);
+                    // Обновим перецень емкостей
+                    updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(riser.type_fuel), null, -1, null);
+                    // Получить информацию по карте
+                    confirm_df.card = cards.getCardOfNumSide((Number(num) + 9), 0);
+                    // Вывести информацию по карте
+                    confirm_df.viewCard();
+                }
                 break;
             case 2:
                 confirm_df.obj.dialog("option", "title", 'Выдать топливо (керосин -' + num + ')');
@@ -1080,6 +1226,19 @@ var confirm_df = {
                     null,
                     -1,
                     null);
+                var kerosene = kerosenes.getKerosenes(num);
+                if (kerosene) {
+                    confirm_df.risers = kerosene;
+                    confirm_df.input_deliver_type_fuel.val(outFuelType(kerosene.type_fuel));
+                    confirm_df.input_sap_ozm_bak.val('(' + kerosene.type_fuel + ') ' + outFuelType(kerosene.type_fuel));
+                    //$('#deliver-Taken').prop('checked', riser.taken);
+                    // Обновим перечень емкостей
+                    updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(kerosene.type_fuel), null, -1, null);
+                    // Получить информацию по карте
+                    confirm_df.card = cards.getCardOfNumSide((Number(num) + 12), 0);
+                    // Вывести информацию по карте
+                    confirm_df.viewCard();
+                }
                 break;
         }
         if (num) {
@@ -1100,6 +1259,23 @@ var confirm_df = {
         $('tr#sap-stock-recipient').hide(); confirm_df.input_sap_stock_recipient.val('').hide(); confirm_df.select_sap_stock_recipient.selectmenu("widget").hide();
         $('tr#sap-factory-recipient').hide(); confirm_df.input_sap_factory_recipient.val('').hide(); confirm_df.select_sap_factory_recipient.selectmenu("widget").hide();
         $('tr#sap-id-card').hide(); confirm_df.input_sap_id_card.val('');
+    },
+    // Вывести информацию по карте
+    viewCard: function () {
+        // Вывести инфу по карте
+        if (confirm_df.card) {
+            $('#deliver-Active').prop('checked', confirm_df.card.Active);
+            $('#deliver-Number').val(confirm_df.card.Number);
+            $('#deliver-AutoNumber').val(confirm_df.card.AutoNumber);
+            $('#deliver-Debitor').val(confirm_df.card.Debitor);
+            $('#deliver-AutoModel').val(confirm_df.card.AutoModel);
+        } else {
+            $('#deliver-Active').prop('checked', false);
+            $('#deliver-Number').val('');
+            $('#deliver-AutoNumber').val('');
+            $('#deliver-Debitor').val('');
+            $('#deliver-AutoModel').val('');
+        }
     },
     // Получить новую SAP_buffer
     getNewSAP_Buffer: function () {
@@ -1141,7 +1317,6 @@ var confirm_df = {
             N_TREB: confirm_df.input_sap_num.val(),
             LGORT: variant == 3 ? confirm_df.getPosSupply(num_pos).LGORT : null, // до выяснения
             WERKS: null, // до выяснения
-            close: null,
             sending: null
         };
     },
@@ -1150,27 +1325,27 @@ var confirm_df = {
         var now = new Date();
         var trk_num = 0;
         var side = false;
-        var gun_num = 0;
+        var num = 0;
         var fuel_type = 0;
         var counter = 0;
 
         switch (confirm_df.type) {
             case 0:
                 trk_num = confirm_df.gun != null ? confirm_df.gun.num_trk : null;
-                side = confirm_df.gun != null ? (confirm_df.gun.side == 0 ? true : false) : null;
-                gun_num = confirm_df.gun != null ? confirm_df.gun.num_gun : null;
+                side = confirm_df.gun != null ? (confirm_df.gun.side == 0 ? false : true) : null;
+                num = confirm_df.gun != null ? confirm_df.gun.num_gun : null;
                 fuel_type = confirm_df.gun != null ? confirm_df.gun.type_fuel : null;
                 counter = confirm_df.gun != null ? confirm_df.gun.total_volume : null;
                 break;
             case 1:
-                trk_num = 20;
-                gun_num = 0; // номер стояка 
+                trk_num = 10;
+                num = 1; // номер стояка 
                 fuel_type = 0;
                 counter = 0;
                 break;
             case 2:
-                trk_num = 30;
-                gun_num = 0; // номер керосина
+                trk_num = 20;
+                num = 1; // номер керосина
                 fuel_type = 0;
                 counter = 0;
                 break;
@@ -1182,7 +1357,8 @@ var confirm_df = {
             smena_num: confirm_df.smena_num,
             smena_datetime: confirm_df.smena_datetime,
             trk_num: trk_num,
-            gun_num: gun_num,
+            side: side,
+            num: num,
             fuel_type: fuel_type,
             tank_num: confirm_df.select_capacity.val(),
             id_card: confirm_df.input_sap_id_card.val(),
@@ -1197,7 +1373,7 @@ var confirm_df = {
             start_density: confirm_df.input_deliver_take_dens.val(),
             start_mass: confirm_df.input_deliver_take_mass.val(),
             start_temp: confirm_df.input_deliver_take_temp.val(),
-            start_water_level: 0, // реализовать
+            start_water_level: confirm_df.input_deliver_take_water_level.val(),
             start_counter: counter,
             stop_datetime: null,
             stop_level: null,
@@ -1276,7 +1452,7 @@ var confirm_close_fuel = {
 
                             }
                         );
-                        
+
                     }
 
                 },
@@ -1294,11 +1470,27 @@ var confirm_close_fuel = {
             var fs = openFuelSale.getFuelSale(id);
             if (fs) {
                 var now = new Date();
-                confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + fs.gun_num + ')');
-                var gun = guns.getGun(fs.gun_num);
-                if (gun) {
-                    fs.volume = gun.last_out_volume; // выдано
-                    fs.stop_counter = gun.total_volume; // по счетчику
+                var trk_num = fs.trk_num
+                if (trk_num > 0 && trk_num < 10) {
+                    confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')');
+                    var gun = guns.getGun(fs.num);
+                    if (gun) {
+                        fs.volume = gun.last_out_volume; // выдано
+                        fs.stop_counter = gun.total_volume; // по счетчику
+                    }
+                }
+                if (trk_num >= 10 && trk_num <= 12) {
+                    confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')');
+                    var riser = risers.getRisers(fs.num);
+                    if (riser) {
+                        fs.volume = 0;//riser.last_out_volume; // выдано
+                        fs.stop_counter = 0;//riser.total_volume; // по счетчику
+                    }
+                }
+                
+                if (gun || riser) {
+                    //fs.volume = gun.last_out_volume; // выдано
+                    //fs.stop_counter = gun.total_volume; // по счетчику
                     fs.close = toISOStringTZ(now);
                     getTankTags(fs.tank_num,
                         function (result) {
@@ -1307,16 +1499,16 @@ var confirm_close_fuel = {
                             fs.stop_datetime = toISOStringTZ(now);
                             fs.stop_level = result.level;
                             fs.stop_mass = result.mass;
-                            fs.stop_temp = result.temp;
+                            fs.stop_temp = result.temp!=null ? (Number(result.temp)/10) : result.temp;
                             fs.stop_volume = result.volume;
                             fs.stop_density = result.dens;
-                            fs.stop_water_level = 0;
+                            fs.stop_water_level = result.water_level;
 
                             $('input#close-operator_name').val(fs.operator_name);
                             $('input#close-smena_num').val(fs.smena_num);
                             $('input#close-smena_datetime').val(fs.smena_datetime);
                             $('input#close-trk_num').val(fs.trk_num);
-                            $('input#close-gun_num').val(fs.gun_num);
+                            $('input#close-gun_num').val(fs.num);
                             $('input#close-fuel_type').val(fs.fuel_type);
                             $('input#close-tank_num').val(fs.tank_num);
                             $('input#close-id_card').val(fs.id_card);

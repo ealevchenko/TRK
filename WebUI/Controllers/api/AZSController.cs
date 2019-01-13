@@ -75,7 +75,7 @@ namespace WebUI.Controllers.api
                         smena_datetime = s.smena_datetime ,
                         trk_num = s.trk_num ,
                         side = s.side ,
-                        gun_num = s.gun_num ,
+                        num = s.num ,
                         fuel_type = s.fuel_type ,
                         tank_num = s.tank_num ,
                         id_card = s.id_card ,

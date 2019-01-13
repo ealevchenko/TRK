@@ -18,27 +18,27 @@ namespace WebUI.Controllers.api
         public TRKController() {
 
         }
-        // GET: api/trk/tags
-        [Route("tags")]
-        [ResponseType(typeof(TRK))]
-        public IHttpActionResult GetTRKTagOPC()
-        {
-            try
-            {
-                TRK trk = client.ReadTagOPC();
-                if (trk == null)
-                {
-                    return NotFound();
-                }
-                return Ok(trk);
-            }
-            catch (Exception e)
-            {
-                return NotFound();
-            }
-        }
+        //// GET: api/trk/tags
+        //[Route("tags")]
+        //[ResponseType(typeof(TRK))]
+        //public IHttpActionResult GetTRKTagOPC()
+        //{
+        //    try
+        //    {
+        //        TRK trk = client.ReadTagOPC();
+        //        if (trk == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(trk);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return NotFound();
+        //    }
+        //}
 
-        // GET: api/trk/tank/num/B2
+        // GET: api/trk/tank/num/B9
         [Route("tank/num/{num}")]
         [ResponseType(typeof(Tank))]
         public IHttpActionResult GetTagsOPSOfTank(string num)
@@ -66,6 +66,26 @@ namespace WebUI.Controllers.api
             try
             {
                 List<Gun> list = client.ReadTagOPCOfGun();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+        // GET: api/trk/rfid/tags
+        [Route("rfid/tags")]
+        [ResponseType(typeof(RFID))]
+        public IHttpActionResult GetReadTagsOPSOfRFID()
+        {
+            try
+            {
+                List<RFID> list = client.ReadTagsOPSOfRFID(false);
                 if (list == null)
                 {
                     return NotFound();

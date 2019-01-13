@@ -50,6 +50,14 @@ legend {
     width: 1030px;
 }
 
+.ns {
+    border: 1px solid #808080;
+    width: auto;
+    float: left;
+    margin-right: 10px;
+}
+
+
 .trk-left {
     width: 500px;
     float: left;
@@ -75,11 +83,11 @@ legend {
     font-size: 12px;
 }
 
-.button-deliver {
+.button-deliver, .button-risers, .button-kerosene {
     margin: 3px;
     height: 25px;
     font-size: 12px;
-    background-color:aquamarine;
+    background-color: aquamarine;
 }
 .button-close {
     margin: 3px;
@@ -125,6 +133,13 @@ legend {
     text-align: center
 }
 
+.table-rfid th, .table-rfid td {
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align:central;
+}
+
 .input-gun-volume {
     width: 100px;
     height: 25px;
@@ -132,20 +147,20 @@ legend {
 }
 
 td.active {
-    /*width: 20px;
-    height: 20px;*/
+    width: 20px;
+    height: 20px;
     background: url('../../Images/active.png') no-repeat center center;
 }
 
 td.not_active {
-    /*width: 20px;
-    height: 20px;*/
+    width: 20px;
+    height: 20px;
     background: url('../../Images/not_active.png') no-repeat center center;
 }
 
 td.null_active {
-    /*width: 20px;
-    height: 20px;*/
+    width: 20px;
+    height: 20px;
     background: url('../../Images/null_active.png') no-repeat center center;
 }
 

@@ -40,12 +40,17 @@ var supply_out =
 // TODO:!!!ТЕСТ УБРАТЬ
 var reservation_out = { "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
 // TODO:!!!ТЕСТ УБРАТЬ
-var bunk_out = { "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
+var bunk_out =
+    { "num_tank": "B9", "dens": 757.274683, "fill_percent": 36.16409940151653, "level": 108190, "mass": 19539.201370766, "status1": 64, "status2": 48, "status": 0, "temp": -32, "ullage": 45545, "unit": null, "volume": 25802, "water_level": 0, "water_volume": 0 }
+    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
 // TODO:!!!ТЕСТ УБРАТЬ
 var guns_out = [
     { "num_trk": 6, "num_gun": 11, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 56902228, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
     { "num_trk": 6, "num_gun": 12, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 }
 ]
+// TODO:!!!ТЕСТ УБРАТЬ
+var rfid_out = null;
+
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
@@ -218,28 +223,28 @@ var AJAXComplete = function () {
     //LockScreenOff();
 }
 
-var getTRKTags= function (callback) {
-    $.ajax({
-        type: 'GET',
-        url: '/api/trk/tags',
-        async: true,
-        dataType: 'json',
-        beforeSend: function () {
-            AJAXBeforeSend();
-        },
-        success: function (data) {
-            if (typeof callback === 'function') {
-                callback(data);
-            }
-        },
-        error: function (x, y, z) {
-            OnAJAXError(x, y, z);
-        },
-        complete: function () {
-            AJAXComplete();
-        },
-    });
-}
+//var getTRKTags= function (callback) {
+//    $.ajax({
+//        type: 'GET',
+//        url: '/api/trk/tags',
+//        async: true,
+//        dataType: 'json',
+//        beforeSend: function () {
+//            AJAXBeforeSend();
+//        },
+//        success: function (data) {
+//            if (typeof callback === 'function') {
+//                callback(data);
+//            }
+//        },
+//        error: function (x, y, z) {
+//            OnAJAXError(x, y, z);
+//        },
+//        complete: function () {
+//            AJAXComplete();
+//        },
+//    });
+//}
 // Прочесть теги бака
 var getTankTags= function (num, callback) {
     $.ajax({
@@ -308,6 +313,38 @@ var getGunTags= function (callback) {
         },
     });
 }
+
+var getRFIDTags= function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/rfid/tags',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 2) {
+                if (typeof callback === 'function') {
+                    callback(rfid_out);
+                }
+            } else {
+                OnAJAXError(x, y, z);
+            }
+
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Считать считаные карты по ТРК из буфера БД
 var getRFIDDB= function (callback) {
     $.ajax({

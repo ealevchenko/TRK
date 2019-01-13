@@ -17,12 +17,12 @@ namespace test
         }
 
         public void Test_ClientTRK_ReadTagOPC() {
-            ClientTRK client = new ClientTRK();
-            TRK list = client.ReadTagOPC();
+            //ClientTRK client = new ClientTRK();
+            //TRK list = client.ReadTagOPC();
 
-            Console.WriteLine("list.cards.Count() - {0}", list.cards.Count());
-            Console.WriteLine("list.guns.Count() - {0}", list.guns.Count());
-            Console.WriteLine("online - - {0}", list.guns[0].online);
+            //Console.WriteLine("list.cards.Count() - {0}", list.cards.Count());
+            //Console.WriteLine("list.guns.Count() - {0}", list.guns.Count());
+            //Console.WriteLine("online - - {0}", list.guns[0].online);
 
         }
 
@@ -45,25 +45,35 @@ namespace test
             {
                 ClientTRK client = new ClientTRK();
 
-                List<RFID> list = client.ReadTagsOPSOfRFID();
+                List<RFID> list = client.ReadTagsOPSOfRFID(true);
 
-                foreach (RFID rfid in list)
+                if (list != null)
                 {
-                    Console.WriteLine("rfid.num_tank - {0}", rfid.num_trk);
-
-                    Console.WriteLine("rfid.side - {0}", rfid.side);
-                    if (rfid.card != null)
+                    foreach (RFID rfid in list)
                     {
-                        Console.WriteLine("rfid.card - {0}", rfid.card);
-                        Console.WriteLine("rfid.card.Id - {0}", rfid.card.Id);
-                        Console.WriteLine("rfid.card.Name - {0}", rfid.card.Name);
+                        Console.WriteLine("rfid.num_tank - {0} ************************************", rfid.num_trk);
+                        Console.WriteLine("rfid.side - {0}", rfid.side);
+                        Console.WriteLine("rfid.online - {0}", rfid.online);
+                        Console.WriteLine("rfid.ready - {0}", rfid.ready);
+                        Console.WriteLine("rfid.status - {0}", rfid.status);
+                        Console.WriteLine("rfid.hi - {0}", rfid.hi);
+                        Console.WriteLine("rfid.lo - {0}", rfid.lo);
+                        if (rfid.card != null)
+                        {
+                            Console.WriteLine("rfid.card - {0}", rfid.card);
+                            Console.WriteLine("rfid.card.Id - {0}", rfid.card.Id);
+                            Console.WriteLine("rfid.card.Name - {0}", rfid.card.Name);
+
+                        }
+                        Console.WriteLine("--------------------------------------");
 
                     }
-
-
-                    Console.WriteLine("rfid.hi - {0}", rfid.hi);
-                    Console.WriteLine("rfid.lo - {0}", rfid.lo);
                 }
+                else
+                {
+                    Console.WriteLine("list = null");
+                }
+
             }
             catch (Exception e)
             {
@@ -78,7 +88,7 @@ namespace test
                 ClientTRK client = new ClientTRK();
                 EFOPC_RFID ef_opc_rfid = new EFOPC_RFID();
 
-                List<RFID> list = client.ReadTagsOPSOfRFID();
+                List<RFID> list = client.ReadTagsOPSOfRFID(true);
 
                 if (list != null)
                 {
@@ -92,10 +102,13 @@ namespace test
 
                         if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0)
                         {
-                            OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo).OrderByDescending(o => o.id).FirstOrDefault();
+                            String.Format("Сервис TRKServices - Считана RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo).SaveInformation();
+                            bool side = rfid.side == 0 ? false : true;
+                            OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo && o.side == side).OrderByDescending(o => o.id).FirstOrDefault();
                             if (rfid_old == null)
                             {
                                 int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
+                                String.Format("Сервис TRKServices - добавлена новая RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4} - id строки - {5}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo, res).SaveInformation();
                             }
                         }
                     }
