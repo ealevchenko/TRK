@@ -418,18 +418,12 @@ function show() {
     );
     // TODO:!!!ТЕСТ УБРАТЬ
     var risers_tag = [
-        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000022 },
-        { "num": 2, "online": true, "passage": false, "taken": true, "type_fuel": 107000023 },
-        { "num": 3, "online": true, "passage": false, "taken": true, "type_fuel": 107000024 },
+        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000024 },
+        { "num": 2, "online": true, "passage": false, "taken": true, "type_fuel": 107000027 },
+        { "num": 3, "online": true, "passage": false, "taken": true, "type_fuel": 107000022 },
     ]
     risers.setRisers(risers_tag);
     viewRisers();
-    // TODO:!!!ТЕСТ УБРАТЬ
-    var kerosenes_tag = [
-        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000027 },
-
-    ]
-    kerosenes.setKerosenes(kerosenes_tag);
 
 };
 
@@ -495,7 +489,6 @@ var confirm_df = {
     type: null,  // текущие тип (пистолет-0, стояк-1, керосин-2)
     gun: null,  // текущие теги пистолета
     risers: null,  // текущие теги разливочного стояка
-    kerosenes: null,  // текущие теги разливочного стояка (керосин)
     card: null, // текущая карта
     supply: null, // текущая поставка возвращенная от САП
 
@@ -708,7 +701,7 @@ var confirm_df = {
         var valid = true;
         confirm_df.allFields.removeClass("ui-state-error");
 
-        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -1182,20 +1175,40 @@ var confirm_df = {
 
             case 1:
                 confirm_df.obj.dialog("option", "title", 'Выдать топливо (разливочный стояк-' + num + ')');
-                // Обновим варианты выдачи
-                updateOptionSelect(
-                    confirm_df.select_variant,
-                    [
-                        { value: 1, text: 'По резервированию (керосин)', disabled: true },
-                        { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                        { value: 3, text: 'По исходящей поставке', disabled: true },
-                        { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                        { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                        { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                    ],
-                    null,
-                    -1,
-                    null);
+                if (num == 2) {
+                    // керосин
+                    // Обновим варианты выдачи
+                    updateOptionSelect(
+                        confirm_df.select_variant,
+                        [
+                            { value: 1, text: 'По резервированию (керосин)' },
+                            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                            { value: 3, text: 'По исходящей поставке', disabled: true },
+                            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                            { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                            { value: 6, text: 'Заправка в цистерну топливозаправщика', disabled: true },
+                        ],
+                        null,
+                        -1,
+                        null);
+
+                } else {
+                    // ДТ\92
+                    // Обновим варианты выдачи
+                    updateOptionSelect(
+                        confirm_df.select_variant,
+                        [
+                            { value: 1, text: 'По резервированию (керосин)', disabled: true },
+                            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                            { value: 3, text: 'По исходящей поставке', disabled: true },
+                            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                            { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                        ],
+                        null,
+                        -1,
+                        null);
+                }
                 var riser = risers.getRisers(num);
                 if (riser) {
                     confirm_df.risers = riser;
@@ -1206,36 +1219,6 @@ var confirm_df = {
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(riser.type_fuel), null, -1, null);
                     // Получить информацию по карте
                     confirm_df.card = cards.getCardOfNumSide((Number(num) + 9), 0);
-                    // Вывести информацию по карте
-                    confirm_df.viewCard();
-                }
-                break;
-            case 2:
-                confirm_df.obj.dialog("option", "title", 'Выдать топливо (керосин -' + num + ')');
-                // Обновим варианты выдачи
-                updateOptionSelect(
-                    confirm_df.select_variant,
-                    [
-                        { value: 1, text: 'По резервированию (керосин)' },
-                        { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                        { value: 3, text: 'По исходящей поставке', disabled: true },
-                        { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                        { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                        { value: 6, text: 'Заправка в цистерну топливозаправщика', disabled: true },
-                    ],
-                    null,
-                    -1,
-                    null);
-                var kerosene = kerosenes.getKerosenes(num);
-                if (kerosene) {
-                    confirm_df.risers = kerosene;
-                    confirm_df.input_deliver_type_fuel.val(outFuelType(kerosene.type_fuel));
-                    confirm_df.input_sap_ozm_bak.val('(' + kerosene.type_fuel + ') ' + outFuelType(kerosene.type_fuel));
-                    //$('#deliver-Taken').prop('checked', riser.taken);
-                    // Обновим перечень емкостей
-                    updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(kerosene.type_fuel), null, -1, null);
-                    // Получить информацию по карте
-                    confirm_df.card = cards.getCardOfNumSide((Number(num) + 12), 0);
                     // Вывести информацию по карте
                     confirm_df.viewCard();
                 }
@@ -1287,14 +1270,9 @@ var confirm_df = {
         switch (confirm_df.type) {
             case 0:
                 fuel_type = confirm_df.gun != null ? confirm_df.gun.type_fuel : null;
-
                 break;
             case 1:
-                fuel_type = 0;
-                counter = 0;
-                break;
-            case 2:
-                fuel_type = 0;
+                fuel_type = confirm_df.risers != null ? confirm_df.risers.type_fuel : null;
                 break;
         }
 
@@ -1338,16 +1316,10 @@ var confirm_df = {
                 counter = confirm_df.gun != null ? confirm_df.gun.total_volume : null;
                 break;
             case 1:
-                trk_num = 10;
-                num = 1; // номер стояка 
-                fuel_type = 0;
-                counter = 0;
-                break;
-            case 2:
-                trk_num = 20;
-                num = 1; // номер керосина
-                fuel_type = 0;
-                counter = 0;
+                num = confirm_df.risers != null ? confirm_df.risers.num : null;
+                trk_num = (9+Number(num));
+                fuel_type = confirm_df.risers != null ? confirm_df.risers.type_fuel : null;
+                counter = 0; // Добавить счетчик
                 break;
         }
 
@@ -1473,6 +1445,8 @@ var confirm_close_fuel = {
                 var trk_num = fs.trk_num
                 if (trk_num > 0 && trk_num < 10) {
                     confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')');
+                    $('tr#type-0').show();
+                    $('tr#type-1').hide();
                     var gun = guns.getGun(fs.num);
                     if (gun) {
                         fs.volume = gun.last_out_volume; // выдано
@@ -1481,6 +1455,8 @@ var confirm_close_fuel = {
                 }
                 if (trk_num >= 10 && trk_num <= 12) {
                     confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')');
+                    $('tr#type-1').show();
+                    $('tr#type-0').hide();
                     var riser = risers.getRisers(fs.num);
                     if (riser) {
                         fs.volume = 0;//riser.last_out_volume; // выдано
@@ -1509,6 +1485,7 @@ var confirm_close_fuel = {
                             $('input#close-smena_datetime').val(fs.smena_datetime);
                             $('input#close-trk_num').val(fs.trk_num);
                             $('input#close-gun_num').val(fs.num);
+                            $('input#close-num').val(fs.num);
                             $('input#close-fuel_type').val(fs.fuel_type);
                             $('input#close-tank_num').val(fs.tank_num);
                             $('input#close-id_card').val(fs.id_card);

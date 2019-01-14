@@ -134,7 +134,7 @@
                             </table>
                         </div>
                         <fieldset>
-                            <legend> (A92) </legend>
+                            <legend> (ДТ) </legend>
                             <table class="table table-ns">
                                 <tr>
                                     <td colspan="2">
@@ -168,7 +168,7 @@
                             </table>
                         </div>
                         <fieldset>
-                            <legend> (A95) </legend>
+                            <legend> (Керосин) </legend>
                             <table class="table table-ns">
                                 <tr>
                                     <td colspan="2">
@@ -202,7 +202,7 @@
                             </table>
                         </div>
                         <fieldset>
-                            <legend> (ДТ) </legend>
+                            <legend> (A92) </legend>
                             <table class="table table-ns">
                                 <tr>
                                     <td colspan="2">
@@ -219,13 +219,6 @@
 
                 </fieldset>
             </div>
-        </div>
-
-        <div>
-            <button id="button-gun-11-deliver" data-kerosene="1" class="ui-button ui-widget ui-corner-all button-kerosene">Керосин</button>
-            @*<button id="button-gun-11-deliver" data-risers="21" class="ui-button ui-widget ui-corner-all button-risers">РС№1</button>
-            <button id="button-gun-11-deliver" data-risers="22" class="ui-button ui-widget ui-corner-all button-risers">РС№2</button>
-            <button id="button-gun-11-deliver" data-risers="23" class="ui-button ui-widget ui-corner-all button-risers">РС№3</button>*@
         </div>
     </div>
 
@@ -678,11 +671,16 @@
                     <th>Дата начала смены:</th>
                     <td><input id="close-smena_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
-                <tr>
-                    <th>№ ТРК:</th>
+                <tr id="type-0">
+                    <th>ТРК №:</th>
                     <td><input id="close-trk_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>№ пистолета/наливного стояка:</th>
+                    <th>Пистолет №:</th>
                     <td><input id="close-gun_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr id="type-1">
+                    <th colspan="2"></th>
+                    <th>Наливной стояк №:</th>
+                    <td><input id="close-num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
                     <th>Тип топлива:</th>
@@ -696,8 +694,6 @@
                     <th>id строки SAP:</th>
                     <td><input id="close-id_sap" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
-                @*</table>
-                    <table class="table-striped table-bordered">*@
                 <tr>
                     <th>Доза:</th>
                     <td><input id="close-dose" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
@@ -723,7 +719,7 @@
                     <td><input id="close-stop_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th>Объем в начале:<</th>
+                    <th>Объем в начале:</th>
                     <td><input id="close-start_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     <th>Объем в конце:</th>
                     <td><input id="close-stop_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>

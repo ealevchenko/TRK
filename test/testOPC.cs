@@ -163,5 +163,40 @@ namespace test
 
         }
 
+        public void Test_ClientTRK_ReadTagOPCOfRisers()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                List<Risers> list = client.ReadTagOPCOfRisers();
+                if (list == null)
+                {
+                    Console.WriteLine("List<Risers> list =null");
+                    return;
+                }
+                foreach (Risers riser in list)
+                {
+                    Console.WriteLine("gun.Counter - {0}", riser.Counter);
+                    Console.WriteLine("gun.CounterResetable - {0}", riser.CounterResetable);
+                    Console.WriteLine("gun.CountOn - {0}", riser.CountOn);
+                    Console.WriteLine("gun.Error - {0}", riser.Error);
+                    Console.WriteLine("gun.Flow - {0}", riser.Flow);
+                    Console.WriteLine("gun.Flow2 - {0}", riser.Flow2);
+                    Console.WriteLine("gun.Freq - {0}", riser.Freq);
+                    Console.WriteLine("gun.PiontsCount - {0}", riser.PiontsCount);
+                    Console.WriteLine("gun.Status - {0}", riser.Status);
+                    Console.WriteLine("gun.Temp - {0}", riser.Temp);
+                    Console.WriteLine("gun.TimerLiveOn - {0}", riser.TimerLiveOn);
+                    Console.WriteLine("gun.TimerOn - {0}", riser.TimerOn);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

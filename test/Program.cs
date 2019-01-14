@@ -36,9 +36,10 @@ namespace test
                 testOPC test_opc = new testOPC();
                 //test_opc.Test_ClientTRK_ReadTagOPC();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfTank();
-                test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
+                //test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
+                test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
                 #endregion
 
                 #region TEST SAP
