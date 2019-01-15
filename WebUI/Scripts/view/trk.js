@@ -701,7 +701,7 @@ var confirm_df = {
         var valid = true;
         confirm_df.allFields.removeClass("ui-state-error");
 
-        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -800,12 +800,12 @@ var confirm_df = {
                     getTankTags(ui.item.value,
                         function (result) {
                             // Обновим информацию по баку
-                            confirm_df.input_deliver_take_level.val(result.level);
-                            confirm_df.input_deliver_take_mass.val(result.mass);
-                            confirm_df.input_deliver_take_temp.val(result.temp!=null ? (Number(result.temp)/10) : result.temp);
-                            confirm_df.input_deliver_take_volume.val(result.volume);
-                            confirm_df.input_deliver_take_dens.val(result.dens);
-                            confirm_df.input_deliver_take_water_level.val(result.water_level);
+                            confirm_df.input_deliver_take_level.val(result.level.toFixed(2));
+                            confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
+                            confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
+                            confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
+                            confirm_df.input_deliver_take_dens.val(result.dens.toFixed(2));
+                            confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
                         }
                     );
                 }
@@ -1473,12 +1473,12 @@ var confirm_close_fuel = {
                             // Обновим информацию по баку
 
                             fs.stop_datetime = toISOStringTZ(now);
-                            fs.stop_level = result.level;
-                            fs.stop_mass = result.mass;
-                            fs.stop_temp = result.temp!=null ? (Number(result.temp)/10) : result.temp;
-                            fs.stop_volume = result.volume;
-                            fs.stop_density = result.dens;
-                            fs.stop_water_level = result.water_level;
+                            fs.stop_level = result.level.toFixed(2);
+                            fs.stop_mass = result.mass.toFixed(2);
+                            fs.stop_temp = result.temp.toFixed(2);
+                            fs.stop_volume = result.volume.toFixed(2);
+                            fs.stop_density = result.dens.toFixed(2);
+                            fs.stop_water_level = result.water_level.toFixed(2);
 
                             $('input#close-operator_name').val(fs.operator_name);
                             $('input#close-smena_num').val(fs.smena_num);

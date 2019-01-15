@@ -39,6 +39,7 @@ namespace test
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
+                //test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
                 test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
                 #endregion
 

@@ -62,20 +62,20 @@ namespace ClientOPCTRK
         public string num_tank { get; set; }
         public double? dens { get; set; }
         public double? fill_percent { get; set; }
-        public int? level { get; set; }
+        public double? level { get; set; }
         public double? mass { get; set; }
         public byte? status1 { get; set; }
         public byte? status2 { get; set; }
         public int? status { get; set; }
-        public int? temp { get; set; }
+        public double? temp { get; set; }
         public int? ullage { get; set; }
         public string unit { get; set; }
-        public int? volume { get; set; }
-        public int? water_level { get; set; }
-        public int? water_volume { get; set; }
+        public double? volume { get; set; }
+        public double? water_level { get; set; }
+        public double? water_volume { get; set; }
     }
 
-    public class Risers { 
+    public class DIORisers { 
         public UInt16[] Counter { get; set; } // 4
         public UInt16[] CounterResetable { get; set; } // 4
         public UInt16[] CountOn { get; set; } // 2
@@ -90,6 +90,19 @@ namespace ClientOPCTRK
         public UInt16[] TimerOn { get; set; } // 2
     }
 
+    public class Risers { 
+        public bool? door { get; set; }
+        public bool? power { get; set; }
+        public bool? flg_kv1 { get; set; }  // управления контактором включения слива
+        public bool? flg_kv2 { get; set; }  // Flg_SHBUS_KV4 - Флаг(4) реле предельного уровня слива 1(в баке,скада)
+        public bool? inp_km { get; set; }   // Inp_SHBUS_KM1 - (Inp)Состояние контактора включения насоса 1
+        public bool? inp_kvq1 { get; set; } //Inp_SHBUS_KVQ1_1 - (Inp)Контроль перелива стояка 1
+        public bool? inp_kvq2 { get; set; } //Inp_SHBUS_KVQ2_1 - (Inp)Контроль заземления автоцистерны стояка 1
+        public bool? inp_sa2 { get; set; }  //Inp_SHBUS_SA2_1 - (Inp)Выбор режима управления насосом стояка 1
+        public bool? out_kv1 { get; set; }  //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
+        public bool? out_kv2 { get; set; }  //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
+    }
+
     public class ClientTRK
     {
         private OpcCom.Factory fact = new OpcCom.Factory();
@@ -99,7 +112,13 @@ namespace ClientOPCTRK
         {
             url = new Opc.URL("opcda://localhost/Kepware.KEPServerEX.V6");
         }
-
+        /// <summary>
+        /// Добавить строки тегов пистолетов
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
         public void AddGun(ref Opc.Da.Item[] items, ref int i, int num_trk, int num_gun)
         {
             try
@@ -207,6 +226,103 @@ namespace ClientOPCTRK
             }
         }
         /// <summary>
+        /// Добавить строки тегов датчика счетчика оборотов наливных стояков
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        /// <param name="num"></param>
+        public void AddDIORisers(ref Opc.Da.Item[] items, ref int i, int num) {
+            try
+            {
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Counter"; //UInt16[4]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".CounterResetable"; //UInt16[4]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".CountOn"; //UInt16[2]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Error"; //UInt16
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Flow"; //UInt16[2]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Flow2"; //float
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Freq"; //UInt16
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".PiontsCount"; //UInt16
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Status"; //UInt16
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".Temp"; //float
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".TimerLiveOn"; //UInt16[4]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TS.C" + num + ".TimerOn"; //UInt16[2]
+                i++;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода AddDIORisers(items={0}, i={1}, num={2})", items, i, num).SaveError(e);
+            }
+        }
+        /// <summary>
+        /// Добавить строки тегов контакторов наливных стояков 
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        /// <param name="num"></param>
+        public void AddRisers(ref Opc.Da.Item[] items, ref int i, int num) {
+            try
+            {
+                
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_Door"; // Inp_SHBUS_Door 
+                i++;             
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_Power"; // Inp_SHBUS_Power 
+                i++;     
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + num; //Флаг(01) управления контактором включения слива 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + (3 + num).ToString(); // Flg_SHBUS_KV4 - Флаг(4) реле предельного уровня слива 1(в баке,скада)
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_KM" + num; //Inp_SHBUS_KM1 - (Inp)Состояние контактора включения насоса 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_KVQ1_" + num; //Inp_SHBUS_KVQ1_1 - (Inp)Контроль перелива стояка 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_KVQ2_" + num; //Inp_SHBUS_KVQ2_1 - (Inp)Контроль заземления автоцистерны стояка 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_SA2_" + num; //Inp_SHBUS_SA2_1 - (Inp)Выбор режима управления насосом стояка 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Out_SHBUS_KV" + num; //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "AZS_SHBUS.SHBUS.Out_SHBUS_KV" + (3 + num).ToString(); // Out_SHBUS_KV4 - (OUT)Реле предельного уровня в резервуарах стояка 1
+                i++;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода AddRisers(items={0}, i={1}, num={2})", items, i, num).SaveError(e);
+            }
+        }
+        /// <summary>
         /// Получить значение тегов RFID
         /// </summary>
         /// <param name="num"></param>
@@ -257,10 +373,12 @@ namespace ClientOPCTRK
                                 rfid.lo = (uint)code2;
                                 if (identify_card)
                                 {
+                                    String.Format("Определим ID=карты code1={0}, code2={1}", code1, code2).SaveInformation();
                                     azsCards card = ef_card.Get().Where(c => c.Number == (code1).ToString("000") + "," + (code2).ToString("00000")).FirstOrDefault();
                                     azsDeparts departs = null;
                                     if (card != null)
                                     {
+                                        String.Format("При code1={0}, code2={1} id_card ={2}", code1, code2, card.Id).SaveInformation();
                                         departs = ef_departs.Get().Where(d => d.id == ((int)card.House).ToString("000")).FirstOrDefault();
                                         Cards cards = new Cards()
                                         {
@@ -283,6 +401,8 @@ namespace ClientOPCTRK
                                             Name = departs != null && departs.name != null ? departs.name : "?",
                                         };
                                         rfid.card = cards;
+                                    } else {
+                                        String.Format("При code1={0}, code2={1} id_card - не определен.", code1, code2).SaveInformation();
                                     }
                                 }
                             }
@@ -295,7 +415,7 @@ namespace ClientOPCTRK
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода GetRFIDOfNum(num_trk={0}, side={1}, list={3}, start={4})", num, side, list, i).SaveError(e);
+                String.Format("Ошибка выполнения метода GetRFIDOfNum(num={0}, side={1}, list={2}, i={3}, identify_card={4})", num, side, list, i, identify_card).SaveError(e);
                 return null;
             }
         }
@@ -396,6 +516,71 @@ namespace ClientOPCTRK
 
         }
         /// <summary>
+        ///  Получить значения тегов наливных стояков
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="list"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        private DIORisers GetDIORisers(int num, ItemValueResult[] list, int start)
+        {
+            try
+            {
+                DIORisers risers = new DIORisers()
+                {
+                    Counter = list[start].Value != null ? list[start].Value as UInt16[] : null,
+                    CounterResetable = list[start + 1].Value != null ? list[start + 1].Value as UInt16[] : null,
+                    CountOn = list[start + 2].Value != null ? list[start + 2].Value as UInt16[] : null,
+                    Error = list[start + 3].Value != null ? list[start + 3].Value as UInt16? : null,
+                    Flow = list[start + 4].Value != null ? list[start + 4].Value as UInt16[] : null,
+                    Flow2 = list[start + 5].Value != null ? list[start + 5].Value as float? : null,
+                    Freq = list[start + 6].Value != null ? list[start + 6].Value as UInt16? : null,
+                    PiontsCount = list[start + 7].Value != null ? list[start + 7].Value as UInt16? : null,
+                    Status = list[start + 8].Value != null ? list[start + 8].Value as UInt16? : null,
+                    Temp = list[start + 9].Value != null ? list[start + 9].Value as float? : null,
+                    TimerLiveOn = list[start + 10].Value != null ? list[start + 10].Value as UInt16[] : null,
+                    TimerOn = list[start + 11].Value != null ? list[start + 11].Value as UInt16[] : null,
+                };
+                return risers;
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода DIORisers(num={0}, list={1}, start={2})", num, list, start).SaveError(e);
+                return null;
+            }
+
+        }
+
+        private Risers GetRisers(int num, ItemValueResult[] list, int start)
+        {
+            try
+            {
+                Risers risers = new Risers()
+                {
+                    door = list[start].Value != null ? list[start].Value as bool? : null,
+                    power = list[start + 1].Value != null ? list[start + 1].Value as bool? : null,
+                    flg_kv1 = list[start + 2].Value != null ? list[start + 2].Value as bool? : null,
+                    flg_kv2 = list[start + 3].Value != null ? list[start + 3].Value as bool? : null,
+                    inp_km = list[start + 4].Value != null ? list[start + 4].Value as bool? : null,
+                    inp_kvq1 = list[start + 5].Value != null ? list[start + 5].Value as bool? : null,
+                    inp_kvq2 = list[start + 6].Value != null ? list[start + 6].Value as bool? : null,
+                    inp_sa2 = list[start + 7].Value != null ? list[start + 7].Value as bool? : null,
+                    out_kv1 = list[start + 8].Value != null ? list[start + 8].Value as bool? : null,
+                    out_kv2 = list[start + 9].Value != null ? list[start + 9].Value as bool? : null,
+                };
+                return risers;
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода GetRisers(num={0}, list={1}, start={2})", num, list, start).SaveError(e);
+                return null;
+            }
+
+        }
+
+        /// <summary>
         /// Получить теги Бака
         /// </summary>
         /// <param name="num_tank"></param>
@@ -456,17 +641,17 @@ namespace ClientOPCTRK
                         num_tank = num_tank,
                         dens = res[0].Value != null ? res[0].Value as double? : null,
                         fill_percent = res[1].Value != null ? res[1].Value as double? : null,
-                        level = res[2].Value != null ? res[2].Value as int? : null,
+                        level = res[2].Value != null ? res[2].Value as int? / 100.0 : null, // преабразуем
                         mass = res[3].Value != null ? res[3].Value as double? : null,
                         status1 = res[4].Value != null ? res[4].Value as byte? : null,
                         status2 = res[5].Value != null ? res[5].Value as byte? : null,
                         status = res[6].Value != null ? res[6].Value as int? : null,
-                        temp = res[7].Value != null ? res[7].Value as int? : null,
+                        temp = res[7].Value != null ? res[7].Value as int? / 10.0 : null, // преабразуем
                         ullage = res[8].Value != null ? res[8].Value as int? : null,
                         unit = res[9].Value != null ? res[9].Value as string : null,
-                        volume = res[10].Value != null ? res[10].Value as int? : null,
-                        water_level = res[11].Value != null ? res[11].Value as int? : null,
-                        water_volume = res[12].Value != null ? res[12].Value as int? : null,
+                        volume = res[10].Value != null ? res[10].Value as int? / 10.0 : null,
+                        water_level = res[11].Value != null ? res[11].Value as int? / 100.0 : null, // преабразуем
+                        water_volume = res[12].Value != null ? res[12].Value as int? / 10.0 : null,
                     };
                     return tank;
                 }
@@ -552,7 +737,7 @@ namespace ClientOPCTRK
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода ReadTagsOPSOfRFID()").SaveError(e);
+                String.Format("Ошибка выполнения метода ReadTagsOPSOfRFID(identify_card={0})", identify_card).SaveError(e);
                 return null;
             }
         }
@@ -602,12 +787,15 @@ namespace ClientOPCTRK
                 return null;
             }
         }
-
-        public List<Risers> ReadTagOPCOfRisers()
+        /// <summary>
+        /// Прочесть теги наливных стояков
+        /// </summary>
+        /// <returns></returns>
+        public List<DIORisers> ReadTagOPCOfDIORisers()
         {
             try
             {
-                Console.WriteLine("TS.C2.Counter - start >");
+                //Console.WriteLine("TS.C1.Counter - start >");
                 Opc.Da.Server server = null;
                 OpcCom.Factory fact = new OpcCom.Factory();
                 server = new Opc.Da.Server(fact, null);
@@ -622,66 +810,69 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[12];
-                items[0] = new Opc.Da.Item();
-                items[0].ItemName = "TS.C2.Counter"; //UInt16[4]
+                Opc.Da.Item[] items = new Opc.Da.Item[3*12];
+                int i = 0;
+                AddDIORisers(ref items, ref i, 1);
+                AddDIORisers(ref items, ref i, 2);
+                AddDIORisers(ref items, ref i, 3);
 
-                items[1] = new Opc.Da.Item();
-                items[1].ItemName = "TS.C2.CounterResetable"; //UInt16[4]
+                items = group.AddItems(items);
 
-                items[2] = new Opc.Da.Item();
-                items[2].ItemName = "TS.C2.CountOn"; //UInt16[2]
+                ItemValueResult[] res = group.Read(items);
 
-                items[3] = new Opc.Da.Item();
-                items[3].ItemName = "TS.C2.Error"; //UInt16
+                List<DIORisers> list_result = new List<DIORisers>();
+                i = 0;
+                list_result.Add(GetDIORisers(1, res, i));
+                i += 12;
+                list_result.Add(GetDIORisers(2, res, i));
+                i += 12;
+                list_result.Add(GetDIORisers(3, res, i));
+                return list_result;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ReadTagOPCOfDIORisers()").SaveError(e);
+                return null;
+            }
+        }
 
-                items[4] = new Opc.Da.Item();
-                items[4].ItemName = "TS.C2.Flow"; //UInt16[2]
+        public List<Risers> ReadTagOPCOfRisers()
+        {
+            try
+            {
+                //Console.WriteLine("TS.C1.Counter - start >");
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
 
-                items[5] = new Opc.Da.Item();
-                items[5].ItemName = "TS.C2.Flow2"; //float
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
 
-                items[6] = new Opc.Da.Item();
-                items[6].ItemName = "TS.C2.Freq"; //UInt16
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "group";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
-                items[7] = new Opc.Da.Item();
-                items[7].ItemName = "TS.C2.PiontsCount"; //UInt16
-
-                items[8] = new Opc.Da.Item();
-                items[8].ItemName = "TS.C2.Status"; //UInt16
-
-                items[9] = new Opc.Da.Item();
-                items[9].ItemName = "TS.C2.Temp"; //float
-
-                items[10] = new Opc.Da.Item();
-                items[10].ItemName = "TS.C2.TimerLiveOn"; //UInt16[4]
-
-                items[11] = new Opc.Da.Item();
-                items[11].ItemName = "TS.C2.TimerOn"; //UInt16[2]
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[3*10];
+                int i = 0;
+                AddRisers(ref items, ref i, 1);
+                AddRisers(ref items, ref i, 2);
+                AddRisers(ref items, ref i, 3);
 
                 items = group.AddItems(items);
 
                 ItemValueResult[] res = group.Read(items);
 
                 List<Risers> list_result = new List<Risers>();
-                list_result.Add(new Risers()
-                {
-                    Counter = res[0].Value != null ? res[0].Value as UInt16[] : null,
-                    CounterResetable = res[1].Value != null ? res[1].Value as UInt16[] : null,
-                    CountOn = res[2].Value != null ? res[2].Value as UInt16[] : null,
-                    Error = res[3].Value != null ? res[3].Value as UInt16? : null,
-                    Flow = res[4].Value != null ? res[4].Value as UInt16[] : null,
-                    Flow2 = res[5].Value != null ? res[5].Value as float? : null,
-                    Freq = res[6].Value != null ? res[6].Value as UInt16? : null,
-                    PiontsCount = res[7].Value != null ? res[7].Value as UInt16? : null,
-                    Status = res[8].Value != null ? res[8].Value as UInt16? : null,
-                    Temp = res[9].Value != null ? res[9].Value as float? : null,
-                    TimerLiveOn = res[10].Value != null ? res[10].Value as UInt16[] : null,
-                    TimerOn = res[11].Value != null ? res[11].Value as UInt16[] : null,
-                });
+                i = 0;
+                list_result.Add(GetRisers(1, res, i));
+                i += 10;
+                list_result.Add(GetRisers(2, res, i));
+                i += 10;
+                list_result.Add(GetRisers(3, res, i));
                 return list_result;
-
-
             }
             catch (Exception e)
             {
@@ -689,6 +880,5 @@ namespace ClientOPCTRK
                 return null;
             }
         }
-
     }
 }

@@ -163,6 +163,41 @@ namespace test
 
         }
 
+        public void Test_ClientTRK_ReadTagOPCOfDIORisers()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                List<DIORisers> list = client.ReadTagOPCOfDIORisers();
+                if (list == null)
+                {
+                    Console.WriteLine("List<Risers> list =null");
+                    return;
+                }
+                foreach (DIORisers riser in list)
+                {
+                    Console.WriteLine("riser.Counter - {0}", riser.Counter);
+                    Console.WriteLine("riser.CounterResetable - {0}", riser.CounterResetable);
+                    Console.WriteLine("riser.CountOn - {0}", riser.CountOn);
+                    Console.WriteLine("riser.Error - {0}", riser.Error);
+                    Console.WriteLine("riser.Flow - {0}", riser.Flow);
+                    Console.WriteLine("riser.Flow2 - {0}", riser.Flow2);
+                    Console.WriteLine("riser.Freq - {0}", riser.Freq);
+                    Console.WriteLine("riser.PiontsCount - {0}", riser.PiontsCount);
+                    Console.WriteLine("riser.Status - {0}", riser.Status);
+                    Console.WriteLine("riser.Temp - {0}", riser.Temp);
+                    Console.WriteLine("riser.TimerLiveOn - {0}", riser.TimerLiveOn);
+                    Console.WriteLine("riser.TimerOn - {0}", riser.TimerOn);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
         public void Test_ClientTRK_ReadTagOPCOfRisers()
         {
             try
@@ -177,18 +212,16 @@ namespace test
                 }
                 foreach (Risers riser in list)
                 {
-                    Console.WriteLine("gun.Counter - {0}", riser.Counter);
-                    Console.WriteLine("gun.CounterResetable - {0}", riser.CounterResetable);
-                    Console.WriteLine("gun.CountOn - {0}", riser.CountOn);
-                    Console.WriteLine("gun.Error - {0}", riser.Error);
-                    Console.WriteLine("gun.Flow - {0}", riser.Flow);
-                    Console.WriteLine("gun.Flow2 - {0}", riser.Flow2);
-                    Console.WriteLine("gun.Freq - {0}", riser.Freq);
-                    Console.WriteLine("gun.PiontsCount - {0}", riser.PiontsCount);
-                    Console.WriteLine("gun.Status - {0}", riser.Status);
-                    Console.WriteLine("gun.Temp - {0}", riser.Temp);
-                    Console.WriteLine("gun.TimerLiveOn - {0}", riser.TimerLiveOn);
-                    Console.WriteLine("gun.TimerOn - {0}", riser.TimerOn);
+                    Console.WriteLine("riser.door - {0}", riser.door);
+                    Console.WriteLine("riser.power - {0}", riser.power);
+                    Console.WriteLine("riser.flg_kv1 - {0}", riser.flg_kv1);
+                    Console.WriteLine("riser.flg_kv2 - {0}", riser.flg_kv2);
+                    Console.WriteLine("riser.inp_km - {0}", riser.inp_km);
+                    Console.WriteLine("riser.inp_kvq1 - {0}", riser.inp_kvq1);
+                    Console.WriteLine("riser.inp_kvq2 - {0}", riser.inp_kvq2);
+                    Console.WriteLine("riser.inp_sa2 - {0}", riser.inp_sa2);
+                    Console.WriteLine("riser.out_kv1 - {0}", riser.out_kv1);
+                    Console.WriteLine("riser.out_kv2 - {0}", riser.out_kv2);
                 }
             }
             catch (Exception e)
