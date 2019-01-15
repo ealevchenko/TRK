@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using MessageLog;
 
 namespace WebUI.Controllers.api
 {
@@ -18,26 +19,6 @@ namespace WebUI.Controllers.api
         public TRKController() {
 
         }
-        //// GET: api/trk/tags
-        //[Route("tags")]
-        //[ResponseType(typeof(TRK))]
-        //public IHttpActionResult GetTRKTagOPC()
-        //{
-        //    try
-        //    {
-        //        TRK trk = client.ReadTagOPC();
-        //        if (trk == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(trk);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return NotFound();
-        //    }
-        //}
-
         // GET: api/trk/tank/num/B9
         [Route("tank/num/{num}")]
         [ResponseType(typeof(Tank))]
@@ -54,6 +35,7 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
+                String.Format("Ошибка выполнения метода API:GetTagsOPSOfTank(num={0})", num).SaveError(e);
                 return NotFound();
             }
         }
@@ -74,6 +56,7 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
+                String.Format("Ошибка выполнения метода API:GetReadTagOPCOfGun()").SaveError(e);
                 return NotFound();
             }
         }
@@ -94,9 +77,51 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
+                String.Format("Ошибка выполнения метода API:GetReadTagsOPSOfRFID()").SaveError(e);
                 return NotFound();
             }
         }
 
+        // GET: api/trk/dio/risers/tags
+        [Route("dio/risers/tags")]
+        [ResponseType(typeof(DIORisers))]
+        public IHttpActionResult GetReadTagOPCOfDIORisers()
+        {
+            try
+            {
+                List<DIORisers> list = client.ReadTagOPCOfDIORisers();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReadTagOPCOfDIORisers()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // GET: api/trk/risers/tags
+        [Route("risers/tags")]
+        [ResponseType(typeof(Risers))]
+        public IHttpActionResult GetReadTagOPCOfRisers()
+        {
+            try
+            {
+                List<Risers> list = client.ReadTagOPCOfRisers();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReadTagOPCOfRisers()").SaveError(e);
+                return NotFound();
+            }
+        }
     }
 }

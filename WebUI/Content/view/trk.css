@@ -133,6 +133,12 @@ legend {
     text-align: center
 }
 
+.table-ns th {
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left
+}
+
 .table-rfid th, .table-rfid td {
     font-size: 12px;
     font-weight: normal;

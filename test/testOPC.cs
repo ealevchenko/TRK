@@ -172,7 +172,7 @@ namespace test
                 List<DIORisers> list = client.ReadTagOPCOfDIORisers();
                 if (list == null)
                 {
-                    Console.WriteLine("List<Risers> list =null");
+                    Console.WriteLine("List<DIORisers> list =null");
                     return;
                 }
                 foreach (DIORisers riser in list)

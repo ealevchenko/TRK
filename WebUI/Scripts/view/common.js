@@ -41,8 +41,7 @@ var supply_out =
 var reservation_out = { "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
 // TODO:!!!ТЕСТ УБРАТЬ
 var bunk_out =
-    { "num_tank": "B9", "dens": 757.274683, "fill_percent": 36.16409940151653, "level": 108190, "mass": 19539.201370766, "status1": 64, "status2": 48, "status": 0, "temp": -32, "ullage": 45545, "unit": null, "volume": 25802, "water_level": 1, "water_volume": 0 }
-    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
+    { "num_tank": "B9", "dens": 754.065493, "fill_percent": 35.194191766997911, "level": 1060.24, "mass": 18934.58452923, "status1": 64, "status2": 48, "status": 0, "temp": -1.8, "ullage": 46237, "unit": null, "volume": 2511.0, "water_level": 0.0, "water_volume": 0.0 }    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
 // TODO:!!!ТЕСТ УБРАТЬ
 var guns_out = [
     { "num_trk": 6, "num_gun": 11, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 56902228, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
@@ -71,7 +70,53 @@ var rfid_out = [
     { "num_trk": 11, "side": 0, "hi": 0, "lo": 0, "online": false, "ready": false, "status": 0, "card": null },
     { "num_trk": 12, "side": 0, "hi": 0, "lo": 0, "online": false, "ready": false, "status": null, "card": null }
 ];
-
+// TODO:!!!ТЕСТ УБРАТЬ
+var dio_out = [];
+// TODO:!!!ТЕСТ УБРАТЬ
+var risers_out = [
+    {
+        "num": 1,
+        "type_fuel": 107000024,
+        "door": false,
+        "power": false,
+        "flg_kv1": false,
+        "flg_kv2": false,
+        "inp_km": true,
+        "inp_kvq1": true,
+        "inp_kvq2": true,
+        "inp_sa2": true,
+        "out_kv1": false,
+        "out_kv2": false
+    },
+    {
+        "num": 2,
+        "type_fuel": 107000027,
+        "door": false,
+        "power": false,
+        "flg_kv1": false,
+        "flg_kv2": false,
+        "inp_km": true,
+        "inp_kvq1": true,
+        "inp_kvq2": true,
+        "inp_sa2": false,
+        "out_kv1": false,
+        "out_kv2": false
+    },
+    {
+        "num": 3,
+        "type_fuel": 107000022,
+        "door": false,
+        "power": false,
+        "flg_kv1": false,
+        "flg_kv2": false,
+        "inp_km": true,
+        "inp_kvq1": true,
+        "inp_kvq2": false,
+        "inp_sa2": true,
+        "out_kv1": false,
+        "out_kv2": false
+    }
+];
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
@@ -151,8 +196,6 @@ var outFuelType = function (i) {
         default: return i;
     }
 };
-
-
 // Инициализация компонента Select
 var initSelect = function (obj_select, property, data, callback_option, value_select, event_change, exceptions_value) {
     var options = [];
@@ -191,7 +234,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
         .selectmenu("refresh");
     return obj_select;
 }
-
+// Обновим компонента Select
 var updateOptionSelect = function (obj_select, data, callback_option, value_select, exceptions_value) {
     var options = [];
     var lang = 'ru';
@@ -235,7 +278,7 @@ var AJAXBeforeSend = function () {
 var OnAJAXError = function (x, y, z) {
     //LockScreenOff();
     if (x.status != 404) {
-        alert(x + '\n' + y + '\n' + z);
+        //alert(x + '\n' + y + '\n' + z);
     }
     //LockScreenOff();
 }
@@ -243,29 +286,6 @@ var OnAJAXError = function (x, y, z) {
 var AJAXComplete = function () {
     //LockScreenOff();
 }
-
-//var getTRKTags= function (callback) {
-//    $.ajax({
-//        type: 'GET',
-//        url: '/api/trk/tags',
-//        async: true,
-//        dataType: 'json',
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function (data) {
-//            if (typeof callback === 'function') {
-//                callback(data);
-//            }
-//        },
-//        error: function (x, y, z) {
-//            OnAJAXError(x, y, z);
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        },
-//    });
-//}
 // Прочесть теги бака
 var getTankTags= function (num, callback) {
     $.ajax({
@@ -334,7 +354,7 @@ var getGunTags= function (callback) {
         },
     });
 }
-
+// Прочесть теги rfid
 var getRFIDTags= function (callback) {
     $.ajax({
         type: 'GET',
@@ -365,7 +385,68 @@ var getRFIDTags= function (callback) {
         },
     });
 }
+// Прочесть теги DIORisers
+var getDIORisersTags= function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/dio/risers/tags',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 2) {
+                if (typeof callback === 'function') {
+                    callback(dio_out);
+                }
+            } else {
+                OnAJAXError(x, y, z);
+            }
 
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Прочесть теги Risers
+var getRisersTags= function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/risers/tags',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 2) {
+                if (typeof callback === 'function') {
+                    callback(risers_out);
+                }
+            } else {
+                OnAJAXError(x, y, z);
+            }
+
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 // Считать считаные карты по ТРК из буфера БД
 var getRFIDDB= function (callback) {
     $.ajax({
@@ -389,7 +470,6 @@ var getRFIDDB= function (callback) {
         },
     });
 }
-
 // Резервирование
 var getReservation = function (num, pos, callback) {
     $.ajax({
@@ -520,7 +600,7 @@ var getCatalogOfDepots = function (id, callback) {
         },
     });
 }
-
+// Получить Depots
 var getCatalogDepots = function (callback) {
     $.ajax({
         type: 'GET',
@@ -543,7 +623,7 @@ var getCatalogDepots = function (callback) {
         },
     });
 }
-
+// Получить Завод
 var getCatalogWerks = function (callback) {
     $.ajax({
         type: 'GET',
@@ -566,7 +646,6 @@ var getCatalogWerks = function (callback) {
         },
     });
 }
-
 //Добавить sap_buffer
 var postAsyncSAP_Buffer = function (sap_buffer, callback) {
     $.ajax({
@@ -614,8 +693,6 @@ var deleteAsynczsSAP_Buffer = function (id, callback) {
         },
     });
 }
-
-
 //Добавить FuelSale
 var postAsyncFuelSale = function (fuel_sale, callback) {
     $.ajax({

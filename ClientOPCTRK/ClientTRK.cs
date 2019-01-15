@@ -76,6 +76,8 @@ namespace ClientOPCTRK
     }
 
     public class DIORisers { 
+        public int num { get; set; }
+        public int type_fuel { get; set; }
         public UInt16[] Counter { get; set; } // 4
         public UInt16[] CounterResetable { get; set; } // 4
         public UInt16[] CountOn { get; set; } // 2
@@ -90,17 +92,19 @@ namespace ClientOPCTRK
         public UInt16[] TimerOn { get; set; } // 2
     }
 
-    public class Risers { 
+    public class Risers {
+        public int num { get; set; }
+        public int type_fuel { get; set; }
         public bool? door { get; set; }
         public bool? power { get; set; }
-        public bool? flg_kv1 { get; set; }  // управления контактором включения слива
+        public bool? flg_kv1 { get; set; }  // Флаг(4) управления контактором включения слива (ФУКВС
         public bool? flg_kv2 { get; set; }  // Flg_SHBUS_KV4 - Флаг(4) реле предельного уровня слива 1(в баке,скада)
         public bool? inp_km { get; set; }   // Inp_SHBUS_KM1 - (Inp)Состояние контактора включения насоса 1
         public bool? inp_kvq1 { get; set; } //Inp_SHBUS_KVQ1_1 - (Inp)Контроль перелива стояка 1
         public bool? inp_kvq2 { get; set; } //Inp_SHBUS_KVQ2_1 - (Inp)Контроль заземления автоцистерны стояка 1
         public bool? inp_sa2 { get; set; }  //Inp_SHBUS_SA2_1 - (Inp)Выбор режима управления насосом стояка 1
         public bool? out_kv1 { get; set; }  //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
-        public bool? out_kv2 { get; set; }  //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
+        public bool? out_kv2 { get; set; }  //Out_SHBUS_KV - (OUT)Реле предельного уровня в резервуарах стояка 1
     }
 
     public class ClientTRK
@@ -516,7 +520,7 @@ namespace ClientOPCTRK
 
         }
         /// <summary>
-        ///  Получить значения тегов наливных стояков
+        ///  Получить значения тегов счетчика наливных стояков
         /// </summary>
         /// <param name="num"></param>
         /// <param name="list"></param>
@@ -526,8 +530,16 @@ namespace ClientOPCTRK
         {
             try
             {
+                int type_fuel = 0;
+                switch (num) {
+                    case 1: type_fuel = 107000024; break;
+                    case 2: type_fuel = 107000027; break;
+                    case 3: type_fuel = 107000022; break;
+                }
                 DIORisers risers = new DIORisers()
                 {
+                    num = num,
+                    type_fuel = type_fuel,
                     Counter = list[start].Value != null ? list[start].Value as UInt16[] : null,
                     CounterResetable = list[start + 1].Value != null ? list[start + 1].Value as UInt16[] : null,
                     CountOn = list[start + 2].Value != null ? list[start + 2].Value as UInt16[] : null,
@@ -551,13 +563,28 @@ namespace ClientOPCTRK
             }
 
         }
-
+        /// <summary>
+        /// Получить значения тегов наливных стояков
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="list"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
         private Risers GetRisers(int num, ItemValueResult[] list, int start)
         {
             try
             {
+                int type_fuel = 0;
+                switch (num)
+                {
+                    case 1: type_fuel = 107000024; break;
+                    case 2: type_fuel = 107000027; break;
+                    case 3: type_fuel = 107000022; break;
+                }
                 Risers risers = new Risers()
                 {
+                    num = num,
+                    type_fuel = type_fuel,
                     door = list[start].Value != null ? list[start].Value as bool? : null,
                     power = list[start + 1].Value != null ? list[start + 1].Value as bool? : null,
                     flg_kv1 = list[start + 2].Value != null ? list[start + 2].Value as bool? : null,
@@ -579,7 +606,6 @@ namespace ClientOPCTRK
             }
 
         }
-
         /// <summary>
         /// Получить теги Бака
         /// </summary>
@@ -805,7 +831,7 @@ namespace ClientOPCTRK
                 //
                 Opc.Da.Subscription group;
                 Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-                groupState.Name = "group";
+                groupState.Name = "DIORisers";
                 groupState.Active = true;
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
@@ -850,7 +876,7 @@ namespace ClientOPCTRK
                 //
                 Opc.Da.Subscription group;
                 Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-                groupState.Name = "group";
+                groupState.Name = "Risers";
                 groupState.Active = true;
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 

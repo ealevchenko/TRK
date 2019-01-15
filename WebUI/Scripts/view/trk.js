@@ -178,7 +178,12 @@ var guns = {
 };
 // список тегов стояков
 var risers = {
+    list_dio: [],
     list: [],
+    setDIORisers: function (data) {
+        risers.list_dio = data;
+    },
+
     setRisers: function (data) {
         risers.list = data;
     },
@@ -188,7 +193,16 @@ var risers = {
             return obj[0];
         }
         return null
+    },
+
+    getDIORisers: function (num) {
+        var obj = getObjects(risers.list_dio, 'num', num)
+        if (obj && obj.length > 0) {
+            return obj[0];
+        }
+        return null
     }
+
 };
 // список тегов керосина
 var kerosenes = {
@@ -204,6 +218,7 @@ var kerosenes = {
         return null
     }
 };
+
 var pb_deliver = {
     pb: [],
     obj: null,
@@ -359,7 +374,7 @@ function viewGuns() {
         }
     }
 };
-
+//
 function viewRisers() {
     if (risers) {
         list = risers.list;
@@ -378,12 +393,90 @@ function viewRisers() {
                     $('#button-ns-' + num_riser + '-deliver').show();
                     $('#button-ns-' + num_riser + '-close').hide().attr("data-id", '');
                 }
-
+                //
+                if (riser.flg_kv1 != null) {
+                    if (riser.flg_kv1) {
+                        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.flg_kv2 != null) {
+                    if (riser.flg_kv2) {
+                        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.inp_km != null) {
+                    if (riser.inp_km) {
+                        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.inp_kvq1 != null) {
+                    if (riser.inp_kvq1) {
+                        $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.inp_kvq2 != null) {
+                    if (riser.inp_kvq2) {
+                        $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.inp_sa2 != null) {
+                    if (riser.inp_sa2) {
+                        $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.out_kv1 != null) {
+                    if (riser.out_kv1) {
+                        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('null_active');
+                }
+                //
+                if (riser.out_kv2 != null) {
+                    if (riser.out_kv2) {
+                        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('active');
+                    } else {
+                        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('null_active');
+                }
             }
         }
     }
 };
-
 // Вывод информации на экран 
 function show() {
     // Время
@@ -416,17 +509,25 @@ function show() {
             }
         }
     );
-    // TODO:!!!ТЕСТ УБРАТЬ
-    var risers_tag = [
-        { "num": 1, "online": true, "passage": false, "taken": true, "type_fuel": 107000024 },
-        { "num": 2, "online": true, "passage": false, "taken": true, "type_fuel": 107000027 },
-        { "num": 3, "online": true, "passage": false, "taken": true, "type_fuel": 107000022 },
-    ]
-    risers.setRisers(risers_tag);
-    viewRisers();
-
+    // Прочесть теги счетчиков оборотов наливных стояков
+    //getDIORisersTags(
+    //    function (result_dio) {
+    //        if (result_dio) {
+    //            risers.setDIORisers(result_dio)
+    //            //viewDIORisers();
+    //        }
+    //    }
+    //);
+    // Прочесть теги наливных стояков
+    getRisersTags(
+        function (result_risers) {
+            if (result_risers) {
+                risers.setRisers(result_risers)
+                viewRisers();
+            }
+        }
+    );
 };
-
 // Панель "Информация по RFID-карте"
 var confirm_rfid_card = {
     obj: null,
@@ -701,7 +802,7 @@ var confirm_df = {
         var valid = true;
         confirm_df.allFields.removeClass("ui-state-error");
 
-        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
