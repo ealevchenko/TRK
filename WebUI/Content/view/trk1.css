@@ -1,0 +1,109 @@
+﻿body {
+    font-size:11px;
+}
+
+legend {
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 3px;
+  font-size: 12px;
+  line-height: inherit;
+  color: #333333;
+  border: 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/*Блокировка экрана*/
+.LockOff {
+    display: none;
+    visibility: hidden;
+}
+.LockOn {
+    display: block;
+    visibility: visible;
+    position: absolute;
+    z-index: 999;
+    top: 0px;
+    left: 0px;
+    width: 105%;
+    height: 1000%;
+    background-color: #ccc;
+    text-align: center;
+    padding-top: 20%;
+    filter: alpha(opacity=75);
+    opacity: 0.75;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    color: #0033CC;
+}
+
+/*ТРК*/
+
+div.trk-all {
+    margin:0 10px;
+    border: 1px dotted red;
+}
+
+div.trk {
+    float: left;
+    border: 1px solid #808080;
+    width: auto;
+}
+
+div.trk-left {
+
+    float: left;
+    border: 1px solid #808080;
+}
+
+div.trk-right {
+    margin-left: 10px;
+
+    float: left;
+    border: 1px solid #808080;
+}
+
+div.cls {
+    clear: left;
+}
+
+/*Индикатор сотояния дискретных данных*/
+td.active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/active.png') no-repeat center center;
+}
+
+td.not_active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/not_active.png') no-repeat center center;
+}
+
+td.null_active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/null_active.png') no-repeat center center;
+}
+
+/*RFID*/
+div.trk-rfid{
+    background-color:#ccc;
+}
+.table-rfid {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 10px;
+}
+
+.button-rfid {
+    margin: 3px;
+    height: 20px;
+    font-size: 10px;
+}
