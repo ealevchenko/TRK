@@ -133,10 +133,33 @@ legend {
     text-align: center
 }
 
+.table-ns-dio {
+
+}
+
+.table-ns-dio th {
+    font-size: 11px;
+    /*font-weight: normal;*/
+    text-align: center;
+}
+
+.table-ns-dio td {
+    font-size: 11px;
+    font-weight: normal;
+    text-align: center;
+}
+
+
 .table-ns th {
     font-size: 12px;
     font-weight: normal;
     text-align: left
+}
+
+.table-ns td {
+    font-size: 11px;
+    font-weight: normal;
+    text-align: center;
 }
 
 .table-rfid th, .table-rfid td {

@@ -71,7 +71,11 @@ var rfid_out = [
     { "num_trk": 12, "side": 0, "hi": 0, "lo": 0, "online": false, "ready": false, "status": null, "card": null }
 ];
 // TODO:!!!ТЕСТ УБРАТЬ
-var dio_out = [];
+var dio_out = [
+    { "num": 1, "type_fuel": 107000024, "Counter": 69750387261, "CounterResetable": 0, "CountOn": 1781, "Error": 0, "Flow": 0, "Flow2": 0.0, "Freq": 0, "PiontsCount": 6, "Status": 0, "Temp": 2.625, "TimerLiveOn": 5264458, "TimerOn": 99596 },
+    { "num": 2, "type_fuel": 107000027, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null },
+    { "num": 3, "type_fuel": 107000022, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null }
+];
 // TODO:!!!ТЕСТ УБРАТЬ
 var risers_out = [
     {

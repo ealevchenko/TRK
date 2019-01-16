@@ -375,6 +375,48 @@ function viewGuns() {
     }
 };
 //
+function viewDIORisers() {
+    if (risers) {
+        list = risers.list_dio;
+        if (list) {
+            for (i = 0; i < list.length; i++) {
+                var riser = list[i];
+
+                // Counter
+                if (riser.Counter != null) {
+                    $('#ns-' + riser.num + '-Counter').text(riser.Counter).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-Counter').val('').addClass('error');
+                }
+                // Status
+                if (riser.Status != null) {
+                    $('#ns-' + riser.num + '-Status').text(riser.Status).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-Status').val('').addClass('error');
+                }
+                // Temp
+                if (riser.Temp != null) {
+                    $('#ns-' + riser.num + '-Temp').text(riser.Temp).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-Temp').val('').addClass('error');
+                }
+                // TimerLiveOn
+                if (riser.TimerLiveOn != null) {
+                    $('#ns-' + riser.num + '-TimerLiveOn').text(riser.TimerLiveOn).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-TimerLiveOn').val('').addClass('error');
+                }
+                // TimerOn
+                if (riser.TimerOn != null) {
+                    $('#ns-' + riser.num + '-TimerOn').text(riser.TimerOn).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-TimerOn').val('').addClass('error');
+                }
+            }
+        }
+    }
+};
+//
 function viewRisers() {
     if (risers) {
         list = risers.list;
@@ -509,15 +551,15 @@ function show() {
             }
         }
     );
-    // Прочесть теги счетчиков оборотов наливных стояков
-    //getDIORisersTags(
-    //    function (result_dio) {
-    //        if (result_dio) {
-    //            risers.setDIORisers(result_dio)
-    //            //viewDIORisers();
-    //        }
-    //    }
-    //);
+   //  Прочесть теги счетчиков оборотов наливных стояков
+    getDIORisersTags(
+        function (result_dio) {
+            if (result_dio) {
+                risers.setDIORisers(result_dio)
+                viewDIORisers();
+            }
+        }
+    );
     // Прочесть теги наливных стояков
     getRisersTags(
         function (result_risers) {

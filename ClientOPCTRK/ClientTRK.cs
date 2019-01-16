@@ -75,21 +75,38 @@ namespace ClientOPCTRK
         public double? water_volume { get; set; }
     }
 
-    public class DIORisers { 
+    //public class DIORisers { 
+    //    public int num { get; set; }
+    //    public int type_fuel { get; set; }
+    //    public UInt16[] Counter { get; set; } // 4
+    //    public UInt16[] CounterResetable { get; set; } // 4
+    //    public UInt16[] CountOn { get; set; } // 2
+    //    public UInt16? Error { get; set; } // 
+    //    public UInt16[] Flow { get; set; } // 2
+    //    public float? Flow2 { get; set; } // 
+    //    public UInt16? Freq { get; set; } // 
+    //    public UInt16? PiontsCount { get; set; } // 
+    //    public UInt16? Status { get; set; } // 
+    //    public float? Temp { get; set; } // 
+    //    public UInt16[] TimerLiveOn { get; set; } // 4
+    //    public UInt16[] TimerOn { get; set; } // 2
+    //}
+    public class DIORisers
+    {
         public int num { get; set; }
         public int type_fuel { get; set; }
-        public UInt16[] Counter { get; set; } // 4
-        public UInt16[] CounterResetable { get; set; } // 4
-        public UInt16[] CountOn { get; set; } // 2
+        public ulong? Counter { get; set; } // UInt16[4]
+        public ulong? CounterResetable { get; set; } // UInt16[4]
+        public ulong? CountOn { get; set; } // UInt16[2]
         public UInt16? Error { get; set; } // 
-        public UInt16[] Flow { get; set; } // 2
+        public ulong? Flow { get; set; } // UInt16[2]
         public float? Flow2 { get; set; } // 
         public UInt16? Freq { get; set; } // 
         public UInt16? PiontsCount { get; set; } // 
         public UInt16? Status { get; set; } // 
         public float? Temp { get; set; } // 
-        public UInt16[] TimerLiveOn { get; set; } // 4
-        public UInt16[] TimerOn { get; set; } // 2
+        public ulong? TimerLiveOn { get; set; } // UInt16[4]
+        public ulong? TimerOn { get; set; } // UInt16[2]
     }
 
     public class Risers {
@@ -519,6 +536,32 @@ namespace ClientOPCTRK
             }
 
         }
+
+        private ulong? ArrUInt16ToULong(object val)
+        {
+            try
+            {
+                UInt16[] value = val != null ? val as UInt16[] : null;
+                ulong? Result = 0;
+                if (value == null) return null;
+                int count = value.Count()-1;
+                ulong ind = 65536;
+                Result += value[count];
+                count--;
+                while (count >= 0)
+                {
+                    Result += (value[count] * ind);
+                    count--;
+                    ind = ind * 65536;
+                }
+                return Result;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ArrUInt16ToULong(val={0})", val).SaveError(e);
+                return null;
+            }
+        }
         /// <summary>
         ///  Получить значения тегов счетчика наливных стояков
         /// </summary>
@@ -536,22 +579,23 @@ namespace ClientOPCTRK
                     case 2: type_fuel = 107000027; break;
                     case 3: type_fuel = 107000022; break;
                 }
+
                 DIORisers risers = new DIORisers()
                 {
                     num = num,
                     type_fuel = type_fuel,
-                    Counter = list[start].Value != null ? list[start].Value as UInt16[] : null,
-                    CounterResetable = list[start + 1].Value != null ? list[start + 1].Value as UInt16[] : null,
-                    CountOn = list[start + 2].Value != null ? list[start + 2].Value as UInt16[] : null,
+                    Counter = ArrUInt16ToULong(list[start].Value),
+                    CounterResetable = ArrUInt16ToULong(list[start+1].Value),
+                    CountOn = ArrUInt16ToULong(list[start+2].Value),
                     Error = list[start + 3].Value != null ? list[start + 3].Value as UInt16? : null,
-                    Flow = list[start + 4].Value != null ? list[start + 4].Value as UInt16[] : null,
+                    Flow = ArrUInt16ToULong(list[start+4].Value),
                     Flow2 = list[start + 5].Value != null ? list[start + 5].Value as float? : null,
                     Freq = list[start + 6].Value != null ? list[start + 6].Value as UInt16? : null,
                     PiontsCount = list[start + 7].Value != null ? list[start + 7].Value as UInt16? : null,
                     Status = list[start + 8].Value != null ? list[start + 8].Value as UInt16? : null,
                     Temp = list[start + 9].Value != null ? list[start + 9].Value as float? : null,
-                    TimerLiveOn = list[start + 10].Value != null ? list[start + 10].Value as UInt16[] : null,
-                    TimerOn = list[start + 11].Value != null ? list[start + 11].Value as UInt16[] : null,
+                    TimerLiveOn = ArrUInt16ToULong(list[start+10].Value),
+                    TimerOn = ArrUInt16ToULong(list[start+11].Value),
                 };
                 return risers;
 
