@@ -253,3 +253,35 @@ td.null_active {
     height: 200px;
 }
 
+.input_edit {
+    background-color:#e3efc5;
+}
+
+.input_view {
+    background-color:#eeeaea;
+}
+
+.ui-button .ui-widget .input_edit {
+    background-color: #e3efc5;
+}
+
+/*.ui-state-hover .input_edit, 
+.ui-widget-content .ui-state-hover .input_edit, 
+.ui-widget-header .ui-state-hover .input_edit, 
+.ui-state-focus .input_edit, 
+.ui-widget-content .ui-state-focus .input_edit, 
+.ui-widget-header .ui-state-focus .input_edit, 
+.ui-button:hover, .ui-button:focus .input_edit {
+    background-color: #e3efc5;
+}
+
+.ui-state-hover .input_edit, 
+.ui-widget-content .ui-state-hover .input_edit, 
+.ui-widget-header .ui-state-hover .input_edit, 
+.ui-state-focus .input_edit, 
+.ui-widget-content .ui-state-focus .input_edit, 
+.ui-widget-header .ui-state-focus .input_edit, 
+.ui-button:hover .input_edit, 
+.ui-button:focus .input_edit {
+    background-color: #e3efc5;
+}*/

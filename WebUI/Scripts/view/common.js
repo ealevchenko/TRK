@@ -1,6 +1,10 @@
 ﻿// TODO:!!!ТЕСТ УБРАТЬ
 var ntype_test = Number(type_test);
 // TODO:!!!ТЕСТ УБРАТЬ
+var bIssue_test = $.parseJSON(issue_test);
+// TODO:!!!ТЕСТ УБРАТЬ
+var btransferSAP_ban = $.parseJSON(transferSAP_ban);
+// TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
     {
@@ -281,11 +285,23 @@ var AJAXBeforeSend = function () {
 // Обработка ошибок
 var OnAJAXError = function (x, y, z) {
     //LockScreenOff();
+    confirm_df.updateTips(x.statusText);
     if (x.status != 404) {
+        confirm_df.updateTips(x.statusText);
         //alert(x + '\n' + y + '\n' + z);
     }
     //LockScreenOff();
 }
+// Обработка ошибок
+var OnAJAXErrorOfMessage= function (message) {
+    confirm_df.updateTips(message);
+    //switch(source){
+    //    case 'getReservation':
+    //        confirm_df.updateTips("Ошибка получения данных из САП по номеру резервирования");
+    //        break;
+    //}
+}
+
 // Событие после выполнения
 var AJAXComplete = function () {
     //LockScreenOff();
@@ -496,7 +512,12 @@ var getReservation = function (num, pos, callback) {
                     callback(reservation_out);
                 }
             } else {
-                OnAJAXError(x, y, z);
+                if (pos=="" || pos==null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервирования. Укажите номер позиции.");
+                }
+                if (num=="" || num==null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервирования. Укажите номер резервирования.");
+                }
             }
         },
         complete: function () {
@@ -650,11 +671,58 @@ var getCatalogWerks = function (callback) {
         },
     });
 }
+//Получить sap_buffer по id
+var getAsyncSAP_Buffer = function (id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/sap_buffer/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 //Добавить sap_buffer
 var postAsyncSAP_Buffer = function (sap_buffer, callback) {
     $.ajax({
         url: '/api/azs/sap_buffer',
         type: 'POST',
+        data: JSON.stringify(sap_buffer),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//Обновить sap_buffer
+var putAsyncSAP_Buffer = function (sap_buffer, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/azs/sap_buffer/' + sap_buffer.id,
         data: JSON.stringify(sap_buffer),
         contentType: "application/json;charset=utf-8",
         async: true,

@@ -133,6 +133,12 @@ div.trk-rfid{
         background-color: #ff7259;
     }
 
+.label-rfid {
+    font-weight: normal;
+    font-style: italic;
+    color: crimson;
+}
+
 /*guns*/
 .trk-guns {
     padding: 0 3px;

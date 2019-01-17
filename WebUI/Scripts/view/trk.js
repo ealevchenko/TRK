@@ -672,7 +672,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         alert(id);
-        openFuelSale.init()
+        openFuelSale.init() // Обновим данные по открытим выдачам
         confirm_df.obj.dialog("close");
     },
     //сохраним данные в локальной базе fuelSale
@@ -1132,6 +1132,9 @@ var confirm_df = {
                         num,
                         pos,
                         function (result) {
+                            if (result.RSNUM == "") {
+                                OnAJAXErrorOfMessage("Номер резервирования №"+num+", позиции №"+pos+ " - не найдет в САП");
+                            }
                             confirm_df.input_sap_num.val(result.RSNUM)
                             //$('input#sap-num').val();
                             confirm_df.input_sap_ozm.val(result.MATNR);
@@ -1273,12 +1276,12 @@ var confirm_df = {
         confirm_df.risers = null;  // Обнулим теги РС
         confirm_df.kerosenes = null;  // Обнулим теги РС
         // Обновим информацию по баку
-        confirm_df.input_deliver_take_level.val('');
-        confirm_df.input_deliver_take_mass.val('');
-        confirm_df.input_deliver_take_temp.val('');
-        confirm_df.input_deliver_take_volume.val('');
-        confirm_df.input_deliver_take_dens.val('');
-        confirm_df.input_deliver_take_water_level.val('');
+        confirm_df.input_deliver_take_level.val('').addClass('input_view');
+        confirm_df.input_deliver_take_mass.val('').addClass('input_view');
+        confirm_df.input_deliver_take_temp.val('').addClass('input_view');
+        confirm_df.input_deliver_take_volume.val('').addClass('input_view');
+        confirm_df.input_deliver_take_dens.val('').addClass('input_view');
+        confirm_df.input_deliver_take_water_level.val('').addClass('input_view');
 
         confirm_df.select_variant.val(-1).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
         confirm_df.checkbox_deliver_Passage.prop('checked', false); // Сбросили технический пролив
@@ -1304,7 +1307,7 @@ var confirm_df = {
                 var gun = guns.getGun(num);
                 if (gun) {
                     confirm_df.gun = gun;
-                    confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel));
+                    confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel)).addClass('input_view');
                     confirm_df.input_sap_ozm_bak.val('(' + gun.type_fuel + ') ' + outFuelType(gun.type_fuel));
                     $('#deliver-Taken').prop('checked', gun.taken);
                     // Обновим перецень емкостей
@@ -1326,10 +1329,10 @@ var confirm_df = {
                         [
                             { value: 1, text: 'По резервированию (керосин)' },
                             { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                            { value: 3, text: 'По исходящей поставке', disabled: true },
+                            { value: 3, text: 'По исходящей поставке'},
                             { value: 4, text: 'По требованию (самовывоз)', disabled: true },
                             { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                            { value: 6, text: 'Заправка в цистерну топливозаправщика', disabled: true },
+                            { value: 6, text: 'Заправка в цистерну топливозаправщика'},
                         ],
                         null,
                         -1,
@@ -1373,34 +1376,40 @@ var confirm_df = {
     },
     // Очистить данные
     clear: function () {
-        confirm_df.input_deliver_dose_fuel.val(''); // Очистить дозу
+        confirm_df.input_deliver_dose_fuel.val('').addClass('input_edit'); // Очистить дозу
+        $('#deliver-Capacity-button').addClass('input_edit');
+        $('#deliver-variant-sap-button').addClass('input_edit');
+        $('#deliver-type-fuel-button').addClass('input_edit');
+        $('#sap-ozm-button').addClass('input_edit');
+        $('#sap-stock-recipient-button').addClass('input_edit');
+        $('#sap-factory-recipient-button').addClass('input_edit');
         //confirm_df.checkbox_deliver_Passage.prop('checked', false);
         $('tr#button-sap').hide();
-        $('tr#sap-num').hide(); confirm_df.input_sap_num.val('');
-        $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.val('').hide(); confirm_df.select_sap_num_pos.selectmenu("widget").hide();
-        $('tr#sap-num-ts').hide(); confirm_df.input_sap_num_ts.val(''); $('tr#sap-num-kpp').hide(); confirm_df.input_sap_num_kpp.val(''); $('tr#sap-name-forwarder').hide(); confirm_df.input_sap_name_forwarder.val('');
-        $('tr#sap-ozm').hide(); confirm_df.input_sap_ozm.val('').hide(); confirm_df.select_sap_ozm.selectmenu("widget").hide();
-        $('tr#sap-ozm-bak').hide(); //confirm_df.input_sap_ozm_bak.val('');
-        $('tr#sap-ozm-amount').hide(); confirm_df.input_sap_ozm_amount.val('');
-        $('tr#sap-stock-recipient').hide(); confirm_df.input_sap_stock_recipient.val('').hide(); confirm_df.select_sap_stock_recipient.selectmenu("widget").hide();
-        $('tr#sap-factory-recipient').hide(); confirm_df.input_sap_factory_recipient.val('').hide(); confirm_df.select_sap_factory_recipient.selectmenu("widget").hide();
-        $('tr#sap-id-card').hide(); confirm_df.input_sap_id_card.val('');
+        $('tr#sap-num').hide(); confirm_df.input_sap_num.val('').addClass('input_edit');
+        $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.val('').hide().addClass('input_edit'); confirm_df.select_sap_num_pos.selectmenu("widget").hide().addClass('input_edit');;
+        $('tr#sap-num-ts').hide(); confirm_df.input_sap_num_ts.val('').addClass('input_edit'); $('tr#sap-num-kpp').hide(); confirm_df.input_sap_num_kpp.val('').addClass('input_edit'); $('tr#sap-name-forwarder').hide(); confirm_df.input_sap_name_forwarder.val('').addClass('input_edit');
+        $('tr#sap-ozm').hide(); confirm_df.input_sap_ozm.val('').hide().addClass('input_view'); confirm_df.select_sap_ozm.selectmenu("widget").hide();
+        $('tr#sap-ozm-bak').hide(); confirm_df.input_sap_ozm_bak.addClass('input_view');
+        $('tr#sap-ozm-amount').hide(); confirm_df.input_sap_ozm_amount.val('').addClass('input_view');
+        $('tr#sap-stock-recipient').hide(); confirm_df.input_sap_stock_recipient.val('').hide().addClass('input_view'); confirm_df.select_sap_stock_recipient.selectmenu("widget").hide();
+        $('tr#sap-factory-recipient').hide(); confirm_df.input_sap_factory_recipient.val('').hide().addClass('input_view'); confirm_df.select_sap_factory_recipient.selectmenu("widget").hide();
+        $('tr#sap-id-card').hide(); confirm_df.input_sap_id_card.val('').addClass('input_view');
     },
     // Вывести информацию по карте
     viewCard: function () {
         // Вывести инфу по карте
         if (confirm_df.card) {
-            $('#deliver-Active').prop('checked', confirm_df.card.Active);
-            $('#deliver-Number').val(confirm_df.card.Number);
-            $('#deliver-AutoNumber').val(confirm_df.card.AutoNumber);
-            $('#deliver-Debitor').val(confirm_df.card.Debitor);
-            $('#deliver-AutoModel').val(confirm_df.card.AutoModel);
+            $('#deliver-Active').prop('checked', confirm_df.card.Active).addClass('input_view');
+            $('#deliver-Number').val(confirm_df.card.Number).addClass('input_view');
+            $('#deliver-AutoNumber').val(confirm_df.card.AutoNumber).addClass('input_view');
+            $('#deliver-Debitor').val(confirm_df.card.Debitor).addClass('input_view');
+            $('#deliver-AutoModel').val(confirm_df.card.AutoModel).addClass('input_view');
         } else {
-            $('#deliver-Active').prop('checked', false);
-            $('#deliver-Number').val('');
-            $('#deliver-AutoNumber').val('');
-            $('#deliver-Debitor').val('');
-            $('#deliver-AutoModel').val('');
+            $('#deliver-Active').prop('checked', false).addClass('input_view');
+            $('#deliver-Number').val('').addClass('input_view');
+            $('#deliver-AutoNumber').val('').addClass('input_view');
+            $('#deliver-Debitor').val('').addClass('input_view');
+            $('#deliver-AutoModel').val('').addClass('input_view');
         }
     },
     // Получить новую SAP_buffer
@@ -1478,8 +1487,8 @@ var confirm_df = {
             tank_num: confirm_df.select_capacity.val(),
             id_card: confirm_df.input_sap_id_card.val(),
             dose: confirm_df.input_deliver_dose_fuel.val(),
-            passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
-            //passage: 'error',
+            //passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
+            passage: 'error',
             volume: null,
             mass: null,
             start_datetime: toISOStringTZ(now),
@@ -1547,6 +1556,7 @@ var confirm_tags_gun = {
 var confirm_close_fuel = {
     obj: null,
     fs: null,
+    sap: null,
     init: function () {
         confirm_close_fuel.obj = $("#dialog-close-fuel").dialog({
             modal: true,
@@ -1556,6 +1566,22 @@ var confirm_close_fuel = {
             buttons: {
                 'Закрыть': function () {
                     if (confirm_close_fuel.fs) {
+
+                        // строка САП есть обновить выдачу
+                        if (confirm_close_fuel.sap) {
+                            confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
+                            confirm_close_fuel.sap.MASS = confirm_close_fuel.fs.mass;
+                            // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В САП
+                            if (btransferSAP_ban) {
+                                var now = new Date();
+                                confirm_close_fuel.sap.sending = toISOStringTZ(now);
+                            }
+                            putAsyncSAP_Buffer(confirm_close_fuel.sap,
+                                function (result) {
+                                    alert("count update sap =" + result);
+                                });
+                        }
+                        // строка FuelSales есть обновить выдачу
                         putAsyncFuelSales(
                             confirm_close_fuel.fs,
                             function (id) {
@@ -1582,8 +1608,16 @@ var confirm_close_fuel = {
         if (id) {
             confirm_close_fuel.obj.dialog("open");
             confirm_close_fuel.fs = null;
+            confirm_close_fuel.sap = null;
             var fs = openFuelSale.getFuelSale(id);
             if (fs) {
+                // Определим запись SAP
+                getAsyncSAP_Buffer(
+                    fs.id_sap,
+                    function (result) {
+                        confirm_close_fuel.sap = result;
+                    });
+                // обновим FuelSale
                 var now = new Date();
                 var trk_num = fs.trk_num
                 if (trk_num > 0 && trk_num < 10) {
@@ -1606,7 +1640,7 @@ var confirm_close_fuel = {
                         fs.stop_counter = 0;//riser.total_volume; // по счетчику
                     }
                 }
-                
+
                 if (gun || riser) {
                     //fs.volume = gun.last_out_volume; // выдано
                     //fs.stop_counter = gun.total_volume; // по счетчику
@@ -1623,6 +1657,16 @@ var confirm_close_fuel = {
                             fs.stop_density = result.dens.toFixed(2);
                             fs.stop_water_level = result.water_level.toFixed(2);
 
+                            // Выполним расчет выданного объема и массы
+                            fs.mass = 0;
+                            fs.volume = fs.stop_counter - fs.start_counter;
+                            // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
+                            if (bIssue_test) {
+                                fs.volume = fs.dose;
+                            }
+                            if (fs.volume > 0) {
+                                fs.mass = (fs.volume * fs.start_density) * 0.001;
+                            }
                             $('input#close-operator_name').val(fs.operator_name);
                             $('input#close-smena_num').val(fs.smena_num);
                             $('input#close-smena_datetime').val(fs.smena_datetime);
@@ -1756,7 +1800,4 @@ $(function () {
             setInterval('show()', 1000);
         });
     });
-
-
-
 });
