@@ -14,11 +14,11 @@ namespace WebUI.Controllers.api
     [RoutePrefix("api/catalog")]
     public class CatalogController : ApiController
     {
-        protected ICat_OZM ef_ozm;
+        protected ICat_OZM_GSM ef_ozm;
         protected ICat_Depots ef_depots;
         protected ICat_Werks ef_werks;
 
-        public CatalogController(ICat_OZM ozm, ICat_Depots depots, ICat_Werks werks)
+        public CatalogController(ICat_OZM_GSM ozm, ICat_Depots depots, ICat_Werks werks)
         {
             this.ef_ozm = ozm;
             this.ef_depots = depots;
@@ -27,12 +27,12 @@ namespace WebUI.Controllers.api
 
         // GET: api/catalog/ozm/id/000000000310008399
         [Route("ozm/id/{id}")]
-        [ResponseType(typeof(Cat_OZM))]
+        [ResponseType(typeof(Cat_OZM_GSM))]
         public IHttpActionResult GetCat_OZM(string id)
         {
             try
             {
-                Cat_OZM ozm = this.ef_ozm.GetCat_OZM(id);
+                Cat_OZM_GSM ozm = this.ef_ozm.GetCat_OZM_GSM(id);
                 if (ozm == null)
                 {
                     return NotFound();
@@ -47,12 +47,12 @@ namespace WebUI.Controllers.api
 
         // GET: api/catalog/ozm/all
         [Route("ozm/all")]
-        [ResponseType(typeof(Cat_OZM))]
-        public IHttpActionResult GetCat_OZM()
+        [ResponseType(typeof(Cat_OZM_GSM))]
+        public IHttpActionResult GetCat_OZM_GSM()
         {
             try
             {
-                List<Cat_OZM> ozms = this.ef_ozm.GetCat_OZM().ToList();
+                List<Cat_OZM_GSM> ozms = this.ef_ozm.GetCat_OZM_GSM().ToList();
                 if (ozms == null)
                 {
                     return NotFound();
@@ -64,6 +64,8 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
+
+
 
         // GET: api/catalog/depots/id/211
         [Route("depots/id/{id}")]

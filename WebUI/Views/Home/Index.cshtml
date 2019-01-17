@@ -499,27 +499,27 @@
                                         <td><select id="deliver-Capacity" name="Capacity" class="ui-widget-content ui-corner-all"></select></td>
                                     </tr>
                                     <tr>
-                                        <th>Уровень ГСМ в баке:</th>
+                                        <th>Уровень ГСМ в баке (мм):</th>
                                         <td><input id="deliver-take-level" name="take-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Объем ГСМ в баке:</th>
+                                        <th>Объем ГСМ в баке (л):</th>
                                         <td><input id="deliver-take-volume" name="take-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Плотность ГСМ в баке:</th>
+                                        <th>Плотность ГСМ в баке (кг/м3):</th>
                                         <td><input id="deliver-take-dens" name="take-dens" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Масса ГСМ в баке:</th>
+                                        <th>Масса ГСМ в баке (кг):</th>
                                         <td><input id="deliver-take-mass" name="take-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Температура ГСМ в баке:</th>
+                                        <th>Температура ГСМ в баке (С°):</th>
                                         <td><input id="deliver-take-temp" name="take-temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Уровень п-воды в баке:</th>
+                                        <th>Уровень п-воды в баке (мм):</th>
                                         <td><input id="deliver-take-water-level" name="water-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                 </table>
@@ -528,10 +528,13 @@
                                 <legend>Колонка\пистолет\стояк</legend>
                                 <table id="table-delivery-fuel">
                                     <tr>
-                                        <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива:</label></th>
-                                        <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                        <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива(л):</label></th>
+                                        <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /><label id="label-mase-fuel"></label></td>
                                     </tr>
-
+                                    <tr>
+                                        <th><label for="deliver-MassFuel" id="label-mass-fuel">Расчетная масса(кг):</label></th>
+                                        <td><input id="deliver-MassFuel" name="MassFuel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
                                     <tr>
                                         <th><label for="deliver-Taken" id="label-taken">Пистолет снят:</label></th>
                                         <td><input id="deliver-Taken" name="deliver-Taken" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>

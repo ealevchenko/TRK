@@ -73,6 +73,7 @@ namespace WebUI.App_Start
         {
             kernel.Bind<EFFC.Abstract.IRepository<azsCards>>().To<EFazsCards>();
             kernel.Bind<ICat_OZM>().To<EFCat_OZM>();
+            kernel.Bind<ICat_OZM_GSM>().To<EFCat_OZM_GSM>();
             kernel.Bind<ICat_Depots>().To<EFCat_Depots>();
             kernel.Bind<IOPC_RFID>().To<EFOPC_RFID>();
             kernel.Bind<ICat_Werks>().To<EFCat_Werks>();

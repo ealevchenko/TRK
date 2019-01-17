@@ -50,12 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\ICat_OZM_GSM.cs" />
     <Compile Include="Abstract\ICat_Werks.cs" />
     <Compile Include="Abstract\ISAP_Buffer.cs" />
     <Compile Include="Abstract\IOPC_RFID.cs" />
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFCat_OZM_GSM.cs" />
     <Compile Include="Concrete\EFCat_Werks.cs" />
     <Compile Include="Concrete\EFFuelSale.cs" />
     <Compile Include="Concrete\EFSAP_Buffer.cs" />
@@ -70,6 +72,8 @@
     <Compile Include="Entities\OPC_RFID.cs" />
     <Compile Include="Entities\FuelSale.cs" />
     <Compile Include="Entities\SAP_Buffer.cs" />
+    <Compile Include="Entities\Cat_Debitor.cs" />
+    <Compile Include="Entities\Cat_OZM_GSM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

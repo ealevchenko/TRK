@@ -647,6 +647,7 @@ var confirm_df = {
     input_deliver_take_dens: null,      // плотность
     input_deliver_take_water_level: null,      // уровень воды
     input_deliver_dose_fuel: null,      // доза топлива
+    input_deliver_mase_fuel: null,      // расчетная масса топлива
     checkbox_deliver_Passage: null,     // Режим пролив
     // SAP ********************************************************
     select_variant: null,               // выбор номеров позиций по поставке
@@ -887,7 +888,7 @@ var confirm_df = {
             modal: true,
             autoOpen: false,
             height: "auto",
-            width: 1000,
+            width: 1050,
             buttons: {
                 'Начать выдачу': function () {
                     var variant = confirm_df.select_variant.val();
@@ -949,6 +950,7 @@ var confirm_df = {
                             confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
                             confirm_df.input_deliver_take_dens.val(result.dens.toFixed(2));
                             confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
+                            confirm_df.viewCalcMass();
                         }
                     );
                 }
@@ -962,7 +964,11 @@ var confirm_df = {
         confirm_df.input_deliver_take_dens = $('#deliver-take-dens');
         confirm_df.input_deliver_take_water_level = $('#deliver-take-water-level');
         // доза топлива
-        confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel');
+        confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel').on("change", function (event) {
+            event.preventDefault();
+            confirm_df.viewCalcMass();
+        });
+        confirm_df.input_deliver_mase_fuel = $('input#deliver-MassFuel');
         // пролив
         confirm_df.checkbox_deliver_Passage = $('#deliver-Passage').on("change", function (event) {
             event.preventDefault();
@@ -996,7 +1002,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         if (confirm_df.card) {
@@ -1013,7 +1019,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1032,7 +1038,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из поставки :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя = Получатель материала в ИП :');
 
                         if (confirm_df.card) {
@@ -1072,7 +1078,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1091,7 +1097,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
                         $('tr#sap-stock-recipient').show(); $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1265,8 +1271,7 @@ var confirm_df = {
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
-        $(".validateTips").text('');
-        $(".ui-state-error").removeClass("ui-state-error");
+
         confirm_df.type = type;
         // Спрячим все поля
         confirm_df.clear();
@@ -1376,7 +1381,10 @@ var confirm_df = {
     },
     // Очистить данные
     clear: function () {
+        $(".validateTips").text('');
+        $(".ui-state-error").removeClass("ui-state-error");
         confirm_df.input_deliver_dose_fuel.val('').addClass('input_edit'); // Очистить дозу
+        confirm_df.input_deliver_mase_fuel.val('Введите дозу и [Enter]').addClass('input_view'); // Очистить массу
         $('#deliver-Capacity-button').addClass('input_edit');
         $('#deliver-variant-sap-button').addClass('input_edit');
         $('#deliver-type-fuel-button').addClass('input_edit');
@@ -1394,6 +1402,18 @@ var confirm_df = {
         $('tr#sap-stock-recipient').hide(); confirm_df.input_sap_stock_recipient.val('').hide().addClass('input_view'); confirm_df.select_sap_stock_recipient.selectmenu("widget").hide();
         $('tr#sap-factory-recipient').hide(); confirm_df.input_sap_factory_recipient.val('').hide().addClass('input_view'); confirm_df.select_sap_factory_recipient.selectmenu("widget").hide();
         $('tr#sap-id-card').hide(); confirm_df.input_sap_id_card.val('').addClass('input_view');
+    },
+    // Вывести расчетную массу
+    viewCalcMass: function () {
+        var massa = 0;
+        var dens = Number(confirm_df.input_deliver_take_dens.val());
+        if (dens > 0) {
+            massa = Number(confirm_df.input_deliver_dose_fuel.val()) * dens * 0.001
+            confirm_df.input_deliver_mase_fuel.val(massa.toFixed(2));
+        } else {
+            confirm_df.input_deliver_mase_fuel.val('Выберите емкость');
+            confirm_df.input_deliver_dose_fuel.val('')
+        }
     },
     // Вывести информацию по карте
     viewCard: function () {
