@@ -159,7 +159,11 @@
                             </table>
                             <table class="table table-ns">
                                 <tr>
-                                    <td id="ns-1-Counter"></td><td id="ns-1-Status"></td><td id="ns-1-Temp"></td><td id="ns-1-TimerLiveOn"></td><td id="ns-1-TimerOn"></td>
+                                    <td id="ns-1-Counter"></td>
+                                    <td id="ns-1-Status"></td>
+                                    <td id="ns-1-Temp"></td>
+                                    <td id="ns-1-TimerLiveOn"></td>
+                                    <td id="ns-1-TimerOn"></td>
                                 </tr>
                                 <tr>
                                     <td id="ns-1-flg_kv1"></td>
@@ -167,37 +171,37 @@
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-flg_kv2"></td>                                    
+                                    <td id="ns-1-flg_kv2"></td>
                                     <th colspan="4"> Флаг реле предельного уровня слива (в баке)</th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-inp_km"></td>                                    
+                                    <td id="ns-1-inp_km"></td>
                                     <th colspan="4"> (Inp)Состояние контактора включения насоса</th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-inp_kvq1"></td>                                    
+                                    <td id="ns-1-inp_kvq1"></td>
                                     <th colspan="4"> (Inp)Контроль перелива стояка </th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-inp_kvq2"></td>                                    
+                                    <td id="ns-1-inp_kvq2"></td>
                                     <th colspan="4"> (Inp)Контроль заземления автоцистерны стояка </th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-inp_sa2"></td>                                   
+                                    <td id="ns-1-inp_sa2"></td>
                                     <th colspan="4"> (Inp)Выбор режима управления насосом стояка</th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-out_kv1"></td>                                   
+                                    <td id="ns-1-out_kv1"></td>
                                     <th colspan="4"> (OUT)Реле управления контактором включения насоса стояка</th>
 
                                 </tr>
                                 <tr>
-                                    <td id="ns-1-out_kv2"></td>                                    
+                                    <td id="ns-1-out_kv2"></td>
                                     <th colspan="4"> (OUT)Реле предельного уровня в резервуарах стояка</th>
 
                                 </tr>
@@ -553,27 +557,33 @@
                             Вариант выдачи:<select id="deliver-variant-sap" name="variant-sap" class="ui-widget-content ui-corner-all"></select>
                             <fieldset>
                                 <legend>Ручной ввод</legend>
+                                <fieldset>
+                                    <legend></legend>
+                                    <table id="table-delivery-sap">
+                                        <tr id="button-sap">
+                                            <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
+                                        </tr>
+                                        <tr id="sap-num">
+                                            <th>
+                                                <label for="sap-num" id="label-sap-num"></label>
+                                            </th>
+                                            <td>
+                                                <input id="sap-num" name="sap-num" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                            </td>
+                                        </tr>
+                                        <tr id="sap-num-pos">
+                                            <th>
+                                                <label for="sap-num-pos" id="label-sap-num-pos"></label>
+                                            </th>
+                                            <td>
+                                                <input id="sap-num-pos" name="sap-num-pos" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                                <select id="sap-num-pos" name="sap-num-pos" class="ui-widget-content ui-corner-all"></select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+
                                 <table id="table-delivery-sap">
-                                    <tr id="button-sap">
-                                        <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
-                                    </tr>
-                                    <tr id="sap-num">
-                                        <th>
-                                            <label for="sap-num" id="label-sap-num"></label>
-                                        </th>
-                                        <td>
-                                            <input id="sap-num" name="sap-num" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                        </td>
-                                    </tr>
-                                    <tr id="sap-num-pos">
-                                        <th>
-                                            <label for="sap-num-pos" id="label-sap-num-pos"></label>
-                                        </th>
-                                        <td>
-                                            <input id="sap-num-pos" name="sap-num-pos" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                            <select id="sap-num-pos" name="sap-num-pos" class="ui-widget-content ui-corner-all"></select>
-                                        </td>
-                                    </tr>
                                     <tr id="sap-num-ts">
                                         <th>
                                             <label for="sap-num-ts" id="label-sap-num-ts"></label>
@@ -751,45 +761,45 @@
         <table class="table-striped table-bordered">
             <tr>
                 <th>Дата выдачи</th>
-                <th>DATE</th>
+                @*<th>DATE</th>*@
                 <td><label id="SAP-DATE"></label></td>
             </tr>
             <tr>
                 <th>Время выдачи</th>
-                <th>TIME</th>
+                @*<th>TIME</th>*@
                 <td><label id="SAP-TIME"></label></td>
             </tr>
             <tr>
                 <th>ФИО ответственного за выдачу</th>
-                <th>LOGIN_R</th>
+                @*<th>LOGIN_R</th>*@
                 <td><label id="SAP-LOGIN_R"></label></td>
             </tr>
             <tr>
                 <th>№ бака</th>
-                <th>N_BAK</th>
+                @*<th>N_BAK</th>*@
                 <td><label id="SAP-N_BAK"></label></td>
             </tr>
             <tr>
                 <th>ОЗМ согласно бака</th>
-                <th>OZM_BAK</th>
+                @*<th>OZM_BAK</th>*@
                 <td><label id="SAP-OZM_BAK"></label></td>
             </tr>
             <tr>
                 <th>ОЗМ из резервирования/маршрута или ОЗМ</th>
-                <th>OZM_TREB</th>
+                @*<th>OZM_TREB</th>*@
                 <td><label id="SAP-OZM_TREB"></label></td>
             </tr>
             <tr>
                 <th>Режим выдачи</th>
-                <th>FLAG_R</th>
+                @*<th>FLAG_R</th>*@
                 <td><label id="SAP-FLAG_R"></label></td>
             </tr>
             <tr>
                 <th>Плотность на момент выдачи</th>
-                <th>PLOTNOST</th>
+                @*<th>PLOTNOST</th>*@
                 <td><label id="SAP-PLOTNOST"></label></td>
             </tr>
-            <tr>
+            @*<tr>
                 <th>Объем, л (После выдачи)</th>
                 <th>VOLUME</th>
                 <td><label id="SAP-VOLUME"></label></td>
@@ -798,40 +808,40 @@
                 <th>Масса, кг (После выдачи)</th>
                 <th>MASS</th>
                 <td><label id="SAP-MASS"></label></td>
-            </tr>
+            </tr>*@
             <tr>
                 <th>ФИО Экспедитора</th>
-                <th>LOGIN_EXP</th>
+                @*<th>LOGIN_EXP</th>*@
                 <td><label id="SAP-LOGIN_EXP"></label></td>
             </tr>
             <tr>
                 <th>№ КПП</th>
-                <th>N_POST</th>
+                @*<th>N_POST</th>*@
                 <td><label id="SAP-N_POST"></label></td>
             </tr>
             <tr>
                 <th>№ ТС факт</th>
-                <th>TRANSP_FAKT</th>
+                @*<th>TRANSP_FAKT</th>*@
                 <td><label id="SAP-TRANSP_FAKT"></label></td>
             </tr>
             <tr>
                 <th>Дебитор</th>
-                <th>N_DEB</th>
+                @*<th>N_DEB</th>*@
                 <td><label id="SAP-N_DEB"></label></td>
             </tr>
             <tr>
                 <th>№ ИП/№ резервирования/№ М-11</th>
-                <th>N_TREB</th>
+                @*<th>N_TREB</th>*@
                 <td><label id="SAP-N_TREB"></label></td>
             </tr>
             <tr>
                 <th>Склад-получатель</th>
-                <th>LGORT</th>
+                @*<th>LGORT</th>*@
                 <td><label id="SAP-LGORT"></label></td>
             </tr>
             <tr>
                 <th>Завод -получатель</th>
-                <th>WERKS</th>
+                @*<th>WERKS</th>*@
                 <td><label id="SAP-WERKS"></label></td>
             </tr>
         </table>

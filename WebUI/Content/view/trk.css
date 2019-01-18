@@ -1,6 +1,6 @@
 ﻿body {
     padding: 10px;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 div {
@@ -121,6 +121,7 @@ legend {
 
 .table {
     margin: 0;
+
 }
 
     .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
@@ -211,8 +212,9 @@ td.null_active {
         width: 95%;
     }
 
-/*#table-delivery-sap {
-}*/
+#table-delivery-sap {
+
+}
 
     #table-delivery-sap th {
         width: 250px;

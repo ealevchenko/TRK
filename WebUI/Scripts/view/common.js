@@ -285,9 +285,9 @@ var AJAXBeforeSend = function () {
 // Обработка ошибок
 var OnAJAXError = function (x, y, z) {
     //LockScreenOff();
-    confirm_df.updateTips(x.statusText);
+    //confirm_df.updateTips(x.statusText);
     if (x.status != 404) {
-        confirm_df.updateTips(x.statusText);
+        //confirm_df.updateTips(x.statusText);
         //alert(x + '\n' + y + '\n' + z);
     }
     //LockScreenOff();
@@ -513,10 +513,10 @@ var getReservation = function (num, pos, callback) {
                 }
             } else {
                 if (pos=="" || pos==null) {
-                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервирования. Укажите номер позиции.");
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер позиции.");
                 }
                 if (num=="" || num==null) {
-                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервирования. Укажите номер резервирования.");
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер резервирования.");
                 }
             }
         },
@@ -547,7 +547,9 @@ var getSupply = function (post, callback) {
                     callback(supply_out);
                 }
             } else {
-                OnAJAXError(x, y, z);
+                if (post == "") {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по ИП. Укажите номер ИП.");
+                }
             }
             
         },

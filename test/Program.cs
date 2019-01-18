@@ -13,30 +13,30 @@ namespace test
     class Program
     {
 
-        private static ulong? ArrUInt16ToULong(object val)
-        {
-            try
-            {
-                UInt16[] value = val != null ? val as UInt16[] : null;
-                ulong? Result = 0;
-                if (value == null) return null;
-                int count = value.Count()-1;
-                ulong ind = 65536;
-                Result += value[count];
-                count--;
-                while (count >= 0)
-                {
-                    Result += (value[count] * ind);
-                    count--;
-                    ind = ind * 65536;
-                }
-                return Result;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
+        //private static ulong? ArrUInt16ToULong(object val)
+        //{
+        //    try
+        //    {
+        //        UInt16[] value = val != null ? val as UInt16[] : null;
+        //        ulong? Result = 0;
+        //        if (value == null) return null;
+        //        int count = value.Count()-1;
+        //        ulong ind = 65536;
+        //        Result += value[count];
+        //        count--;
+        //        while (count >= 0)
+        //        {
+        //            Result += (value[count] * ind);
+        //            count--;
+        //            ind = ind * 65536;
+        //        }
+        //        return Result;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return null;
+        //    }
+        //}
 
         static void Main(string[] args)
         {
@@ -73,8 +73,8 @@ namespace test
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfTank();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
-                //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
-                test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
+                test_opc.Test_ClientTRK_ReadTagOPCOfGun();
+                //test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
                 #endregion
 

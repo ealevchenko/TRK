@@ -8,6 +8,20 @@ function replaceWith(html) {
     return StyledError;
 };
 
+$(document).keypress(
+    function (event) {
+
+        if (event.which == '13') {
+            $(".validateTips").text('');
+            $(".ui-state-error").removeClass("ui-state-error");
+            event.preventDefault();
+            if (event.target.name == 'DoseFuel') {
+                confirm_df.viewCalcMass();
+            }
+
+        }
+    });
+
 // список баков
 var ozm_bak = {
     list: [
@@ -701,12 +715,12 @@ var confirm_df = {
         init: function () {
             confirm_df.fsap.obj = $("#dialog-message").dialog({
                 modal: true,
-                title: 'Отправить в SAP?',
+                title: 'Проверьте данные отправляемые в САП после завершения выдачи ГСМ!',
                 autoOpen: false,
                 height: "auto",
                 width: "auto",
                 buttons: {
-                    Ok: function () {
+                    'Начать выдачу': function () {
                         postAsyncSAP_Buffer(
                             sap_buffer,
                             function (id) {
@@ -722,7 +736,7 @@ var confirm_df = {
                         );
                         $(this).dialog("close");
                     },
-                    'Отмена': function () {
+                    'Вернутся к выбору режимов': function () {
                         $(this).dialog("close");
                     }
                 }
@@ -843,9 +857,11 @@ var confirm_df = {
     // Проверка правильного заполнения формы
     validationConfirm: function (variant) {
         var valid = true;
-        confirm_df.allFields.removeClass("ui-state-error");
+        $(".validateTips").text('');
+        $(".ui-state-error").removeClass("ui-state-error");
+        //confirm_df.allFields.removeClass("ui-state-error");
 
-        //if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -921,6 +937,7 @@ var confirm_df = {
         confirm_df.form = confirm_df.obj.find("form").on("submit", function (event) {
             event.preventDefault();
         });
+
         // КОЛОНКА ****************************************************************
         // тип топлива
         confirm_df.input_deliver_type_fuel = $('input#deliver-type-fuel');
@@ -1038,7 +1055,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из поставки :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (т):');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя = Получатель материала в ИП :');
 
                         if (confirm_df.card) {
@@ -1090,7 +1107,7 @@ var confirm_df = {
                     case '6':
                         confirm_df.clear();
                         $('tr#button-sap').show();
-                        $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
+                        $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд допуска:');
                         $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                         $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
                         $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('*№ КПП :');
@@ -1114,6 +1131,8 @@ var confirm_df = {
             null);
         // нажата кнопка "Получить из САП"
         confirm_df.buttom_select_sap = $('button#button-sap').on('click', function () {
+            $(".validateTips").text('');
+            $(".ui-state-error").removeClass("ui-state-error");
             event.preventDefault();
             var i = confirm_df.select_variant.val();
 
@@ -1129,8 +1148,10 @@ var confirm_df = {
                 case "5":
                 case "6":
                     // По резервированию
+                    confirm_df.input_sap_num.val($.trim(confirm_df.input_sap_num.val())); // Уберем пробелы
                     var num = confirm_df.input_sap_num.val();
                     //var num = $('input#sap-num').val();
+                    confirm_df.input_sap_num_pos.val($.trim(confirm_df.input_sap_num_pos.val()));// Уберем пробелы
                     var pos = confirm_df.input_sap_num_pos.val();
                     //var pos = $('input#sap-num-pos').val();
 
@@ -1154,6 +1175,7 @@ var confirm_df = {
                     );
                     break;
                 case "3":
+                    confirm_df.input_sap_num.val($.trim(confirm_df.input_sap_num.val())); // Уберем пробелы
                     var num = confirm_df.input_sap_num.val();
                     //var num = $('input#sap-num').val();
                     confirm_df.supply = null;
@@ -1161,15 +1183,22 @@ var confirm_df = {
                         num,
                         function (result) {
                             if (result) {
-                                confirm_df.supply = result;
-                                var pos = [];
-                                for (i = 0; i < result.length; i++) {
-                                    pos.push({ value: result[i].posnr, text: result[i].posnr });
-                                };
-                                // Обновим перечень позиций
-                                updateOptionSelect(confirm_df.select_sap_num_pos, pos, null, -1, null);
-                                // Покажем позиции
-                                confirm_df.select_sap_num_pos.selectmenu("widget").show();
+                                // Проверим на возврат значений
+                                if (result.length > 0 && result[0].posnr != "") {
+                                    confirm_df.supply = result;
+                                    var pos = [];
+                                    for (i = 0; i < result.length; i++) {
+
+                                        pos.push({ value: result[i].posnr, text: result[i].posnr });
+                                    };
+                                    // Обновим перечень позиций
+                                    updateOptionSelect(confirm_df.select_sap_num_pos, pos, null, -1, null);
+                                    // Покажем позиции
+                                    confirm_df.select_sap_num_pos.selectmenu("widget").show();
+                                } else {
+                                    OnAJAXErrorOfMessage("Номер ИП №" + num + " - не найден в САП");
+                                }
+
                             }
                         }
                     );
@@ -1196,6 +1225,7 @@ var confirm_df = {
                     confirm_df.input_sap_ozm.val(sup.MATNR);
                     confirm_df.input_sap_ozm_amount.val(sup.LFIMG);
                     confirm_df.input_sap_stock_recipient.val(sup.KUNNR)
+                    // Уточнить добавить WERKS (завод)
                 };
             },
             null);
@@ -1466,7 +1496,7 @@ var confirm_df = {
             N_DEB: variant == 5 || variant == 6 ? confirm_df.card.Debitor : null,
             N_TREB: confirm_df.input_sap_num.val(),
             LGORT: variant == 3 ? confirm_df.getPosSupply(num_pos).LGORT : null, // до выяснения
-            WERKS: null, // до выяснения
+            WERKS: variant == 3 ? confirm_df.getPosSupply(num_pos).WERKS : null, // до выяснения
             sending: null
         };
     },
@@ -1507,8 +1537,8 @@ var confirm_df = {
             tank_num: confirm_df.select_capacity.val(),
             id_card: confirm_df.input_sap_id_card.val(),
             dose: confirm_df.input_deliver_dose_fuel.val(),
-            //passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
-            passage: 'error',
+            passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
+            //passage: 'error',
             volume: null,
             mass: null,
             start_datetime: toISOStringTZ(now),

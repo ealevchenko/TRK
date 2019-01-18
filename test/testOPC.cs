@@ -139,6 +139,7 @@ namespace test
                 {
                     Console.WriteLine("gun.num_tank - {0}", gun.num_trk);
                     Console.WriteLine("gun.side - {0}", gun.side);
+                    Console.WriteLine("gun.num_gun - {0}", gun.num_gun);
                     Console.WriteLine("gun.current_volume - {0}", gun.current_volume);
                     Console.WriteLine("gun.density - {0}", gun.density);
                     Console.WriteLine("gun.last_out_volume - {0}", gun.last_out_volume);

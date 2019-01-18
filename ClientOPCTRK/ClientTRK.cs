@@ -75,22 +75,6 @@ namespace ClientOPCTRK
         public double? water_volume { get; set; }
     }
 
-    //public class DIORisers { 
-    //    public int num { get; set; }
-    //    public int type_fuel { get; set; }
-    //    public UInt16[] Counter { get; set; } // 4
-    //    public UInt16[] CounterResetable { get; set; } // 4
-    //    public UInt16[] CountOn { get; set; } // 2
-    //    public UInt16? Error { get; set; } // 
-    //    public UInt16[] Flow { get; set; } // 2
-    //    public float? Flow2 { get; set; } // 
-    //    public UInt16? Freq { get; set; } // 
-    //    public UInt16? PiontsCount { get; set; } // 
-    //    public UInt16? Status { get; set; } // 
-    //    public float? Temp { get; set; } // 
-    //    public UInt16[] TimerLiveOn { get; set; } // 4
-    //    public UInt16[] TimerOn { get; set; } // 2
-    //}
     public class DIORisers
     {
         public int num { get; set; }
@@ -833,10 +817,40 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[14 + 14];
+                Opc.Da.Item[] items = new Opc.Da.Item[29 * 14];
                 int i = 0;
+                AddGun(ref items, ref i, 1, 0); // левая
+                AddGun(ref items, ref i, 1, 5); // правая 
+                AddGun(ref items, ref i, 2, 0); // левая
+                AddGun(ref items, ref i, 2, 5); // правая  
+                AddGun(ref items, ref i, 3, 0); // левая
+                AddGun(ref items, ref i, 3, 5); // правая                  
+                AddGun(ref items, ref i, 4, 0); // левая
+                AddGun(ref items, ref i, 4, 5); // правая                 
+                AddGun(ref items, ref i, 5, 0); // левая
+                AddGun(ref items, ref i, 5, 5); // правая               
                 AddGun(ref items, ref i, 6, 0); // левая
                 AddGun(ref items, ref i, 6, 5); // правая
+
+                AddGun(ref items, ref i, 7, 0); // левая
+                AddGun(ref items, ref i, 7, 1); // левая
+                AddGun(ref items, ref i, 7, 2); // левая
+                AddGun(ref items, ref i, 7, 3); // левая
+                AddGun(ref items, ref i, 7, 5); // правая 
+                AddGun(ref items, ref i, 7, 6); // правая
+                AddGun(ref items, ref i, 7, 7); // правая 
+                AddGun(ref items, ref i, 7, 8); // правая 
+
+                AddGun(ref items, ref i, 8, 0); // левая
+                AddGun(ref items, ref i, 8, 1); // левая
+                AddGun(ref items, ref i, 8, 2); // левая
+                AddGun(ref items, ref i, 8, 3); // левая
+                AddGun(ref items, ref i, 8, 5); // правая 
+                AddGun(ref items, ref i, 8, 6); // правая
+                AddGun(ref items, ref i, 8, 7); // правая 
+                AddGun(ref items, ref i, 8, 8); // правая 
+
+                AddGun(ref items, ref i, 9, 0); // левая
 
                 items = group.AddItems(items);
 
@@ -845,9 +859,63 @@ namespace ClientOPCTRK
 
                 ItemValueResult[] res = group.Read(items);
                 i = 0;
+                result_list.Add(GetGun(1, 1, 0, res, i)); // пистолет 1
+                i += 14;
+                result_list.Add(GetGun(1, 2, 1, res, i)); // пистолет 2
+                i += 14;
+                result_list.Add(GetGun(2, 3, 0, res, i)); // пистолет 3
+                i += 14;
+                result_list.Add(GetGun(2, 4, 1, res, i)); // пистолет 4
+                i += 14;
+                result_list.Add(GetGun(3, 5, 0, res, i)); // пистолет 5
+                i += 14;
+                result_list.Add(GetGun(3, 6, 1, res, i)); // пистолет 6
+                i += 14;
+                result_list.Add(GetGun(4, 7, 0, res, i)); // пистолет 7
+                i += 14;
+                result_list.Add(GetGun(4, 8, 1, res, i)); // пистолет 8
+                i += 14;
+                result_list.Add(GetGun(5, 9, 0, res, i)); // пистолет 9
+                i += 14;
+                result_list.Add(GetGun(5, 10, 1, res, i)); // пистолет 10
+                i += 14;
                 result_list.Add(GetGun(6, 11, 0, res, i)); // пистолет 11
                 i += 14;
                 result_list.Add(GetGun(6, 12, 1, res, i)); // пистолет 12
+                i += 14;
+                result_list.Add(GetGun(7, 13, 0, res, i)); // пистолет 13
+                i += 14;
+                result_list.Add(GetGun(7, 14, 0, res, i)); // пистолет 14
+                i += 14;
+                result_list.Add(GetGun(7, 15, 0, res, i)); // пистолет 15
+                i += 14;
+                result_list.Add(GetGun(7, 16, 0, res, i)); // пистолет 16
+                i += 14;
+                result_list.Add(GetGun(7, 17, 1, res, i)); // пистолет 17
+                i += 14;
+                result_list.Add(GetGun(7, 18, 1, res, i)); // пистолет 18
+                i += 14;
+                result_list.Add(GetGun(7, 19, 1, res, i)); // пистолет 19
+                i += 14;
+                result_list.Add(GetGun(7, 20, 1, res, i)); // пистолет 20
+                i += 14;
+                result_list.Add(GetGun(8, 21, 0, res, i)); // пистолет 21
+                i += 14;
+                result_list.Add(GetGun(8, 22, 0, res, i)); // пистолет 22
+                i += 14;
+                result_list.Add(GetGun(8, 23, 0, res, i)); // пистолет 23
+                i += 14;
+                result_list.Add(GetGun(8, 24, 0, res, i)); // пистолет 24
+                i += 14;
+                result_list.Add(GetGun(8, 25, 1, res, i)); // пистолет 25
+                i += 14;
+                result_list.Add(GetGun(8, 26, 1, res, i)); // пистолет 26
+                i += 14;
+                result_list.Add(GetGun(8, 27, 1, res, i)); // пистолет 27
+                i += 14;
+                result_list.Add(GetGun(8, 28, 1, res, i)); // пистолет 28
+                i += 14;
+                result_list.Add(GetGun(9, 29, 0, res, i)); // пистолет 29
 
                 return result_list;
             }
