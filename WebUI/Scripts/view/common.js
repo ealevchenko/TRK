@@ -7,39 +7,39 @@ var btransferSAP_ban = $.parseJSON(transferSAP_ban);
 // TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
-    {
-        "vbeln": "8000000020",
-        "posnr": "000001",
-        "MATNR": "000000000000000259",
-        "WERKS": "0010",
-        "LGORT": "706G",
-        "KUNNR": "4000000600",
-        "LFIMG": "3542.01",
-        "LGOBE": "",
-        "MEINS": "TO"
-    },
-    {
-        "vbeln": "8000000020",
-        "posnr": "000011",
-        "MATNR": "000000000000000122",
-        "WERKS": "0010",
-        "LGORT": "",
-        "KUNNR": "4000000600",
-        "LFIMG": "3542.01",
-        "LGOBE": "",
-        "MEINS": "TO"
-    },
-    {
-        "vbeln": "8000000020",
-        "posnr": "000021",
-        "MATNR": "000000000000000123",
-        "WERKS": "0010",
-        "LGORT": "",
-        "KUNNR": "4000000600",
-        "LFIMG": "3542.01",
-        "LGOBE": "",
-        "MEINS": "TO"
-    }
+        {
+            "vbeln": "8000000020",
+            "posnr": "000001",
+            "MATNR": "000000000000000259",
+            "WERKS": "0010",
+            "LGORT": "706G",
+            "KUNNR": "4000000600",
+            "LFIMG": "3542.01",
+            "LGOBE": "",
+            "MEINS": "TO"
+        },
+        {
+            "vbeln": "8000000020",
+            "posnr": "000011",
+            "MATNR": "000000000000000122",
+            "WERKS": "0010",
+            "LGORT": "",
+            "KUNNR": "4000000600",
+            "LFIMG": "3542.01",
+            "LGOBE": "",
+            "MEINS": "TO"
+        },
+        {
+            "vbeln": "8000000020",
+            "posnr": "000021",
+            "MATNR": "000000000000000123",
+            "WERKS": "0010",
+            "LGORT": "",
+            "KUNNR": "4000000600",
+            "LFIMG": "3542.01",
+            "LGOBE": "",
+            "MEINS": "TO"
+        }
     ]
 // TODO:!!!ТЕСТ УБРАТЬ
 var reservation_out = { "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
@@ -48,8 +48,35 @@ var bunk_out =
     { "num_tank": "B9", "dens": 754.065493, "fill_percent": 35.194191766997911, "level": 1060.24, "mass": 18934.58452923, "status1": 64, "status2": 48, "status": 0, "temp": -1.8, "ullage": 46237, "unit": null, "volume": 2511.0, "water_level": 0.0, "water_volume": 0.0 }    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
 // TODO:!!!ТЕСТ УБРАТЬ
 var guns_out = [
+    { "num_trk": 1, "num_gun": 1, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 1, "num_gun": 2, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 2, "num_gun": 3, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 2, "num_gun": 4, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 3, "num_gun": 5, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 3, "num_gun": 6, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 4, "num_gun": 7, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 4, "num_gun": 8, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 5, "num_gun": 9, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 5, "num_gun": 10, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
     { "num_trk": 6, "num_gun": 11, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 56902228, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
-    { "num_trk": 6, "num_gun": 12, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 }
+    { "num_trk": 6, "num_gun": 12, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 7, "num_gun": 13, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 7, "num_gun": 14, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 7, "num_gun": 15, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 7, "num_gun": 16, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 7, "num_gun": 17, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 7, "num_gun": 18, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 7, "num_gun": 19, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 7, "num_gun": 20, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 8, "num_gun": 21, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 8, "num_gun": 22, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 8, "num_gun": 23, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 8, "num_gun": 24, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 8, "num_gun": 25, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 8, "num_gun": 26, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 8, "num_gun": 27, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 8, "num_gun": 28, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
+    { "num_trk": 9, "num_gun": 29, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 }
 ]
 // TODO:!!!ТЕСТ УБРАТЬ
 var rfid_out = [
@@ -75,10 +102,11 @@ var rfid_out = [
     { "num_trk": 12, "side": 0, "hi": 0, "lo": 0, "online": false, "ready": false, "status": null, "card": null }
 ];
 // TODO:!!!ТЕСТ УБРАТЬ
-var dio_out = [
-    { "num": 1, "type_fuel": 107000024, "Counter": 69750387261, "CounterResetable": 0, "CountOn": 1781, "Error": 0, "Flow": 0, "Flow2": 0.0, "Freq": 0, "PiontsCount": 6, "Status": 0, "Temp": 2.625, "TimerLiveOn": 5264458, "TimerOn": 99596 },
-    { "num": 2, "type_fuel": 107000027, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null },
-    { "num": 3, "type_fuel": 107000022, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null }
+var dio_out =
+    [
+        { "num": 1, "type_fuel": 107000024, "Counter": 69750387261, "CounterResetable": 0, "CountOn": 1781, "Error": 0, "Flow": 0, "Flow2": 0.0, "Freq": 0, "PiontsCount": 6, "Status": 0, "Temp": -0.9375, "TimerLiveOn": 5530357, "TimerOn": 365495 },
+        { "num": 2, "type_fuel": 107000027, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null },
+        { "num": 3, "type_fuel": 107000022, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null }
 ];
 // TODO:!!!ТЕСТ УБРАТЬ
 var risers_out = [
@@ -293,7 +321,7 @@ var OnAJAXError = function (x, y, z) {
     //LockScreenOff();
 }
 // Обработка ошибок
-var OnAJAXErrorOfMessage= function (message) {
+var OnAJAXErrorOfMessage = function (message) {
     confirm_df.updateTips(message);
     //switch(source){
     //    case 'getReservation':
@@ -307,10 +335,10 @@ var AJAXComplete = function () {
     //LockScreenOff();
 }
 // Прочесть теги бака
-var getTankTags= function (num, callback) {
+var getTankTags = function (num, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/trk/tank/num/'+num,
+        url: '/api/trk/tank/num/' + num,
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -344,7 +372,7 @@ var getTankTags= function (num, callback) {
     });
 }
 // Прочесть теги пистолетов
-var getGunTags= function (callback) {
+var getGunTags = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/trk/guns',
@@ -355,7 +383,12 @@ var getGunTags= function (callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (ntype_test == 1) {
+                    callback(guns_out);
+                } else {
+                    callback(data);
+                }
             }
         },
         error: function (x, y, z) {
@@ -375,7 +408,7 @@ var getGunTags= function (callback) {
     });
 }
 // Прочесть теги rfid
-var getRFIDTags= function (callback) {
+var getRFIDTags = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/trk/rfid/tags',
@@ -406,7 +439,7 @@ var getRFIDTags= function (callback) {
     });
 }
 // Прочесть теги DIORisers
-var getDIORisersTags= function (callback) {
+var getDIORisersTags = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/trk/dio/risers/tags',
@@ -417,7 +450,12 @@ var getDIORisersTags= function (callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (ntype_test == 1) {
+                    callback(dio_out);
+                } else {
+                    callback(data);
+                }
             }
         },
         error: function (x, y, z) {
@@ -437,7 +475,7 @@ var getDIORisersTags= function (callback) {
     });
 }
 // Прочесть теги Risers
-var getRisersTags= function (callback) {
+var getRisersTags = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/trk/risers/tags',
@@ -448,7 +486,12 @@ var getRisersTags= function (callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (ntype_test == 1) {
+                    callback(risers_out);
+                } else {
+                    callback(data);
+                }
             }
         },
         error: function (x, y, z) {
@@ -468,7 +511,7 @@ var getRisersTags= function (callback) {
     });
 }
 // Считать считаные карты по ТРК из буфера БД
-var getRFIDDB= function (callback) {
+var getRFIDDB = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/rfid/db',
@@ -494,7 +537,7 @@ var getRFIDDB= function (callback) {
 var getReservation = function (num, pos, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/sap/reservation/num/'+num+'/pos/'+pos,
+        url: '/api/sap/reservation/num/' + num + '/pos/' + pos,
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -512,10 +555,10 @@ var getReservation = function (num, pos, callback) {
                     callback(reservation_out);
                 }
             } else {
-                if (pos=="" || pos==null) {
+                if (pos == "" || pos == null) {
                     OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер позиции.");
                 }
-                if (num=="" || num==null) {
+                if (num == "" || num == null) {
                     OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер резервирования.");
                 }
             }
@@ -551,7 +594,7 @@ var getSupply = function (post, callback) {
                     OnAJAXErrorOfMessage("Ошибка получения данных из САП по ИП. Укажите номер ИП.");
                 }
             }
-            
+
         },
         complete: function () {
             AJAXComplete();
@@ -713,6 +756,7 @@ var postAsyncSAP_Buffer = function (sap_buffer, callback) {
             }
         },
         error: function (x, y, z) {
+            LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {
@@ -784,6 +828,7 @@ var postAsyncFuelSale = function (fuel_sale, callback) {
             }
         },
         error: function (x, y, z) {
+            LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {

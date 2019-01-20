@@ -22,6 +22,15 @@ $(document).keypress(
         }
     });
 
+function updateMessageTips(t) {
+    $(".messageTips")
+        .text(t)
+        .addClass("ui-state-highlight");
+    setTimeout(function () {
+        $(".messageTips").removeClass("ui-state-highlight", 1500);
+    }, 500);
+};
+
 // список баков
 var ozm_bak = {
     list: [
@@ -308,7 +317,7 @@ function viewRFID() {
                             } else {
                                 // Нет. карты нет в базе
                                 $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').hide();
-                                $('#label-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').show().text(c_card.hi > 0 && c_card.lo > 0 ? '(' + c_card.hi + ',' + c_card.lo + ') - нет в базе' : ': Нет данных');
+                                $('#label-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').show().text(c_card.hi > 0 && c_card.lo > 0 ? '(' + c_card.hi + ',' + c_card.lo + ') - ?' : ': Нет данных');
                             }
                         } else {
                             // Нет. карта не подносилась к считывтелю
@@ -398,34 +407,40 @@ function viewDIORisers() {
 
                 // Counter
                 if (riser.Counter != null) {
-                    $('#ns-' + riser.num + '-Counter').text(riser.Counter).removeClass('error');
+                    $('#ns-' + riser.num + '-Counter').val((riser.Counter/1000000).toFixed(2)).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-Counter').val('').addClass('error');
                 }
-                // Status
-                if (riser.Status != null) {
-                    $('#ns-' + riser.num + '-Status').text(riser.Status).removeClass('error');
+                // Counter
+                if (riser.Flow != null) {
+                    $('#ns-' + riser.num + '-Flow').val((riser.Flow/1000000).toFixed(2)).removeClass('error');
                 } else {
-                    $('#ns-' + riser.num + '-Status').val('').addClass('error');
+                    $('#ns-' + riser.num + '-Flow').val('').addClass('error');
                 }
-                // Temp
-                if (riser.Temp != null) {
-                    $('#ns-' + riser.num + '-Temp').text(riser.Temp).removeClass('error');
-                } else {
-                    $('#ns-' + riser.num + '-Temp').val('').addClass('error');
-                }
+                //// Status
+                //if (riser.Status != null) {
+                //    $('#ns-' + riser.num + '-Status').text(riser.Status).removeClass('error');
+                //} else {
+                //    $('#ns-' + riser.num + '-Status').val('').addClass('error');
+                //}
+                //// Temp
+                //if (riser.Temp != null) {
+                //    $('#ns-' + riser.num + '-Temp').text(riser.Temp).removeClass('error');
+                //} else {
+                //    $('#ns-' + riser.num + '-Temp').val('').addClass('error');
+                //}
                 // TimerLiveOn
                 if (riser.TimerLiveOn != null) {
-                    $('#ns-' + riser.num + '-TimerLiveOn').text(riser.TimerLiveOn).removeClass('error');
+                    $('#ns-' + riser.num + '-TimerLiveOn').val(riser.TimerLiveOn).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-TimerLiveOn').val('').addClass('error');
                 }
-                // TimerOn
-                if (riser.TimerOn != null) {
-                    $('#ns-' + riser.num + '-TimerOn').text(riser.TimerOn).removeClass('error');
-                } else {
-                    $('#ns-' + riser.num + '-TimerOn').val('').addClass('error');
-                }
+                //// TimerOn
+                //if (riser.TimerOn != null) {
+                //    $('#ns-' + riser.num + '-TimerOn').text(riser.TimerOn).removeClass('error');
+                //} else {
+                //    $('#ns-' + riser.num + '-TimerOn').val('').addClass('error');
+                //}
             }
         }
     }
@@ -593,9 +608,9 @@ var confirm_rfid_card = {
             modal: true,
             autoOpen: false,
             height: "auto",
-            width: 600,
+            width: 400,
             buttons: {
-                Cancel: function () {
+                'Закрыть': function () {
                     $(this).dialog("close");
                 }
             }
@@ -686,16 +701,19 @@ var confirm_df = {
 
     // старт выдачи
     issuance_start: function (id) {
-        alert(id);
+        //alert(id);
+        updateMessageTips("Выдаем ГСМ id="+id);
         openFuelSale.init() // Обновим данные по открытим выдачам
         confirm_df.obj.dialog("close");
     },
     //сохраним данные в локальной базе fuelSale
     save_fuelSale: function (id) {
         var fuel_sale = confirm_df.getNewFuelSale(id);
+        LockScreen('Подождите, идет создание строки ведомости выдачи ГСМ в БД');
         postAsyncFuelSale(
             fuel_sale,
             function (id) {
+                LockScreenOff();
                 // Данные в САП сохранились?
                 if (id > 0) {
                     // Начнем выдавать
@@ -718,12 +736,14 @@ var confirm_df = {
                 title: 'Проверьте данные отправляемые в САП после завершения выдачи ГСМ!',
                 autoOpen: false,
                 height: "auto",
-                width: "auto",
+                width: 500,
                 buttons: {
                     'Начать выдачу': function () {
+                        LockScreen('Подождите, идет создание строки БД для САП');
                         postAsyncSAP_Buffer(
                             sap_buffer,
                             function (id) {
+                                LockScreenOff();
                                 // Данные в САП сохранились?
                                 if (id > 0) {
                                     // Запись в базу локальную
@@ -859,9 +879,19 @@ var confirm_df = {
         var valid = true;
         $(".validateTips").text('');
         $(".ui-state-error").removeClass("ui-state-error");
-        //confirm_df.allFields.removeClass("ui-state-error");
+        // Проверка RFID карты на активность
 
-        if (confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        if (confirm_df.card == null) {
+            confirm_df.updateTips("Нет RFID-карты - выдача запрещена!");
+            return false;
+        }
+
+        if (confirm_df.card && !confirm_df.card.Active) {
+            confirm_df.updateTips("RFID-карта не активна - выдача запрещена!");
+            return false;
+        }
+
+        if (ntype_test == 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
 
 
@@ -878,7 +908,7 @@ var confirm_df = {
             //Проверка возврата САП
             if (variant != 4) valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
             if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_ozm, "Выберите ОЗМ");
-            valid && confirm_df.checkLength(confirm_df.input_sap_ozm_bak, "ОЗМ согласно бака", 1, 18);
+            //valid && confirm_df.checkLength(confirm_df.input_sap_ozm_bak, "ОЗМ согласно бака", 1, 18);
             if (variant != 4) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_stock_recipient, "Нет значения склад получателя (из резервирования \ получатель материала в ИП)");
             if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_stock_recipient, "Выберите склад получателя");
             if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_factory_recipient, "Нет значения завод-получатель");
@@ -904,7 +934,7 @@ var confirm_df = {
             modal: true,
             autoOpen: false,
             height: "auto",
-            width: 1050,
+            width: 900,
             buttons: {
                 'Начать выдачу': function () {
                     var variant = confirm_df.select_variant.val();
@@ -1238,7 +1268,7 @@ var confirm_df = {
         // sap-ozm
         confirm_df.select_sap_ozm = initSelect(
             $('select[name ="sap-ozm"]'),
-            { width: 250 },
+            { width: 280 },
             catalog_ozm.list,
             function (row) {
                 return { value: Number(row.id), text: row.name };
@@ -1255,7 +1285,7 @@ var confirm_df = {
         confirm_df.input_sap_stock_recipient = $('textarea#sap-stock-recipient');
         confirm_df.select_sap_stock_recipient = initSelect(
             $('select[name ="sap-stock-recipient"]'),
-            { width: 250 },
+            { width: 280 },
             catalog_depots.list,
             function (row) {
                 return { value: Number(row.id), text: row.name };
@@ -1269,7 +1299,7 @@ var confirm_df = {
         confirm_df.input_sap_factory_recipient = $('input#sap-factory-recipient');
         confirm_df.select_sap_factory_recipient = initSelect(
             $('select[name ="sap-factory-recipient"]'),
-            { width: 250 },
+            { width: 280 },
             catalog_werks.list,
             function (row) {
                 return { value: Number(row.id), text: row.name };
@@ -1579,6 +1609,7 @@ var confirm_tags_gun = {
             }
         });
         confirm_tags_gun.current = num;
+        confirm_tags_gun.clear();
     },
     open: function () {
         confirm_tags_gun.obj.dialog("open");
@@ -1600,6 +1631,23 @@ var confirm_tags_gun = {
         $('#volume_to_write-value').text(gun.volume_to_write);
         $('#write_price-value').text(gun.write_price);
         $('#type_fuel-value').text(gun.type_fuel);
+    },
+    clear: function () {
+        $('#current_volume-value').text('');
+        $('#density-value').text('');
+        $('#last_out_volume-value').text('');
+        $('#online-value').text('');
+        $('#passage-value').text('');
+        $('#price_to_write-value').text('');
+        $('#start-value').text('');
+        $('#state-value').text('');
+        $('#stop-value').text('');
+        $('#taken-value').text('');
+        $('#total_volume-value').text('');
+        $('#Trk06_0_status-value').text('');
+        $('#volume_to_write-value').text('');
+        $('#write_price-value').text('');
+        $('#type_fuel-value').text('');
     }
 };
 
@@ -1616,7 +1664,7 @@ var confirm_close_fuel = {
             buttons: {
                 'Закрыть': function () {
                     if (confirm_close_fuel.fs) {
-
+                        LockScreen("Подождите закрываю ведомость в БД");
                         // строка САП есть обновить выдачу
                         if (confirm_close_fuel.sap) {
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
@@ -1628,7 +1676,9 @@ var confirm_close_fuel = {
                             }
                             putAsyncSAP_Buffer(confirm_close_fuel.sap,
                                 function (result) {
-                                    alert("count update sap =" + result);
+                                    LockScreenOff();
+                                    updateMessageTips("Запись САП обновлена результат = " + result);
+                                    //alert("count update sap =" + result);
                                 });
                         }
                         // строка FuelSales есть обновить выдачу
@@ -1636,11 +1686,14 @@ var confirm_close_fuel = {
                             confirm_close_fuel.fs,
                             function (id) {
                                 if (id > 0) {
+                                    LockScreenOff();
                                     // Инициализация открытых выдач
                                     openFuelSale.init();
                                     confirm_close_fuel.obj.dialog("close");
+                                    
                                 }
-
+                                updateMessageTips("Запись FuelSales обновлена результат = " + id);
+                                //alert("count update FuelSales =" + id);
                             }
                         );
 

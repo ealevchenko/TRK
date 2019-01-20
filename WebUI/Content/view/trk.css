@@ -1,10 +1,30 @@
 ﻿body {
-    padding: 10px;
-    font-size: 13px;
+    font-size: 11px;
 }
 
 div {
     border-radius: 3px;
+}
+
+legend {
+    padding: 0;
+    border: 0;
+}
+
+legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 3px;
+    font-size: 12px;
+    line-height: inherit;
+    color: #333333;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.overflow {
+    height: 200px;
 }
 
 /*Блокировка экрана*/
@@ -12,6 +32,7 @@ div {
     display: none;
     visibility: hidden;
 }
+
 .LockOn {
     display: block;
     visibility: visible;
@@ -31,71 +52,79 @@ div {
     color: #0033CC;
 }
 
-fieldset {
-    padding: 3px;
-    margin: 3px;
-    border: 1px solid #c0c0c0;
-}
+/*ТРК*/
 
-legend {
-    padding: 0;
-    border: 0;
+div.trk-all {
     width: auto;
-    font-size: inherit;
-    margin-bottom: 0;
+    margin: 0 10px;
+    /*border: 1px dotted red;*/
 }
 
-.trk {
-    border: 1px solid #808080;
-    width: 1030px;
-}
-
-.ns {
+div.trk {
+    float: left;
     border: 1px solid #808080;
     width: auto;
-    float: left;
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
-
-.trk-left {
-    width: 500px;
+div.trk-left {
     float: left;
     border: 1px solid #808080;
 }
 
-.trk-right {
-    margin-left: 10px;
-    width: 500px;
+div.trk-right {
+    margin-left: 3px;
     float: left;
     border: 1px solid #808080;
 }
 
-.trk-rfid {
+div.cls {
+    clear: left;
+}
+
+/*Индикатор сотояния дискретных данных*/
+td.active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/active.png') no-repeat center center;
+}
+
+td.not_active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/not_active.png') no-repeat center center;
+}
+
+td.null_active {
+    width: 20px;
+    height: 20px;
+    background: url('../../Images/null_active.png') no-repeat center center;
+}
+
+.error {
+    background: #fddfdf
+}
+
+
+/*RFID*/
+div.trk-rfid {
+    background-color: #ccc;
+    margin: 3px 3px;
     height: 30px;
-    padding: 0px 5px;
-    background-color: #eeeaea;
+}
+
+.table-rfid {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 10px;
 }
 
 .button-rfid {
     margin: 3px;
-    height: 25px;
-    font-size: 12px;
+    height: 20px;
+    font-size: 11px;
 }
-
-.button-deliver, .button-risers, .button-kerosene {
-    margin: 3px;
-    height: 25px;
-    font-size: 12px;
-    background-color: aquamarine;
-}
-.button-close {
-    margin: 3px;
-    height: 25px;
-    font-size: 12px;
-    background-color:khaki;
-}
-
 
 .button-rfid-active {
     background-color: #b6ff00;
@@ -119,171 +148,321 @@ legend {
     color: crimson;
 }
 
-.table {
-    margin: 0;
-
+/*guns*/
+.trk-guns {
+    padding: 0 3px;
 }
 
-    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
-        padding: 0;
-    }
-
-.table-gun th {
-    font-size: 12px;
-    font-weight: normal;
-    text-align: center
-}
-
-.table-ns-dio {
-
-}
-
-.table-ns-dio th {
-    font-size: 11px;
-    /*font-weight: normal;*/
-    text-align: center;
-}
-
-.table-ns-dio td {
-    font-size: 11px;
-    font-weight: normal;
-    text-align: center;
-}
-
-
-.table-ns th {
-    font-size: 12px;
-    font-weight: normal;
-    text-align: left
-}
-
-.table-ns td {
-    font-size: 11px;
-    font-weight: normal;
-    text-align: center;
-}
-
-.table-rfid th, .table-rfid td {
-    font-size: 12px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align:central;
-}
-
-.input-gun-volume {
-    width: 100px;
-    height: 25px;
+.trk-gun {
+    float: left;
     margin: 3px;
+    border: 1px solid #808080;
+    padding: 0 3px;
+    height: 155px;
 }
 
-td.active {
-    width: 20px;
-    height: 20px;
-    background: url('../../Images/active.png') no-repeat center center;
+.table-gun {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 11px;
+    font-weight: normal;
 }
 
-td.not_active {
-    width: 20px;
-    height: 20px;
-    background: url('../../Images/not_active.png') no-repeat center center;
-}
-
-td.null_active {
-    width: 20px;
-    height: 20px;
-    background: url('../../Images/null_active.png') no-repeat center center;
-}
-
-.error {
-    background: #fddfdf
-}
-
-#table-confirm-rfid-card th {
-    width: 250px;
-    text-align: right;
-}
-
-#table-confirm-rfid-card td {
-    width: 300px;
-    text-align: left
-}
-
-    #table-confirm-rfid-card td input, #table-confirm-rfid-card td textarea {
-        width: 95%;
-    }
-
-#table-delivery-sap {
-
-}
-
-    #table-delivery-sap th {
-        width: 250px;
+    .table-gun th {
         text-align: right;
+        font-weight: bold;
     }
 
-    #table-delivery-sap td {
-        width: 300px;
-        text-align: left
+    .table-gun td {
+        font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+        width: 70px;
     }
 
-        #table-delivery-sap td input, #table-delivery-sap td textarea {
+        .table-gun td input {
             width: 95%;
         }
 
-.ui-progressbar {
-    position: relative;
+/*ns*/
+
+div.ns-all {
+    width: auto;
+    margin: 0 10px;
+    /*border: 1px dotted red;*/
 }
 
+div.ns {
+    float: left;
+    border: 1px solid #808080;
+    width: auto;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.trk-ns {
+    padding: 0 3px;
+}
 
-.progressbar-deliver {
-    width: 95%;
+.trk-ns {
+    float: left;
     margin: 3px;
-    height: 25px;
+    border: 1px solid #808080;
+    padding: 0 3px;
+    height: 155px;
 }
 
-.progress-label {
-    font-size: 13px;
-    margin: 2px;
-    position: absolute;
-    left: 50%;
+.table-ns {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 11px;
     font-weight: normal;
-    font-style: italic;
-    text-shadow: 1px 1px 0 #fff;
 }
 
-.overflow {
-    height: 200px;
+    .table-ns th {
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .table-ns td {
+        font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+        width: 70px;
+    }
+
+        .table-ns td input {
+            width: 95%;
+        }
+
+/*кнопки*/
+.button-deliver, .button-risers, .button-kerosene {
+    margin: 3px;
+    height: 20px;
+    font-size: 10px;
+    background-color: aquamarine;
 }
+
+.button-close {
+    margin: 3px;
+    height: 20px;
+    font-size: 10px;
+    background-color: khaki;
+}
+
+
+/*Окно RFID*/
+
+body div[aria-describedby="confirm-rfid-card"] {
+    font-size: 14px;
+}
+
+.table-confirm-rfid-card {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .table-confirm-rfid-card th {
+        text-align: right;
+        font-weight: normal;
+    }
+
+    .table-confirm-rfid-card td {
+    }
+
+        .table-confirm-rfid-card td input {
+            color: blue;
+            width: 95%;
+            font-style: italic;
+        }
+
+/*Окно выдачи топлива*/
+
+body div[aria-describedby="confirm-deliver-fuel"] {
+    font-size: 14px;
+}
+
+.confirm-deliver-fuel {
+    font-size: 14px;
+}
+
+.table-confirm-deliver-fuel {
+}
+
+    .table-confirm-deliver-fuel td fieldset {
+        padding: 3px;
+        margin: 3px;
+        border: 1px solid #c0c0c0;
+    }
+
+    .table-confirm-deliver-fuel td legend {
+        padding: 0;
+        border: 0;
+        width: auto;
+        font-size: 14px;
+        /*font-weight: bold;*/
+        font-style: italic;
+        color: #808080;
+        margin-bottom: 0;
+    }
+
+.table-delivery-fuel {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .table-delivery-fuel th {
+        text-align: right;
+        font-weight: normal;
+    }
+
+    .table-delivery-fuel td {
+    }
+
+        .table-delivery-fuel td input {
+            /*color: blue;*/
+            width: 95%;
+            font-style: italic;
+        }
+
+        .table-delivery-fuel td textarea {
+            /*color: blue;*/
+            width: 95%;
+            font-style: italic;
+        }
+
+.table-delivery-sap {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .table-delivery-sap tr.line {
+        border-top: 1px solid #c0c0c0;
+        margin-top: 3px;
+    }
+    .table-delivery-sap th {
+        width: 200px;
+        text-align: right;
+        font-weight: normal;
+    }
+
+    .table-delivery-sap th label {
+        font-weight: normal;
+    }
+
+    .table-delivery-sap td {
+        width: 300px;
+    }
+
+        .table-delivery-sap td input {
+            /*color: blue;*/
+            width: 95%;
+            font-style: italic;
+        }
+
+        .table-delivery-sap td textarea {
+            /*color: blue;*/
+            width: 95%;
+            font-style: italic;
+        }
+
 
 .input_edit {
-    background-color:#e3efc5;
+    background-color: #e3efc5;
 }
 
 .input_view {
-    background-color:#eeeaea;
+    background-color: #eeeaea;
 }
 
 .ui-button .ui-widget .input_edit {
     background-color: #e3efc5;
 }
 
-/*.ui-state-hover .input_edit, 
-.ui-widget-content .ui-state-hover .input_edit, 
-.ui-widget-header .ui-state-hover .input_edit, 
-.ui-state-focus .input_edit, 
-.ui-widget-content .ui-state-focus .input_edit, 
-.ui-widget-header .ui-state-focus .input_edit, 
-.ui-button:hover, .ui-button:focus .input_edit {
-    background-color: #e3efc5;
+
+/*Окно dialog-message*/
+body div[aria-describedby="dialog-message"] {
+    font-size: 14px;
 }
 
-.ui-state-hover .input_edit, 
-.ui-widget-content .ui-state-hover .input_edit, 
-.ui-widget-header .ui-state-hover .input_edit, 
-.ui-state-focus .input_edit, 
-.ui-widget-content .ui-state-focus .input_edit, 
-.ui-widget-header .ui-state-focus .input_edit, 
-.ui-button:hover .input_edit, 
-.ui-button:focus .input_edit {
-    background-color: #e3efc5;
-}*/
+.table-dialog-message {
+    border-collapse: collapse;
+    border-spacing: 0;
+
+}
+
+    .table-dialog-message th {
+        width:200px;
+        text-align: right;
+        font-weight: normal;
+    }
+    .table-dialog-message td {
+        width:200px;
+        text-align: left;
+    }
+    .table-dialog-message td label{
+        font-weight: normal;
+        font-style:italic;
+        color:blue;
+    }
+
+/*Окно dialog-close-fuel*/
+body div[aria-describedby="dialog-close-fuel"] {
+    font-size: 14px;
+}
+
+
+.table-dialog-close-fuel {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+    .table-dialog-close-fuel th {
+        /*width: 200px;*/
+        text-align: right;
+        font-weight: normal;
+    }
+    .table-dialog-close-fuel td {
+        /*width: 200px;*/
+        text-align: center;
+    }
+        .table-dialog-close-fuel td input {
+            font-weight: normal;
+            font-style: italic;
+            color: blue;
+        }
+            .table-dialog-close-fuel td input.new_data {
+                color: crimson;
+            }
+
+/*Окно RFID*/
+
+body div[aria-describedby="dialog-tags-gun"] {
+    font-size: 14px;
+}
+
+.table-dialog-tags-gun {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .table-dialog-tags-gun th {
+        text-align: right;
+        font-weight: normal;
+    }
+
+    .table-dialog-tags-gun td {
+    }
+
+        .table-dialog-tags-gun td label {
+            color: blue;
+            width: 95%;
+            font-style: italic;
+        }

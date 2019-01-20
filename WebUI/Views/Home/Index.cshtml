@@ -31,107 +31,1344 @@
 </head>
 <body>
     <div id="lockPanel" class="LockOff"></div>
+    <p class="messageTips"></p>
+
     <div id="content">
         <div>Текущее время :<label id="date-value"></label></div>
-        <div id="trk-6" class="trk">
-            <fieldset>
-                <legend> Колонка №: 6 </legend>
-                <div id="trk-6-0" class="trk-left">
-                    <div id="trk-6-0-rfid" class="trk-rfid">
-                        <table class="table-rfid">
-                            <tr>
-                                <td id="trk-6-0-online"></td>
-                                <th>RFID-карта</th>
-                                <th>
-                                    <button id="button-trk-6-0-rfid" data-trk="6" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
-                                    <label id="label-trk-6-0-rfid" class="label-rfid"></label>
-                                </th>
-                            </tr>
-                        </table>
+        <div class="trk-all">
+            @*TRK 1*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 1 </legend>
+                    <div id="trk-1-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-1-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-1-0-rfid" data-trk="1" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-1-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 1 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="1">Связь</th>
+                                            <td id="gun-1-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-1-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-1-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-1-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-1-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-1-deliver" data-gun="1" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-1-close" data-gun="1" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
                     </div>
-                    <fieldset>
-                        <legend> Пистолет №: 11 (A92) </legend>
-                        <table class="table table-gun">
-                            <tr>
-                                <th class="button-online" data-num="11">Связь</th>
-                                <th>Снят</th>
-                                <th>Всего, м3</th>
-                                <th>Заданно, л</th>
-                                <th>Выдано, л</th>
-                            </tr>
-                            <tr>
-                                <td id="gun-11-online"></td>
-                                <td id="gun-11-taken"></td>
-                                <td><input id="gun-11-total_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                                <td><input id="gun-11-volume_to_write" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                                <td><input id="gun-11-last_out_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <button id="button-gun-11-deliver" data-gun="11" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
-                                    <button id="button-gun-11-close" data-gun="11" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
-                                </td>
-                                <td colspan="3">
-                                    <div id="progressbar-gun-11" class="progressbar-deliver"><div id="progress-label-gun-11" class="progress-label">Заправка...</div></div>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                </div>
-                <div id="trk-6-1" class="trk-right">
-                    <div id="trk-6-1-rfid" class="trk-rfid">
-                        <table class="table-rfid">
-                            <tr>
-                                <td id="trk-6-1-online"></td>
-                                <th>RFID-карта</th>
-                                <th>
-                                    <button id="button-trk-6-1-rfid" data-trk="6" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
-                                    <label id="label-trk-6-1-rfid" class="label-rfid"></label>
-                                </th>
-                            </tr>
-                        </table>
+                    <div id="trk-1-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-1-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-1-1-rfid" data-trk="1" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-1-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 2 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="2">Связь</th>
+                                            <td id="gun-2-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-2-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-2-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-2-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-2-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-2-deliver" data-gun="2" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-2-close" data-gun="2" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
                     </div>
-                    <fieldset>
-                        <legend> Пистолет №: 12 (A92) </legend>
-                        <table class="table table-gun">
-                            <tr>
-                                <th class="button-online" data-num="12">Связь</th>
-                                <th>Снят</th>
-                                <th>Всего, м3</th>
-                                <th>Заданно, л</th>
-                                <th>Выдано, л</th>
-                            </tr>
-                            <tr>
-                                <td id="gun-12-online"></td>
-                                <td id="gun-12-taken"></td>
-                                <td><input id="gun-12-total_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                                <td><input id="gun-12-volume_to_write" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                                <td><input id="gun-12-last_out_volume" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <button id="button-gun-12-deliver" data-gun="12" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
-                                    <button id="button-gun-12-close" data-gun="12" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
-                                </td>
-                                <td colspan="3">
-                                    <div id="progressbar-gun-12" class="progressbar-deliver"><div id="progress-label-gun-12" class="progress-label">Заправка...</div></div>
-                                </td>
-                            </tr>
-                        </table>
-                    </fieldset>
-                </div>
-            </fieldset>
-        </div>
-        <div>
-            <div id="ns" class="ns">
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 2*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 2 </legend>
+                    <div id="trk-2-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-2-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-2-0-rfid" data-trk="2" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-2-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 3 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="3">Связь</th>
+                                            <td id="gun-3-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-3-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-3-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-3-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-3-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-3-deliver" data-gun="3" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-3-close" data-gun="3" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-2-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-2-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-2-1-rfid" data-trk="2" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-2-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 4 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="4">Связь</th>
+                                            <td id="gun-4-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-4-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-4-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-4-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-4-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-4-deliver" data-gun="4" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-4-close" data-gun="4" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 3*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 3 </legend>
+                    <div id="trk-3-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-3-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-3-0-rfid" data-trk="3" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-3-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 5 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="5">Связь</th>
+                                            <td id="gun-5-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-5-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-5-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-5-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-5-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-5-deliver" data-gun="5" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-5-close" data-gun="5" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-3-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-3-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-3-1-rfid" data-trk="3" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-3-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 6 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="6">Связь</th>
+                                            <td id="gun-6-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-6-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-6-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-6-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-6-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-6-deliver" data-gun="6" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-6-close" data-gun="6" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 4*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 4 </legend>
+                    <div id="trk-4-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-4-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-4-0-rfid" data-trk="4" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-4-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 7 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="7">Связь</th>
+                                            <td id="gun-7-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-7-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-7-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-7-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-7-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-7-deliver" data-gun="7" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-7-close" data-gun="7" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-4-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-4-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-4-1-rfid" data-trk="4" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-4-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 8 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="8">Связь</th>
+                                            <td id="gun-8-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-8-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-8-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-8-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-8-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-8-deliver" data-gun="8" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-8-close" data-gun="8" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 5*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 5 </legend>
+                    <div id="trk-5-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-5-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-5-0-rfid" data-trk="5" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-5-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 9 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="9">Связь</th>
+                                            <td id="gun-9-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-9-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-9-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-9-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-9-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-9-deliver" data-gun="9" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-9-close" data-gun="9" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-5-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-5-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-5-1-rfid" data-trk="5" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-5-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 10 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="10">Связь</th>
+                                            <td id="gun-10-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-10-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-10-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-10-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-10-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-10-deliver" data-gun="10" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-10-close" data-gun="10" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 6*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 6 </legend>
+                    <div id="trk-6-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-6-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-6-0-rfid" data-trk="6" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-6-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 11 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="11">Связь</th>
+                                            <td id="gun-11-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-11-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-11-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-11-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-11-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-11-deliver" data-gun="11" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-11-close" data-gun="11" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-6-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-6-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-6-1-rfid" data-trk="6" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-6-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 12 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="12">Связь</th>
+                                            <td id="gun-12-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-12-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-12-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-12-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-12-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-12-deliver" data-gun="12" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-12-close" data-gun="12" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 7*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 7 </legend>
+                    <div id="trk-7-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-7-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-7-0-rfid" data-trk="7" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-7-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 13 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="13">Связь</th>
+                                            <td id="gun-13-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-13-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-13-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-13-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-13-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-13-deliver" data-gun="13" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-13-close" data-gun="13" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 14 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="14">Связь</th>
+                                            <td id="gun-14-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-14-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-14-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-14-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-14-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-14-deliver" data-gun="14" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-14-close" data-gun="14" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 15 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="15">Связь</th>
+                                            <td id="gun-15-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-15-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-15-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-15-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-15-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-15-deliver" data-gun="15" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-15-close" data-gun="15" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 16 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="16">Связь</th>
+                                            <td id="gun-16-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-16-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-16-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-16-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-16-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-16-deliver" data-gun="16" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-16-close" data-gun="16" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-7-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-7-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-7-1-rfid" data-trk="7" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-7-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 17 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="17">Связь</th>
+                                            <td id="gun-17-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-17-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-17-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-17-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-17-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-17-deliver" data-gun="17" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-17-close" data-gun="17" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 18 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="18">Связь</th>
+                                            <td id="gun-18-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-18-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-18-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-18-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-18-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-18-deliver" data-gun="18" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-18-close" data-gun="18" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 19 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="19">Связь</th>
+                                            <td id="gun-19-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-19-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-19-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-19-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-19-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-19-deliver" data-gun="19" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-19-close" data-gun="19" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 20 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="20">Связь</th>
+                                            <td id="gun-20-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-20-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-20-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-20-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-20-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-20-deliver" data-gun="20" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-20-close" data-gun="20" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 8*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 8 </legend>
+                    <div id="trk-8-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-8-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-8-0-rfid" data-trk="8" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-8-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 21 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="21">Связь</th>
+                                            <td id="gun-21-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-21-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-21-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-21-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-21-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-21-deliver" data-gun="21" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-21-close" data-gun="21" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 22 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="22">Связь</th>
+                                            <td id="gun-22-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-22-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-22-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-22-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-22-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-22-deliver" data-gun="22" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-22-close" data-gun="22" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 23 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="23">Связь</th>
+                                            <td id="gun-23-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-23-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-23-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-23-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-23-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-23-deliver" data-gun="23" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-23-close" data-gun="23" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 24 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="24">Связь</th>
+                                            <td id="gun-24-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-24-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-24-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-24-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-24-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-24-deliver" data-gun="24" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-24-close" data-gun="24" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div id="trk-8-1" class="trk-right">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-8-1-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-8-1-rfid" data-trk="8" data-side="1" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-8-1-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 25 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="25">Связь</th>
+                                            <td id="gun-25-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-25-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-25-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-25-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-25-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-25-deliver" data-gun="25" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-25-close" data-gun="25" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 26 (A95) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="26">Связь</th>
+                                            <td id="gun-26-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-26-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-26-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-26-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-26-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-26-deliver" data-gun="26" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-26-close" data-gun="26" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 27 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="27">Связь</th>
+                                            <td id="gun-27-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-27-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-27-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-27-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-27-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-27-deliver" data-gun="27" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-27-close" data-gun="27" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 28 (A92) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="28">Связь</th>
+                                            <td id="gun-28-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-28-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-28-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-28-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-28-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-28-deliver" data-gun="28" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-28-close" data-gun="28" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*TRK 9*@
+            <div class="trk">
+                <fieldset>
+                    <legend> Колонка №: 9 </legend>
+                    <div id="trk-9-0" class="trk-left">
+                        <div class="trk-rfid">
+                            <table class="table-rfid">
+                                <tr>
+                                    <td id="trk-9-0-online"></td>
+                                    <th>RFID</th>
+                                    <th>
+                                        <button id="button-trk-9-0-rfid" data-trk="9" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
+                                        <label id="label-trk-9-0-rfid" class="label-rfid"></label>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="trk-guns">
+                            <div class="trk-gun">
+                                <fieldset>
+                                    <legend> Пистолет №: 29 (ДТ) </legend>
+                                    <table class="table-gun">
+                                        <tr>
+                                            <th class="button-online" data-num="29">Связь</th>
+                                            <td id="gun-29-online"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Снят</th>
+                                            <td id="gun-29-taken"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Всего(м3):</th>
+                                            <td><input id="gun-29-total_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Зад.(л):</th>
+                                            <td><input id="gun-29-volume_to_write" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Выд.(л):</th>
+                                            <td><input id="gun-29-last_out_volume" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-gun-volume" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button id="button-gun-29-deliver" data-gun="29" class="ui-button ui-widget ui-corner-all button-deliver">Выдать...</button>
+                                                <button id="button-gun-29-close" data-gun="29" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                    </div>
+
+                    <div class="cls"></div>
+                </fieldset>
+            </div>
+            @*ns*@
+            <div class="ns">
                 <fieldset>
                     <legend> Наливной стояк: №: 1 </legend>
                     <div id="trk-10-0" class="trk-left">
-                        <div id="trk-10-0-rfid" class="trk-rfid">
+                        <div class="trk-rfid">
                             <table class="table-rfid">
                                 <tr>
                                     <td id="trk-10-0-online"></td>
-                                    <th>RFID-карта</th>
+                                    <th>RFID</th>
                                     <th>
                                         <button id="button-trk-10-0-rfid" data-trk="10" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
                                         <label id="label-trk-10-0-rfid" class="label-rfid"></label>
@@ -139,96 +1376,51 @@
                                 </tr>
                             </table>
                         </div>
-                        <fieldset>
-                            <legend> (ДТ) </legend>
-                            <table class="table-bordered table-ns-dio">
-                                <tr>
-                                    <th>Counter</th>
-                                    <th>Status</th>
-                                    <th>Temp</th>
-                                    <th>TimerLiveOn</th>
-                                    <th>TimerOn</th>
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-Counter"></td>
-                                    <td id="ns-1-Status"></td>
-                                    <td id="ns-1-Temp"></td>
-                                    <td id="ns-1-TimerLiveOn"></td>
-                                    <td id="ns-1-TimerOn"></td>
-                                </tr>
-                            </table>
-                            <table class="table table-ns">
-                                <tr>
-                                    <td id="ns-1-Counter"></td>
-                                    <td id="ns-1-Status"></td>
-                                    <td id="ns-1-Temp"></td>
-                                    <td id="ns-1-TimerLiveOn"></td>
-                                    <td id="ns-1-TimerOn"></td>
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-flg_kv1"></td>
-                                    <th colspan="4"> Флаг управления контактором включения слива</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-flg_kv2"></td>
-                                    <th colspan="4"> Флаг реле предельного уровня слива (в баке)</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-inp_km"></td>
-                                    <th colspan="4"> (Inp)Состояние контактора включения насоса</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-inp_kvq1"></td>
-                                    <th colspan="4"> (Inp)Контроль перелива стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-inp_kvq2"></td>
-                                    <th colspan="4"> (Inp)Контроль заземления автоцистерны стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-inp_sa2"></td>
-                                    <th colspan="4"> (Inp)Выбор режима управления насосом стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-out_kv1"></td>
-                                    <th colspan="4"> (OUT)Реле управления контактором включения насоса стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-1-out_kv2"></td>
-                                    <th colspan="4"> (OUT)Реле предельного уровня в резервуарах стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button id="button-ns-10-deliver" data-risers="1" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
-                                        <button id="button-ns-10-close" data-risers="1" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
-                                    </td>
-                                    <td colspan="3">
-                                        @*<div id="progressbar-ns-10" class="progressbar-deliver"><div id="progress-label-ns-10" class="progress-label">Заправка...</div></div>*@
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
+                        <div class="trk-ns">
+                            <fieldset>
+                                <legend> (ДТ) </legend>
+                                <table class="table-ns">
+                                    @*<tr>
+                                    <th class="button-online" data-num="1">Связь</th>
+                                    <td id="ns-1-online"></td>
+                                </tr>*@
+                                    <tr>
+                                        <th>Заземление</th>
+                                        <td id="ns-1-inp_kvq2"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Счетчик(м3):</th>
+                                        <td><input id="ns-1-Counter" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Расход:</th>
+                                        <td><input id="ns-1-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Время:</th>
+                                        <td><input id="ns-1-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button id="button-ns-10-deliver" data-risers="1" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                            <button id="button-ns-10-close" data-risers="1" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </div>
                     </div>
-
                 </fieldset>
             </div>
-            <div id="ns" class="ns">
+            <div class="ns">
                 <fieldset>
                     <legend> Наливной стояк: №: 2 </legend>
                     <div id="trk-11-0" class="trk-left">
-                        <div id="trk-11-0-rfid" class="trk-rfid">
+                        <div class="trk-rfid">
                             <table class="table-rfid">
                                 <tr>
                                     <td id="trk-11-0-online"></td>
-                                    <th>RFID-карта</th>
+                                    <th>RFID</th>
                                     <th>
                                         <button id="button-trk-11-0-rfid" data-trk="11" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
                                         <label id="label-trk-11-0-rfid" class="label-rfid"></label>
@@ -236,89 +1428,51 @@
                                 </tr>
                             </table>
                         </div>
-                        <fieldset>
-                            <legend> (Керосин) </legend>
-                            <table class="table-bordered table-ns-dio">
-                                <tr>
-                                    <th>Counter</th>
-                                    <th>Status</th>
-                                    <th>Temp</th>
-                                    <th>TimerLiveOn</th>
-                                    <th>TimerOn</th>
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-Counter"></td>
-                                    <td id="ns-2-Status"></td>
-                                    <td id="ns-2-Temp"></td>
-                                    <td id="ns-2-TimerLiveOn"></td>
-                                    <td id="ns-2-TimerOn"></td>
-                                </tr>
-                            </table>
-                            <table class="table table-ns">
-                                <tr>
-                                    <td id="ns-2-flg_kv1"></td>
-                                    <th colspan="4"> Флаг управления контактором включения слива</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-flg_kv2"></td>
-                                    <th colspan="4"> Флаг реле предельного уровня слива (в баке)</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-inp_km"></td>
-                                    <th colspan="4"> (Inp)Состояние контактора включения насоса</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-inp_kvq1"></td>
-                                    <th colspan="4"> (Inp)Контроль перелива стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-inp_kvq2"></td>
-                                    <th colspan="4"> (Inp)Контроль заземления автоцистерны стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-inp_sa2"></td>
-                                    <th colspan="4"> (Inp)Выбор режима управления насосом стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-out_kv1"></td>
-                                    <th colspan="4"> (OUT)Реле управления контактором включения насоса стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-2-out_kv2"></td>
-                                    <th colspan="4"> (OUT)Реле предельного уровня в резервуарах стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button id="button-ns-11-deliver" data-risers="2" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
-                                        <button id="button-ns-11-close" data-risers="2" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
-                                    </td>
-                                    <td colspan="3">
-                                        @*<div id="progressbar-ns-11" class="progressbar-deliver"><div id="progress-label-ns-11" class="progress-label">Заправка...</div></div>*@
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
+                        <div class="trk-ns">
+                            <fieldset>
+                                <legend> (Керосин) </legend>
+                                <table class="table-ns">
+                                    @*<tr>
+                                    <th class="button-online" data-num="2">Связь</th>
+                                    <td id="ns-2-online"></td>
+                                </tr>*@
+                                    <tr>
+                                        <th>Заземление</th>
+                                        <td id="ns-2-inp_kvq2"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Счетчик(м3):</th>
+                                        <td><input id="ns-2-Counter" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Расход:</th>
+                                        <td><input id="ns-2-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Время:</th>
+                                        <td><input id="ns-2-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button id="button-ns-11-deliver" data-risers="2" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                            <button id="button-ns-11-close" data-risers="2" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </div>
                     </div>
-
                 </fieldset>
             </div>
-            <div id="ns" class="ns">
+            <div class="ns">
                 <fieldset>
                     <legend> Наливной стояк: №: 3 </legend>
                     <div id="trk-12-0" class="trk-left">
-                        <div id="trk-12-0-rfid" class="trk-rfid">
+                        <div class="trk-rfid">
                             <table class="table-rfid">
                                 <tr>
                                     <td id="trk-12-0-online"></td>
-                                    <th>RFID-карта</th>
+                                    <th>RFID</th>
                                     <th>
                                         <button id="button-trk-12-0-rfid" data-trk="12" data-side="0" class="ui-button ui-widget ui-corner-all button-rfid button-rfid-not-active "></button>
                                         <label id="label-trk-12-0-rfid" class="label-rfid"></label>
@@ -326,129 +1480,96 @@
                                 </tr>
                             </table>
                         </div>
-                        <fieldset>
-                            <legend> (A92) </legend>
-                            <table class="table-bordered table-ns-dio">
-                                <tr>
-                                    <th>Counter</th>
-                                    <th>Status</th>
-                                    <th>Temp</th>
-                                    <th>TimerLiveOn</th>
-                                    <th>TimerOn</th>
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-Counter"></td>
-                                    <td id="ns-3-Status"></td>
-                                    <td id="ns-3-Temp"></td>
-                                    <td id="ns-3-TimerLiveOn"></td>
-                                    <td id="ns-3-TimerOn"></td>
-                                </tr>
-                            </table>
-                            <table class="table table-ns">
-                                <tr>
-                                    <td id="ns-3-flg_kv1"></td>
-                                    <th colspan="4"> Флаг управления контактором включения слива</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-flg_kv2"></td>
-                                    <th colspan="4"> Флаг реле предельного уровня слива (в баке)</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-inp_km"></td>
-                                    <th colspan="4"> (Inp)Состояние контактора включения насоса</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-inp_kvq1"></td>
-                                    <th colspan="4"> (Inp)Контроль перелива стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-inp_kvq2"></td>
-                                    <th colspan="4"> (Inp)Контроль заземления автоцистерны стояка </th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-inp_sa2"></td>
-                                    <th colspan="4"> (Inp)Выбор режима управления насосом стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-out_kv1"></td>
-                                    <th colspan="4"> (OUT)Реле управления контактором включения насоса стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td id="ns-3-out_kv2"></td>
-                                    <th colspan="4"> (OUT)Реле предельного уровня в резервуарах стояка</th>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button id="button-ns-12-deliver" data-risers="3" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
-                                        <button id="button-ns-12-close" data-risers="3" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
-                                    </td>
-                                    <td colspan="3">
-                                        @*<div id="progressbar-ns-12" class="progressbar-deliver"><div id="progress-label-ns-12" class="progress-label">Заправка...</div></div>*@
-                                    </td>
-                                </tr>
-                            </table>
-                        </fieldset>
+                        <div class="trk-ns">
+                            <fieldset>
+                                <legend> (А92) </legend>
+                                <table class="table-ns">
+                                    @*<tr>
+                                    <th class="button-online" data-num="3">Связь</th>
+                                    <td id="ns-3-online"></td>
+                                </tr>*@
+                                    <tr>
+                                        <th>Заземление</th>
+                                        <td id="ns-3-inp_kvq2"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Счетчик(м3):</th>
+                                        <td><input id="ns-3-Counter" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Расход:</th>
+                                        <td><input id="ns-3-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Время:</th>
+                                        <td><input id="ns-3-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button id="button-ns-12-deliver" data-risers="3" class="ui-button ui-widget ui-corner-all button-risers">Выдать...</button>
+                                            <button id="button-ns-12-close" data-risers="3" data-id="" class="ui-button ui-widget ui-corner-all button-close" style="display:none">Закрыть</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </div>
                     </div>
-
                 </fieldset>
             </div>
+            <div class="cls"></div>
         </div>
+        <div class="ns-all">
+
+        </div>
+        <div class="cls"></div>
     </div>
 
-    <div id="confirm-rfid-card" title="" style="display:none">
+    <div id="confirm-rfid-card" title="" class="table-confirm-rfid-card" style="display:none">
         <form id="form-rfid-card">
             <fieldset>
-                <table id="table-confirm-rfid-card">
+                <table id="table-confirm-rfid-card" class="confirm-rfid-card table-striped">
                     <tr>
-                        <th><label for="id" id="label-number-cards"></label>id карты :</th>
+                        <th>id карты :</th>
                         <td><input id="id" name="id" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="Number" id="label-number-cards"></label>Номер карты :</th>
+                        <th>Номер карты :</th>
                         <td><input id="Number" name="Number" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="DriverName" id="label-drivername-cards">DriverName :</label></th>
+                        <th>DriverName :</th>
                         <td><input id="DriverName" name="DriverName" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="AutoNumber" id="label-autonumber-cards">Номер автомобиля :</label></th>
+                        <th>Номер автомобиля :</th>
                         <td><input id="AutoNumber" name="AutoNumber" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="Debitor" id="label-debitor-cards">Код дебитора :</label></th>
+                        <th>Код дебитора :</th>
                         <td><input id="Debitor" name="Debitor" type="number" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="Sn1" id="label-sn1-cards"></label>Код транспортного средства :</th>
+                        <th>Код транспортного средства :</th>
                         <td><input id="Sn1" name="Sn1" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="AutoModel" id="label-automodel-cards">Модель автомобиля :</label></th>
+                        <th>Модель автомобиля :</th>
                         <td><input id="AutoModel" name="AutoModel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="Street" id="label-street-cards"></label>Автоколона :</th>
+                        <th>Автоколона :</th>
                         <td><input id="Street" name="Street" type="number" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="House" id="label-house-cards"></label>House :</th>
-                        <td><textarea id="House" name="House" type="text" disabled="disabled" class="ui-widget-content ui-corner-all"></textarea></td>
+                        <th>House :</th>
+                        <td><textarea id="House" name="House" type="text" rows="3" disabled="disabled" class="ui-widget-content ui-corner-all"></textarea></td>
                     </tr>
                     <tr>
-                        <th><label for="Owner" id="label-owner-cards">Owner :</label></th>
+                        <th>Owner :</th>
                         <td><input id="Owner" name="Owner" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                     <tr>
-                        <th><label for="Active" id="label-active-cards">Активация карты :</label></th>
+                        <th>Активация карты :</th>
                         <td><input id="Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     </tr>
                 </table>
@@ -458,94 +1579,94 @@
         </form>
     </div>
 
-    <div id="confirm-deliver-fuel" title="" style="display:none">
+    <div id="confirm-deliver-fuel" class="confirm-deliver-fuel" title="" style="display:none">
         <form id="form-deliver-fuel">
             <p class="validateTips"></p>
-            <table>
+            <table class="table-confirm-deliver-fuel">
                 <tr>
                     <td style="text-align:left; vertical-align:top">
                         <fieldset>
                             <legend>Выдача топлива</legend>
                             <fieldset>
                                 <legend>RFID-карта</legend>
-                                <table id="table-delivery-fuel">
+                                <table class="table-delivery-fuel table-striped">
                                     <tr>
-                                        <th><label for="deliver-Active" id="label-active-cards">Карта активная:</label></th>
+                                        <th>Карта активная :</th>
                                         <td><input id="deliver-Active" name="Active" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-Number" id="label-number-cards">Номер карты:</label></th>
+                                        <th>Номер карты :</th>
                                         <td><input id="deliver-Number" name="Number" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-AutoNumber" id="label-autonumber-cards">Номер авто:</label></th>
+                                        <th>Номер авто :</th>
                                         <td><input id="deliver-AutoNumber" name="AutoNumber" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-Debitor" id="label-debitor-cards">Код дебитора :</label></th>
+                                        <th>Код дебитора :</th>
                                         <td><input id="deliver-Debitor" name="Debitor" type="number" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-AutoModel" id="label-automodel-cards">Модель автомобиля :</label></th>
+                                        <th>Модель автомобиля :</th>
                                         <td><input id="deliver-AutoModel" name="AutoModel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                 </table>
                             </fieldset>
                             <fieldset>
                                 <legend>ГСМ/Бак</legend>
-                                <table id="table-delivery-fuel">
+                                <table class="table-delivery-fuel table-striped">
                                     <tr>
-                                        <th><label for="deliver-type-fuel" id="label-type-fuel">Тип топлива:</label></th>
+                                        <th>Тип топлива :</th>
                                         <td><input id="deliver-type-fuel" name="type-fuel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-Capacity" id="label-capacitys">Емкость:</label></th>
+                                        <th>Емкость :</th>
                                         <td><select id="deliver-Capacity" name="Capacity" class="ui-widget-content ui-corner-all"></select></td>
                                     </tr>
                                     <tr>
-                                        <th>Уровень ГСМ в баке (мм):</th>
+                                        <th>Уровень ГСМ в баке (мм) :</th>
                                         <td><input id="deliver-take-level" name="take-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Объем ГСМ в баке (л):</th>
+                                        <th>Объем ГСМ в баке (л) :</th>
                                         <td><input id="deliver-take-volume" name="take-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Плотность ГСМ в баке (кг/м3):</th>
+                                        <th>Плотность ГСМ в баке (кг/м3) :</th>
                                         <td><input id="deliver-take-dens" name="take-dens" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Масса ГСМ в баке (кг):</th>
+                                        <th>Масса ГСМ в баке (кг) :</th>
                                         <td><input id="deliver-take-mass" name="take-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Температура ГСМ в баке (С°):</th>
+                                        <th>Температура ГСМ в баке (С°) :</th>
                                         <td><input id="deliver-take-temp" name="take-temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th>Уровень п-воды в баке (мм):</th>
+                                        <th>Уровень п-воды в баке (мм) :</th>
                                         <td><input id="deliver-take-water-level" name="water-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                 </table>
                             </fieldset>
                             <fieldset>
                                 <legend>Колонка\пистолет\стояк</legend>
-                                <table id="table-delivery-fuel">
+                                <table class="table-delivery-fuel table-striped">
                                     <tr>
-                                        <th><label for="deliver-DoseFuel" id="label-dose-fuel">Доза топлива(л):</label></th>
+                                        <th>Доза (л) :</th>
                                         <td><input id="deliver-DoseFuel" name="DoseFuel" type="number" class="confirm-input ui-widget-content ui-corner-all" /><label id="label-mase-fuel"></label></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-MassFuel" id="label-mass-fuel">Расчетная масса(кг):</label></th>
+                                        <th>Расчетная масса (кг) :</th>
                                         <td><input id="deliver-MassFuel" name="MassFuel" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-Taken" id="label-taken">Пистолет снят:</label></th>
-                                        <td><input id="deliver-Taken" name="deliver-Taken" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                        <th id="label-taken">Пистолет снят :</th>
+                                        <td><input id="deliver-Taken" type="checkbox" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="deliver-Passage" id="label-passage">Технический пролив</label></th>
-                                        <td><input id="deliver-Passage" name="deliver-Passage" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                        <th>Технический пролив :</th>
+                                        <td><input id="deliver-Passage" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                 </table>
                             </fieldset>
@@ -557,34 +1678,34 @@
                             Вариант выдачи:<select id="deliver-variant-sap" name="variant-sap" class="ui-widget-content ui-corner-all"></select>
                             <fieldset>
                                 <legend>Ручной ввод</legend>
-                                <fieldset>
-                                    <legend></legend>
-                                    <table id="table-delivery-sap">
-                                        <tr id="button-sap">
-                                            <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
-                                        </tr>
-                                        <tr id="sap-num">
-                                            <th>
-                                                <label for="sap-num" id="label-sap-num"></label>
-                                            </th>
-                                            <td>
-                                                <input id="sap-num" name="sap-num" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                            </td>
-                                        </tr>
-                                        <tr id="sap-num-pos">
-                                            <th>
-                                                <label for="sap-num-pos" id="label-sap-num-pos"></label>
-                                            </th>
-                                            <td>
-                                                <input id="sap-num-pos" name="sap-num-pos" type="number" class="confirm-input ui-widget-content ui-corner-all" />
-                                                <select id="sap-num-pos" name="sap-num-pos" class="ui-widget-content ui-corner-all"></select>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </fieldset>
+                                @*<fieldset>
+                                    <legend></legend>*@
+                                <table class="table-delivery-sap table-striped">
+                                    <tr id="button-sap">
+                                        <td colspan="2"><button id="button-sap" class="ui-button ui-widget ui-corner-all button-sap">Запрос к SAP</button></td>
+                                    </tr>
+                                    <tr id="sap-num">
+                                        <th>
+                                            <label for="sap-num" id="label-sap-num"></label>
+                                        </th>
+                                        <td>
+                                            <input id="sap-num" name="sap-num" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                        </td>
+                                    </tr>
+                                    <tr id="sap-num-pos">
+                                        <th>
+                                            <label for="sap-num-pos" id="label-sap-num-pos"></label>
+                                        </th>
+                                        <td>
+                                            <input id="sap-num-pos" name="sap-num-pos" type="number" class="confirm-input ui-widget-content ui-corner-all" />
+                                            <select id="sap-num-pos" name="sap-num-pos" class="ui-widget-content ui-corner-all"></select>
+                                        </td>
+                                    </tr>
+                                    @*</table>
+                                        </fieldset>
 
-                                <table id="table-delivery-sap">
-                                    <tr id="sap-num-ts">
+                                        <table class="table-delivery-sap table-striped">*@
+                                    <tr id="sap-num-ts" class="line">
                                         <th>
                                             <label for="sap-num-ts" id="label-sap-num-ts"></label>
                                         </th>
@@ -612,7 +1733,7 @@
                             </fieldset>
                             <fieldset>
                                 <legend>Справочные данные САП(АСУ)</legend>
-                                <table id="table-delivery-sap">
+                                <table class="table-delivery-sap table-striped">
                                     <tr id="sap-ozm">
                                         <th>
                                             <label for="sap-ozm" id="label-sap-ozm"></label>
@@ -678,9 +1799,9 @@
         </form>
     </div>
 
-    <div id="dialog-tags-gun" title="" style="display:none">
+    <div id="dialog-tags-gun" title="" class="dialog-tags-gun" style="display:none">
         <form id="form-deliver-fuel">
-            <table class="tab-content">
+            <table class="table-dialog-tags-gun table-striped">
                 @*<tr>
                         <th><label id="number" for="number-value">Номер карточки :</label></th>
                         <td><label id="number-value"></label></td>
@@ -753,196 +1874,196 @@
         </form>
     </div>
 
-    <div id="dialog-message" title="Download complete" style="display:none">
+    <div id="dialog-message" title="" class="dialog-message" style="display:none">
         @*<p>
                 <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
                 Your files have downloaded successfully into the My Downloads folder.
             </p>*@
-        <table class="table-striped table-bordered">
+        <table class="table-dialog-message table-striped table-bordered">
             <tr>
-                <th>Дата выдачи</th>
+                <th>Дата выдачи :</th>
                 @*<th>DATE</th>*@
                 <td><label id="SAP-DATE"></label></td>
             </tr>
             <tr>
-                <th>Время выдачи</th>
+                <th>Время выдачи :</th>
                 @*<th>TIME</th>*@
                 <td><label id="SAP-TIME"></label></td>
             </tr>
             <tr>
-                <th>ФИО ответственного за выдачу</th>
+                <th>ФИО ответственного за выдачу :</th>
                 @*<th>LOGIN_R</th>*@
                 <td><label id="SAP-LOGIN_R"></label></td>
             </tr>
             <tr>
-                <th>№ бака</th>
+                <th>№ бака :</th>
                 @*<th>N_BAK</th>*@
                 <td><label id="SAP-N_BAK"></label></td>
             </tr>
             <tr>
-                <th>ОЗМ согласно бака</th>
+                <th>ОЗМ согласно бака :</th>
                 @*<th>OZM_BAK</th>*@
                 <td><label id="SAP-OZM_BAK"></label></td>
             </tr>
             <tr>
-                <th>ОЗМ из резервирования/маршрута или ОЗМ</th>
+                <th>ОЗМ из резервирования/маршрута или ОЗМ :</th>
                 @*<th>OZM_TREB</th>*@
                 <td><label id="SAP-OZM_TREB"></label></td>
             </tr>
             <tr>
-                <th>Режим выдачи</th>
+                <th>Режим выдачи :</th>
                 @*<th>FLAG_R</th>*@
                 <td><label id="SAP-FLAG_R"></label></td>
             </tr>
             <tr>
-                <th>Плотность на момент выдачи</th>
+                <th>Плотность на момент выдачи :</th>
                 @*<th>PLOTNOST</th>*@
                 <td><label id="SAP-PLOTNOST"></label></td>
             </tr>
             @*<tr>
-                <th>Объем, л (После выдачи)</th>
-                <th>VOLUME</th>
-                <td><label id="SAP-VOLUME"></label></td>
-            </tr>
+                    <th>Объем, л (После выдачи)</th>
+                    <th>VOLUME</th>
+                    <td><label id="SAP-VOLUME"></label></td>
+                </tr>
+                <tr>
+                    <th>Масса, кг (После выдачи)</th>
+                    <th>MASS</th>
+                    <td><label id="SAP-MASS"></label></td>
+                </tr>*@
             <tr>
-                <th>Масса, кг (После выдачи)</th>
-                <th>MASS</th>
-                <td><label id="SAP-MASS"></label></td>
-            </tr>*@
-            <tr>
-                <th>ФИО Экспедитора</th>
+                <th>ФИО Экспедитора:</th>
                 @*<th>LOGIN_EXP</th>*@
                 <td><label id="SAP-LOGIN_EXP"></label></td>
             </tr>
             <tr>
-                <th>№ КПП</th>
+                <th>№ КПП :</th>
                 @*<th>N_POST</th>*@
                 <td><label id="SAP-N_POST"></label></td>
             </tr>
             <tr>
-                <th>№ ТС факт</th>
+                <th>№ ТС факт :</th>
                 @*<th>TRANSP_FAKT</th>*@
                 <td><label id="SAP-TRANSP_FAKT"></label></td>
             </tr>
             <tr>
-                <th>Дебитор</th>
+                <th>Дебитор :</th>
                 @*<th>N_DEB</th>*@
                 <td><label id="SAP-N_DEB"></label></td>
             </tr>
             <tr>
-                <th>№ ИП/№ резервирования/№ М-11</th>
+                <th>№ ИП/№ резервирования/№ М-11 :</th>
                 @*<th>N_TREB</th>*@
                 <td><label id="SAP-N_TREB"></label></td>
             </tr>
             <tr>
-                <th>Склад-получатель</th>
+                <th>Склад-получатель :</th>
                 @*<th>LGORT</th>*@
                 <td><label id="SAP-LGORT"></label></td>
             </tr>
             <tr>
-                <th>Завод -получатель</th>
+                <th>Завод -получатель :</th>
                 @*<th>WERKS</th>*@
                 <td><label id="SAP-WERKS"></label></td>
             </tr>
         </table>
     </div>
 
-    <div id="dialog-close-fuel" title="" style="display:none">
+    <div id="dialog-close-fuel" title="" class="dialog-close-fuel" style="display:none">
         <form id="form-close-fuel">
-            <table class="table-striped table-bordered">
+            <table class="table-dialog-close-fuel table-striped table-bordered">
                 <tr>
-                    <th>Имя оператора:</th>
+                    <th>Имя оператора: </th>
                     <td><input id="close-operator_name" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     <td colspan="2"></td>
                 </tr>
                 <tr>
-                    <th>Номер смены:</th>
+                    <th>Номер смены: </th>
                     <td><input id="close-smena_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                     <th>Дата начала смены:</th>
                     <td><input id="close-smena_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr id="type-0">
-                    <th>ТРК №:</th>
+                    <th>ТРК № :</th>
                     <td><input id="close-trk_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Пистолет №:</th>
+                    <th>Пистолет № :</th>
                     <td><input id="close-gun_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr id="type-1">
                     <th colspan="2"></th>
-                    <th>Наливной стояк №:</th>
+                    <th>Наливной стояк № :</th>
                     <td><input id="close-num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th>Тип топлива:</th>
+                    <th>Тип топлива :</th>
                     <td><input id="close-fuel_type" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Номер бака:</th>
+                    <th>Номер бака :</th>
                     <td><input id="close-tank_num" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th>id RFID-карты:</th>
+                    <th>id RFID-карты :</th>
                     <td><input id="close-id_card" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>id строки SAP:</th>
+                    <th>id строки SAP :</th>
                     <td><input id="close-id_sap" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
                     <th>Доза:</th>
                     <td><input id="close-dose" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Тип выдача:</th>
+                    <th>Тип выдача :</th>
                     <td><input id="close-passage" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th>Объем выдачи:</th>
-                    <td><input id="close-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Масса выдачи:</th>
-                    <td><input id="close-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Объем выдачи :</th>
+                    <td><input id="close-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
+                    <th>Масса выдачи :</th>
+                    <td><input id="close-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Начало выдачи:</th>
+                    <th>Начало выдачи :</th>
                     <td><input id="close-start_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Конец выдачи:</th>
-                    <td><input id="close-stop_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Конец выдачи :</th>
+                    <td><input id="close-stop_datetime" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Уровень в начале:</th>
+                    <th>Уровень в начале :</th>
                     <td><input id="close-start_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Уровень в конце:</th>
-                    <td><input id="close-stop_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Уровень в конце :</th>
+                    <td><input id="close-stop_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Объем в начале:</th>
+                    <th>Объем в начале :</th>
                     <td><input id="close-start_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Объем в конце:</th>
-                    <td><input id="close-stop_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Объем в конце :</th>
+                    <td><input id="close-stop_volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Плотность в начале:</th>
+                    <th>Плотность в начале :</th>
                     <td><input id="close-start_density" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Плотность в конце:</th>
-                    <td><input id="close-stop_density" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Плотность в конце :</th>
+                    <td><input id="close-stop_density" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Масса в начале:</th>
+                    <th>Масса в начале :</th>
                     <td><input id="close-start_mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Масса в конце:</th>
-                    <td><input id="close-stop_mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Масса в конце :</th>
+                    <td><input id="close-stop_mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Температура в начале:</th>
+                    <th>Температура в начале :</th>
                     <td><input id="close-start_temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Температура в конце:</th>
-                    <td><input id="close-stop_temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Температура в конце :</th>
+                    <td><input id="close-stop_temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Уровень воды в начале:</th>
+                    <th>Уровень воды в начале :</th>
                     <td><input id="close-start_water_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Уровень воды в конце:</th>
-                    <td><input id="close-stop_water_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Уровень воды в конце :</th>
+                    <td><input id="close-stop_water_level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
                 <tr>
-                    <th>Счетчик в начале:</th>
+                    <th>Счетчик в начале :</th>
                     <td><input id="close-start_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                    <th>Счетчик в конце:</th>
-                    <td><input id="close-stop_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th>Счетчик в конце :</th>
+                    <td><input id="close-stop_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
             </table>
         </form>

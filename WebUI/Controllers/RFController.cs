@@ -6,8 +6,9 @@ using System.Web.Mvc;
 
 namespace WebUI.Controllers
 {
-    public class HomeController : Controller
+    public class RFController : Controller
     {
+        // GET: RF
         public ActionResult Index()
         {
             return View();
