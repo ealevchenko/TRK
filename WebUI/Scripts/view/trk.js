@@ -161,6 +161,54 @@ var cards = {
         }
         return null;
     },
+    //// Получить карточку
+    //getCardOfGun: function (num) {
+    //    var trk_num = 0;
+    //    var side = 0;
+    //    switch (num) {
+    //        case 1: trk_num = 1; side = 0; break;
+    //        case 2: trk_num = 1; side = 1; break;
+    //        case 3: trk_num = 2; side = 0; break;
+    //        case 4: trk_num = 2; side = 1; break;
+    //        case 5: trk_num = 3; side = 0; break;
+    //        case 6: trk_num = 3; side = 1; break;
+    //        case 7: trk_num = 4; side = 0; break;
+    //        case 8: trk_num = 4; side = 1; break;
+    //        case 9: trk_num = 5; side = 0; break;
+    //        case 10: trk_num = 5; side = 1; break;
+    //        case 11: trk_num = 6; side = 0; break;
+    //        case 12: trk_num = 6; side = 1; break;
+    //        case 13:
+    //        case 14:
+    //        case 15:
+    //        case 16: trk_num = 7; side = 0; break;
+    //        case 17:
+    //        case 18:
+    //        case 19:
+    //        case 20: trk_num = 7; side = 1; break;
+    //        case 21:
+    //        case 22:
+    //        case 23:
+    //        case 24: trk_num = 8; side = 0; break;
+    //        case 25:
+    //        case 26:
+    //        case 27:
+    //        case 28: trk_num = 8; side = 1; break;
+    //        case 29: trk_num = 9; side = 0; break;
+    //    }
+    //    // Считаем карту
+    //    if (cards.list && cards.list.length > 0) {
+    //        var card = getObjects(cards.list, 'num_trk', trk_num)
+    //        if (card && card.length > 0) {
+    //            for (ic = 0; ic < card.length; ic++) {
+    //                if (card[ic].side == side) {
+    //                    return card[ic].card;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    return null;
+    //},
     // Получить всю запись с карточкой
     getRFIDCardOfNumSide: function (trk_num, side) {
         // Считаем карту
@@ -259,6 +307,8 @@ var pb_deliver = {
 
         });
         pb_deliver.lab = $(".progress-label");
+
+
     },
     outValume: function (num_gun, valume) {
         // вывести значение
@@ -276,12 +326,10 @@ var pb_deliver = {
             }
         });
     },
-    hide: function (num) {
+    hide: function () {
         pb_deliver.obj.each(function (indx, element) {
             var id = $(this).attr('id');
-            if ('progressbar-gun-' + num == id) {
-                $(this).closest('.progress').fadeOut();
-            }
+            $('div#' + id).hide();
         });
     }
 }
@@ -397,15 +445,81 @@ function viewGuns() {
                 } else {
                     $('#gun-' + gun.num_gun + '-last_out_volume').val('').addClass('error');
                 }
+
+                //gun.state = 2;
+                //gun.volume_to_write = 2000;
+                //gun.current_volume = 150;
+                // Проверим сотояние TRK
+                var id_ofs = openFuelSale.getFuelSaleID(gun.num_trk, gun.side, gun.num_gun);
                 // Определить активную кнопку
-                if (gun.state != null && gun.state == 1) {
-                    $('div#progressbar-gun-' + gun.num_gun).show();
-                    pb_deliver.outValume(gun.num_gun, 10);
+                if (gun.state != null) {
+                    switch (gun.state) {
+                        case 1: //  разрешено выдавать
+                            var card = cards.getCardOfNumSide(gun.num_trk, gun.side);
+                            $('div#progressbar-gun-' + gun.num_gun).hide();
+                            $('button#button-gun-' + gun.num_gun + '-close').hide();
+                            // Отобразим кнопки выдать\закрыть
+                            if (id_ofs != null) {
+                                $('#button-gun-' + gun.num_gun + '-deliver').hide();
+                                $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                            } else {
+                                if (card && gun && card.Active && gun.online && gun.taken) {
+                                    $('button#button-gun-' + gun.num_gun + '-deliver').show();
+                                } else {
+                                    $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                                }
+                            }
+                            break;
+                        case 2: //  Выдача
+                            $('button#button-gun-' + gun.num_gun + '-close').hide();
+                            $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            $('div#progressbar-gun-' + gun.num_gun).show();
+                            if (gun && gun.volume_to_write > 0) {
+                                var curr = 0;
+                                curr = ((gun.current_volume * 100.0) / gun.volume_to_write);
+                                pb_deliver.outValume(gun.num_gun, curr);
+                            }
+                            break;
+                        case 4: //  Выдача стоп
+                            $('button#button-gun-' + gun.num_gun + '-close').hide();
+                            $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            $('div#progressbar-gun-' + gun.num_gun).show();
+                            pb_deliver.outValume(gun.num_gun, 100);
+                            break;
+                        case 128: //  нет ответа
+                            $('div#progressbar-gun-' + gun.num_gun).hide();
+                            // Отобразим кнопки выдать\закрыть
+                            if (id_ofs != null) {
+                                $('#button-gun-' + gun.num_gun + '-deliver').hide();
+                                $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                            } else {
+                                $('button#button-gun-' + gun.num_gun + '-close').hide();
+                                $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            }
+                            break;
+                        default: {
+                            $('div#progressbar-gun-' + gun.num_gun).hide();
+                            // Отобразим кнопки выдать\закрыть
+                            if (id_ofs != null) {
+                                $('#button-gun-' + gun.num_gun + '-deliver').hide();
+                                $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                            } else {
+                                $('button#button-gun-' + gun.num_gun + '-close').hide();
+                                $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            }
+                            break;
+                        }
+
+                    }
+
+
+                    //$('div#progressbar-gun-' + gun.num_gun).show();
+                    //pb_deliver.outValume(gun.num_gun, 10);
                 } else {
                     $('div#progressbar-gun-' + gun.num_gun).hide();
                 }
                 // тест
-                
+
             }
         }
     }
@@ -1927,8 +2041,13 @@ $(function () {
         var id = $(this).attr('data-id');
         confirm_close_fuel.open(id);
     });
+
+    $('.button-deliver').hide();
+    $('.button-close').hide();
+
     // инициализация progresbar
     pb_deliver.init();
+    pb_deliver.hide();
     // Инициализация открытых выдач
     openFuelSale.init();
     // Загрузка библиотек
