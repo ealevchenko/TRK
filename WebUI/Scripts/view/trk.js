@@ -275,6 +275,14 @@ var pb_deliver = {
                 $(this).text(valume + '%');
             }
         });
+    },
+    hide: function (num) {
+        pb_deliver.obj.each(function (indx, element) {
+            var id = $(this).attr('id');
+            if ('progressbar-gun-' + num == id) {
+                $(this).closest('.progress').fadeOut();
+            }
+        });
     }
 }
 // Вывести информацию по считывателям
@@ -390,9 +398,14 @@ function viewGuns() {
                     $('#gun-' + gun.num_gun + '-last_out_volume').val('').addClass('error');
                 }
                 // Определить активную кнопку
-
+                if (gun.state != null && gun.state == 1) {
+                    $('div#progressbar-gun-' + gun.num_gun).show();
+                    pb_deliver.outValume(gun.num_gun, 10);
+                } else {
+                    $('div#progressbar-gun-' + gun.num_gun).hide();
+                }
                 // тест
-                pb_deliver.outValume(gun.num_gun, 10);
+                
             }
         }
     }
@@ -407,13 +420,13 @@ function viewDIORisers() {
 
                 // Counter
                 if (riser.Counter != null) {
-                    $('#ns-' + riser.num + '-Counter').val((riser.Counter/1000000).toFixed(2)).removeClass('error');
+                    $('#ns-' + riser.num + '-Counter').val((riser.Counter / 1000000).toFixed(2)).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-Counter').val('').addClass('error');
                 }
                 // Counter
                 if (riser.Flow != null) {
-                    $('#ns-' + riser.num + '-Flow').val((riser.Flow/1000000).toFixed(2)).removeClass('error');
+                    $('#ns-' + riser.num + '-Flow').val((riser.Flow / 1000000).toFixed(2)).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-Flow').val('').addClass('error');
                 }
@@ -580,7 +593,7 @@ function show() {
             }
         }
     );
-   //  Прочесть теги счетчиков оборотов наливных стояков
+    //  Прочесть теги счетчиков оборотов наливных стояков
     getDIORisersTags(
         function (result_dio) {
             if (result_dio) {
@@ -654,9 +667,9 @@ var confirm_rfid_card = {
 var confirm_df = {
     obj: null,
     form: null,
-    operator_name: 'Оператор тест',
-    smena_num: 0,
-    smena_datetime: new Date(2019, 0, 10, 0, 0, 0, 0),
+    operator_name: null,// 'Оператор тест',
+    smena_num: null,// 0,
+    smena_datetime: null,// new Date(2019, 0, 10, 0, 0, 0, 0),
 
     type: null,  // текущие тип (пистолет-0, стояк-1, керосин-2)
     gun: null,  // текущие теги пистолета
@@ -702,7 +715,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         //alert(id);
-        updateMessageTips("Выдаем ГСМ id="+id);
+        updateMessageTips("Выдаем ГСМ id=" + id);
         openFuelSale.init() // Обновим данные по открытим выдачам
         confirm_df.obj.dialog("close");
     },
@@ -1049,7 +1062,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         if (confirm_df.card) {
@@ -1066,7 +1079,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1085,7 +1098,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из поставки :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (т):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя = Получатель материала в ИП :');
 
                         if (confirm_df.card) {
@@ -1125,7 +1138,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
                         $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1144,7 +1157,7 @@ var confirm_df = {
                         $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
                         $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                         $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
-                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество (кг):');
+                        $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
                         $('tr#sap-stock-recipient').show(); $('tr#sap-stock-recipient').show(); confirm_df.input_sap_stock_recipient.attr('disabled', 'disabled').show(); $('#label-sap-stock-recipient').text('Склад получателя из резервирования :');
                         $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                         $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
@@ -1190,16 +1203,34 @@ var confirm_df = {
                         pos,
                         function (result) {
                             if (result.RSNUM == "") {
-                                OnAJAXErrorOfMessage("Номер резервирования №"+num+", позиции №"+pos+ " - не найдет в САП");
-                            }
-                            confirm_df.input_sap_num.val(result.RSNUM)
-                            //$('input#sap-num').val();
-                            confirm_df.input_sap_ozm.val(result.MATNR);
-                            confirm_df.input_sap_ozm_amount.val(result.BDMNG);
-                            confirm_df.input_sap_factory_recipient.val(result.WERKS)
-                            var depots = catalog_depots.get($.trim(result.UMLGO));
-                            if (depots) {
-                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name)
+                                OnAJAXErrorOfMessage("Номер резервирования №" + num + ", позиции №" + pos + " - не найдет в САП");
+                            } else {
+                                // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
+                                    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
+                                } else {
+                                    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
+                                        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
+                                    } else {
+                                        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999)
+                                        //$('input#sap-num').val();
+                                        confirm_df.input_sap_ozm.val(result.MATNR);
+                                        confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                                        confirm_df.input_sap_factory_recipient.val(result.WERKS)
+                                        $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                                        if (result.RSNUM != "---") {
+                                            var depots = catalog_depots.get($.trim(result.UMLGO));
+                                            if (depots) {
+                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name)
+                                            }
+                                        } else { // TODO:!!!ТЕСТ УБРАТЬ
+                                            confirm_df.input_sap_stock_recipient.val("---");
+                                        }
+
+                                    }
+                                }
                             }
                         }
                     );
@@ -1255,6 +1286,7 @@ var confirm_df = {
                     confirm_df.input_sap_ozm.val(sup.MATNR);
                     confirm_df.input_sap_ozm_amount.val(sup.LFIMG);
                     confirm_df.input_sap_stock_recipient.val(sup.KUNNR)
+                    $('#label-sap-ozm-amount').text('Количество ' + sup.MEINS + ':');
                     // Уточнить добавить WERKS (завод)
                 };
             },
@@ -1331,7 +1363,15 @@ var confirm_df = {
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
-
+        // Определим пользователя и смену
+        getAsyncCurrentUsersActions(
+            function (user) {
+                if (user) {
+                    confirm_df.operator_name = user.UserName;
+                    confirm_df.smena_num = user.SessionID;
+                    confirm_df.smena_datetime = user.TimeStmp;
+                }
+            });
         confirm_df.type = type;
         // Спрячим все поля
         confirm_df.clear();
@@ -1394,10 +1434,10 @@ var confirm_df = {
                         [
                             { value: 1, text: 'По резервированию (керосин)' },
                             { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                            { value: 3, text: 'По исходящей поставке'},
+                            { value: 3, text: 'По исходящей поставке' },
                             { value: 4, text: 'По требованию (самовывоз)', disabled: true },
                             { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                            { value: 6, text: 'Заправка в цистерну топливозаправщика'},
+                            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
                         ],
                         null,
                         -1,
@@ -1525,8 +1565,10 @@ var confirm_df = {
             TRANSP_FAKT: confirm_df.input_sap_num_ts.val(),
             N_DEB: variant == 5 || variant == 6 ? confirm_df.card.Debitor : null,
             N_TREB: confirm_df.input_sap_num.val(),
-            LGORT: variant == 3 ? confirm_df.getPosSupply(num_pos).LGORT : null, // до выяснения
-            WERKS: variant == 3 ? confirm_df.getPosSupply(num_pos).WERKS : null, // до выяснения
+            //LGORT: variant == 3 ? confirm_df.getPosSupply(num_pos).LGORT : null, // до выяснения
+            //WERKS: variant == 3 ? confirm_df.getPosSupply(num_pos).WERKS : null, // до выяснения
+            LGORT: variant == 4 ? confirm_df.select_sap_stock_recipient.val() : null,
+            WERKS: variant == 4 ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null
         };
     },
@@ -1549,7 +1591,7 @@ var confirm_df = {
                 break;
             case 1:
                 num = confirm_df.risers != null ? confirm_df.risers.num : null;
-                trk_num = (9+Number(num));
+                trk_num = (9 + Number(num));
                 fuel_type = confirm_df.risers != null ? confirm_df.risers.type_fuel : null;
                 counter = 0; // Добавить счетчик
                 break;
@@ -1690,7 +1732,7 @@ var confirm_close_fuel = {
                                     // Инициализация открытых выдач
                                     openFuelSale.init();
                                     confirm_close_fuel.obj.dialog("close");
-                                    
+
                                 }
                                 updateMessageTips("Запись FuelSales обновлена результат = " + id);
                                 //alert("count update FuelSales =" + id);
@@ -1885,7 +1927,7 @@ $(function () {
         var id = $(this).attr('data-id');
         confirm_close_fuel.open(id);
     });
-
+    // инициализация progresbar
     pb_deliver.init();
     // Инициализация открытых выдач
     openFuelSale.init();

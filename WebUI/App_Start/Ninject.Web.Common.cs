@@ -79,6 +79,7 @@ namespace WebUI.App_Start
             kernel.Bind<ICat_Werks>().To<EFCat_Werks>();
             kernel.Bind<EFAZS.Abstract.IRepository<SAP_Buffer>>().To<EFSAP_Buffer>();
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.FuelSale>>().To<EFAZS.Concrete.EFFuelSale>();
+            kernel.Bind<IUsersActions>().To<EFUsersActions>();
         }
     }
 }

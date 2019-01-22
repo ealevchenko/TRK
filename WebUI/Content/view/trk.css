@@ -277,6 +277,12 @@ body div[aria-describedby="confirm-rfid-card"] {
             font-style: italic;
         }
 
+        .table-confirm-rfid-card td textarea {
+            color: blue;
+            width: 95%;
+            font-style: italic;
+        }
+
 /*Окно выдачи топлива*/
 
 body div[aria-describedby="confirm-deliver-fuel"] {

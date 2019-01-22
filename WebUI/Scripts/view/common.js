@@ -883,6 +883,30 @@ var putAsyncFuelSales = function (fuel_sale, callback) {
         },
     });
 }
+// Веруть последний UsersActions
+var getAsyncCurrentUsersActions = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/user/curent',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {

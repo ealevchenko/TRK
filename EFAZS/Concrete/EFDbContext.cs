@@ -22,6 +22,7 @@
         public virtual DbSet<SAP_Buffer> SAP_Buffer { get; set; }
         public virtual DbSet<Cat_Debitor> Cat_Debitor { get; set; }
         public virtual DbSet<Cat_OZM_GSM> Cat_OZM_GSM { get; set; }
+        public virtual DbSet<UsersActions> UsersActions { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

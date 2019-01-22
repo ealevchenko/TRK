@@ -16,11 +16,13 @@ namespace WebUI.Controllers.api
     {
         protected IRepository<SAP_Buffer> ef_sap;
         protected IRepository<FuelSale> ef_fs;
+        protected IUsersActions ef_ua;
 
-        public AZSController(IRepository<SAP_Buffer> sap, IRepository<FuelSale> fs)
+        public AZSController(IRepository<SAP_Buffer> sap, IRepository<FuelSale> fs, IUsersActions ua)
         {
             this.ef_sap = sap;
             this.ef_fs = fs;
+            this.ef_ua = ua;
         }
 
         // GET: api/azs/sap_buffer/id/1
@@ -208,6 +210,27 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:PutFuelSale(id={0}, value={1})", id, value).SaveError(e);
                 return -1;
+            }
+        }
+
+        // GET: api/azs/user/curent
+        [Route("user/curent")]
+        [ResponseType(typeof(UsersActions))]
+        public IHttpActionResult GetCurrentUsersActions()
+        {
+            try
+            {
+                UsersActions current = this.ef_ua.GetCurrentUsersActions();
+                if (current == null)
+                {
+                    return NotFound();
+                }
+                return Ok(current);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetCurrentUsersActions()").SaveError(e);
+                return NotFound();
             }
         }
 

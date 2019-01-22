@@ -22,6 +22,7 @@ namespace ClientSAPTRK
         public string ENMNG { get; set; }
         public string LGOBE { get; set; }
         public string MEINS { get; set; }
+        public string BWART { get; set; }
     }
 
     public class Supply
@@ -35,6 +36,7 @@ namespace ClientSAPTRK
         public string LFIMG { get; set; }
         public string LGOBE { get; set; }
         public string MEINS { get; set; }
+        public string BWART { get; set; }
     }
 
     public class ClientSAP
@@ -149,6 +151,7 @@ namespace ClientSAPTRK
                     ENMNG = (string)element.Element("ENMNG"),
                     LGOBE = (string)element.Element("LGOBE"),
                     MEINS = (string)element.Element("MEINS"),
+                    BWART = (string)element.Element("BWART"),
                 };
 
                 return reserv;
@@ -196,7 +199,7 @@ namespace ClientSAPTRK
                         LFIMG = (string)element.Element("LFIMG"),
                         LGOBE = (string)element.Element("LGOBE"),
                         MEINS = (string)element.Element("MEINS"),
-
+                        BWART = (string)element.Element("BWART"),
                     };
                     list_supply.Add(sypply);
                 }
