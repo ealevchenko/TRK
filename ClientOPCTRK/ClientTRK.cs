@@ -1230,15 +1230,15 @@ namespace ClientOPCTRK
                 //
                 Opc.Da.Subscription group;
                 Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-                groupState.Name = "volume";
+                groupState.Name = "status";
                 groupState.Active = true;
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
                 Opc.Da.Item[] items = new Opc.Da.Item[1];
 
-                items[1] = new Opc.Da.Item();
-                items[1].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".state";
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".state";
                 items = group.AddItems(items);
 
                 ItemValueResult[] res = group.Read(items);
