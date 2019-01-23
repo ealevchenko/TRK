@@ -14,13 +14,12 @@
     <link rel="stylesheet" type="text/css" href="~/Content/view/trk.css">
     <script>
         var type_test = '@System.Configuration.ConfigurationManager.AppSettings["Type_test"]';
-    </script>
-    <script>
         var issue_test = '@System.Configuration.ConfigurationManager.AppSettings["Issue_test"]';
-    </script>
-    <script>
         var transferSAP_ban = '@System.Configuration.ConfigurationManager.AppSettings["TransferSAP_ban"]';
+        var controlTRK_ban = '@System.Configuration.ConfigurationManager.AppSettings["ControlTRK_ban"]';
+
     </script>
+
 
     <script type="text/javascript" src="~/Scripts/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery-ui.js"></script>
@@ -1382,9 +1381,9 @@
                                 <legend> (ДТ) </legend>
                                 <table class="table-ns">
                                     @*<tr>
-                                    <th class="button-online" data-num="1">Связь</th>
-                                    <td id="ns-1-online"></td>
-                                </tr>*@
+                                            <th class="button-online" data-num="1">Связь</th>
+                                            <td id="ns-1-online"></td>
+                                        </tr>*@
                                     <tr>
                                         <th>Заземление</th>
                                         <td id="ns-1-inp_kvq2"></td>
@@ -1434,9 +1433,9 @@
                                 <legend> (Керосин) </legend>
                                 <table class="table-ns">
                                     @*<tr>
-                                    <th class="button-online" data-num="2">Связь</th>
-                                    <td id="ns-2-online"></td>
-                                </tr>*@
+                                            <th class="button-online" data-num="2">Связь</th>
+                                            <td id="ns-2-online"></td>
+                                        </tr>*@
                                     <tr>
                                         <th>Заземление</th>
                                         <td id="ns-2-inp_kvq2"></td>
@@ -1486,9 +1485,9 @@
                                 <legend> (А92) </legend>
                                 <table class="table-ns">
                                     @*<tr>
-                                    <th class="button-online" data-num="3">Связь</th>
-                                    <td id="ns-3-online"></td>
-                                </tr>*@
+                                            <th class="button-online" data-num="3">Связь</th>
+                                            <td id="ns-3-online"></td>
+                                        </tr>*@
                                     <tr>
                                         <th>Заземление</th>
                                         <td id="ns-3-inp_kvq2"></td>

@@ -463,7 +463,8 @@ function viewGuns() {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
                             } else {
-                                if (card && gun && card.Active && gun.online && gun.taken) {
+                                //if (card && gun && card.Active && gun.online && gun.taken) {
+                                if (gun && gun.online && gun.taken) {
                                     $('button#button-gun-' + gun.num_gun + '-deliver').show();
                                 } else {
                                     $('button#button-gun-' + gun.num_gun + '-deliver').hide();
@@ -511,15 +512,12 @@ function viewGuns() {
                         }
 
                     }
-
-
-                    //$('div#progressbar-gun-' + gun.num_gun).show();
-                    //pb_deliver.outValume(gun.num_gun, 10);
                 } else {
+                    // Статус не определен
+                    $('button#button-gun-' + gun.num_gun + '-close').hide();
+                    $('button#button-gun-' + gun.num_gun + '-deliver').hide();
                     $('div#progressbar-gun-' + gun.num_gun).hide();
                 }
-                // тест
-
             }
         }
     }
@@ -828,8 +826,23 @@ var confirm_df = {
 
     // старт выдачи
     issuance_start: function (id) {
-        //alert(id);
-        updateMessageTips("Выдаем ГСМ id=" + id);
+        if (bcontrolTRK_ban == false) {
+            updateMessageTips("Производим выдачу на реальную колонку, id=" + id);
+            var gun_start = {
+                id: id,
+                num: confirm_df.gun != null ? confirm_df.gun.num_gun : 0,
+                passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? true : false,
+                volume: confirm_df.input_deliver_dose_fuel.val()
+            }
+            postAsyncGunStart(
+                gun_start,
+                function (status) {
+                    updateMessageTips("Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =" + status + ".");
+                });
+
+        } else {
+            updateMessageTips("Выдача на колонке заблокированна, id=" + id);
+        }
         openFuelSale.init() // Обновим данные по открытим выдачам
         confirm_df.obj.dialog("close");
     },
@@ -1008,21 +1021,19 @@ var confirm_df = {
         $(".ui-state-error").removeClass("ui-state-error");
         // Проверка RFID карты на активность
 
-        if (confirm_df.card == null) {
-            confirm_df.updateTips("Нет RFID-карты - выдача запрещена!");
-            return false;
-        }
-
-        if (confirm_df.card && !confirm_df.card.Active) {
-            confirm_df.updateTips("RFID-карта не активна - выдача запрещена!");
-            return false;
-        }
-
         if (ntype_test == 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
-
-
         if (!confirm_df.checkbox_deliver_Passage.prop('checked')) {
+
+            if (confirm_df.card == null) {
+                confirm_df.updateTips("Нет RFID-карты - выдача запрещена!");
+                return false;
+            }
+
+            if (confirm_df.card && !confirm_df.card.Active) {
+                confirm_df.updateTips("RFID-карта не активна - выдача запрещена!");
+                return false;
+            }
             // режим не пролив
             valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
 

@@ -16,6 +16,13 @@ namespace WebUI.Controllers.api
     {
         ClientTRK client = new ClientTRK();
 
+        public class GunStart {
+            public int id { get; set;}
+            public int num { get; set; }
+            public bool passage { get; set; }
+            public uint volume { get; set; }
+        }
+
         public TRKController() {
 
         }
@@ -121,6 +128,23 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:GetReadTagOPCOfRisers()").SaveError(e);
                 return NotFound();
+            }
+        }
+
+        // POST api/trk/gun/start
+        [HttpPost]
+        [Route("gun/start")]
+        public int PostGunStart([FromBody]GunStart value)
+        {
+            try
+            {
+                int res = client.IssueFuelTRK(value.num, value.passage, value.volume * 100);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostGunStart(value={0})", value).SaveError(e);
+                return -1;
             }
         }
     }

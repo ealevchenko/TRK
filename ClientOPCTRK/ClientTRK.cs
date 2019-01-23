@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MessageLog;
+using Opc;
 
 namespace ClientOPCTRK
 {
@@ -44,12 +45,6 @@ namespace ClientOPCTRK
         public bool? write_price { get; set; }
         public int type_fuel { get; set; }
     }
-
-    //public class TRK
-    //{
-    //    public RFID[] cards { get; set; }
-    //    public Gun[] guns { get; set; }
-    //}
 
     public class Cards : azsCards
     {
@@ -93,7 +88,8 @@ namespace ClientOPCTRK
         public ulong? TimerOn { get; set; } // UInt16[2]
     }
 
-    public class Risers {
+    public class Risers
+    {
         public int num { get; set; }
         public int type_fuel { get; set; }
         public bool? door { get; set; }
@@ -117,6 +113,42 @@ namespace ClientOPCTRK
         {
             url = new Opc.URL("opcda://localhost/Kepware.KEPServerEX.V6");
         }
+
+        private void getTRKOfGun(int gun, out int trk_num, out int side) {
+            switch (gun) {
+                case 1: trk_num = 1; side = 0; break;
+                case 2: trk_num = 1; side = 5; break;
+                case 3: trk_num = 2; side = 0; break;
+                case 4: trk_num = 2; side = 5; break;
+                case 5: trk_num = 3; side = 0; break;
+                case 6: trk_num = 3; side = 5; break;
+                case 7: trk_num = 4; side = 0; break;
+                case 8: trk_num = 4; side = 5; break;
+                case 9: trk_num = 5; side = 0; break;
+                case 10: trk_num = 5; side = 5; break;
+                case 11: trk_num = 6; side = 0; break;
+                case 12: trk_num = 6; side = 5; break;
+                case 13: trk_num = 7; side = 0; break;
+                case 14: trk_num = 7; side = 1; break;
+                case 15: trk_num = 7; side = 2; break;
+                case 16: trk_num = 7; side = 3; break;
+                case 17: trk_num = 7; side = 5; break;
+                case 18: trk_num = 7; side = 6; break;
+                case 19: trk_num = 7; side = 7; break;
+                case 20: trk_num = 7; side = 8; break;
+                case 21: trk_num = 8; side = 0; break;
+                case 22: trk_num = 8; side = 1; break;
+                case 23: trk_num = 8; side = 2; break;
+                case 24: trk_num = 8; side = 3; break;
+                case 25: trk_num = 8; side = 5; break;
+                case 26: trk_num = 8; side = 6; break;
+                case 27: trk_num = 8; side = 7; break;
+                case 28: trk_num = 8; side = 8; break;
+                case 29: trk_num = 9; side = 0; break;
+                default:trk_num = 0; side = 0; break;
+            }
+        }
+
         /// <summary>
         /// Добавить строки тегов пистолетов
         /// </summary>
@@ -236,7 +268,8 @@ namespace ClientOPCTRK
         /// <param name="items"></param>
         /// <param name="i"></param>
         /// <param name="num"></param>
-        public void AddDIORisers(ref Opc.Da.Item[] items, ref int i, int num) {
+        public void AddDIORisers(ref Opc.Da.Item[] items, ref int i, int num)
+        {
             try
             {
                 items[i] = new Opc.Da.Item();
@@ -287,16 +320,17 @@ namespace ClientOPCTRK
         /// <param name="items"></param>
         /// <param name="i"></param>
         /// <param name="num"></param>
-        public void AddRisers(ref Opc.Da.Item[] items, ref int i, int num) {
+        public void AddRisers(ref Opc.Da.Item[] items, ref int i, int num)
+        {
             try
             {
-                
+
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_Door"; // Inp_SHBUS_Door 
-                i++;             
+                i++;
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "AZS_SHBUS.SHBUS.Inp_SHBUS_Power"; // Inp_SHBUS_Power 
-                i++;     
+                i++;
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + num; //Флаг(01) управления контактором включения слива 1
                 i++;
@@ -406,7 +440,9 @@ namespace ClientOPCTRK
                                             Name = departs != null && departs.name != null ? departs.name : "?",
                                         };
                                         rfid.card = cards;
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         String.Format("При code1={0}, code2={1} id_card - не определен.", code1, code2).SaveInformation();
                                     }
                                 }
@@ -481,9 +517,9 @@ namespace ClientOPCTRK
                     case 29:
                         type_fuel = 107000024; // ДТ
                         break;
-                        //case 4:
-                        //    type_fuel = 107000027; // Керосин
-                        //    break;
+                    //case 4:
+                    //    type_fuel = 107000027; // Керосин
+                    //    break;
                 }
 
                 Gun gun = new Gun()
@@ -528,7 +564,7 @@ namespace ClientOPCTRK
                 UInt16[] value = val != null ? val as UInt16[] : null;
                 ulong? Result = 0;
                 if (value == null) return null;
-                int count = value.Count()-1;
+                int count = value.Count() - 1;
                 ulong ind = 65536;
                 Result += value[count];
                 count--;
@@ -558,7 +594,8 @@ namespace ClientOPCTRK
             try
             {
                 int type_fuel = 0;
-                switch (num) {
+                switch (num)
+                {
                     case 1: type_fuel = 107000024; break;
                     case 2: type_fuel = 107000027; break;
                     case 3: type_fuel = 107000022; break;
@@ -569,17 +606,17 @@ namespace ClientOPCTRK
                     num = num,
                     type_fuel = type_fuel,
                     Counter = ArrUInt16ToULong(list[start].Value),
-                    CounterResetable = ArrUInt16ToULong(list[start+1].Value),
-                    CountOn = ArrUInt16ToULong(list[start+2].Value),
+                    CounterResetable = ArrUInt16ToULong(list[start + 1].Value),
+                    CountOn = ArrUInt16ToULong(list[start + 2].Value),
                     Error = list[start + 3].Value != null ? list[start + 3].Value as UInt16? : null,
-                    Flow = ArrUInt16ToULong(list[start+4].Value),
+                    Flow = ArrUInt16ToULong(list[start + 4].Value),
                     Flow2 = list[start + 5].Value != null ? list[start + 5].Value as float? : null,
                     Freq = list[start + 6].Value != null ? list[start + 6].Value as UInt16? : null,
                     PiontsCount = list[start + 7].Value != null ? list[start + 7].Value as UInt16? : null,
                     Status = list[start + 8].Value != null ? list[start + 8].Value as UInt16? : null,
                     Temp = list[start + 9].Value != null ? list[start + 9].Value as float? : null,
-                    TimerLiveOn = ArrUInt16ToULong(list[start+10].Value),
-                    TimerOn = ArrUInt16ToULong(list[start+11].Value),
+                    TimerLiveOn = ArrUInt16ToULong(list[start + 10].Value),
+                    TimerOn = ArrUInt16ToULong(list[start + 11].Value),
                 };
                 return risers;
 
@@ -926,7 +963,7 @@ namespace ClientOPCTRK
             }
         }
         /// <summary>
-        /// Прочесть теги наливных стояков
+        /// Прочесть теги счетчиков наливных стояков
         /// </summary>
         /// <returns></returns>
         public List<DIORisers> ReadTagOPCOfDIORisers()
@@ -948,7 +985,7 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[3*12];
+                Opc.Da.Item[] items = new Opc.Da.Item[3 * 12];
                 int i = 0;
                 AddDIORisers(ref items, ref i, 1);
                 AddDIORisers(ref items, ref i, 2);
@@ -973,7 +1010,10 @@ namespace ClientOPCTRK
                 return null;
             }
         }
-
+        /// <summary>
+        /// Прочесть теги (дискретные) наливных стояков
+        /// </summary>
+        /// <returns></returns>
         public List<Risers> ReadTagOPCOfRisers()
         {
             try
@@ -993,7 +1033,7 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[3*10];
+                Opc.Da.Item[] items = new Opc.Da.Item[3 * 10];
                 int i = 0;
                 AddRisers(ref items, ref i, 1);
                 AddRisers(ref items, ref i, 2);
@@ -1016,6 +1056,272 @@ namespace ClientOPCTRK
             {
                 String.Format("Ошибка выполнения метода ReadTagOPCOfRisers()").SaveError(e);
                 return null;
+            }
+        }
+        /// <summary>
+        /// Записать значение passage в пистолет
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <param name="value"></param>
+        public bool WriteTagsGunPassage(int num_gun, bool value)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+                
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "passage";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".passage";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (bool)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsPassage(num_gun={0}, value={1})", num_gun, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Начать выдачу
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsGunStart(int num_gun, bool value)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "start";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".start";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (bool)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsGunStart(num_gun={0}, value={1})", num_gun, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Задать дозу
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsGunVolume(int num_gun, uint value)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "volume";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".volume_to_write";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (uint)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsGunVolume(num_gun={0}, value={1})", num_gun, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Прочесть сотояние колонки пистолета
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <returns></returns>
+        public int? ReadTagsGunStatus(int num_gun)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+                
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "volume";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[1] = new Opc.Da.Item();
+                items[1].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".state";
+                items = group.AddItems(items);
+
+                ItemValueResult[] res = group.Read(items);
+                int? state = res[0].Value != null ? res[0].Value as int? : null;
+                return state;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ReadTagsGunStatus(num_gun={0})", num_gun).SaveError(e);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Произвести выдачу по колонке
+        /// </summary>
+        /// <param name="num_trk"></param>
+        /// <param name="num_gun"></param>
+        /// <param name="passage"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public int IssueFuelTRK(int num_gun, bool passage, uint value)
+        {
+            try
+            {
+                int? status_trk = ReadTagsGunStatus(num_gun);
+                if (status_trk == 1)
+                {
+                    // запишем бит пролива
+                    bool res_pas = WriteTagsGunPassage(num_gun, passage);
+                    if (res_pas)
+                    {
+                        // Запишем дозу
+                        bool res_val = WriteTagsGunVolume(num_gun, value);
+                        if (res_val)
+                        {
+                            // запустим колонку
+                            bool res_start = WriteTagsGunStart(num_gun, true);
+                            if (res_start)
+                            {
+                                int? res_status_trk = ReadTagsGunStatus(num_gun);
+                                if (res_status_trk >= 0)
+                                {
+                                    return (int)res_status_trk;
+                                }
+                                else
+                                {
+                                    // Ошибка чтения состояния колонки
+                                    String.Format("Ошибка -6. Пистолет {0} - ошибка чтения сотояния колонки после команды 'старт', сотояние = {1})", num_gun, res_status_trk).SaveWarning();
+                                    return -6;
+                                }
+                            }
+                            else
+                            {
+                                // Ошибка записи бита старт
+                                String.Format("Ошибка -5. Пистолет {0} - ошибка записи бита 'старт')", num_gun).SaveWarning();
+                                return -5;
+                            }
+                        }
+                        else
+                        {
+                            // Ошибка записи дозы
+                            String.Format("Ошибка -4. Пистолет {0} - ошибка записи дозы = {1})", num_gun, value).SaveWarning();
+                            return -4;
+                        }
+                    }
+                    else
+                    {
+                        // Ошибка записи бита пролива
+                        String.Format("Ошибка -3. Пистолет {0} - ошибка записи бита 'пролив' = {1})", num_gun, passage).SaveWarning();
+                        return -3;
+                    }
+                }
+                else
+                {
+                    // Колонка не готова 
+                    String.Format("Ошибка -2. Пистолет {0} - не готова, статус колонки = {1})", num_gun, status_trk).SaveWarning();
+                    return -2;
+                }
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода IssueFuelTRK(num_gun={0}, passage={1}, value={2})", num_gun, passage, value).SaveError(e);
+                return -1;
             }
         }
     }

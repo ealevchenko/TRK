@@ -232,5 +232,43 @@ namespace test
 
         }
 
+        public void Test_ClientTRK_WriteTagsGun()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                bool res_p =client.WriteTagsGunPassage(11,true);
+                Console.WriteLine("set Passage - {0}", res_p);
+                bool res_v =client.WriteTagsGunVolume(11,2*100);
+                Console.WriteLine("set Volume - {0}", res_v);
+                bool res_s =client.WriteTagsGunStart(11,true);
+                Console.WriteLine("set Start - {0}", res_s);
+                int? res_stat = client.ReadTagsGunStatus(11);
+                Console.WriteLine("Status TRK - {0}", res_stat);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        public void Test_ClientTRK_IssueFuelTRK()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                int res = client.IssueFuelTRK(11, true, 2*100);
+                Console.WriteLine("res - {0}", res);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

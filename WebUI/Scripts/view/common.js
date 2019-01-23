@@ -5,6 +5,9 @@ var bIssue_test = $.parseJSON(issue_test);
 // TODO:!!!ТЕСТ УБРАТЬ
 var btransferSAP_ban = $.parseJSON(transferSAP_ban);
 // TODO:!!!ТЕСТ УБРАТЬ
+var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
+
+// TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
         {
@@ -899,6 +902,32 @@ var getAsyncCurrentUsersActions = function (callback) {
             }
         },
         error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+//Включить колонку
+var postAsyncGunStart = function (gun_start, callback) {
+    $.ajax({
+        url: '/api/trk/gun/start',
+        type: 'POST',
+        data: JSON.stringify(gun_start),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {
