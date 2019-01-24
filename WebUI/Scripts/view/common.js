@@ -912,7 +912,7 @@ var getAsyncCurrentUsersActions = function (callback) {
     });
 }
 
-//Включить колонку
+// Включить колонку
 var postAsyncGunStart = function (gun_start, callback) {
     $.ajax({
         url: '/api/trk/gun/start',
@@ -937,6 +937,32 @@ var postAsyncGunStart = function (gun_start, callback) {
         },
     });
 }
+// Сбросить настройки колонки
+var postAsyncGunClear = function (gun_clear, callback) {
+    $.ajax({
+        url: '/api/trk/gun/clear',
+        type: 'POST',
+        data: JSON.stringify(gun_clear),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек

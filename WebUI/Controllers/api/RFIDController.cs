@@ -18,6 +18,11 @@ namespace WebUI.Controllers.api
     {
         protected IOPC_RFID ef_rfid;
 
+        //public class RFIDClear
+        //{
+        //    public int num { get; set; }
+        //}
+
         public RFIDController(IOPC_RFID rfid)
         {
             this.ef_rfid = rfid;
@@ -97,6 +102,23 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
+
+        // POST api/rfid/db/clear
+        //[HttpPost]
+        //[Route("db/clear")]
+        //public int PostRFIDClearOfDB([FromBody]GunClear value)
+        //{
+        //    try
+        //    {
+        //        //int res = client.ResetTRK(value.num);
+        //        return res;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        String.Format("Ошибка выполнения метода API:PostGunClear(value={0})", value).SaveError(e);
+        //        return -1;
+        //    }
+        //}
 
     }
 }

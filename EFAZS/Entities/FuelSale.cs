@@ -94,6 +94,9 @@ namespace EFAZS.Entities
 
         public int? id_sap { get; set; }
 
+        public DateTime? sending { get; set; }
+
         public virtual SAP_Buffer SAP_Buffer { get; set; }
+
     }
 }

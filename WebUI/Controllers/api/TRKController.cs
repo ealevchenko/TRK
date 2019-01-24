@@ -23,6 +23,12 @@ namespace WebUI.Controllers.api
             public uint volume { get; set; }
         }
 
+        public class GunClear {
+            public int id { get; set;}
+            public int num { get; set; }
+        }
+
+
         public TRKController() {
 
         }
@@ -147,5 +153,23 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
+
+        // POST api/trk/gun/clear
+        [HttpPost]
+        [Route("gun/clear")]
+        public int PostGunClear([FromBody]GunClear value)
+        {
+            try
+            {
+                int res = client.ResetTRK(value.num);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostGunClear(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
     }
 }

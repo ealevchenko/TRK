@@ -1286,35 +1286,35 @@ namespace ClientOPCTRK
                                 else
                                 {
                                     // Ошибка чтения состояния колонки
-                                    String.Format("Ошибка -6. Пистолет {0} - ошибка чтения сотояния колонки после команды 'старт', сотояние = {1})", num_gun, res_status_trk).SaveWarning();
+                                    String.Format("Ошибка -6. Пистолет {0} - ошибка чтения сотояния колонки после команды 'старт', сотояние = {1}", num_gun, res_status_trk).SaveWarning();
                                     return -6;
                                 }
                             }
                             else
                             {
                                 // Ошибка записи бита старт
-                                String.Format("Ошибка -5. Пистолет {0} - ошибка записи бита 'старт')", num_gun).SaveWarning();
+                                String.Format("Ошибка -5. Пистолет {0} - ошибка записи бита 'старт'", num_gun).SaveWarning();
                                 return -5;
                             }
                         }
                         else
                         {
                             // Ошибка записи дозы
-                            String.Format("Ошибка -4. Пистолет {0} - ошибка записи дозы = {1})", num_gun, value).SaveWarning();
+                            String.Format("Ошибка -4. Пистолет {0} - ошибка записи дозы = {1}", num_gun, value).SaveWarning();
                             return -4;
                         }
                     }
                     else
                     {
                         // Ошибка записи бита пролива
-                        String.Format("Ошибка -3. Пистолет {0} - ошибка записи бита 'пролив' = {1})", num_gun, passage).SaveWarning();
+                        String.Format("Ошибка -3. Пистолет {0} - ошибка записи бита 'пролив' = {1}", num_gun, passage).SaveWarning();
                         return -3;
                     }
                 }
                 else
                 {
                     // Колонка не готова 
-                    String.Format("Ошибка -2. Пистолет {0} - не готова, статус колонки = {1})", num_gun, status_trk).SaveWarning();
+                    String.Format("Ошибка -2. Пистолет {0} - не готова, статус колонки = {1}", num_gun, status_trk).SaveWarning();
                     return -2;
                 }
             }
@@ -1324,5 +1324,67 @@ namespace ClientOPCTRK
                 return -1;
             }
         }
+        /// <summary>
+        /// Произвести сброс по колонке
+        /// </summary>
+        /// <param name="num_gun"></param>
+        /// <returns></returns>
+        public int ResetTRK(int num_gun)
+        {
+            try
+            {
+                int? status_trk = ReadTagsGunStatus(num_gun);
+                if (status_trk == 1)
+                {
+                    // запишем бит пролива
+                    bool res_pas = WriteTagsGunPassage(num_gun, false);
+                    if (res_pas)
+                    {
+                        // Запишем дозу
+                        bool res_val = WriteTagsGunVolume(num_gun, 0);
+                        if (res_val)
+                        {
+
+                            int? res_status_trk = ReadTagsGunStatus(num_gun);
+                            if (res_status_trk >= 0)
+                            {
+                                return (int)res_status_trk;
+                            }
+                            else
+                            {
+                                // Ошибка чтения состояния колонки
+                                String.Format("Ошибка -7. Пистолет {0} - ошибка чтения сотояния колонки после команды 'Очистить'", num_gun, res_status_trk).SaveWarning();
+                                return -6;
+                            }
+
+                        }
+                        else
+                        {
+                            // Ошибка записи дозы
+                            String.Format("Ошибка -4. Пистолет {0} - ошибка сброса дозы", num_gun).SaveWarning();
+                            return -4;
+                        }
+                    }
+                    else
+                    {
+                        // Ошибка записи бита пролива
+                        String.Format("Ошибка -3. Пистолет {0} - ошибка сброса бита 'пролив'", num_gun).SaveWarning();
+                        return -3;
+                    }
+                }
+                else
+                {
+                    // Колонка не готова 
+                    String.Format("Ошибка -2. Пистолет {0} - не готова, статус колонки = {1}", num_gun, status_trk).SaveWarning();
+                    return -2;
+                }
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ResetTRK(num_gun={0})", num_gun).SaveError(e);
+                return -1;
+            }
+        }
+
     }
 }
