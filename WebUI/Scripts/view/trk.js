@@ -706,14 +706,16 @@ function show() {
         }
     );
     //  Прочесть теги счетчиков оборотов наливных стояков
-    getDIORisersTags(
-        function (result_dio) {
-            if (result_dio) {
-                risers.setDIORisers(result_dio)
-                viewDIORisers();
+    if (bpollDIO == true) {
+        getDIORisersTags(
+            function (result_dio) {
+                if (result_dio) {
+                    risers.setDIORisers(result_dio)
+                    viewDIORisers();
+                }
             }
-        }
-    );
+        );
+    }
     // Прочесть теги наливных стояков
     getRisersTags(
         function (result_risers) {
@@ -1761,7 +1763,8 @@ var confirm_df = {
             stop_water_level: null,
             stop_counter: null,
             close: null,
-            id_sap: id_sap
+            id_sap: id_sap,
+            sending: null
         };
     }
 

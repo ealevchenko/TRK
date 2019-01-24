@@ -23,6 +23,23 @@ legend {
     border-bottom: 1px solid #e5e5e5;
 }
 
+.ui-progressbar {
+    position: relative;
+}
+
+.ui-progressbar-value {
+    background-color:#b6ff00;
+}
+
+.progress-label {
+    position: absolute;
+    left: 40%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+
 .overflow {
     height: 200px;
 }
@@ -238,14 +255,16 @@ div.ns {
 .button-deliver, .button-risers, .button-kerosene {
     margin: 3px;
     height: 20px;
-    font-size: 10px;
+    font-size: 11px;
+    font-weight:bold;
     background-color: aquamarine;
 }
 
 .button-close {
     margin: 3px;
     height: 20px;
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: bold;
     background-color: khaki;
 }
 
