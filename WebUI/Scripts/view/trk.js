@@ -8,6 +8,8 @@ function replaceWith(html) {
     return StyledError;
 };
 
+
+
 $(document).keypress(
     function (event) {
 
@@ -828,7 +830,9 @@ var confirm_df = {
 
     // старт выдачи
     issuance_start: function (id) {
+        log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id);
         if (bcontrolTRK_ban == false) {
+
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type == 0) {
                 updateMessageTips("Производим выдачу на реальную колонку, id=" + id);
@@ -1965,6 +1969,9 @@ var confirm_close_fuel = {
                             if (fs.passage=="B") {
                                 // Если не пролив, разица посчетчикам
                                 fs.volume = fs.stop_counter - fs.start_counter;
+                                if (fs.volume > 0) {
+                                    fs.volume = fs.volume / 100.0;
+                                }
                             }
                             
                             // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
@@ -2016,6 +2023,8 @@ var confirm_close_fuel = {
 
 $(function () {
 
+    
+    log.info('Старт проект');
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');

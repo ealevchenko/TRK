@@ -9,4 +9,6 @@
 /// <reference path="view/common.js" />
 /// <reference path="view/trk.js" />
 /// <reference path="jquery-1.10.2.js" />
+/// <reference path="log4javascript_uncompressed.js" />
+/// <reference path="log4javascript.js" />
 

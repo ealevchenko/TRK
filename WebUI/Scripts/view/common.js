@@ -1,13 +1,19 @@
-﻿// TODO:!!!ТЕСТ УБРАТЬ
+﻿var log = log4javascript.getDefaultLogger();
+// TODO:!!!ТЕСТ УБРАТЬ
 var ntype_test = Number(type_test);
+log.info('Тип теста - ', ntype_test);
 // TODO:!!!ТЕСТ УБРАТЬ
 var bIssue_test = $.parseJSON(issue_test);
+log.info('Тестовый расчет массы и объема - ', bIssue_test);
 // TODO:!!!ТЕСТ УБРАТЬ
 var btransferSAP_ban = $.parseJSON(transferSAP_ban);
+log.info('Заблокировать передачу в САП - ', btransferSAP_ban);
 // TODO:!!!ТЕСТ УБРАТЬ
 var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
+log.info('Заблокировать выдачу на реальную колонку - ', bcontrolTRK_ban);
 // TODO:!!!ТЕСТ УБРАТЬ
 var bpollDIO = $.parseJSON(pollDIO);
+log.info('Опрос ДИО - ', bpollDIO);
 // TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
@@ -58,7 +64,7 @@ var guns_out = [
     { "num_trk": 1, "num_gun": 2, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": null, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 2, "num_gun": 3, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 2, "num_gun": 4, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
-    { "num_trk": 3, "num_gun": 5, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 2, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 3, "num_gun": 5, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 3, "num_gun": 6, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 2, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 4, "num_gun": 7, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 4, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 4, "num_gun": 8, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 4, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
