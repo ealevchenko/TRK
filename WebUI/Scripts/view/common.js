@@ -1,19 +1,21 @@
-﻿var log = log4javascript.getDefaultLogger();
+﻿// TODO:!!!ТЕСТ УБРАТЬ
+var blog_view = $.parseJSON(log_view);
+var log = (blog_view == true ? log4javascript.getDefaultLogger() : null);
 // TODO:!!!ТЕСТ УБРАТЬ
 var ntype_test = Number(type_test);
-log.info('Тип теста - ', ntype_test);
+if (log) { log.info('Тип запущенного проекта - ', ntype_test); }
 // TODO:!!!ТЕСТ УБРАТЬ
 var bIssue_test = $.parseJSON(issue_test);
-log.info('Тестовый расчет массы и объема - ', bIssue_test);
+if (log) {log.info('Включен тестовый расчет массы и объема (по дозе) - ', bIssue_test);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var btransferSAP_ban = $.parseJSON(transferSAP_ban);
-log.info('Заблокировать передачу в САП - ', btransferSAP_ban);
+if (log) {log.info('Включена блокировка передачи данных в САП (режим отладки) - ', btransferSAP_ban);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
-log.info('Заблокировать выдачу на реальную колонку - ', bcontrolTRK_ban);
+if (log) {log.info('Включена блокировка передачи управления на колонку - ', bcontrolTRK_ban);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var bpollDIO = $.parseJSON(pollDIO);
-log.info('Опрос ДИО - ', bpollDIO);
+if (log) {log.info('Включен опрос датчиков ДИО (наливных стояков) - ', bpollDIO);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
