@@ -358,6 +358,7 @@ function viewRFID() {
                         }
                     }
                     // Показать карточки
+
                     if (cards && cards.list && cards.list.length > 0) {
                         var c_card = cards.getRFIDCardOfNumSide(c_rfid.num_trk, c_rfid.side);
                         if (c_card) {
@@ -365,7 +366,7 @@ function viewRFID() {
                             if (c_card.card) {
                                 // Да. карта есть в базе
                                 $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').show();
-                                $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').text(c_card.card.Number);
+                                $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').text(c_card.card.AutoNumber);
                                 if (c_card.card.Active) {
                                     $('#button-trk-' + c_card.num_trk + '-' + c_card.side + '-rfid').removeClass('button-rfid-not-active').addClass('button-rfid-active');
                                 } else {
@@ -382,6 +383,9 @@ function viewRFID() {
                             $('#button-trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-rfid').hide();
                             $('#label-trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-rfid').show().text('Поднесите карту');
                         }
+                    } else {
+                        $('.button-rfid').hide();
+                        $('.label-rfid').show().text('Поднесите карту');
                     }
                 }
             }
@@ -1866,6 +1870,22 @@ var confirm_close_fuel = {
                 'Закрыть': function () {
                     if (confirm_close_fuel.fs) {
                         LockScreen("Подождите, закрываю ведомость в БД");
+                        // Сбросим RFID-карту
+                        var rfid_clear = {
+                            trk: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.trk_num : 0,
+                            side: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.side : 0,
+                        };
+                        // TODO:!!!ТЕСТ УБРАТЬ
+                        if (log) {
+                            log.info('Сброcим RFID-карту rfid_clear');
+                            log.debug(rfid_clear);
+                        }
+                        postAsyncRFIDClear(
+                            rfid_clear,
+                            function (result_rfid_clear) {
+                                if (log) { log.info('RFID-карта - сброшена, результат = ' + result_rfid_clear); } // TODO:!!!ТЕСТ УБРАТЬ
+                            }
+                            );
                         // строка САП есть обновить выдачу
                         if (confirm_close_fuel.sap) {
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
@@ -1983,7 +2003,7 @@ var confirm_close_fuel = {
                     var gun = guns.getGun(fs.num);
                     // TODO:!!!ТЕСТ УБРАТЬ
                     if (log) {
-                        log.info('Текущее состояние тегов пистолета fs.num=' +fs.num);
+                        log.info('Текущее состояние тегов пистолета fs.num=' + fs.num);
                         log.debug(gun);
                     }
                     if (gun) {

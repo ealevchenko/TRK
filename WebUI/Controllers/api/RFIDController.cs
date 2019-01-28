@@ -10,6 +10,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Data;
+using System.Data.SqlClient;
+using MessageLog;
 
 namespace WebUI.Controllers.api
 {
@@ -18,10 +21,11 @@ namespace WebUI.Controllers.api
     {
         protected IOPC_RFID ef_rfid;
 
-        //public class RFIDClear
-        //{
-        //    public int num { get; set; }
-        //}
+        public class RFIDClear
+        {
+            public int trk { get; set; }
+            public bool side { get; set; }
+        }
 
         public RFIDController(IOPC_RFID rfid)
         {
@@ -104,21 +108,23 @@ namespace WebUI.Controllers.api
         }
 
         // POST api/rfid/db/clear
-        //[HttpPost]
-        //[Route("db/clear")]
-        //public int PostRFIDClearOfDB([FromBody]GunClear value)
-        //{
-        //    try
-        //    {
-        //        //int res = client.ResetTRK(value.num);
-        //        return res;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        String.Format("Ошибка выполнения метода API:PostGunClear(value={0})", value).SaveError(e);
-        //        return -1;
-        //    }
-        //}
+        [HttpPost]
+        [Route("db/clear")]
+        public int PostRFIDClearOfDB([FromBody]RFIDClear value)
+        {
+            try
+            {
+                SqlParameter trk = new SqlParameter("@trk", value.trk);
+                SqlParameter side = new SqlParameter("@side", value.side);
+                int res = ef_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostRFIDClearOfDB(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
 
     }
 }

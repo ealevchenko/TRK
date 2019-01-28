@@ -972,6 +972,32 @@ var postAsyncGunClear = function (gun_clear, callback) {
     });
 }
 
+// Сбросить RFID карту
+var postAsyncRFIDClear = function (rfid_clear, callback) {
+    $.ajax({
+        url: '/api/rfid/db/clear',
+        type: 'POST',
+        data: JSON.stringify(rfid_clear),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
