@@ -215,6 +215,7 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\view\rf.css" />
     <Content Include="Content\view\trk_old.css" />
     <Content Include="Content\view\trk.css" />
     <Content Include="favicon.ico" />
@@ -246,6 +247,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\view\common.js" />
+    <Content Include="Scripts\view\rf.js" />
     <Content Include="Scripts\view\trk.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Web.config">

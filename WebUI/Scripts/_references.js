@@ -11,4 +11,5 @@
 /// <reference path="jquery-1.10.2.js" />
 /// <reference path="log4javascript_uncompressed.js" />
 /// <reference path="log4javascript.js" />
+/// <reference path="view/rf.js" />
 
