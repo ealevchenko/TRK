@@ -152,7 +152,7 @@ var cards = {
     getCardOfNumSide: function (trk_num, side) {
         // Считаем карту
         if (cards.list && cards.list.length > 0) {
-            var card = getObjects(cards.list, 'num_trk', trk_num)
+            var card = getObjects(cards.list, 'num_trk', trk_num);
             if (card && card.length > 0) {
                 for (ic = 0; ic < card.length; ic++) {
                     if (card[ic].side == side) {
@@ -215,7 +215,7 @@ var cards = {
     getRFIDCardOfNumSide: function (trk_num, side) {
         // Считаем карту
         if (cards.list && cards.list.length > 0) {
-            var card = getObjects(cards.list, 'num_trk', trk_num)
+            var card = getObjects(cards.list, 'num_trk', trk_num);
             if (card && card.length > 0) {
                 for (ic = 0; ic < card.length; ic++) {
                     if (card[ic].side == side) {
@@ -233,7 +233,7 @@ var rfid = {
     list: [],
     setRFID: function (data) {
         rfid.list = data;
-    },
+    }
 };
 // список тегов пистолетов
 var guns = {
@@ -334,12 +334,13 @@ var pb_deliver = {
             $('div#' + id).hide();
         });
     }
-}
+};
 // Вывести информацию по считывателям
-function viewRFID() {
+var viewRFID = function () {
     if (rfid) {
         list = rfid.list;
         if (list) {
+            confirm_rfid_all.Out(list);
             for (i = 0; i < list.length; i++) {
                 var c_rfid = list[i];
                 if (c_rfid) {
@@ -393,7 +394,7 @@ function viewRFID() {
     }
 };
 // Показать все пистолеты
-function viewGuns() {
+var viewGuns = function () {
     if (guns) {
         list = guns.list;
         if (list) {
@@ -529,7 +530,7 @@ function viewGuns() {
     }
 };
 //
-function viewDIORisers() {
+var viewDIORisers = function () {
     if (risers) {
         list = risers.list_dio;
         if (list) {
@@ -577,7 +578,7 @@ function viewDIORisers() {
     }
 };
 //
-function viewRisers() {
+var viewRisers = function () {
     if (risers) {
         list = risers.list;
         if (list) {
@@ -680,7 +681,7 @@ function viewRisers() {
     }
 };
 // Вывод информации на экран 
-function show() {
+var show = function () {
     // Время
     var d = new Date();
     $('#date-value').text(toISOStringTZ(d));
@@ -731,6 +732,67 @@ function show() {
             }
         }
     );
+};
+// Панель "Состояние RFID-считывателей"
+var confirm_rfid_all = {
+    obj: null,
+    init: function () {
+        confirm_rfid_all.obj = $("#confirm-rfid-all").dialog({
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            height: "auto",
+            title: "RFID - считыватели",
+            width: 650,
+            buttons: {
+                'Закрыть': function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    },
+    Open: function (trk_num, side) {
+        confirm_rfid_all.obj.dialog("open");
+    },
+    Out: function (rfid_list) {
+        for (i = 0; i < rfid_list.length; i++) {
+            var rfid = rfid_list[i];
+            if (rfid.num_trk > 0 && rfid.num_trk < 13) {
+                // Вывод связь
+                if (rfid.online != null) {
+                    if (rfid.online) {
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-online').html("").removeClass().addClass('active');
+                    } else {
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-online').html("").removeClass().addClass('not_active');
+                    }
+                } else {
+                    $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-online').html("").removeClass().addClass('null_active');
+                }
+                if (cards && cards.list && cards.list.length > 0) {
+                    var c_card = cards.getRFIDCardOfNumSide(rfid.num_trk, rfid.side);
+                    if (c_card!=null && c_card.card) {
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-id').html(c_card.card.Id);
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-Number').html(c_card.card.Number);
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-AutoNumber').html(c_card.card.AutoNumber);
+                        $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-Debitor').html(c_card.card.Debitor);
+                        // Вывод активности
+                        if (c_card.card.Active != null) {
+                            if (c_card.card.Active) {
+                                $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-Active').html("").removeClass().addClass('active');
+                            } else {
+                                $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-Active').html("").removeClass().addClass('not_active');
+                            }
+                        } else {
+                            $('#rfid-' + rfid.num_trk + '-' + rfid.side + '-Active').html("").removeClass().addClass('null_active');
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+    }
 };
 // Панель "Информация по RFID-карте"
 var confirm_rfid_card = {
@@ -1885,7 +1947,7 @@ var confirm_close_fuel = {
                             function (result_rfid_clear) {
                                 if (log) { log.info('RFID-карта - сброшена, результат = ' + result_rfid_clear); } // TODO:!!!ТЕСТ УБРАТЬ
                             }
-                            );
+                        );
                         // строка САП есть обновить выдачу
                         if (confirm_close_fuel.sap) {
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
@@ -2149,6 +2211,10 @@ $(function () {
         });
     };
 
+    $('.button-rfid-all').on('click', function () {
+        confirm_rfid_all.Open();
+    });
+
     // Инициализаия кнопки вывода панели "Информация по RFID-карте"
     $('.button-rfid').on('click', function () {
         var trk_num = $(this).attr('data-trk');
@@ -2193,6 +2259,8 @@ $(function () {
     openFuelSale.init();
     // Загрузка библиотек
     loadReference(function (result) {
+        // Инициализаия панели  "Информация по всем RFID-считывателям"
+        confirm_rfid_all.init();
         // Инициализаия панели  "Информация по RFID-карте"
         confirm_rfid_card.init();
         // Инициализаия панели  "Задания выдачи и работе с SAP MII"

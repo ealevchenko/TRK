@@ -433,7 +433,12 @@ var getRFIDTags = function (callback) {
         },
         success: function (data) {
             if (typeof callback === 'function') {
-                callback(data);
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (ntype_test == 1) {
+                    callback(rfid_out);
+                } else {
+                    callback(data);
+                }
             }
         },
         error: function (x, y, z) {

@@ -137,7 +137,7 @@ div.trk-rfid {
     font-size: 10px;
 }
 
-.button-rfid {
+.button-rfid, .button-rfid-all {
     margin: 3px;
     height: 20px;
     font-size: 11px;
@@ -267,6 +267,29 @@ div.ns {
     font-weight: bold;
     background-color: khaki;
 }
+/*Окно RFID-считыватели*/
+
+body div[aria-describedby="confirm-rfid-all"] {
+    font-size: 13px;
+}
+
+.table-confirm-rfid-all {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+    .table-confirm-rfid-all th {
+        text-align: center;
+        font-weight: normal;
+        font-size:13px;
+    }
+
+    .table-confirm-rfid-all td {
+        text-align: center;
+        font-size:13px;
+    }
 
 
 /*Окно RFID*/
