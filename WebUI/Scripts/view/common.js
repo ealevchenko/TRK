@@ -1004,6 +1004,98 @@ var postAsyncRFIDClear = function (rfid_clear, callback) {
 }
 
 
+// Веруть выбранные емкости по А92
+var getAsyncSelectTanks_A92 = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/tanks/a92/select',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть выбранные емкости по А95
+var getAsyncSelectTanks_A95 = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/tanks/a95/select',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть выбранные емкости по dt
+var getAsyncSelectTanks_dt = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/tanks/dt/select',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть выбранные емкости по kerosene
+var getAsyncSelectTanks_kerosene = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/tanks/kerosene/select',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {

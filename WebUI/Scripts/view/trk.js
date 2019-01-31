@@ -751,7 +751,7 @@ var confirm_rfid_all = {
             }
         });
     },
-    Open: function (trk_num, side) {
+    Open: function () {
         confirm_rfid_all.obj.dialog("open");
     },
     Out: function (rfid_list) {
@@ -2168,6 +2168,55 @@ var confirm_close_fuel = {
     },
 };
 
+// Панель "Выбор емкостей"
+var confirm_tanks = {
+    obj: null,
+    init: function () {
+        confirm_tanks.obj = $("#confirm-tanks").dialog({
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            height: "auto",
+            title: "Выбранные емкости",
+            width: 500,
+            buttons: {
+                'Сохранить': function () {
+                    $(this).dialog("close");
+                },
+                'Закрыть': function () {
+                    $(this).dialog("close");
+                },
+            }
+        });
+    },
+    Open: function () {
+        confirm_tanks.obj.dialog("open");
+        getAsyncSelectTanks_A92(function (tanks_a92) {
+            if (tanks_a92) {
+                $('input#B2').prop('checked', tanks_a92.B2);
+                $('input#B3').prop('checked', tanks_a92.B3);
+                $('input#B9').prop('checked', tanks_a92.B9);
+                $('input#B11').prop('checked', tanks_a92.B11);
+                $('input#B16').prop('checked', tanks_a92.B16);
+            }
+        });
+        getAsyncSelectTanks_A95(function (tanks_a95) {
+            if (tanks_a95) {
+                $('input#B17').prop('checked', tanks_a95.B17);
+                $('input#B18').prop('checked', tanks_a95.B18);
+                $('input#B19').prop('checked', tanks_a95.B19);
+                $('input#B20').prop('checked', tanks_a95.B20);
+            }
+        });
+        getAsyncSelectTanks_dt(function (tanks_dt) {
+            if (tanks_dt) {
+                //$('input#dt-1').prop('checked', tanks_dt.);
+
+            }
+        });
+    }
+};
+
 $(function () {
 
     if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
@@ -2210,9 +2259,13 @@ $(function () {
             }
         });
     };
-
+    // Инициализаия кнопки вывода панели "Информация по всем RFID-считывателям"
     $('.button-rfid-all').on('click', function () {
         confirm_rfid_all.Open();
+    });
+    // Инициализаия кнопки вывода панели "Информация по выбраным Емкастям"
+    $('.button-tanks').on('click', function () {
+        confirm_tanks.Open();
     });
 
     // Инициализаия кнопки вывода панели "Информация по RFID-карте"
@@ -2259,6 +2312,8 @@ $(function () {
     openFuelSale.init();
     // Загрузка библиотек
     loadReference(function (result) {
+        // Инициализаия панели  "Выбранные емкости"
+        confirm_tanks.init();
         // Инициализаия панели  "Информация по всем RFID-считывателям"
         confirm_rfid_all.init();
         // Инициализаия панели  "Информация по RFID-карте"

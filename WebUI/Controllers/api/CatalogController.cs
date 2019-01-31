@@ -65,8 +65,6 @@ namespace WebUI.Controllers.api
             }
         }
 
-
-
         // GET: api/catalog/depots/id/211
         [Route("depots/id/{id}")]
         [ResponseType(typeof(Cat_Depots))]

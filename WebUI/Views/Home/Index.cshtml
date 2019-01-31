@@ -38,7 +38,8 @@
 
     <div id="content">
         <div>
-            <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID</button>  Текущее время :<label id="date-value"></label>
+            <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID</button>
+            <button id="button-tanks" class="ui-button ui-widget ui-corner-all button-tanks">Емкости</button>  Текущее время :<label id="date-value"></label>
         </div>
 
         <div class="trk-all">
@@ -2311,6 +2312,83 @@
                     <td><input id="close-stop_counter" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all new_data" /></td>
                 </tr>
             </table>
+        </form>
+    </div>
+
+    <div id="confirm-tanks" title="" class="table-confirm-tanks" style="display:none">
+        <form id="form-tanks">
+            <fieldset>
+                <table id="table-confirm-tanks" class="confirm-tanks table-bordered">
+                    <tr><th colspan="10">Емкости с A92</th></tr>
+                    <tr>
+                        <td>B2: <input id="B2" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B3: <input id="B3" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B9: <input id="B9" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B11: <input id="B11" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B16: <input id="B16" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr><th colspan="10">Емкости с A95</th></tr>
+                    <tr>
+                        <td>B17: <input id="B17" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B18: <input id="B18" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B19: <input id="B19" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>B20: <input id="B20" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td colspan="6"></td>
+                    </tr>
+                    <tr><th colspan="10">Емкости с ДТ</th></tr>
+                    <tr>
+                        <td>01: <input id="dt-1" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>02: <input id="dt-2" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>03: <input id="dt-3" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>04: <input id="dt-4" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>05: <input id="dt-5" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>06: <input id="dt-6" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>07: <input id="dt-7" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>08: <input id="dt-8" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>09: <input id="dt-9" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>10: <input id="dt-10" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                    </tr>
+                    <tr>
+                        <td>11: <input id="dt-11" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>12: <input id="dt-12" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>13: <input id="dt-13" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>14: <input id="dt-14" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>15: <input id="dt-15" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>16: <input id="dt-16" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>17: <input id="dt-17" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>18: <input id="dt-18" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>19: <input id="dt-19" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>20: <input id="dt-20" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                    </tr>
+                    <tr>
+                        <td>21: <input id="dt-21" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>22: <input id="dt-22" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>23: <input id="dt-23" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>24: <input id="dt-24" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>25: <input id="dt-25" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>26: <input id="dt-26" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>27: <input id="dt-27" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>28: <input id="dt-28" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>29: <input id="dt-29" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>30: <input id="dt-30" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                    </tr>
+                    <tr>
+                        <td>31: <input id="dt-31" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>32: <input id="dt-32" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td colspan="8"></td>
+                    </tr>
+                    <tr><th colspan="10">Емкости с керосином</th></tr>
+                    <tr>
+                        <td>33: <input id="k33" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>38: <input id="k38" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>39: <input id="k39" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td colspan="7"></td>
+                    </tr>
+                </table>
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </fieldset>
         </form>
     </div>
 

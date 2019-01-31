@@ -24,6 +24,11 @@
         public virtual DbSet<Cat_OZM_GSM> Cat_OZM_GSM { get; set; }
         public virtual DbSet<UsersActions> UsersActions { get; set; }
 
+        public virtual DbSet<Tanks_A92> Tanks_A92 { get; set; }
+        public virtual DbSet<Tanks_A95> Tanks_A95 { get; set; }
+        public virtual DbSet<Tanks_dt> Tanks_dt { get; set; }
+        public virtual DbSet<Tanks_kerosene> Tanks_kerosene { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cat_Werks>()

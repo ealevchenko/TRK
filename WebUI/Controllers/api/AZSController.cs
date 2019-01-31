@@ -16,15 +16,32 @@ namespace WebUI.Controllers.api
     {
         protected IRepository<SAP_Buffer> ef_sap;
         protected IRepository<FuelSale> ef_fs;
+        protected IRepository<Tanks_A92> ef_ta92;
+        protected IRepository<Tanks_A95> ef_ta95;
+        protected IRepository<Tanks_dt> ef_tdt;
+        protected IRepository<Tanks_kerosene> ef_tk;
         protected IUsersActions ef_ua;
 
-        public AZSController(IRepository<SAP_Buffer> sap, IRepository<FuelSale> fs, IUsersActions ua)
+        public AZSController(IRepository<SAP_Buffer> sap,
+            IRepository<FuelSale> fs,
+            IUsersActions ua,
+            IRepository<Tanks_A92> ta92,
+            IRepository<Tanks_A95> ta95,
+            IRepository<Tanks_dt> tdt,
+            IRepository<Tanks_kerosene> tk
+            )
         {
             this.ef_sap = sap;
             this.ef_fs = fs;
             this.ef_ua = ua;
+            this.ef_ta92 = ta92;
+            this.ef_ta95 = ta95;
+            this.ef_tdt = tdt;
+            this.ef_tk = tk;
+
         }
 
+        #region sap_buffer
         // GET: api/azs/sap_buffer/id/1
         [Route("sap_buffer/id/{id:int}")]
         [ResponseType(typeof(SAP_Buffer))]
@@ -35,25 +52,25 @@ namespace WebUI.Controllers.api
                 SAP_Buffer sap = this.ef_sap.Get().Where(s => s.id == id).ToList()
                     .Select(s => new SAP_Buffer
                     {
-                       id = s.id ,
-                       DATE = s.DATE ,
-                       TIME = s.TIME ,
-                       LOGIN_R = s.LOGIN_R ,
-                       N_BAK = s.N_BAK ,
-                       OZM_BAK = s.OZM_BAK ,
-                       OZM_TREB = s.OZM_TREB ,
-                       FLAG_R = s.FLAG_R ,
-                       PLOTNOST = s.PLOTNOST ,
-                       VOLUME = s.VOLUME ,
-                       MASS = s.MASS ,
-                       LOGIN_EXP = s.LOGIN_EXP ,
-                       N_POST = s.N_POST ,
-                       TRANSP_FAKT = s.TRANSP_FAKT ,
-                       N_DEB = s.N_DEB ,
-                       N_TREB = s.N_TREB ,
-                       LGORT = s.LGORT ,
-                       WERKS = s.WERKS ,
-                       sending = s.sending ,
+                        id = s.id,
+                        DATE = s.DATE,
+                        TIME = s.TIME,
+                        LOGIN_R = s.LOGIN_R,
+                        N_BAK = s.N_BAK,
+                        OZM_BAK = s.OZM_BAK,
+                        OZM_TREB = s.OZM_TREB,
+                        FLAG_R = s.FLAG_R,
+                        PLOTNOST = s.PLOTNOST,
+                        VOLUME = s.VOLUME,
+                        MASS = s.MASS,
+                        LOGIN_EXP = s.LOGIN_EXP,
+                        N_POST = s.N_POST,
+                        TRANSP_FAKT = s.TRANSP_FAKT,
+                        N_DEB = s.N_DEB,
+                        N_TREB = s.N_TREB,
+                        LGORT = s.LGORT,
+                        WERKS = s.WERKS,
+                        sending = s.sending,
                     }).FirstOrDefault();
                 if (sap == null)
                 {
@@ -114,11 +131,14 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода API:DeleteSAP_Buffer(id={0})", id).SaveError(e);                
+                String.Format("Ошибка выполнения метода API:DeleteSAP_Buffer(id={0})", id).SaveError(e);
                 return -1;
             }
         }
 
+        #endregion
+
+        #region fuel_sale
         // GET: api/azs/fuel_sale/open
         [Route("fuel_sale/open")]
         [ResponseType(typeof(FuelSale))]
@@ -130,38 +150,38 @@ namespace WebUI.Controllers.api
                     .ToList()
                     .Select(s => new FuelSale
                     {
-                        id = s.id ,
-                        operator_name = s.operator_name ,
-                        smena_num = s.smena_num ,
-                        smena_datetime = s.smena_datetime ,
-                        trk_num = s.trk_num ,
-                        side = s.side ,
-                        num = s.num ,
-                        fuel_type = s.fuel_type ,
-                        tank_num = s.tank_num ,
-                        id_card = s.id_card ,
-                        dose = s.dose ,
-                        passage = s.passage ,
-                        volume = s.volume ,
-                        mass = s.mass ,
-                        start_datetime = s.start_datetime ,
-                        start_level = s.start_level ,
-                        start_volume = s.start_volume ,
-                        start_density = s.start_density ,
-                        start_mass = s.start_mass ,
-                        start_temp = s.start_temp ,
-                        start_water_level = s.start_water_level ,
-                        start_counter = s.start_counter ,
-                        stop_datetime = s.stop_datetime ,
-                        stop_level = s.stop_level ,
-                        stop_volume = s.stop_volume ,
-                        stop_density = s.stop_density ,
-                        stop_mass = s.stop_mass ,
-                        stop_temp = s.stop_temp ,
-                        stop_water_level = s.stop_water_level ,
-                        stop_counter = s.stop_counter ,
-                        close = s.close ,
-                        id_sap = s.id_sap ,
+                        id = s.id,
+                        operator_name = s.operator_name,
+                        smena_num = s.smena_num,
+                        smena_datetime = s.smena_datetime,
+                        trk_num = s.trk_num,
+                        side = s.side,
+                        num = s.num,
+                        fuel_type = s.fuel_type,
+                        tank_num = s.tank_num,
+                        id_card = s.id_card,
+                        dose = s.dose,
+                        passage = s.passage,
+                        volume = s.volume,
+                        mass = s.mass,
+                        start_datetime = s.start_datetime,
+                        start_level = s.start_level,
+                        start_volume = s.start_volume,
+                        start_density = s.start_density,
+                        start_mass = s.start_mass,
+                        start_temp = s.start_temp,
+                        start_water_level = s.start_water_level,
+                        start_counter = s.start_counter,
+                        stop_datetime = s.stop_datetime,
+                        stop_level = s.stop_level,
+                        stop_volume = s.stop_volume,
+                        stop_density = s.stop_density,
+                        stop_mass = s.stop_mass,
+                        stop_temp = s.stop_temp,
+                        stop_water_level = s.stop_water_level,
+                        stop_counter = s.stop_counter,
+                        close = s.close,
+                        id_sap = s.id_sap,
                     })
                     .ToList();
                 if (list == null)
@@ -212,7 +232,9 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
+        #endregion
 
+        #region UsersActions
         // GET: api/azs/user/curent
         [Route("user/curent")]
         [ResponseType(typeof(UsersActions))]
@@ -233,6 +255,94 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
+        #endregion
+
+        #region Tanks
+
+        // GET: api/azs/tanks/a92/select
+        [Route("tanks/a92/select")]
+        [ResponseType(typeof(Tanks_A92))]
+        public IHttpActionResult GetSelectTanks_A92()
+        {
+            try
+            {
+                Tanks_A92 current = this.ef_ta92.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                if (current == null)
+                {
+                    return NotFound();
+                }
+                return Ok(current);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetSelectTanks_A92()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // GET: api/azs/tanks/a95/select
+        [Route("tanks/a95/select")]
+        [ResponseType(typeof(Tanks_A95))]
+        public IHttpActionResult GetSelectTanks_A95()
+        {
+            try
+            {
+                Tanks_A95 current = this.ef_ta95.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                if (current == null)
+                {
+                    return NotFound();
+                }
+                return Ok(current);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetSelectTanks_A95()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // GET: api/azs/tanks/dt/select
+        [Route("tanks/dt/select")]
+        [ResponseType(typeof(Tanks_dt))]
+        public IHttpActionResult GetSelectTanks_dt()
+        {
+            try
+            {
+                Tanks_dt current = this.ef_tdt.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                if (current == null)
+                {
+                    return NotFound();
+                }
+                return Ok(current);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetSelectTanks_dt()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // GET: api/azs/tanks/kerosene/select
+        [Route("tanks/kerosene/select")]
+        [ResponseType(typeof(Tanks_kerosene))]
+        public IHttpActionResult GetSelectTanks_Kerosene()
+        {
+            try
+            {
+                Tanks_kerosene current = this.ef_tk.Get().OrderByDescending(t => t.changed).FirstOrDefault();
+                if (current == null)
+                {
+                    return NotFound();
+                }
+                return Ok(current);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetSelectTanks_Kerosene()").SaveError(e);
+                return NotFound();
+            }
+        }
+        #endregion
 
     }
 }

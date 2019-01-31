@@ -80,6 +80,10 @@ namespace WebUI.App_Start
             kernel.Bind<EFAZS.Abstract.IRepository<SAP_Buffer>>().To<EFSAP_Buffer>();
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.FuelSale>>().To<EFAZS.Concrete.EFFuelSale>();
             kernel.Bind<IUsersActions>().To<EFUsersActions>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Tanks_A92>>().To<EFAZS.Concrete.EFTanks_A92>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Tanks_A95>>().To<EFAZS.Concrete.EFTanks_A95>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Tanks_dt>>().To<EFAZS.Concrete.EFTanks_dt>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Tanks_kerosene>>().To<EFAZS.Concrete.EFTanks_kerosene>();
         }
     }
 }
