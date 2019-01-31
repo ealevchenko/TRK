@@ -137,7 +137,14 @@ div.trk-rfid {
     font-size: 10px;
 }
 
-.button-rfid, .button-rfid-all, .button-tanks {
+.button-rfid-all, .button-tanks {
+    margin: 3px;
+    height: 20px;
+    font-size: 11px;
+    background-color: #b6ff00;
+}
+
+.button-rfid {
     margin: 3px;
     height: 20px;
     font-size: 11px;
@@ -268,7 +275,30 @@ div.ns {
     background-color: khaki;
 }
 
+/*Окно confirm-rfid-all*/
 
+body div[aria-describedby="confirm-rfid-all"] {
+    font-size: 14px;
+}
+
+.table-confirm-rfid-all {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+    .table-confirm-rfid-all th {
+        text-align: center;
+        font-weight: normal;
+        font-size: 12px;
+    }
+
+    .table-confirm-rfid-all td {
+        text-align: center;
+        font-size: 12px;
+        /*font-weight: bold;*/
+    }
 
 /*Окно RFID*/
 

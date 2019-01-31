@@ -15,7 +15,10 @@ var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
 if (log) {log.info('Включена блокировка передачи управления на колонку - ', bcontrolTRK_ban);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var bpollDIO = $.parseJSON(pollDIO);
-if (log) {log.info('Включен опрос датчиков ДИО (наливных стояков) - ', bpollDIO);}
+if (log) { log.info('Включен опрос датчиков ДИО (наливных стояков) - ', bpollDIO); }
+// TODO:!!!ТЕСТ УБРАТЬ
+var btanks_one = $.parseJSON(tanks_one);
+if (log) { log.info('Включен выбор одной емкости - ', btanks_one); }
 // TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
@@ -1027,6 +1030,31 @@ var getAsyncSelectTanks_A92 = function (callback) {
         },
     });
 }
+// Добавить новые выбраные баки
+var postAsyncTanks_A92 = function (tanks_a92, callback) {
+    $.ajax({
+        url: '/api/azs/tanks/a92/',
+        type: 'POST',
+        data: JSON.stringify(tanks_a92),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 // Веруть выбранные емкости по А95
 var getAsyncSelectTanks_A95 = function (callback) {
     $.ajax({
@@ -1043,6 +1071,31 @@ var getAsyncSelectTanks_A95 = function (callback) {
             }
         },
         error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Добавить новые выбраные баки
+var postAsyncTanks_A95 = function (tanks_a95, callback) {
+    $.ajax({
+        url: '/api/azs/tanks/a95/',
+        type: 'POST',
+        data: JSON.stringify(tanks_a95),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {
@@ -1073,6 +1126,31 @@ var getAsyncSelectTanks_dt = function (callback) {
         },
     });
 }
+// Добавить новые выбраные баки
+var postAsyncTanks_dt = function (tanks_dt, callback) {
+    $.ajax({
+        url: '/api/azs/tanks/dt/',
+        type: 'POST',
+        data: JSON.stringify(tanks_dt),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 // Веруть выбранные емкости по kerosene
 var getAsyncSelectTanks_kerosene = function (callback) {
     $.ajax({
@@ -1089,6 +1167,31 @@ var getAsyncSelectTanks_kerosene = function (callback) {
             }
         },
         error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Добавить новые выбраные баки
+var postAsyncTanks_kerosene = function (tanks_kerosene, callback) {
+    $.ajax({
+        url: '/api/azs/tanks/tanks_kerosene/',
+        type: 'POST',
+        data: JSON.stringify(tanks_kerosene),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {

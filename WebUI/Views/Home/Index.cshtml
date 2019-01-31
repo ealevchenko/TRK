@@ -26,6 +26,7 @@
         var transferSAP_ban = '@System.Configuration.ConfigurationManager.AppSettings["TransferSAP_ban"]';
         var controlTRK_ban = '@System.Configuration.ConfigurationManager.AppSettings["ControlTRK_ban"]';
         var pollDIO = '@System.Configuration.ConfigurationManager.AppSettings["PollDIO"]';
+        var tanks_one = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_one"]';
     </script>
 
     <script src="~/Scripts/view/common.js" type="text/javascript"></script>
@@ -38,7 +39,7 @@
 
     <div id="content">
         <div>
-            <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID</button>
+            <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID-считыватели</button>
             <button id="button-tanks" class="ui-button ui-widget ui-corner-all button-tanks">Емкости</button>  Текущее время :<label id="date-value"></label>
         </div>
 
@@ -2380,9 +2381,9 @@
                     </tr>
                     <tr><th colspan="10">Емкости с керосином</th></tr>
                     <tr>
-                        <td>33: <input id="k33" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
-                        <td>38: <input id="k38" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
-                        <td>39: <input id="k39" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>33: <input id="k-33" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>38: <input id="k-38" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
+                        <td>39: <input id="k-39" type="checkbox" class="ui-widget-content ui-corner-all" /></td>
                         <td colspan="7"></td>
                     </tr>
                 </table>

@@ -280,6 +280,25 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // POST api/azs/tanks/a92/
+        [HttpPost]
+        [Route("tanks/a92/")]
+        public int PostSelectTanks_A92([FromBody]Tanks_A92 value)
+        {
+            try
+            {
+                this.ef_ta92.Add(value);
+                this.ef_ta92.Save();
+                this.ef_ta92.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostSelectTanks_A92(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
         // GET: api/azs/tanks/a95/select
         [Route("tanks/a95/select")]
         [ResponseType(typeof(Tanks_A95))]
@@ -298,6 +317,25 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:GetSelectTanks_A95()").SaveError(e);
                 return NotFound();
+            }
+        }
+
+        // POST api/azs/tanks/a95/
+        [HttpPost]
+        [Route("tanks/a95/")]
+        public int PostSelectTanks_A95([FromBody]Tanks_A95 value)
+        {
+            try
+            {
+                this.ef_ta95.Add(value);
+                this.ef_ta95.Save();
+                this.ef_ta95.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostSelectTanks_A95(value={0})", value).SaveError(e);
+                return -1;
             }
         }
 
@@ -322,6 +360,25 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // POST api/azs/tanks/dt/
+        [HttpPost]
+        [Route("tanks/dt/")]
+        public int PostSelectTanks_dt([FromBody]Tanks_dt value)
+        {
+            try
+            {
+                this.ef_tdt.Add(value);
+                this.ef_tdt.Save();
+                this.ef_tdt.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostSelectTanks_dt(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
         // GET: api/azs/tanks/kerosene/select
         [Route("tanks/kerosene/select")]
         [ResponseType(typeof(Tanks_kerosene))]
@@ -340,6 +397,25 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:GetSelectTanks_Kerosene()").SaveError(e);
                 return NotFound();
+            }
+        }
+
+        // POST api/azs/tanks/kerosene/
+        [HttpPost]
+        [Route("tanks/kerosene/")]
+        public int PostSelectTanks_kerosene([FromBody]Tanks_kerosene value)
+        {
+            try
+            {
+                this.ef_tk.Add(value);
+                this.ef_tk.Save();
+                this.ef_tk.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostSelectTanks_kerosene(value={0})", value).SaveError(e);
+                return -1;
             }
         }
         #endregion
