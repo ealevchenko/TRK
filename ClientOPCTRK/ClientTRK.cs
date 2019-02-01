@@ -148,7 +148,61 @@ namespace ClientOPCTRK
                 default:trk_num = 0; side = 0; break;
             }
         }
-
+        /// <summary>
+        ///  Добавить строки тегов емкостей
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        /// <param name="num"></param>
+        public void AddTank(ref Opc.Da.Item[] items, ref int i, string num)
+        {
+            try
+            {
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".dens";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".fill_percent";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".level";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".mass";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".status1";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".status2";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".tank" + num + "_status";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".temp";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".ullage";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".unit";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".volume";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".water_level";
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "OWN.tank" + num + ".water_volume";
+                i++;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода AddTank(items={0}, i={1}, num={2})", items, i, num).SaveError(e);
+            }
+        }
         /// <summary>
         /// Добавить строки тегов пистолетов
         /// </summary>
@@ -360,6 +414,48 @@ namespace ClientOPCTRK
             {
                 String.Format("Ошибка выполнения метода AddRisers(items={0}, i={1}, num={2})", items, i, num).SaveError(e);
             }
+        }
+        /// <summary>
+        /// Получить значение тегов Емкостей
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="list"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        private Tank GetTank(string num, ItemValueResult[] list, int start)
+        {
+            try
+            {
+                if (list != null && list.Count() > 0)
+                {
+                    Tank tank = new Tank()
+                    {
+                        num_tank = num,
+                        dens = list[start].Value != null ? list[start].Value as double? : null,
+                        fill_percent = list[start + 1].Value != null ? list[start + 1].Value as double? : null,
+                        level = list[start + 2].Value != null ? list[start + 2].Value as int? / 100.0 : null, // преабразуем
+                        mass = list[start + 3].Value != null ? list[start + 3].Value as double? : null,
+                        status1 = list[start + 4].Value != null ? list[start + 4].Value as byte? : null,
+                        status2 = list[start + 5].Value != null ? list[start + 5].Value as byte? : null,
+                        status = list[start + 6].Value != null ? list[start + 6].Value as int? : null,
+                        temp = list[start + 7].Value != null ? list[start + 7].Value as int? / 10.0 : null, // преабразуем
+                        ullage = list[start + 8].Value != null ? list[start + 8].Value as int? : null,
+                        unit = list[start + 9].Value != null ? list[start + 9].Value as string : null,
+                        volume = list[start + 10].Value != null ? list[start + 10].Value as int? / 10.0 : null,
+                        water_level = list[start + 11].Value != null ? list[start + 11].Value as int? / 100.0 : null, // преабразуем
+                        water_volume = list[start + 12].Value != null ? list[start + 12].Value as int? / 10.0 : null,
+                    };
+                    return tank;
+                }
+                return null;
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода GetTank(num={0}, list={1}, start={2})", num, list, start).SaveError(e);
+                return null;
+            }
+
         }
         /// <summary>
         /// Получить значение тегов RFID
@@ -689,7 +785,7 @@ namespace ClientOPCTRK
                 //
                 Opc.Da.Subscription group;
                 Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-                groupState.Name = "group";
+                groupState.Name = "Tank";
                 groupState.Active = true;
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
@@ -751,6 +847,51 @@ namespace ClientOPCTRK
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода ReadTagsOPSOfTank(num_tank={0})", num_tank).SaveError(e);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить теги списка баков
+        /// </summary>
+        /// <param name="num_tanks"></param>
+        /// <returns></returns>
+        public List<Tank> ReadTagsOPSOfTank(string[] num_tanks) {
+            try
+            {
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "tanks";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[13 * num_tanks.Count()];
+                int i = 0;
+                foreach (string tk in num_tanks) { 
+                    AddTank(ref items, ref i, tk); 
+                }
+                items = group.AddItems(items);
+
+                List<Tank> result_list = new List<Tank>();
+
+                ItemValueResult[] res = group.Read(items);
+                i = 0;
+                foreach (string tk in num_tanks) {
+                    result_list.Add(GetTank(tk, res, i)); 
+                    i += 13;
+                }
+                return result_list;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ReadTagsOPSOfTank(num_tanks={0})", num_tanks).SaveError(e);
                 return null;
             }
         }

@@ -170,6 +170,11 @@ var risers_out = [
         "out_kv2": false
     }
 ];
+// TODO:!!!ТЕСТ УБРАТЬ
+var bunks_out = [
+    { "num_tank": "B2", "dens": 755.495805, "fill_percent": 17.640862872872312, "level": 653.14, "mass": 9488.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.3, "ullage": 58643, "unit": null, "volume": 1256.1, "water_level": 0.31, "water_volume": 0.0 },
+    { "num_tank": "B3", "dens": 757.904171, "fill_percent": 35.737970982049163, "level": 1082.59, "mass": 19361.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.1, "ullage": 45930, "unit": null, "volume": 2554.3, "water_level": 1.1, "water_volume": 0.2 }
+];
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
@@ -376,6 +381,43 @@ var getTankTags = function (num, callback) {
             if (ntype_test == 2) {
                 if (typeof callback === 'function') {
                     callback(bunk_out);
+                }
+            } else {
+                OnAJAXError(x, y, z);
+            }
+
+
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Прочесть теги из списка бака
+var getTanksTags = function (nums, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/tank/list/' + nums,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (ntype_test == 1) {
+                    callback(bunks_out);
+                } else {
+                    callback(data);
+                }
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 2) {
+                if (typeof callback === 'function') {
+                    callback(bunks_out);
                 }
             } else {
                 OnAJAXError(x, y, z);
@@ -1177,7 +1219,7 @@ var getAsyncSelectTanks_kerosene = function (callback) {
 // Добавить новые выбраные баки
 var postAsyncTanks_kerosene = function (tanks_kerosene, callback) {
     $.ajax({
-        url: '/api/azs/tanks/tanks_kerosene/',
+        url: '/api/azs/tanks/kerosene/',
         type: 'POST',
         data: JSON.stringify(tanks_kerosene),
         contentType: "application/json;charset=utf-8",

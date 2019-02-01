@@ -33,8 +33,8 @@ namespace WebUI.Controllers.api
 
         }
 
-
-        // GET: api/trk/tank/num/B9
+        #region Tank
+        // GET: api/trk/tank/num/B2
         [Route("tank/num/{num}")]
         [ResponseType(typeof(Tank))]
         public IHttpActionResult GetTagsOPSOfTank(string num)
@@ -54,6 +54,32 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
+
+        // GET: api/trk/tank/list/B2,B3
+        [Route("tank/list/{nums}")]
+        [ResponseType(typeof(Tank))]
+        public IHttpActionResult GetTagsOPSOfTanks(string nums)
+        {
+            try
+            {
+                string[] num_arr = nums.Split(',');
+                List<Tank> tanks = client.ReadTagsOPSOfTank(num_arr);
+                if (tanks == null)
+                {
+                    return NotFound();
+                }
+                return Ok(tanks);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetTagsOPSOfTanks(nums={0})", nums).SaveError(e);
+                return NotFound();
+            }
+        }
+
+        #endregion
+
+
 
         // GET: api/trk/guns
         [Route("guns")]
