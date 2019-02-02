@@ -436,19 +436,20 @@ var viewGuns = function () {
                 }
                 // Вывод всего
                 if (gun.total_volume != null) {
-                    $('#gun-' + gun.num_gun + '-total_volume').val(gun.total_volume).removeClass('error');
+
+                    $('#gun-' + gun.num_gun + '-total_volume').val(gun.total_volume > 0 ? gun.total_volume / 100.0 : gun.total_volume).removeClass('error');
                 } else {
                     $('#gun-' + gun.num_gun + '-total_volume').val('').addClass('error');
                 }
                 // Вывод заданно
                 if (gun.volume_to_write != null) {
-                    $('#gun-' + gun.num_gun + '-volume_to_write').val(gun.volume_to_write).removeClass('error');
+                    $('#gun-' + gun.num_gun + '-volume_to_write').val(gun.volume_to_write > 0 ? gun.volume_to_write / 100.0 : gun.volume_to_write).removeClass('error');
                 } else {
                     $('#gun-' + gun.num_gun + '-volume_to_write').val('').addClass('error');
                 }
                 // Вывод выданно
                 if (gun.last_out_volume != null) {
-                    $('#gun-' + gun.num_gun + '-last_out_volume').val(gun.last_out_volume).removeClass('error');
+                    $('#gun-' + gun.num_gun + '-last_out_volume').val(gun.last_out_volume > 0 ? gun.last_out_volume / 100.0 : gun.last_out_volume).removeClass('error');
                 } else {
                     $('#gun-' + gun.num_gun + '-last_out_volume').val('').addClass('error');
                 }
@@ -1136,8 +1137,8 @@ var confirm_df = {
             if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
             if (variant == 3) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
-            valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
-            valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
+            if (variant != 5) valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
+            if (variant != 5) valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
             //Проверка возврата САП
             if (variant != 4) valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
             if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_ozm, "Выберите ОЗМ");
@@ -1149,7 +1150,7 @@ var confirm_df = {
             if (variant == 2 && variant == 5 && variant == 6) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_id_card, "Нет значения ID карты");
         }
         // Проверка выбранного бака
-        valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_capacity, "Выберите бак с топливом");
+        //valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_capacity, "Выберите бак с топливом");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_dens, "Нет значения плотности ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_level, "Нет значения уровень ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_mass, "Нет значения массы ГСМ в баке");
@@ -1514,8 +1515,21 @@ var confirm_df = {
                     } else {
                         // выбран режим нескольких емкостей
                         confirm_df.select_capacity.selectmenu("widget").hide();
-                        confirm_df.textarea_capacity.show().text('B1');
-                        confirm_df.viewParmetrTanksOfType(gun.type_fuel);
+                        confirm_df.textarea_capacity.show().text('');
+                        confirm_df.viewParmetrTanksOfType(
+                            gun.type_fuel,
+                            function (list_tags) {
+                                var result = confirm_df.viewParamTanks(list_tags);
+                                if (result) {
+                                    confirm_df.input_deliver_take_level.val(result.level.toFixed(2));
+                                    confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
+                                    confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
+                                    confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
+                                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(2));
+                                    confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
+                                }
+                            }
+                        );
                     }
 
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(gun.type_fuel), null, -1, null);
@@ -1791,15 +1805,64 @@ var confirm_df = {
         }
     },
     // Вывести усредненые параметры по выбранным ямкостям 
-    viewParmetrTanksOfType: function (type_fuel) {
-        var tanks ='';
+    viewParmetrTanksOfType: function (type_fuel, callback) {
+        confirm_df.input_deliver_take_level.val('');
+        confirm_df.input_deliver_take_mass.val('');
+        confirm_df.input_deliver_take_temp.val('');
+        confirm_df.input_deliver_take_volume.val('');
+        confirm_df.input_deliver_take_dens.val('');
+        confirm_df.input_deliver_take_water_level.val('');
+        var tanks = '';
         //var param_tanks = [];
         switch (type_fuel) {
             case 107000022: // A92
-
+                getAsyncSelectTanks_A92(
+                    function (tanks_a92) {
+                        if (tanks_a92) {
+                            if (tanks_a92.B2) { tanks += 'B2,'; }
+                            if (tanks_a92.B3) { tanks += 'B3,'; }
+                            if (tanks_a92.B9) { tanks += 'B9,'; }
+                            if (tanks_a92.B11) { tanks += 'B11,'; }
+                            if (tanks_a92.B16) { tanks += 'B16,'; }
+                            if (tanks.length > 0) {
+                                tanks = tanks.substring(0, tanks.length - 1);
+                                confirm_df.textarea_capacity.show().text(tanks);  // Покажем список баков
+                                getTanksTags(
+                                    tanks,
+                                    function (list_tags) {
+                                        if (typeof callback === 'function') {
+                                            callback(list_tags);
+                                        }
+                                    });
+                            } else {
+                                confirm_df.textarea_capacity.show().text('Емкости не выбраны');  // Покажем список баков
+                            }
+                        }
+                    });
                 break;
             case 107000023: // A95
-
+                getAsyncSelectTanks_A95(
+                    function (tanks_a95) {
+                        if (tanks_a95) {
+                            if (tanks_a95.B17) { tanks += 'B17,'; }
+                            if (tanks_a95.B18) { tanks += 'B18,'; }
+                            if (tanks_a95.B19) { tanks += 'B19,'; }
+                            if (tanks_a95.B20) { tanks += 'B20,'; }
+                            if (tanks.length > 0) {
+                                tanks = tanks.substring(0, tanks.length - 1);
+                                confirm_df.textarea_capacity.show().text(tanks);  // Покажем список баков
+                                getTanksTags(
+                                    tanks,
+                                    function (list_tags) {
+                                        if (typeof callback === 'function') {
+                                            callback(list_tags);
+                                        }
+                                    });
+                            } else {
+                                confirm_df.textarea_capacity.show().text('Емкости не выбраны');  // Покажем список баков
+                            }
+                        }
+                    });
                 break;
             case 107000024: // ДТ
                 getAsyncSelectTanks_dt(
@@ -1837,23 +1900,82 @@ var confirm_df = {
                             if (tanks_dt.C30) { tanks += '30,'; }
                             if (tanks_dt.C31) { tanks += '31,'; }
                             if (tanks_dt.C32) { tanks += '32,'; }
-                            getTanksTags(0,
-                                function (list_tags) {
+                            if (tanks.length > 0) {
+                                tanks = tanks.substring(0, tanks.length - 1);
+                                confirm_df.textarea_capacity.show().text(tanks);  // Покажем список баков
+                                getTanksTags(
+                                    tanks,
+                                    function (list_tags) {
+                                        if (typeof callback === 'function') {
+                                            callback(list_tags);
+                                        }
+                                    });
+                            } else {
+                                confirm_df.textarea_capacity.show().text('Емкости не выбраны');  // Покажем список баков
+                            }
 
-                            });
-                            //if (tanks_dt.C1) {
-                            //    tanks += '01;';
-
-                            //    getTankTags('01',
-                            //        function (result) { param_tanks.push(result) });
-                            //}
                         }
                     });
                 break;
             case 107000027: // Керосин
-
+                getAsyncSelectTanks_kerosene(
+                    function (tanks_kerosene) {
+                        if (tanks_kerosene) {
+                            if (tanks_kerosene.C33) { tanks += 'C33,'; }
+                            if (tanks_kerosene.C38) { tanks += 'C38,'; }
+                            if (tanks_kerosene.C39) { tanks += 'C39,'; }
+                            if (tanks.length > 0) {
+                                tanks = tanks.substring(0, tanks.length - 1);
+                                confirm_df.textarea_capacity.show().text(tanks);  // Покажем список баков
+                                getTanksTags(
+                                    tanks,
+                                    function (list_tags) {
+                                        if (typeof callback === 'function') {
+                                            callback(list_tags);
+                                        }
+                                        //confirm_df.viewParamTanks(list_tags);
+                                    });
+                            } else {
+                                confirm_df.textarea_capacity.show().text('Емкости не выбраны');  // Покажем список баков
+                            }
+                        }
+                    });
                 break;
         }
+    },
+    // Показать параметры баков
+    viewParamTanks: function (list_tags) {
+        var count = list_tags.length;
+        var level = 0;
+        var mass = 0;
+        var temp = 0;
+        var volume = 0;
+        var dens = 0;
+        var water_level = 0;
+        for (ip = 0; ip < list_tags.length; ip++) {
+            level += list_tags[ip].level;
+            mass += list_tags[ip].mass;
+            temp += list_tags[ip].temp;
+            volume += list_tags[ip].volume;
+            dens += list_tags[ip].dens;
+            water_level += list_tags[ip].water_level;
+        }
+        level = level / count;
+        mass = mass / count;
+        temp = temp / count;
+        volume = volume / count;
+        dens = dens / count;
+        water_level = water_level / count;
+
+        var result = {
+            level: level,
+            mass: mass,
+            temp: temp,
+            volume: volume,
+            dens: dens,
+            water_level: water_level,
+        };
+        return result;
     },
     // Получить новую SAP_buffer
     getNewSAP_Buffer: function () {
@@ -1929,7 +2051,7 @@ var confirm_df = {
             side: side,
             num: num,
             fuel_type: fuel_type,
-            tank_num: confirm_df.select_capacity.val(),
+            tank_num: btanks_one == true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             id_card: confirm_df.input_sap_id_card.val(),
             dose: confirm_df.input_deliver_dose_fuel.val(),
             passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
@@ -2193,73 +2315,100 @@ var confirm_close_fuel = {
                     //fs.volume = gun.last_out_volume; // выдано
                     //fs.stop_counter = gun.total_volume; // по счетчику
                     fs.close = toISOStringTZ(now);
-                    getTankTags(fs.tank_num,
-                        function (result) {
-                            // Обновим информацию по баку
-                            fs.stop_datetime = toISOStringTZ(now);
-                            fs.stop_level = result.level.toFixed(2);
-                            fs.stop_mass = result.mass.toFixed(2);
-                            fs.stop_temp = result.temp.toFixed(2);
-                            fs.stop_volume = result.volume.toFixed(2);
-                            fs.stop_density = result.dens.toFixed(2);
-                            fs.stop_water_level = result.water_level.toFixed(2);
-                            // TODO:!!!ТЕСТ УБРАТЬ
-                            if (log) {
-                                log.info('Обновим информацию по баку');
-                                log.debug(fs);
+                    if (btanks_one == true) {
+                        // выбран режим одной емкости
+                        getTankTags(fs.tank_num,
+                            function (result) {
+                                // Обновим информацию по баку
+                                fs.stop_level = result.level.toFixed(2);
+                                fs.stop_mass = result.mass.toFixed(2);
+                                fs.stop_temp = result.temp.toFixed(2);
+                                fs.stop_volume = result.volume.toFixed(2);
+                                fs.stop_density = result.dens.toFixed(2);
+                                fs.stop_water_level = result.water_level.toFixed(2);
+                                $('input#close-stop_level').val(fs.stop_level);
+                                $('input#close-stop_volume').val(fs.stop_volume);
+                                $('input#close-stop_density').val(fs.stop_density);
+                                $('input#close-stop_mass').val(fs.stop_mass);
+                                $('input#close-stop_temp').val(fs.stop_temp);
+                                $('input#close-stop_water_level').val(fs.stop_water_level);
                             }
-                            // Выполним расчет выданного объема и массы
-                            fs.mass = 0;
-                            if (fs.passage == "B") {
-                                // Если не пролив, разица посчетчикам
-                                fs.volume = fs.stop_counter - fs.start_counter;
-                                if (fs.volume > 0) {
-                                    fs.volume = fs.volume / 100.0;
-                                    if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
+                        );
+                    } else {
+                        // выбран режим нескольких емкостей
+                        confirm_df.viewParmetrTanksOfType(
+                            fs.fuel_type,
+                            function (list_tags) {
+                                var result = confirm_df.viewParamTanks(list_tags);
+                                if (result) {
+                                // Обновим информацию по баку
+                                    fs.stop_level = result.level.toFixed(2);
+                                    fs.stop_mass = result.mass.toFixed(2);
+                                    fs.stop_temp = result.temp.toFixed(2);
+                                    fs.stop_volume = result.volume.toFixed(2);
+                                    fs.stop_density = result.dens.toFixed(2);
+                                    fs.stop_water_level = result.water_level.toFixed(2);
+                                    $('input#close-stop_level').val(fs.stop_level);
+                                    $('input#close-stop_volume').val(fs.stop_volume);
+                                    $('input#close-stop_density').val(fs.stop_density);
+                                    $('input#close-stop_mass').val(fs.stop_mass);
+                                    $('input#close-stop_temp').val(fs.stop_temp);
+                                    $('input#close-stop_water_level').val(fs.stop_water_level);
                                 }
                             }
-
-                            // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
-                            if (bIssue_test) {
-                                fs.volume = fs.dose;
-                            }
-                            if (fs.volume > 0) {
-                                fs.mass = (fs.volume * fs.start_density) * 0.001;
-                            }
-
-                            $('input#close-operator_name').val(fs.operator_name);
-                            $('input#close-smena_num').val(fs.smena_num);
-                            $('input#close-smena_datetime').val(fs.smena_datetime);
-                            $('input#close-trk_num').val(fs.trk_num);
-                            $('input#close-gun_num').val(fs.num);
-                            $('input#close-num').val(fs.num);
-                            $('input#close-fuel_type').val(fs.fuel_type);
-                            $('input#close-tank_num').val(fs.tank_num);
-                            $('input#close-id_card').val(fs.id_card);
-                            $('input#close-dose').val(fs.dose);
-                            $('input#close-passage').val(fs.passage);
-                            $('input#close-volume').val(fs.volume);
-                            $('input#close-mass').val(fs.mass);
-                            $('input#close-start_datetime').val(fs.start_datetime);
-                            $('input#close-start_level').val(fs.start_level);
-                            $('input#close-start_volume').val(fs.start_volume);
-                            $('input#close-start_density').val(fs.start_density);
-                            $('input#close-start_mass').val(fs.start_mass);
-                            $('input#close-start_temp').val(fs.start_temp);
-                            $('input#close-start_water_level').val(fs.start_water_level);
-                            $('input#close-start_counter').val(fs.start_counter);
-                            $('input#close-stop_datetime').val(fs.stop_datetime);
-                            $('input#close-stop_level').val(fs.stop_level);
-                            $('input#close-stop_volume').val(fs.stop_volume);
-                            $('input#close-stop_density').val(fs.stop_density);
-                            $('input#close-stop_mass').val(fs.stop_mass);
-                            $('input#close-stop_temp').val(fs.stop_temp);
-                            $('input#close-stop_water_level').val(fs.stop_water_level);
-                            $('input#close-stop_counter').val(fs.stop_counter);
-                            //$('input#close-close').val(fs.close);
-                            $('input#close-id_sap').val(fs.id_sap);
+                        );
+                    }
+                    fs.stop_datetime = toISOStringTZ(now);
+                    // TODO:!!!ТЕСТ УБРАТЬ
+                    if (log) {
+                        log.info('Обновим информацию по баку');
+                        log.debug(fs);
+                    }
+                    // Выполним расчет выданного объема и массы
+                    fs.mass = 0;
+                    if (fs.passage == "B") {
+                        // Если не пролив, разица посчетчикам
+                        fs.volume = fs.stop_counter - fs.start_counter;
+                        if (fs.volume > 0) {
+                            fs.volume = fs.volume / 100.0;
+                            if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
                         }
-                    );
+                    }
+
+                    // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
+                    if (bIssue_test) {
+                        fs.volume = fs.dose;
+                    }
+                    if (fs.volume > 0) {
+                        fs.mass = (fs.volume * fs.start_density) * 0.001;
+                    }
+
+                    $('input#close-operator_name').val(fs.operator_name);
+                    $('input#close-smena_num').val(fs.smena_num);
+                    $('input#close-smena_datetime').val(fs.smena_datetime);
+                    $('input#close-trk_num').val(fs.trk_num);
+                    $('input#close-gun_num').val(fs.num);
+                    $('input#close-num').val(fs.num);
+                    $('input#close-fuel_type').val(fs.fuel_type);
+                    $('input#close-tank_num').val(fs.tank_num);
+                    $('input#close-id_card').val(fs.id_card);
+                    $('input#close-dose').val(fs.dose);
+                    $('input#close-passage').val(fs.passage);
+                    $('input#close-volume').val(fs.volume);
+                    $('input#close-mass').val(fs.mass);
+                    $('input#close-start_datetime').val(fs.start_datetime);
+                    $('input#close-start_level').val(fs.start_level);
+                    $('input#close-start_volume').val(fs.start_volume);
+                    $('input#close-start_density').val(fs.start_density);
+                    $('input#close-start_mass').val(fs.start_mass);
+                    $('input#close-start_temp').val(fs.start_temp);
+                    $('input#close-start_water_level').val(fs.start_water_level);
+                    $('input#close-start_counter').val(fs.start_counter);
+                    $('input#close-stop_datetime').val(fs.stop_datetime);
+
+                    $('input#close-stop_counter').val(fs.stop_counter);
+                    //$('input#close-close').val(fs.close);
+                    $('input#close-id_sap').val(fs.id_sap);
                 }
                 confirm_close_fuel.fs = fs;
             }

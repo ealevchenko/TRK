@@ -55,7 +55,7 @@ var supply_out =
             "LGOBE": "",
             "MEINS": "TO"
         }
-    ]
+    ];
 // TODO:!!!ТЕСТ УБРАТЬ
 var reservation_out =
     { "RSNUM": "0003947680", "RSPOS": "0001", "MATNR": "000000000107000027", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "080 ", "UMWRK": "0010", "BDMNG": "0.05", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "TO ", "BWART": "X01" }
@@ -79,7 +79,7 @@ var guns_out = [
     { "num_trk": 6, "num_gun": 12, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
     { "num_trk": 7, "num_gun": 13, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
     { "num_trk": 7, "num_gun": 14, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
-    { "num_trk": 7, "num_gun": 15, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
+    { "num_trk": 7, "num_gun": 15, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
     { "num_trk": 7, "num_gun": 16, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000023 },
     { "num_trk": 7, "num_gun": 17, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
     { "num_trk": 7, "num_gun": 18, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 128, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000022 },
@@ -184,13 +184,13 @@ var LockScreen = function (message) {
     if (lock)
         lock.className = 'LockOn';
     lock.innerHTML = message;
-}
+};
 // Разблокировать 
 var LockScreenOff = function () {
     var lock = document.getElementById('lockPanel');
     if (lock)
         lock.className = 'LockOff';
-}
+};
 /* ----------------------------------------------------------
     Функции работы с масивами
 -------------------------------------------------------------*/
@@ -206,7 +206,7 @@ var getAllObjects = function (obj, key, val) {
         }
     }
     return objects;
-}
+};
 // Поиск элемента массива по ключу по первому уровню 
 var getObjects = function (obj, key, val) {
     var objects = [];
@@ -220,7 +220,7 @@ var getObjects = function (obj, key, val) {
             }
     }
     return objects;
-}
+};
 // Поиск элемента массива во вложенных обектах второго уровня 
 var getChildObjects = function (obj, key, val) {
     var objects = [];
@@ -234,12 +234,12 @@ var getChildObjects = function (obj, key, val) {
             }
     }
     return objects;
-}
+};
 
 // Коррекция вывода даты с учетом зоны
 var toISOStringTZ = function (date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-}
+};
 
 var outVal = function (i) {
     return i != null ? Number(i) : '';
@@ -291,7 +291,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
         .val(value_select)
         .selectmenu("refresh");
     return obj_select;
-}
+};
 // Обновим компонента Select
 var updateOptionSelect = function (obj_select, data, callback_option, value_select, exceptions_value) {
     var options = [];
@@ -323,7 +323,7 @@ var updateOptionSelect = function (obj_select, data, callback_option, value_sele
         .append(options.join(""))
         .val(value_select)
         .selectmenu("refresh");
-}
+};
 
 /* ----------------------------------------------------------
     Обработчики ajax - функций
@@ -331,7 +331,7 @@ var updateOptionSelect = function (obj_select, data, callback_option, value_sele
 // Событие перед запросом
 var AJAXBeforeSend = function () {
     //OnBegin();
-}
+};
 // Обработка ошибок
 var OnAJAXError = function (x, y, z) {
     //LockScreenOff();
@@ -350,12 +350,12 @@ var OnAJAXErrorOfMessage = function (message) {
     //        confirm_df.updateTips("Ошибка получения данных из САП по номеру резервирования");
     //        break;
     //}
-}
+};
 
 // Событие после выполнения
 var AJAXComplete = function () {
     //LockScreenOff();
-}
+};
 // Прочесть теги бака
 var getTankTags = function (num, callback) {
     $.ajax({
@@ -392,7 +392,7 @@ var getTankTags = function (num, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Прочесть теги из списка бака
 var getTanksTags = function (nums, callback) {
     $.ajax({
@@ -427,9 +427,9 @@ var getTanksTags = function (nums, callback) {
         },
         complete: function () {
             AJAXComplete();
-        },
+        }
     });
-}
+};
 // Прочесть теги пистолетов
 var getGunTags = function (callback) {
     $.ajax({
@@ -465,7 +465,7 @@ var getGunTags = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Прочесть теги rfid
 var getRFIDTags = function (callback) {
     $.ajax({
@@ -501,7 +501,7 @@ var getRFIDTags = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Прочесть теги DIORisers
 var getDIORisersTags = function (callback) {
     $.ajax({
@@ -537,7 +537,7 @@ var getDIORisersTags = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Прочесть теги Risers
 var getRisersTags = function (callback) {
     $.ajax({
@@ -573,7 +573,7 @@ var getRisersTags = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Считать считаные карты по ТРК из буфера БД
 var getRFIDDB = function (callback) {
     $.ajax({
@@ -596,7 +596,7 @@ var getRFIDDB = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Резервирование
 var getReservation = function (num, pos, callback) {
     $.ajax({
@@ -631,7 +631,7 @@ var getReservation = function (num, pos, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Поставки
 var getSupply = function (post, callback) {
     $.ajax({
@@ -664,7 +664,7 @@ var getSupply = function (post, callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Получить OZM из внутрененго справочника
 var getCatalogOfOZM = function (id, callback) {
     $.ajax({
@@ -687,7 +687,7 @@ var getCatalogOfOZM = function (id, callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Получить список всех OZM из внутрененго справочника
 var getCatalogOZM = function (callback) {
     $.ajax({
@@ -710,7 +710,7 @@ var getCatalogOZM = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Получить склад
 var getCatalogOfDepots = function (id, callback) {
     $.ajax({
@@ -733,7 +733,7 @@ var getCatalogOfDepots = function (id, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Получить Depots
 var getCatalogDepots = function (callback) {
     $.ajax({
@@ -756,7 +756,7 @@ var getCatalogDepots = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Получить Завод
 var getCatalogWerks = function (callback) {
     $.ajax({
@@ -779,7 +779,7 @@ var getCatalogWerks = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Получить sap_buffer по id
 var getAsyncSAP_Buffer = function (id, callback) {
     $.ajax({
@@ -802,7 +802,7 @@ var getAsyncSAP_Buffer = function (id, callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Добавить sap_buffer
 var postAsyncSAP_Buffer = function (sap_buffer, callback) {
     $.ajax({
@@ -827,7 +827,7 @@ var postAsyncSAP_Buffer = function (sap_buffer, callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Обновить sap_buffer
 var putAsyncSAP_Buffer = function (sap_buffer, callback) {
     $.ajax({
@@ -851,7 +851,7 @@ var putAsyncSAP_Buffer = function (sap_buffer, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Удалить sap_buffer по id
 var deleteAsynczsSAP_Buffer = function (id, callback) {
     $.ajax({
@@ -874,7 +874,7 @@ var deleteAsynczsSAP_Buffer = function (id, callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Добавить FuelSale
 var postAsyncFuelSale = function (fuel_sale, callback) {
     $.ajax({
@@ -899,7 +899,7 @@ var postAsyncFuelSale = function (fuel_sale, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Веруть список FuelSale открытых выдач топлива
 var getAsyncOpenFuelSale = function (callback) {
     $.ajax({
@@ -922,7 +922,7 @@ var getAsyncOpenFuelSale = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 //Обновить FuelSale
 var putAsyncFuelSales = function (fuel_sale, callback) {
     $.ajax({
@@ -946,7 +946,7 @@ var putAsyncFuelSales = function (fuel_sale, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Веруть последний UsersActions
 var getAsyncCurrentUsersActions = function (callback) {
     $.ajax({
@@ -969,7 +969,7 @@ var getAsyncCurrentUsersActions = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 
 // Включить колонку
 var postAsyncGunStart = function (gun_start, callback) {
@@ -995,7 +995,7 @@ var postAsyncGunStart = function (gun_start, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Сбросить настройки колонки
 var postAsyncGunClear = function (gun_clear, callback) {
     $.ajax({
@@ -1020,8 +1020,7 @@ var postAsyncGunClear = function (gun_clear, callback) {
             AJAXComplete();
         },
     });
-}
-
+};
 // Сбросить RFID карту
 var postAsyncRFIDClear = function (rfid_clear, callback) {
     $.ajax({
@@ -1046,9 +1045,7 @@ var postAsyncRFIDClear = function (rfid_clear, callback) {
             AJAXComplete();
         },
     });
-}
-
-
+};
 // Веруть выбранные емкости по А92
 var getAsyncSelectTanks_A92 = function (callback) {
     $.ajax({
@@ -1071,7 +1068,7 @@ var getAsyncSelectTanks_A92 = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Добавить новые выбраные баки
 var postAsyncTanks_A92 = function (tanks_a92, callback) {
     $.ajax({
@@ -1096,7 +1093,7 @@ var postAsyncTanks_A92 = function (tanks_a92, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Веруть выбранные емкости по А95
 var getAsyncSelectTanks_A95 = function (callback) {
     $.ajax({
@@ -1119,7 +1116,7 @@ var getAsyncSelectTanks_A95 = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Добавить новые выбраные баки
 var postAsyncTanks_A95 = function (tanks_a95, callback) {
     $.ajax({
@@ -1144,7 +1141,7 @@ var postAsyncTanks_A95 = function (tanks_a95, callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Веруть выбранные емкости по dt
 var getAsyncSelectTanks_dt = function (callback) {
     $.ajax({
@@ -1167,7 +1164,7 @@ var getAsyncSelectTanks_dt = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
 // Добавить новые выбраные баки
 var postAsyncTanks_dt = function (tanks_dt, callback) {
     $.ajax({

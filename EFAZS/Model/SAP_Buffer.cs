@@ -1,4 +1,4 @@
-namespace EFAZS.Entities
+namespace EFAZS.Model
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +13,7 @@ namespace EFAZS.Entities
         {
             FuelSale = new HashSet<FuelSale>();
         }
+
         public int id { get; set; }
 
         [Column(TypeName = "date")]

@@ -85,15 +85,16 @@
     <Compile Include="Entities\Tanks_A95.cs" />
     <Compile Include="Entities\Tanks_dt.cs" />
     <Compile Include="Entities\Tanks_kerosene.cs" />
+    <Compile Include="Model\FuelSale.cs" />
+    <Compile Include="Model\Model1.cs" />
+    <Compile Include="Model\SAP_Buffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\LogFile\LogFile.csproj">
       <Project>{2ae0080b-7e15-4c79-842c-35e52fc945fa}</Project>
