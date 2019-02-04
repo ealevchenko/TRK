@@ -26,26 +26,139 @@
         var transferSAP_ban = '@System.Configuration.ConfigurationManager.AppSettings["TransferSAP_ban"]';
         var controlTRK_ban = '@System.Configuration.ConfigurationManager.AppSettings["ControlTRK_ban"]';
         var pollDIO = '@System.Configuration.ConfigurationManager.AppSettings["PollDIO"]';
+        var tanks_one = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_one"]';
     </script>
 
     <script src="~/Scripts/view/common.js" type="text/javascript"></script>
     <script src="~/Scripts/view/rf.js" type="text/javascript"></script>
-
 
 </head>
 <body>
     <div id="lockPanel" class="LockOff"></div>
     <div id="content">
         <div>Текущее время :<label id="date-value"></label></div>
-        <div>
+        <div class="rf">
             <div class="setup-rf">
-                Тип операции приема ГСМ : <select id="type-fuel-receiving" class="ui-widget-content ui-corner-all"></select>
+                <button id="button-start" class="ui-button ui-widget ui-corner-all button-rfid-all">Начать прием ГСМ</button>
             </div>
-            <div class="fuel-receiving-hopper-all">
-                <div class="fuel-receiving-hopper">
+            <div class="input-all">
+                <div class="input-document">
 
+                    <fieldset>
+                        <legend>Заполнить документы</legend>
+                        Операция приема ГСМ из : <select id="type-fuel-receiving" class="ui-widget-content ui-corner-all"></select>
+                        <div id="tank-truck" class="setup-operation">
+                            <table class="setup-table">
+                                <tr>
+                                    <th>Номер накладной:</th>
+                                    <td><input id="tank-truck-num-nak" type="number" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Вес топлива:</th>
+                                    <td><input id="tank-truck-weight" type="number" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Поставщик:</th>
+                                    <td><textarea id="tank-truck-provider" rows="2" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="tank-railway" class="setup-operation">
+                            <table class="setup-table">
+                                <tr>
+                                    <th>Номер ж.д. накладной:</th>
+                                    <td><input id="tank-railway-num-nak" type="number" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Поставщик:</th>
+                                    <td><textarea id="tank-railway-provider" rows="2" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <th>Объем по накладной:</th>
+                                    <td><input id="tank-railway-nak-volume" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Плотность по накладной:</th>
+                                    <td><input id="tank-railway-nak-dens" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Масса по накладной:</th>
+                                    <td><input id="tank-railway-nak-mass" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Уровень в цистерне по руч. измерениям:</th>
+                                    <td><input id="tank-railway-manual-level" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Объем в цистерне по руч. измерениям:</th>
+                                    <td><input id="tank-railway-manual-volume" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Плотность в цистерне по руч. измерениям:</th>
+                                    <td><input id="tank-railway-manual-dens" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Масса в цистерне по руч. измерениям:</th>
+                                    <td><input id="tank-railway-manual-mass" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
                 </div>
+                <div class="input-tank">
+                    <fieldset>
+                        <legend>Добавить емкость</legend>
+                        ГСМ : <select id="type-fuel" class="ui-widget-content ui-corner-all"></select>
+                        <table class="table-fuel-receiving-hopper">
+                            <tr>
+                                <th>Емкость для приема:</th>
+                                <td>
+                                    <select id="reception-tank" class="ui-widget-content ui-corner-all"></select>
+                                    <button id="button-add-tank" class="ui-button ui-widget ui-corner-all button-rfid-all">Добавить</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Уровень ГСМ в баке (мм) :</th>
+                                <td><input id="reception-tank-level" name="take-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th>Объем ГСМ в баке (л) :</th>
+                                <td><input id="reception-tank-volume" name="take-volume" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th>Плотность ГСМ в баке (кг/м3) :</th>
+                                <td><input id="reception-tank-dens" name="take-dens" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th>Масса ГСМ в баке (кг) :</th>
+                                <td><input id="reception-tank-mass" name="take-mass" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th>Температура ГСМ в баке (С°) :</th>
+                                <td><input id="reception-tank-temp" name="take-temp" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                            <tr>
+                                <th>Уровень п-воды в баке (мм) :</th>
+                                <td><input id="reception-tank-water-level" name="water-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+                <div class="cls"></div>
             </div>
+
+            <fieldset>
+                <legend>Резурвуары для приема</legend>
+                <div class="fuel-receiving-hopper-all">
+                    <div class="fuel-receiving-hopper">
+
+                    </div>
+                </div>
+            </fieldset>
+
+
+
+
         </div>
         <p class="messageTips"></p>
     </div>

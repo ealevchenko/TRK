@@ -1,11 +1,32 @@
 ﻿body {
-    font-size: 11px;
+    font-size: 14px;
     margin:0 10px;
 }
 
 div {
     border-radius: 3px;
-    border: 1px dotted #0033CC 
+    /*border: 1px dotted #0033CC*/ 
+}
+
+legend {
+    padding: 0;
+    border: 0;
+}
+
+legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 3px;
+    font-size: 14px;
+    line-height: inherit;
+    color: #333333;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.overflow {
+    height: 200px;
 }
 
 /*Блокировка экрана*/
@@ -32,3 +53,92 @@ div {
     font-size: xx-large;
     color: #0033CC;
 }
+
+div.rf {
+    /*width:1100px;*/
+    padding:10px;
+}
+
+div.input-all {
+    width: auto;
+
+}
+
+div.input-document {
+    width: 520px;
+    float: left;
+    /*border: 1px solid #e5e5e5;*/
+}
+
+div.input-tank {
+    margin-left:20px;
+    width: 520px;
+    float: left;
+    /*border: 1px solid #e5e5e5;*/
+}
+
+div.cls {
+    clear: left;
+}
+
+/*setup-table*/
+.setup-table {
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .setup-table th {
+        font-size: 14px;
+        text-align: right;
+        font-weight: bold;
+        width: 200px;
+    }
+
+    .setup-table td {
+        font-size: 14px;
+        font-weight: bold;
+        text-align: left;
+        width: 300px;
+    }
+
+        .setup-table td input {
+            width: 95%;
+        }
+
+        .setup-table td textarea {
+            width: 95%;
+        }
+
+/*table-fuel-receiving-hopper*/
+.table-fuel-receiving-hopper {
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+    .table-fuel-receiving-hopper th {
+        font-size: 14px;
+        text-align: right;
+        font-weight: bold;
+        width: 200px;
+    }
+
+    .table-fuel-receiving-hopper td {
+        font-size: 14px;
+        font-weight: bold;
+        text-align: left;
+        width: 300px;
+    }
+
+        .table-fuel-receiving-hopper td input {
+            width: 95%;
+        }
+
+        .table-fuel-receiving-hopper td textarea {
+            width: 95%;
+        }

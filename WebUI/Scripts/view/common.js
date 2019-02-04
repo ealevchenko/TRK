@@ -175,6 +175,69 @@ var bunks_out = [
     { "num_tank": "B2", "dens": 755.495805, "fill_percent": 17.640862872872312, "level": 653.14, "mass": 9488.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.3, "ullage": 58643, "unit": null, "volume": 1256.1, "water_level": 0.31, "water_volume": 0.0 },
     { "num_tank": "B3", "dens": 757.904171, "fill_percent": 35.737970982049163, "level": 1082.59, "mass": 19361.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.1, "ullage": 45930, "unit": null, "volume": 2554.3, "water_level": 1.1, "water_volume": 0.2 }
 ];
+
+// список баков
+var ozm_bak = {
+    list: [
+        {
+            type: 107000022, // A92
+            tanks: [{ value: 'B2', text: 'B2' }, { value: 'B3', text: 'B3' }, { value: 'B9', text: 'B9' }, { value: 'B11', text: 'B11' }, { value: 'B16', text: 'B16' }]
+        },
+        {
+            type: 107000023, // A95
+            tanks: [{ value: 'B17', text: 'B17' }, { value: 'B18', text: 'B18' }, { value: 'B19', text: 'B19' }, { value: 'B20', text: 'B20' }]
+        },
+        {
+            type: 107000024, // ДТ
+            tanks: [
+                { value: '01', text: '01' },
+                { value: '02', text: '02' },
+                { value: '03', text: '03' },
+                { value: '04', text: '04' },
+                { value: '05', text: '05' },
+                { value: '06', text: '06' },
+                { value: '07', text: '07' },
+                { value: '08', text: '08' },
+                { value: '09', text: '09' },
+                { value: '10', text: '10' },
+                { value: '11', text: '11' },
+                { value: '12', text: '12' },
+                //{ value: '13', text: '13' }, // конфискат
+                { value: '14', text: '14' },
+                { value: '15', text: '15' },
+                { value: '16', text: '16' },
+                { value: '17', text: '17' },
+                { value: '18', text: '18' },
+                { value: '19', text: '19' },
+                { value: '20', text: '20' },
+                { value: '21', text: '21' },
+                { value: '22', text: '22' },
+                { value: '23', text: '23' },
+                { value: '24', text: '24' },
+                { value: '25', text: '25' },
+                { value: '26', text: '26' },
+                { value: '27', text: '27' },
+                { value: '28', text: '28' },
+                { value: '29', text: '29' },
+                { value: '30', text: '30' },
+                { value: '31', text: '31' },
+                { value: '32', text: '32' },
+            ]
+        },
+        {
+            type: 107000027, // Керосин
+            tanks: [{ value: '33', text: '3' }, { value: '38', text: '38' }, { value: '39', text: '39' }]
+        }
+    ],
+    // Вернуть список баков по типу
+    getTanks: function (type) {
+        var tanks = getObjects(ozm_bak.list, 'type', type);
+        if (tanks && tanks.length > 0) {
+            return tanks[0].tanks;
+        }
+    }
+};
+
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
