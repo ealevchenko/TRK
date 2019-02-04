@@ -212,6 +212,58 @@ namespace ClientSAPTRK
                 return null;
             }
         }
+
+        public Reservation GetReservationOfDebitor(string debitor, string ozm, string mode)
+        {
+            try
+            {
+
+                string message = this.url + this.transaction_reservation +
+                    "&RSNUM=3052703" +
+                    "&RSPOS=1" +
+                    "&KUNNR=" + debitor +
+                    "&MATNR=" + ozm +
+                    "&FLAG_R=" + mode +
+                    "&OutputParameter=RSLT" +
+                    "&XacuteLoginName=" + this.login +
+                    "&XacuteLoginPassword=" + this.pass;
+
+                string response = Select(message, "GET", "text/xml");
+
+                if (String.IsNullOrWhiteSpace(response)) return null;
+                //Console.WriteLine("Result text/xml = {0}", response);
+
+                XDocument doc = XDocument.Parse(response);
+
+                XElement element = doc.Element("Rowsets").Element("Rowset").Elements("Row").FirstOrDefault();
+
+                Reservation reserv = new Reservation()
+                {
+                    RSNUM = (string)element.Element("RSNUM"), //Номер резервирования
+                    RSPOS = (string)element.Element("RSPOS"), // Позиция резервирования
+                    MATNR = (string)element.Element("MATNR"), //ОЗМ
+                    WERKS = (string)element.Element("WERKS"), //Завод
+                    LGORT = (string)element.Element("LGORT"), //Склад-отправитель
+                    UMLGO = (string)element.Element("UMLGO"), //Склад-получатель
+                    UMWRK = (string)element.Element("UMWRK"), //
+                    BDMNG = (string)element.Element("BDMNG"), //Количество требуемое
+                    //ENMNG = (string)element.Element("ENMNG"), //
+                    LGOBE = (string)element.Element("LGOBE"), //
+                    MEINS = (string)element.Element("MEINS"), //базисная единица
+                    BWART = (string)element.Element("BWART"), //Вид движения"
+
+                };
+
+                return reserv;
+            }
+            catch (Exception e)
+            {
+                "Ошибка выполнения метода GetReservationOfDebitor".SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservation(debitor={0}, ozm={1}, mode={2}, e {3}", debitor, ozm, mode, e);
+                return null;
+            }
+        }
+
     }
 
 

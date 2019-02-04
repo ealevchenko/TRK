@@ -31,6 +31,8 @@ namespace test
             Console.WriteLine("BDMNG = {0}", reserv.BDMNG);
             Console.WriteLine("ENMNG = {0}", reserv.ENMNG);
             Console.WriteLine("LGOBE = {0}", reserv.LGOBE);
+            Console.WriteLine("MEINS = {0}", reserv.MEINS);
+            Console.WriteLine("BWART = {0}", reserv.BWART);
 
         }
 
@@ -55,6 +57,27 @@ namespace test
                 Console.WriteLine("MEINS = {0}", p.MEINS);
 
             }
+
+        }
+
+        public void Test_ClientSAP_GetReservationOfDebitor()
+        {
+            ClientSAP sap = new ClientSAP();
+
+            Reservation reserv = sap.GetReservationOfDebitor("101296", "310008399", "5");
+
+            Console.WriteLine("RSNUM = {0}", reserv.RSNUM);
+            Console.WriteLine("RSPOS = {0}", reserv.RSPOS);
+            Console.WriteLine("MATNR = {0}", reserv.MATNR);
+            Console.WriteLine("WERKS = {0}", reserv.WERKS);
+            Console.WriteLine("LGORT = {0}", reserv.LGORT);
+            Console.WriteLine("UMLGO = {0}", reserv.UMLGO);
+            Console.WriteLine("UMWRK = {0}", reserv.UMWRK);
+            Console.WriteLine("BDMNG = {0}", reserv.BDMNG);
+            //Console.WriteLine("ENMNG = {0}", reserv.ENMNG);
+            Console.WriteLine("LGOBE = {0}", reserv.LGOBE);
+            Console.WriteLine("MEINS = {0}", reserv.MEINS);
+            Console.WriteLine("BWART = {0}", reserv.BWART);
 
         }
 
