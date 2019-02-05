@@ -61,7 +61,7 @@ div.rf {
 
 div.input-all {
     width: auto;
-
+    border: 1px solid #e5e5e5;
 }
 
 div.input-document {
@@ -79,6 +79,17 @@ div.input-tank {
 
 div.cls {
     clear: left;
+}
+
+div.fuel-receiving-hopper-all {
+    width: auto;
+    border: 1px solid #e5e5e5;
+}
+
+div.fuel-receiving-hopper {
+    margin-left:10px;
+    border: 1px solid #e5e5e5;
+    float: left;
 }
 
 /*setup-table*/
@@ -112,8 +123,8 @@ div.cls {
             width: 95%;
         }
 
-/*table-fuel-receiving-hopper*/
-.table-fuel-receiving-hopper {
+/*table-fuel-receiving-tank*/
+.table-fuel-receiving-tank {
     margin-top: 10px;
     border-collapse: collapse;
     border-spacing: 0;
@@ -121,24 +132,47 @@ div.cls {
     font-weight: normal;
 }
 
-    .table-fuel-receiving-hopper th {
+    .table-fuel-receiving-tank th {
         font-size: 14px;
         text-align: right;
         font-weight: bold;
         width: 200px;
     }
 
-    .table-fuel-receiving-hopper td {
+    .table-fuel-receiving-tank td {
         font-size: 14px;
         font-weight: bold;
         text-align: left;
         width: 300px;
     }
 
-        .table-fuel-receiving-hopper td input {
+        .table-fuel-receiving-tank td input {
             width: 95%;
         }
 
-        .table-fuel-receiving-hopper td textarea {
+        .table-fuel-receiving-tank td textarea {
             width: 95%;
         }
+
+/*table-fuel-receiving-hopper*/
+.table-fuel-receiving-hopper {
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+    .table-fuel-receiving-hopper th {
+        font-size: 12px;
+        text-align: right;
+        font-weight: bold;
+        width: 100px;
+    }
+
+    .table-fuel-receiving-hopper td {
+        font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+        width: 100px;
+    }
