@@ -219,8 +219,10 @@ namespace ClientSAPTRK
             {
 
                 string message = this.url + this.transaction_reservation +
-                    "&RSNUM=3052703" +
-                    "&RSPOS=1" +
+                    //"&RSNUM=" +
+                    //"&RSPOS=" +
+                    ////"&RSNUM=3052703" +
+                    ////"&RSPOS=1" +
                     "&KUNNR=" + debitor +
                     "&MATNR=" + ozm +
                     "&FLAG_R=" + mode +

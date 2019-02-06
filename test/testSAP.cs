@@ -64,7 +64,9 @@ namespace test
         {
             ClientSAP sap = new ClientSAP();
 
-            Reservation reserv = sap.GetReservationOfDebitor("101296", "310008399", "5");
+            //Reservation reserv = sap.GetReservationOfDebitor("101296", "", "1");
+            //Reservation reserv = sap.GetReservationOfDebitor("101697", "107000024", "5");
+            Reservation reserv = sap.GetReservationOfDebitor("101635", "107000024", "5");
 
             Console.WriteLine("RSNUM = {0}", reserv.RSNUM);
             Console.WriteLine("RSPOS = {0}", reserv.RSPOS);
