@@ -39,6 +39,26 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // GET: api/sap/reservation/debitor/101635/ozm/107000024/mode/5
+        [Route("reservation/debitor/{debitor}/ozm/{ozm}/mode/{mode}")]
+        [ResponseType(typeof(Reservation))]
+        public IHttpActionResult GetReservationOfDebitor(string debitor, string ozm, string mode)
+        {
+            try
+            {
+                Reservation reservation = sap.GetReservationOfDebitor(debitor, ozm, mode);
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+                return Ok(reservation);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         // GET: api/sap/supply/post/8000000020
         [Route("supply/post/{post}")]
         [ResponseType(typeof(Supply))]

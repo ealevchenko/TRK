@@ -25,7 +25,7 @@ namespace EFAZS.Entities
         public string LOGIN_R { get; set; }
 
         [Required]
-        [StringLength(3)]
+        [StringLength(200)]
         public string N_BAK { get; set; }
 
         [Required]

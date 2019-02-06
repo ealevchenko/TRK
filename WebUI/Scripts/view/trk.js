@@ -816,6 +816,7 @@ var confirm_df = {
     // SAP ********************************************************
     select_variant: null,               // выбор номеров позиций по поставке
     buttom_select_sap: null,            // Запрос на САП
+    buttom_select_sap_debitor: null,    // Запрос на САП дебитор
     input_sap_num: null,                // Номер запроса в САП
     input_sap_num_pos: null,            // Номер позиции запроса в САП
     select_sap_num_pos: null,           // выбор номеров позиций по поставке
@@ -838,7 +839,6 @@ var confirm_df = {
     issuance_start: function (id) {
         if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
         if (bcontrolTRK_ban == false) {
-
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type == 0) {
                 if (log) { log.info('Производим выдачу на реальную колонку, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
@@ -1200,6 +1200,69 @@ var confirm_df = {
                 confirm_df.viewVariant(ui.item.value);
             },
             null);
+        // нажата кнопка "Получить из САП дебитор"
+        confirm_df.buttom_select_sap_debitor = $('button#button-sap-debitor').on('click', function () {
+            $(".validateTips").text('');
+            $(".ui-state-error").removeClass("ui-state-error");
+            event.preventDefault();
+            var i = confirm_df.select_variant.val();
+
+            // Покажем позиции
+            confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+            confirm_df.input_sap_ozm.val('');
+            confirm_df.input_sap_ozm_amount.val('');
+            confirm_df.input_sap_stock_recipient.val('');
+            confirm_df.input_sap_factory_recipient.val('');
+            switch (i) {
+                case "1":
+                case "2":
+                case "5":
+                case "6":
+                    // По резервированию
+                    var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
+                    var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null) ;
+
+                    getReservationOfDebitor(
+                        debitor,
+                        ozm,
+                        i,
+                        function (result) {
+                            if (result.RSNUM === "") {
+                                OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor);
+                            } else {
+                                //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
+                                //    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
+                                //} else {
+                                //    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                //    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
+                                //        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
+                                //    } else {
+                                //        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                confirm_df.input_sap_num.val(result.RSNUM);
+                                confirm_df.input_sap_num_pos.val(result.RSPOS);
+                                //        //$('input#sap-num').val();
+                                confirm_df.input_sap_ozm.val(result.MATNR);
+                                confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                                confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                                //        if (result.RSNUM != "---") {
+                                            var depots = catalog_depots.get($.trim(result.UMLGO));
+                                            if (depots) {
+                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                            }
+                                //        } else { // TODO:!!!ТЕСТ УБРАТЬ
+                                //            confirm_df.input_sap_stock_recipient.val("---");
+                                //        }
+
+                                //    }
+                                //}
+                            }
+                        }
+                    );
+                    break;
+            }
+        });
         // нажата кнопка "Получить из САП"
         confirm_df.buttom_select_sap = $('button#button-sap').on('click', function () {
             $(".validateTips").text('');
@@ -1602,6 +1665,7 @@ var confirm_df = {
             case '1':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap-debitor').show();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1619,6 +1683,7 @@ var confirm_df = {
             case '2':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap-debitor').show();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1638,6 +1703,7 @@ var confirm_df = {
             case '3':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap-debitor').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер исх.поставки :');
                 $('tr#sap-num-pos').show(); $('#label-sap-num-pos').text('*Номер позиции ИП :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1678,6 +1744,7 @@ var confirm_df = {
             case '5':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap-debitor').show();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1697,6 +1764,7 @@ var confirm_df = {
             case '6':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap-debitor').show();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд допуска:');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1936,9 +2004,9 @@ var confirm_df = {
             DATE: toISOStringTZ(now).substring(0, 10),
             TIME: toISOStringTZ(now).substring(11, 23),
             LOGIN_R: confirm_df.operator_name,
-            N_BAK: confirm_df.select_capacity.val(),
+            N_BAK: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             OZM_BAK: fuel_type,
-            OZM_TREB: variant == 4 ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val(),
+            OZM_TREB: variant === 4 ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val(),
             FLAG_R: variant,
             PLOTNOST: confirm_df.input_deliver_take_dens.val(),
             VOLUME: null,
@@ -1946,12 +2014,10 @@ var confirm_df = {
             LOGIN_EXP: confirm_df.input_sap_name_forwarder.val(),
             N_POST: confirm_df.input_sap_num_kpp.val(),
             TRANSP_FAKT: confirm_df.input_sap_num_ts.val(),
-            N_DEB: variant == 5 || variant == 6 ? confirm_df.card.Debitor : null,
+            N_DEB: variant === 5 || variant === 6 ? confirm_df.card.Debitor : null,
             N_TREB: confirm_df.input_sap_num.val(),
-            //LGORT: variant == 3 ? confirm_df.getPosSupply(num_pos).LGORT : null, // до выяснения
-            //WERKS: variant == 3 ? confirm_df.getPosSupply(num_pos).WERKS : null, // до выяснения
-            LGORT: variant == 4 ? confirm_df.select_sap_stock_recipient.val() : null,
-            WERKS: variant == 4 ? confirm_df.select_sap_factory_recipient.val() : null,
+            LGORT: variant === 4 ? confirm_df.select_sap_stock_recipient.val() : null,
+            WERKS: variant === 4 ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null
         };
     },
@@ -1966,16 +2032,16 @@ var confirm_df = {
 
         switch (confirm_df.type) {
             case 0:
-                trk_num = confirm_df.gun != null ? confirm_df.gun.num_trk : null;
-                side = confirm_df.gun != null ? (confirm_df.gun.side == 0 ? false : true) : null;
-                num = confirm_df.gun != null ? confirm_df.gun.num_gun : null;
-                fuel_type = confirm_df.gun != null ? confirm_df.gun.type_fuel : null;
-                counter = confirm_df.gun != null ? confirm_df.gun.total_volume : null;
+                trk_num = confirm_df.gun !== null ? confirm_df.gun.num_trk : null;
+                side = confirm_df.gun !== null ? (confirm_df.gun.side === 0 ? false : true) : null;
+                num = confirm_df.gun !== null ? confirm_df.gun.num_gun : null;
+                fuel_type = confirm_df.gun !== null ? confirm_df.gun.type_fuel : null;
+                counter = confirm_df.gun !== null ? confirm_df.gun.total_volume : null;
                 break;
             case 1:
-                num = confirm_df.risers != null ? confirm_df.risers.num : null;
+                num = confirm_df.risers !== null ? confirm_df.risers.num : null;
                 trk_num = (9 + Number(num));
-                fuel_type = confirm_df.risers != null ? confirm_df.risers.type_fuel : null;
+                fuel_type = confirm_df.risers !== null ? confirm_df.risers.type_fuel : null;
                 counter = 0; // Добавить счетчик
                 break;
         }
@@ -1989,7 +2055,7 @@ var confirm_df = {
             side: side,
             num: num,
             fuel_type: fuel_type,
-            tank_num: btanks_one == true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
+            tank_num: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             id_card: confirm_df.input_sap_id_card.val(),
             dose: confirm_df.input_deliver_dose_fuel.val(),
             passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
@@ -2079,6 +2145,7 @@ var confirm_tags_gun = {
 
 var confirm_close_fuel = {
     obj: null,
+    type: null,
     fs: null,
     sap: null,
     init: function () {
@@ -2109,6 +2176,16 @@ var confirm_close_fuel = {
                         );
                         // строка САП есть обновить выдачу
                         if (confirm_close_fuel.sap) {
+
+                            // расчет для пистолета
+                            if (confirm_close_fuel.type === 0) {
+                                confirm_close_fuel.sap.PLOTNOST =  confirm_close_fuel.fs.stop_density;
+                            }
+                            // расчет для наливного стояка
+                            if (confirm_close_fuel.type === 1) {
+                                confirm_close_fuel.sap.PLOTNOST = ((confirm_close_fuel.fs.start_density + confirm_close_fuel.fs.stop_density) / 2);
+                            }
+                            
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
                             confirm_close_fuel.sap.MASS = confirm_close_fuel.fs.mass;
                             // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В САП
@@ -2217,6 +2294,7 @@ var confirm_close_fuel = {
                 var now = new Date();
                 var trk_num = fs.trk_num;
                 if (trk_num > 0 && trk_num < 10) {
+                    confirm_close_fuel.type = 0;
                     if (log) { log.info('Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
                     confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')');
                     $('tr#type-0').show();
@@ -2233,6 +2311,7 @@ var confirm_close_fuel = {
                     }
                 }
                 if (trk_num >= 10 && trk_num <= 12) {
+                    confirm_close_fuel.type = 1;
                     if (log) { log.info('Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
                     confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')');
                     $('tr#type-1').show();
@@ -2253,23 +2332,13 @@ var confirm_close_fuel = {
                     //fs.volume = gun.last_out_volume; // выдано
                     //fs.stop_counter = gun.total_volume; // по счетчику
                     fs.close = toISOStringTZ(now);
-                    if (btanks_one == true) {
+                    if (btanks_one === true) {
                         // выбран режим одной емкости
                         getTankTags(fs.tank_num,
                             function (result) {
                                 // Обновим информацию по баку
-                                fs.stop_level = result.level.toFixed(2);
-                                fs.stop_mass = result.mass.toFixed(2);
-                                fs.stop_temp = result.temp.toFixed(2);
-                                fs.stop_volume = result.volume.toFixed(2);
-                                fs.stop_density = result.dens.toFixed(2);
-                                fs.stop_water_level = result.water_level.toFixed(2);
-                                $('input#close-stop_level').val(fs.stop_level);
-                                $('input#close-stop_volume').val(fs.stop_volume);
-                                $('input#close-stop_density').val(fs.stop_density);
-                                $('input#close-stop_mass').val(fs.stop_mass);
-                                $('input#close-stop_temp').val(fs.stop_temp);
-                                $('input#close-stop_water_level').val(fs.stop_water_level);
+                                fs = confirm_close_fuel.set_fs_Close(fs, result);
+                                confirm_close_fuel.fs = fs;
                             }
                         );
                     } else {
@@ -2280,77 +2349,91 @@ var confirm_close_fuel = {
                                 var result = confirm_df.viewParamTanks(list_tags);
                                 if (result) {
                                 // Обновим информацию по баку
-                                    fs.stop_level = result.level.toFixed(2);
-                                    fs.stop_mass = result.mass.toFixed(2);
-                                    fs.stop_temp = result.temp.toFixed(2);
-                                    fs.stop_volume = result.volume.toFixed(2);
-                                    fs.stop_density = result.dens.toFixed(2);
-                                    fs.stop_water_level = result.water_level.toFixed(2);
-                                    $('input#close-stop_level').val(fs.stop_level);
-                                    $('input#close-stop_volume').val(fs.stop_volume);
-                                    $('input#close-stop_density').val(fs.stop_density);
-                                    $('input#close-stop_mass').val(fs.stop_mass);
-                                    $('input#close-stop_temp').val(fs.stop_temp);
-                                    $('input#close-stop_water_level').val(fs.stop_water_level);
+                                    fs = confirm_close_fuel.set_fs_Close(fs, result);
+                                    confirm_close_fuel.fs = fs;
                                 }
                             }
                         );
                     }
-                    fs.stop_datetime = toISOStringTZ(now);
-                    // TODO:!!!ТЕСТ УБРАТЬ
-                    if (log) {
-                        log.info('Обновим информацию по баку');
-                        log.debug(fs);
-                    }
-                    // Выполним расчет выданного объема и массы
-                    fs.mass = 0;
-                    if (fs.passage == "B") {
-                        // Если не пролив, разица посчетчикам
-                        fs.volume = fs.stop_counter - fs.start_counter;
-                        if (fs.volume > 0) {
-                            fs.volume = fs.volume / 100.0;
-                            if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
-                        }
-                    }
-
-                    // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
-                    if (bIssue_test) {
-                        fs.volume = fs.dose;
-                    }
-                    if (fs.volume > 0) {
-                        fs.mass = (fs.volume * fs.start_density) * 0.001;
-                    }
-
-                    $('input#close-operator_name').val(fs.operator_name);
-                    $('input#close-smena_num').val(fs.smena_num);
-                    $('input#close-smena_datetime').val(fs.smena_datetime);
-                    $('input#close-trk_num').val(fs.trk_num);
-                    $('input#close-gun_num').val(fs.num);
-                    $('input#close-num').val(fs.num);
-                    $('input#close-fuel_type').val(fs.fuel_type);
-                    $('input#close-tank_num').val(fs.tank_num);
-                    $('input#close-id_card').val(fs.id_card);
-                    $('input#close-dose').val(fs.dose);
-                    $('input#close-passage').val(fs.passage);
-                    $('input#close-volume').val(fs.volume);
-                    $('input#close-mass').val(fs.mass);
-                    $('input#close-start_datetime').val(fs.start_datetime);
-                    $('input#close-start_level').val(fs.start_level);
-                    $('input#close-start_volume').val(fs.start_volume);
-                    $('input#close-start_density').val(fs.start_density);
-                    $('input#close-start_mass').val(fs.start_mass);
-                    $('input#close-start_temp').val(fs.start_temp);
-                    $('input#close-start_water_level').val(fs.start_water_level);
-                    $('input#close-start_counter').val(fs.start_counter);
-                    $('input#close-stop_datetime').val(fs.stop_datetime);
-
-                    $('input#close-stop_counter').val(fs.stop_counter);
-                    //$('input#close-close').val(fs.close);
-                    $('input#close-id_sap').val(fs.id_sap);
                 }
                 confirm_close_fuel.fs = fs;
             }
         }
+    },
+    set_fs_Close: function (fs, result) {
+        var now = new Date();
+        // Обновим информацию по баку
+        fs.stop_level = result.level.toFixed(2);
+        fs.stop_mass = result.mass.toFixed(2);
+        fs.stop_temp = result.temp.toFixed(2);
+        fs.stop_volume = result.volume.toFixed(2);
+        fs.stop_density = result.dens.toFixed(2);
+        fs.stop_water_level = result.water_level.toFixed(2);
+        $('input#close-stop_level').val(fs.stop_level);
+        $('input#close-stop_volume').val(fs.stop_volume);
+        $('input#close-stop_density').val(fs.stop_density);
+        $('input#close-stop_mass').val(fs.stop_mass);
+        $('input#close-stop_temp').val(fs.stop_temp);
+        $('input#close-stop_water_level').val(fs.stop_water_level);
+        //
+        fs.stop_datetime = toISOStringTZ(now);
+        // TODO:!!!ТЕСТ УБРАТЬ
+        if (log) {
+            log.info('Обновим информацию по баку');
+            log.debug(fs);
+        }
+        // Выполним расчет выданного объема и массы
+        fs.mass = 0;
+        if (fs.passage === "B") {
+            // Если не пролив, разица посчетчикам
+            fs.volume = fs.stop_counter - fs.start_counter;
+            if (fs.volume > 0) {
+                fs.volume = fs.volume / 100.0;
+                if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
+            }
+        }
+
+        // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
+        if (bIssue_test) {
+            fs.volume = fs.dose;
+        }
+        if (fs.volume > 0) {
+            // расчет для пистолета
+            if (confirm_close_fuel.type === 0) {
+                fs.mass = (fs.volume * fs.stop_density) * 0.001;
+            }
+            // расчет для наливного стояка
+            if (confirm_close_fuel.type === 1) {
+                fs.mass = (fs.volume * ((fs.start_density + fs.stop_density) / 2)) * 0.001;
+            }
+        }
+        //
+        $('input#close-operator_name').val(fs.operator_name);
+        $('input#close-smena_num').val(fs.smena_num);
+        $('input#close-smena_datetime').val(fs.smena_datetime);
+        $('input#close-trk_num').val(fs.trk_num);
+        $('input#close-gun_num').val(fs.num);
+        $('input#close-num').val(fs.num);
+        $('input#close-fuel_type').val(fs.fuel_type);
+        $('input#close-tank_num').val(fs.tank_num);
+        $('input#close-id_card').val(fs.id_card);
+        $('input#close-dose').val(fs.dose);
+        $('input#close-passage').val(fs.passage);
+        $('input#close-volume').val(fs.volume);
+        $('input#close-mass').val(fs.mass);
+        $('input#close-start_datetime').val(fs.start_datetime);
+        $('input#close-start_level').val(fs.start_level);
+        $('input#close-start_volume').val(fs.start_volume);
+        $('input#close-start_density').val(fs.start_density);
+        $('input#close-start_mass').val(fs.start_mass);
+        $('input#close-start_temp').val(fs.start_temp);
+        $('input#close-start_water_level').val(fs.start_water_level);
+        $('input#close-start_counter').val(fs.start_counter);
+        $('input#close-stop_datetime').val(fs.stop_datetime);
+        $('input#close-stop_counter').val(fs.stop_counter);
+        //$('input#close-close').val(fs.close);
+        $('input#close-id_sap').val(fs.id_sap);
+        return fs;
     }
 };
 
