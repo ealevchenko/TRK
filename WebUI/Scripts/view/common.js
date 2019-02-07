@@ -368,7 +368,7 @@ var updateOptionSelect = function (obj_select, data, callback_option, value_sele
     }
     if (data != null) {
         for (i = 0; i < data.length; i++) {
-            var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled }
+            var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled };
             // Преобразовать формат
             if (typeof callback_option === 'function') {
                 option = callback_option(data[i]);
