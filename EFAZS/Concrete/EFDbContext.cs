@@ -64,7 +64,7 @@
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.start_density)
-                .HasPrecision(4, 1);
+                .HasPrecision(9, 5);
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.start_mass)
@@ -88,7 +88,7 @@
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.stop_density)
-                .HasPrecision(4, 1);
+                .HasPrecision(9, 5);
 
             modelBuilder.Entity<FuelSale>()
                 .Property(e => e.stop_mass)

@@ -1526,7 +1526,7 @@ var confirm_df = {
                                     confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
                                     confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
                                     confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
-                                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(2));
+                                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(5));
                                     confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
                                 }
                             }
@@ -1803,7 +1803,7 @@ var confirm_df = {
                     confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
                     confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
                     confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
-                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(2));
+                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(5));
                     confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
                     confirm_df.viewCalcMass();
                 }
@@ -2367,7 +2367,7 @@ var confirm_close_fuel = {
         fs.stop_mass = result.mass.toFixed(2);
         fs.stop_temp = result.temp.toFixed(2);
         fs.stop_volume = result.volume.toFixed(2);
-        fs.stop_density = result.dens.toFixed(2);
+        fs.stop_density = result.dens.toFixed(5);
         fs.stop_water_level = result.water_level.toFixed(2);
         $('input#close-stop_level').val(fs.stop_level);
         $('input#close-stop_volume').val(fs.stop_volume);
