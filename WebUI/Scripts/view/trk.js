@@ -2006,7 +2006,7 @@ var confirm_df = {
             LOGIN_R: confirm_df.operator_name,
             N_BAK: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             OZM_BAK: fuel_type,
-            OZM_TREB: variant === 4 ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val(),
+            OZM_TREB: variant === "4" ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val(),
             FLAG_R: variant,
             PLOTNOST: confirm_df.input_deliver_take_dens.val(),
             VOLUME: null,
@@ -2014,10 +2014,10 @@ var confirm_df = {
             LOGIN_EXP: confirm_df.input_sap_name_forwarder.val(),
             N_POST: confirm_df.input_sap_num_kpp.val(),
             TRANSP_FAKT: confirm_df.input_sap_num_ts.val(),
-            N_DEB: variant === 5 || variant === 6 ? confirm_df.card.Debitor : null,
+            N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
             N_TREB: confirm_df.input_sap_num.val(),
-            LGORT: variant === 4 ? confirm_df.select_sap_stock_recipient.val() : null,
-            WERKS: variant === 4 ? confirm_df.select_sap_factory_recipient.val() : null,
+            LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
+            WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null
         };
     },
