@@ -24,14 +24,14 @@ $(document).keypress(
         }
     });
 
-function updateMessageTips(t) {
-    $(".messageTips")
-        .text(t)
-        .addClass("ui-state-highlight");
-    setTimeout(function () {
-        $(".messageTips").removeClass("ui-state-highlight", 1500);
-    }, 500);
-}
+//function updateMessageTips(t) {
+//    $(".messageTips")
+//        .text(t)
+//        .addClass("ui-state-highlight");
+//    setTimeout(function () {
+//        $(".messageTips").removeClass("ui-state-highlight", 1500);
+//    }, 500);
+//}
 
 var catalog_ozm = {
     list: null

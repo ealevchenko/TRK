@@ -241,6 +241,16 @@ var ozm_bak = {
     }
 };
 
+var updateMessageTips = function(t) {
+    $(".messageTips")
+        .text(t)
+        .addClass("ui-state-highlight");
+    setTimeout(function () {
+        $(".messageTips").removeClass("ui-state-highlight", 1500);
+    }, 500);
+}
+
+
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
