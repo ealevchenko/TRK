@@ -227,6 +227,76 @@
         </div>
         <p class="messageTips"></p>
     </div>
+
+    <div id="confirm-acceptance" title="" class="confirm-acceptance" style="display:none">
+        @*<p>
+                <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+                Your files have downloaded successfully into the My Downloads folder.
+            </p>*@
+        <table class="table-confirm-acceptance table-striped table-bordered">
+            <tr>
+                <th>Операция приема ГСМ из:</th>
+                <td id="type-fuel-receiving"></td>
+            </tr>
+            <tr>
+                <th>Тип ГСМ:</th>
+                <td id="type-fuel"></td>
+            </tr>
+            <tr id="truck">
+                <th>Номер накладной:</th>
+                <td id="acceptance-tank-truck-num-nak"></td>
+            </tr>
+            <tr id="truck">
+                <th>Вес топлива:</th>
+                <td id="acceptance-tank-truck-weight"></td>
+            </tr>
+            <tr id="truck">
+                <th>Поставщик:</th>
+                <td id="acceptance-tank-truck-provider"></td>
+            </tr>
+
+            <tr id="railway">
+                <th>Номер ж.д. накладной:</th>
+                <td id="acceptance-tank-railway-num-nak"></td>
+            </tr>
+            <tr id="railway">
+                <th>Поставщик:</th>
+                <td id="acceptance-tank-railway-provider"></td>
+            </tr>
+            <tr id="railway">
+                <th>Объем по накладной:</th>
+                <td id="acceptance-tank-railway-nak-volume"></td>
+            </tr>
+            <tr id="railway">
+                <th>Плотность по накладной:</th>
+                <td id="acceptance-tank-railway-nak-dens"></td>
+            </tr>
+            <tr id="railway">
+                <th>Масса по накладной:</th>
+                <td id="acceptance-tank-railway-nak-mass"></td>
+            </tr>
+            <tr id="railway">
+                <th>Уровень в цистерне по руч. измерениям:</th>
+                <td id="acceptance-tank-railway-manual-level"></td>
+            </tr>
+            <tr id="railway">
+                <th>Объем в цистерне по руч. измерениям:</th>
+                <td id="acceptance-tank-railway-manual-volume"></td>
+            </tr>
+            <tr id="railway">
+                <th>Плотность в цистерне по руч. измерениям:</th>
+                <td id="acceptance-tank-railway-manual-dens"></td>
+            </tr>
+            <tr id="railway">
+                <th>Масса в цистерне по руч. измерениям:</th>
+                <td id="acceptance-tank-railway-manual-mass"></td>
+            </tr>
+            <tr>
+                <th>Список емкостей для приема ГСМ:</th>
+                <td id="list-tanks"></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
 

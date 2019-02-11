@@ -176,3 +176,26 @@ div.fuel-receiving-hopper {
         text-align: left;
         width: 100px;
     }
+
+/*Окно confirm-acceptance*/
+body div[aria-describedby="confirm-acceptance"] {
+    font-size: 14px;
+}
+
+.table-confirm-acceptance {
+    border-collapse: collapse;
+    border-spacing: 0;
+
+}
+
+    .table-confirm-acceptance th {
+        width:300px;
+        text-align: right;
+        font-weight: normal;
+    }
+    .table-confirm-acceptance td {
+        width:200px;
+        font-style:italic;
+        color:blue;
+        text-align: left;
+    }
