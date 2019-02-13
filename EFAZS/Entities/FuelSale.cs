@@ -97,6 +97,5 @@ namespace EFAZS.Entities
         public DateTime? sending { get; set; }
 
         public virtual SAP_Buffer SAP_Buffer { get; set; }
-
     }
 }

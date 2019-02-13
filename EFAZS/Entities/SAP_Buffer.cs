@@ -13,6 +13,7 @@ namespace EFAZS.Entities
         {
             FuelSale = new HashSet<FuelSale>();
         }
+
         public int id { get; set; }
 
         [Column(TypeName = "date")]
@@ -63,6 +64,9 @@ namespace EFAZS.Entities
         [Required]
         [StringLength(40)]
         public string N_TREB { get; set; }
+
+        [StringLength(6)]
+        public string N_POS { get; set; }
 
         [StringLength(4)]
         public string LGORT { get; set; }

@@ -827,6 +827,7 @@ var confirm_df = {
     input_sap_ozm: null,                // SAP-ОЗМ ответ справочника
     input_sap_ozm_bak: null,            // ОЗМ БАК
     input_sap_ozm_amount: null,         // Количество для выдачи
+    sap_ozm_amount_multiplier: 1,        // Множитель
     select_sap_stock_recipient: null,   // Склад получателя выбор
     input_sap_stock_recipient: null,    // Склад получателя ответ справочника
     select_sap_factory_recipient: null, // Завод получатель выбор
@@ -954,6 +955,7 @@ var confirm_df = {
                 $('label#SAP-TRANSP_FAKT').text(sap_buffer.TRANSP_FAKT);
                 $('label#SAP-N_DEB').text(sap_buffer.N_DEB);
                 $('label#SAP-N_TREB').text(sap_buffer.N_TREB);
+                $('label#SAP-N_POS').text(sap_buffer.N_POS);
                 $('label#SAP-LGORT').text(sap_buffer.LGORT);
                 $('label#SAP-WERKS').text(sap_buffer.WERKS);
             }
@@ -1001,8 +1003,8 @@ var confirm_df = {
     checkSelect: function (o, n, min, max) {
         if (o.val() > max || o.val() < min) {
             o.addClass("ui-state-error");
-            confirm_df.updateTips("Length of " + n + " must be between " +
-                min + " and " + max + ".");
+            confirm_df.updateTips("Значение " + n + " должно быть в диапазоне от " +
+                min + " до " + max + ".");
             return false;
         } else {
             return true;
@@ -1030,7 +1032,7 @@ var confirm_df = {
     },
     // Проверка на пустой объект
     checkIsNullOfMessage: function (o, message) {
-        if (o.val() == '' || o.val() == null) {
+        if (o.val() === '' || o.val() === null) {
             o.addClass("ui-state-error");
             confirm_df.updateTips(message);
             return false;
@@ -1055,11 +1057,11 @@ var confirm_df = {
         $(".ui-state-error").removeClass("ui-state-error");
         // Проверка RFID карты на активность
 
-        if (ntype_test == 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
+        if (ntype_test === 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
         if (!confirm_df.checkbox_deliver_Passage.prop('checked')) {
 
-            if (confirm_df.card == null) {
+            if (confirm_df.card === null) {
                 confirm_df.updateTips("Нет RFID-карты - выдача запрещена!");
                 return false;
             }
@@ -1072,20 +1074,26 @@ var confirm_df = {
             valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
 
             valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
-            if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
-            if (variant == 3) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
+            if (variant !== "4" && variant !== "3") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
+            if (variant === "3") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
-            if (variant != 5) valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
-            if (variant != 5) valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
+            if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
+            if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
             //Проверка возврата САП
-            if (variant != 4) valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
-            if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_ozm, "Выберите ОЗМ");
+            if (variant !== "4") valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
+            if (variant === "4") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_ozm, "Выберите ОЗМ");
             //valid && confirm_df.checkLength(confirm_df.input_sap_ozm_bak, "ОЗМ согласно бака", 1, 18);
-            if (variant != 4) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_stock_recipient, "Нет значения склад получателя (из резервирования \ получатель материала в ИП)");
-            if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_stock_recipient, "Выберите склад получателя");
-            if (variant != 4 && variant != 3) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_factory_recipient, "Нет значения завод-получатель");
-            if (variant == 4) valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_factory_recipient, "Выберите завод-получатель");
-            if (variant == 2 && variant == 5 && variant == 6) valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_id_card, "Нет значения ID карты");
+            if (variant !== "4") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_stock_recipient, "Нет значения склад получателя (из резервирования \ получатель материала в ИП)");
+            if (variant === "4") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_stock_recipient, "Выберите склад получателя");
+            if (variant !== "4" && variant !== "3") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_factory_recipient, "Нет значения завод-получатель");
+            if (variant === "4") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_factory_recipient, "Выберите завод-получатель");
+            if (variant === "2" && variant === "5" && variant === "6") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_id_card, "Нет значения ID карты");
+
+            if (variant !== "4") {
+                var max_mass = confirm_df.input_sap_ozm_amount.val() !== null ? Number(confirm_df.input_sap_ozm_amount.val()) : 0;
+                valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_mase_fuel, "расчетной массы", 0, max_mass * confirm_df.sap_ozm_amount_multiplier);
+            }
+
         }
         // Проверка выбранного бака
         //valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_capacity, "Выберите бак с топливом");
@@ -1097,6 +1105,10 @@ var confirm_df = {
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_water_level, "Нет значения уровень п-воды в баке");
         // Проверка колонки
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
+        valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 99999);
+
+
+
         return valid;
     },
     // инициализация формы
@@ -1110,12 +1122,15 @@ var confirm_df = {
             buttons: {
                 'Начать выдачу': function () {
                     var variant = confirm_df.select_variant.val();
+                    if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                        variant = 7;
+                    }
                     // проверка правильности заполнения формы
                     var valid = confirm_df.validationConfirm(variant);
                     // Все заполненно?
                     if (valid) {
                         // Да форма заполнена
-                        if (variant >= 1 && variant <= 6) {
+                        if (variant >= 1 && variant <= 7) {
                             // получим данные для SAP
                             var sap_buffer = confirm_df.getNewSAP_Buffer();
                             // TODO:!!!ТЕСТ УБРАТЬ
@@ -1220,7 +1235,7 @@ var confirm_df = {
                 case "6":
                     // По резервированию
                     var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
-                    var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null) ;
+                    var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null);
 
                     getReservationOfDebitor(
                         debitor,
@@ -1245,12 +1260,13 @@ var confirm_df = {
                                 confirm_df.input_sap_ozm.val(result.MATNR);
                                 confirm_df.input_sap_ozm_amount.val(result.BDMNG);
                                 confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
                                 $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
                                 //        if (result.RSNUM != "---") {
-                                            var depots = catalog_depots.get($.trim(result.UMLGO));
-                                            if (depots) {
-                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
-                                            }
+                                var depots = catalog_depots.get($.trim(result.UMLGO));
+                                if (depots) {
+                                    confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                }
                                 //        } else { // TODO:!!!ТЕСТ УБРАТЬ
                                 //            confirm_df.input_sap_stock_recipient.val("---");
                                 //        }
@@ -1305,16 +1321,17 @@ var confirm_df = {
                                         OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
                                     } else {
                                         // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999)
+                                        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
                                         //$('input#sap-num').val();
                                         confirm_df.input_sap_ozm.val(result.MATNR);
                                         confirm_df.input_sap_ozm_amount.val(result.BDMNG);
-                                        confirm_df.input_sap_factory_recipient.val(result.WERKS)
+                                        confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                        confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
                                         $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
                                         if (result.RSNUM != "---") {
                                             var depots = catalog_depots.get($.trim(result.UMLGO));
                                             if (depots) {
-                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name)
+                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
                                             }
                                         } else { // TODO:!!!ТЕСТ УБРАТЬ
                                             confirm_df.input_sap_stock_recipient.val("---");
@@ -1377,6 +1394,7 @@ var confirm_df = {
                     confirm_df.input_sap_ozm.val(sup.MATNR);
                     confirm_df.input_sap_ozm_amount.val(sup.LFIMG);
                     confirm_df.input_sap_stock_recipient.val(sup.KUNNR);
+                    confirm_df.sap_ozm_amount_multiplier = ($.trim(sup.MEINS) === "TO" ? 1000 : 1);
                     $('#label-sap-ozm-amount').text('Количество ' + sup.MEINS + ':');
                     // Уточнить добавить WERKS (завод)
                 };
@@ -1635,7 +1653,7 @@ var confirm_df = {
         var massa = 0;
         var dens = Number(confirm_df.input_deliver_take_dens.val());
         if (dens > 0) {
-            massa = Number(confirm_df.input_deliver_dose_fuel.val()) * dens * 0.001
+            massa = Number(confirm_df.input_deliver_dose_fuel.val()) * dens * 0.001;
             confirm_df.input_deliver_mase_fuel.val(massa.toFixed(2));
         } else {
             confirm_df.input_deliver_mase_fuel.val('Выберите емкость');
@@ -1987,7 +2005,10 @@ var confirm_df = {
     getNewSAP_Buffer: function () {
         var now = new Date();
         var variant = confirm_df.select_variant.val();
-        var num_pos = confirm_df.select_sap_num_pos.val();
+        if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+            variant = "7";
+        }
+        //var num_pos = confirm_df.select_sap_num_pos.val();
         var fuel_type = 0;
 
         switch (confirm_df.type) {
@@ -2006,16 +2027,17 @@ var confirm_df = {
             LOGIN_R: confirm_df.operator_name,
             N_BAK: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             OZM_BAK: fuel_type,
-            OZM_TREB: variant === "4" ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val(),
+            OZM_TREB: variant === "4" ? confirm_df.select_sap_ozm.val() : variant !== "7" ? confirm_df.input_sap_ozm.val() : "0",
             FLAG_R: variant,
             PLOTNOST: confirm_df.input_deliver_take_dens.val(),
             VOLUME: null,
             MASS: null,
-            LOGIN_EXP: confirm_df.input_sap_name_forwarder.val(),
-            N_POST: confirm_df.input_sap_num_kpp.val(),
-            TRANSP_FAKT: confirm_df.input_sap_num_ts.val(),
+            LOGIN_EXP: variant !== "7" ? confirm_df.input_sap_name_forwarder.val() : null,
+            N_POST:  variant !== "7" ? confirm_df.input_sap_num_kpp.val() : null,
+            TRANSP_FAKT: variant !== "7" ? confirm_df.input_sap_num_ts.val() : "-",
             N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
-            N_TREB: confirm_df.input_sap_num.val(),
+            N_TREB:  variant !== "7" ? confirm_df.input_sap_num.val() : "0",
+            N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" ? confirm_df.input_sap_num_pos.val() : null,
             LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
             WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null
@@ -2179,13 +2201,13 @@ var confirm_close_fuel = {
 
                             // расчет для пистолета
                             if (confirm_close_fuel.type === 0) {
-                                confirm_close_fuel.sap.PLOTNOST =  confirm_close_fuel.fs.stop_density;
+                                confirm_close_fuel.sap.PLOTNOST = confirm_close_fuel.fs.stop_density;
                             }
                             // расчет для наливного стояка
                             if (confirm_close_fuel.type === 1) {
                                 confirm_close_fuel.sap.PLOTNOST = ((confirm_close_fuel.fs.start_density + confirm_close_fuel.fs.stop_density) / 2);
                             }
-                            
+
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
                             confirm_close_fuel.sap.MASS = confirm_close_fuel.fs.mass;
                             // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В САП
@@ -2348,7 +2370,7 @@ var confirm_close_fuel = {
                             function (list_tags) {
                                 var result = confirm_df.viewParamTanks(list_tags);
                                 if (result) {
-                                // Обновим информацию по баку
+                                    // Обновим информацию по баку
                                     fs = confirm_close_fuel.set_fs_Close(fs, result);
                                     confirm_close_fuel.fs = fs;
                                 }
