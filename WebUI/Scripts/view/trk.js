@@ -847,7 +847,9 @@ var confirm_df = {
                 var gun_start = {
                     id: id,
                     num: confirm_df.gun != null ? confirm_df.gun.num_gun : 0,
-                    passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? true : false,
+                    // !! отменили режим пасаж
+                    //passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? true : false,
+                    passage: false,
                     volume: confirm_df.input_deliver_dose_fuel.val()
                 };
                 // TODO:!!!ТЕСТ УБРАТЬ
@@ -1001,13 +1003,13 @@ var confirm_df = {
     },
     //
     checkSelect: function (o, n, min, max) {
-        if (o.val() > max || o.val() < min) {
+        if (o.val() > min && o.val() <= max) {
+            return true;
+        } else {
             o.addClass("ui-state-error");
             confirm_df.updateTips("Значение " + n + " должно быть в диапазоне от " +
                 min + " до " + max + ".");
             return false;
-        } else {
-            return true;
         }
     },
     // Проверка на выбор за указаный период valume
@@ -2027,17 +2029,17 @@ var confirm_df = {
             LOGIN_R: confirm_df.operator_name,
             N_BAK: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             OZM_BAK: fuel_type,
-            OZM_TREB: variant === "4" ? confirm_df.select_sap_ozm.val() : variant !== "7" ? confirm_df.input_sap_ozm.val() : "0",
+            OZM_TREB: variant === "4" ? confirm_df.select_sap_ozm.val() : variant !== "7" ? confirm_df.input_sap_ozm.val() : null,
             FLAG_R: variant,
             PLOTNOST: confirm_df.input_deliver_take_dens.val(),
             VOLUME: null,
             MASS: null,
             LOGIN_EXP: variant !== "7" ? confirm_df.input_sap_name_forwarder.val() : null,
-            N_POST:  variant !== "7" ? confirm_df.input_sap_num_kpp.val() : null,
-            TRANSP_FAKT: variant !== "7" ? confirm_df.input_sap_num_ts.val() : "-",
+            N_POST: variant !== "7" ? confirm_df.input_sap_num_kpp.val() : null,
+            TRANSP_FAKT: variant !== "7" ? confirm_df.input_sap_num_ts.val() : null,
             N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
-            N_TREB:  variant !== "7" ? confirm_df.input_sap_num.val() : "0",
-            N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" ? confirm_df.input_sap_num_pos.val() : null,
+            N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() : null,
+            N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null,
             LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
             WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null
@@ -2406,14 +2408,14 @@ var confirm_close_fuel = {
         }
         // Выполним расчет выданного объема и массы
         fs.mass = 0;
-        if (fs.passage === "B") {
-            // Если не пролив, разица посчетчикам
-            fs.volume = fs.stop_counter - fs.start_counter;
-            if (fs.volume > 0) {
-                fs.volume = fs.volume / 100.0;
-                if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
-            }
+        //if (fs.passage === "B") {
+        // Считаем разица посчетчикам
+        fs.volume = fs.stop_counter - fs.start_counter;
+        if (fs.volume > 0) {
+            fs.volume = fs.volume / 100.0;
+            if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
         }
+        //}
 
         // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
         if (bIssue_test) {

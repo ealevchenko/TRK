@@ -33,7 +33,6 @@ namespace EFAZS.Entities
         [StringLength(18)]
         public string OZM_BAK { get; set; }
 
-        [Required]
         [StringLength(18)]
         public string OZM_TREB { get; set; }
 
@@ -54,14 +53,12 @@ namespace EFAZS.Entities
         [StringLength(2)]
         public string N_POST { get; set; }
 
-        [Required]
         [StringLength(40)]
         public string TRANSP_FAKT { get; set; }
 
         [StringLength(10)]
         public string N_DEB { get; set; }
 
-        [Required]
         [StringLength(40)]
         public string N_TREB { get; set; }
 

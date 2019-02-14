@@ -68,6 +68,7 @@ namespace WebUI.Controllers.api
                         TRANSP_FAKT = s.TRANSP_FAKT,
                         N_DEB = s.N_DEB,
                         N_TREB = s.N_TREB,
+                        N_POS = s.N_POS,
                         LGORT = s.LGORT,
                         WERKS = s.WERKS,
                         sending = s.sending,
