@@ -84,7 +84,8 @@ namespace test
                 testSAP test_sap = new testSAP();
                 //test_sap.Test_ClientSAP_GetReservation();
                 //test_sap.Test_ClientSAP_GetSupply();
-                test_sap.Test_ClientSAP_GetReservationOfDebitor();
+                //test_sap.Test_ClientSAP_GetReservationOfDebitor();
+                test_sap.Test_ClientSAP_GetReservationOfValumeMassDebitor();
                 #endregion
 
             }

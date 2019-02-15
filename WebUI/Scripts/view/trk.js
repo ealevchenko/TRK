@@ -1224,6 +1224,11 @@ var confirm_df = {
             event.preventDefault();
             var i = confirm_df.select_variant.val();
 
+            var valid = true;
+            valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
+            valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 99999);
+
+
             // Покажем позиции
             confirm_df.select_sap_num_pos.selectmenu("widget").hide();
             confirm_df.input_sap_ozm.val('');
@@ -1236,6 +1241,8 @@ var confirm_df = {
                 case "5":
                 case "6":
                     // По резервированию
+                    var value = confirm_df.input_deliver_dose_fuel.val();
+                    var mass = confirm_df.input_deliver_mase_fuel.val();
                     var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
                     var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null);
 
@@ -1245,7 +1252,7 @@ var confirm_df = {
                         i,
                         function (result) {
                             if (result.RSNUM === "") {
-                                OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor);
+                                OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor + ", объем :"+value + ", масса :"+mass);
                             } else {
                                 //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
                                 //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {

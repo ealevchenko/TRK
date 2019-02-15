@@ -62,7 +62,8 @@ var reservation_out =
     //{ "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
 var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };
-
+var reservation_vd_debitor_out =
+    { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000023", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "27571.260000000002", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
 // TODO:!!!ТЕСТ УБРАТЬ
 var bunk_out =
     { "num_tank": "B9", "dens": 754.065493, "fill_percent": 35.194191766997911, "level": 1060.24, "mass": 18934.58452923, "status1": 64, "status2": 48, "status": 0, "temp": -1.8, "ullage": 46237, "unit": null, "volume": 2511.0, "water_level": 0.0, "water_volume": 0.0 }    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
@@ -743,6 +744,48 @@ var getReservationOfDebitor = function (debitor, ozm, mode, callback) {
         }
     });
 };
+// Резервирование по объему, массе и дебитору
+var getReservationOfVolumeMassDebitor = function (valume,  mass, debitor, ozm, mode, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/sap/reservation/value/'+valume+'/mass/'+mass+'/debitor/' + debitor + '/ozm/' + ozm + '/mode/' + mode,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test === 1) {
+                if (typeof callback === 'function') {
+                    callback(reservation_vd_debitor_out);
+                }
+            } else {
+                if (ozm === "" || ozm === null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по коду дебитора. Неопределен код ОЗМ.");
+                }
+                if (debitor === "" || debitor === null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по коду дебитора. Неопределен код Дебитора.");
+                }
+                if (mass === "" || mass === null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по коду дебитора. Неопределена Масса выдачи.");
+                }
+                if (valume === "" || valume === null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по коду дебитора. Неопределен Объем выдачи.");
+                }
+            }
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+
 // Поставки
 var getSupply = function (post, callback) {
     $.ajax({

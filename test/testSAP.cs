@@ -83,5 +83,28 @@ namespace test
 
         }
 
+        public void Test_ClientSAP_GetReservationOfValumeMassDebitor()
+        {
+            ClientSAP sap = new ClientSAP();
+
+            //Reservation reserv = sap.GetReservationOfDebitor("101296", "", "1");
+            //Reservation reserv = sap.GetReservationOfDebitor("101697", "107000024", "5");
+            Reservation reserv = sap.GetReservationOfValumeMassDebitor(125.55, 100.66, "101852", "107000023", "5");
+
+            Console.WriteLine("RSNUM = {0}", reserv.RSNUM);
+            Console.WriteLine("RSPOS = {0}", reserv.RSPOS);
+            Console.WriteLine("MATNR = {0}", reserv.MATNR);
+            Console.WriteLine("WERKS = {0}", reserv.WERKS);
+            Console.WriteLine("LGORT = {0}", reserv.LGORT);
+            Console.WriteLine("UMLGO = {0}", reserv.UMLGO);
+            Console.WriteLine("UMWRK = {0}", reserv.UMWRK);
+            Console.WriteLine("BDMNG = {0}", reserv.BDMNG);
+            //Console.WriteLine("ENMNG = {0}", reserv.ENMNG);
+            Console.WriteLine("LGOBE = {0}", reserv.LGOBE);
+            Console.WriteLine("MEINS = {0}", reserv.MEINS);
+            Console.WriteLine("BWART = {0}", reserv.BWART);
+
+        }
+
     }
 }
