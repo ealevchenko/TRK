@@ -1228,64 +1228,65 @@ var confirm_df = {
             valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
             valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 99999);
 
+            if (valid === true) {
+                // Покажем позиции
+                confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+                confirm_df.input_sap_ozm.val('');
+                confirm_df.input_sap_ozm_amount.val('');
+                confirm_df.input_sap_stock_recipient.val('');
+                confirm_df.input_sap_factory_recipient.val('');
+                switch (i) {
+                    case "1":
+                    case "2":
+                    case "5":
+                    case "6":
+                        // По резервированию
+                        var value = confirm_df.input_deliver_dose_fuel.val();
+                        var mass = confirm_df.input_deliver_mase_fuel.val();
+                        var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
+                        var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null);
 
-            // Покажем позиции
-            confirm_df.select_sap_num_pos.selectmenu("widget").hide();
-            confirm_df.input_sap_ozm.val('');
-            confirm_df.input_sap_ozm_amount.val('');
-            confirm_df.input_sap_stock_recipient.val('');
-            confirm_df.input_sap_factory_recipient.val('');
-            switch (i) {
-                case "1":
-                case "2":
-                case "5":
-                case "6":
-                    // По резервированию
-                    var value = confirm_df.input_deliver_dose_fuel.val();
-                    var mass = confirm_df.input_deliver_mase_fuel.val();
-                    var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
-                    var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null);
+                        getReservationOfDebitor(
+                            debitor,
+                            ozm,
+                            i,
+                            function (result) {
+                                if (result.RSNUM === "") {
+                                    OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor + ", объем :" + value + ", масса :" + mass);
+                                } else {
+                                    //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                    //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
+                                    //    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
+                                    //} else {
+                                    //    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                    //    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
+                                    //        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
+                                    //    } else {
+                                    //        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                    confirm_df.input_sap_num.val(result.RSNUM);
+                                    confirm_df.input_sap_num_pos.val(result.RSPOS);
+                                    //        //$('input#sap-num').val();
+                                    confirm_df.input_sap_ozm.val(result.MATNR);
+                                    confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                                    confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                    confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
+                                    $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                                    //        if (result.RSNUM != "---") {
+                                    var depots = catalog_depots.get($.trim(result.UMLGO));
+                                    if (depots) {
+                                        confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                    }
+                                    //        } else { // TODO:!!!ТЕСТ УБРАТЬ
+                                    //            confirm_df.input_sap_stock_recipient.val("---");
+                                    //        }
 
-                    getReservationOfDebitor(
-                        debitor,
-                        ozm,
-                        i,
-                        function (result) {
-                            if (result.RSNUM === "") {
-                                OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor + ", объем :"+value + ", масса :"+mass);
-                            } else {
-                                //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
-                                //    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
-                                //} else {
-                                //    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                //    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
-                                //        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
-                                //    } else {
-                                //        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                confirm_df.input_sap_num.val(result.RSNUM);
-                                confirm_df.input_sap_num_pos.val(result.RSPOS);
-                                //        //$('input#sap-num').val();
-                                confirm_df.input_sap_ozm.val(result.MATNR);
-                                confirm_df.input_sap_ozm_amount.val(result.BDMNG);
-                                confirm_df.input_sap_factory_recipient.val(result.WERKS);
-                                confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
-                                $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
-                                //        if (result.RSNUM != "---") {
-                                var depots = catalog_depots.get($.trim(result.UMLGO));
-                                if (depots) {
-                                    confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                    //    }
+                                    //}
                                 }
-                                //        } else { // TODO:!!!ТЕСТ УБРАТЬ
-                                //            confirm_df.input_sap_stock_recipient.val("---");
-                                //        }
-
-                                //    }
-                                //}
                             }
-                        }
-                    );
-                    break;
+                        );
+                        break;
+                }
             }
         });
         // нажата кнопка "Получить из САП"
