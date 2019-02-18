@@ -30,6 +30,7 @@ var open_rf = {
     truck_provider: null,
     // ж.д. цистерна
     railway_num_nak: null,
+    railway_num_tanker: null,
     railway_provider: null,
     railway_nak_volume: null,
     railway_nak_dens: null,
@@ -44,9 +45,10 @@ var open_rf = {
         this.truck_weight = $('input#tank-truck-weight').val('');
         this.truck_provider = $('textarea#tank-truck-provider').text('');
         this.railway_num_nak = $('input#tank-railway-num-nak').val('');
+        this.railway_num_tanker = $('input#tank-railway-num-tanker').val('');
         this.railway_provider = $('textarea#tank-railway-provider').text('');
         this.railway_nak_volume = $('input#tank-railway-nak-volume').val('');
-        this.railway_nak_dens = $('input#tank-railway-nak-dens').val('');
+        this.railway_nak_dens = $('input#tank-railway-nak-dens').val(''); 
         this.railway_nak_mass = $('input#tank-railway-nak-mass').val('');
         this.railway_manual_level = $('input#tank-railway-manual-level').val('');
         this.railway_manual_volume = $('input#tank-railway-manual-volume').val('');
@@ -76,70 +78,74 @@ var open_rf = {
 
 };
 
-    // Форма подтверждения создания строки приема
+// Форма подтверждения создания строки приема
 var confirm_acceptance = {
-        obj: null,
-        init: function () {
-            confirm_acceptance.obj = $("#confirm-acceptance").dialog({
-                modal: true,
-                title: 'Подтвердите правильность введённых данных.',
-                autoOpen: false,
-                height: "auto",
-                width: 700,
-                buttons: {
-                    'Начать прием': function () {
-                        //LockScreen('Подождите, идет создание строки в БД');
-                        //postAsyncSAP_Buffer(
-                        //    sap_buffer,
-                        //    function (id) {
-                        //        if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-                        //        LockScreenOff();
-                        //        // Данные в САП сохранились?
-                        //        if (id > 0) {
-                        //            // Запись в базу локальную
-                        //            confirm_df.save_fuelSale(id);
-                        //        } else {
-                        //            // Ошибка, операция отменена (! нужно решить что делать далее).
-                        //            confirm_df.updateTips("Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
-                        //        }
-                        //    }
-                        //);
-                        $(this).dialog("close");
-                    },
-                    'Отмена': function () {
-                        $(this).dialog("close");
-                    }
+    obj: null,
+    init: function () {
+        confirm_acceptance.obj = $("#confirm-acceptance").dialog({
+            modal: true,
+            title: 'Подтвердите правильность введённых данных.',
+            autoOpen: false,
+            height: "auto",
+            width: 700,
+            buttons: {
+                'Начать прием': function () {
+                    open_rf.master = 2;
+                    //Вывести на экран шаг
+                    outMasterStep();
+                    LockScreen('Подождите, идет создание строки в БД');
+                    //postAsyncSAP_Buffer(
+                    //    sap_buffer,
+                    //    function (id) {
+                    //        if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                    //        LockScreenOff();
+                    //        // Данные в САП сохранились?
+                    //        if (id > 0) {
+                    //            // Запись в базу локальную
+                    //            confirm_df.save_fuelSale(id);
+                    //        } else {
+                    //            // Ошибка, операция отменена (! нужно решить что делать далее).
+                    //            confirm_df.updateTips("Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                    //        }
+                    //    }
+                    //);
+                    $(this).dialog("close");
+                },
+                'Отмена': function () {
+                    $(this).dialog("close");
                 }
-            });
-        },
-        open: function () {
-            confirm_acceptance.obj.dialog("open");
-            if (open_rf) {
-                $('td#type-fuel-receiving').text(open_rf.type === "0" ? 'Автоцистерна' : open_rf.type === "1" ? 'Ж.Д. цистерна' : '?');
-                $('td#type-fuel').text(outFuelType(Number(open_rf.fuel)));
-                if (open_rf.type === "0") {
-                    $('tr#truck').show();
-                    $('tr#railway').hide();
-                    $('td#acceptance-tank-truck-num-nak').text(open_rf.truck_num_nak.val());
-                    $('td#acceptance-tank-truck-weight').text(open_rf.truck_weight.val());
-                    $('td#acceptance-tank-truck-provider').text(open_rf.truck_provider.text());
-                }
-                if (open_rf.type === "1") {
-                    $('tr#truck').hide();
-                    $('tr#railway').show();
-                    $('td#acceptance-tank-railway-num-nak').text(open_rf.railway_num_nak.val());
-                    $('td#acceptance-tank-railway-provider').text(open_rf.railway_provider.text());
-                    $('td#acceptance-tank-railway-nak-volume').text(open_rf.railway_nak_volume.val());
-                    $('td#acceptance-tank-railway-nak-dens').text(open_rf.railway_nak_dens.val());
-                    $('td#acceptance-tank-railway-nak-mass').text(open_rf.railway_nak_mass.val());
-                    $('td#acceptance-tank-railway-manual-level').text(open_rf.railway_manual_level.val());
-                    $('td#acceptance-tank-railway-manual-volume').text(open_rf.railway_manual_volume.val());
-                    $('td#acceptance-tank-railway-manual-dens').text(open_rf.railway_manual_dens.val());
-                    $('td#acceptance-tank-railway-manual-mass').text(open_rf.railway_manual_mass.val());
-                }
-                $('td#list-tanks').text(open_rf.list_tank.join(','));
             }
+        });
+    },
+    open: function () {
+        confirm_acceptance.obj.dialog("open");
+        if (open_rf) {
+            $('td#type-fuel-receiving').text(open_rf.type === "0" ? 'Автоцистерна' : open_rf.type === "1" ? 'Ж.Д. цистерна' : '?');
+            $('td#type-fuel').text(outFuelType(Number(open_rf.fuel)));
+            if (open_rf.type === "0") {
+                $('tr#truck').show();
+                $('tr#railway').hide();
+                $('td#acceptance-tank-truck-num-nak').text(open_rf.truck_num_nak.val());
+                $('td#acceptance-tank-truck-weight').text(open_rf.truck_weight.val());
+                $('td#acceptance-tank-truck-provider').text(open_rf.truck_provider.text());
+            }
+            if (open_rf.type === "1") {
+                $('tr#truck').hide();
+                $('tr#railway').show();
+                $('td#acceptance-tank-railway-num-nak').text(open_rf.railway_num_nak.val());
+                $('td#acceptance-tank-railway-num-tanker').text(open_rf.railway_num_tanker.val());
+                $('td#acceptance-tank-railway-provider').text(open_rf.railway_provider.text());
+                $('td#acceptance-tank-railway-nak-volume').text(open_rf.railway_nak_volume.val());
+                $('td#acceptance-tank-railway-nak-dens').text(open_rf.railway_nak_dens.val());
+                $('td#acceptance-tank-railway-nak-mass').text(open_rf.railway_nak_mass.val());
+                $('td#acceptance-tank-railway-manual-level').text(open_rf.railway_manual_level.val());
+                $('td#acceptance-tank-railway-manual-volume').text(open_rf.railway_manual_volume.val());
+                $('td#acceptance-tank-railway-manual-dens').text(open_rf.railway_manual_dens.val());
+                $('td#acceptance-tank-railway-manual-mass').text(open_rf.railway_manual_mass.val());
+            }
+            $('td#list-tanks').text(open_rf.list_tank.join(','));
         }
+    }
 };
 
 // Вывод информации на экран 
@@ -186,6 +192,7 @@ var validationAddDoc = function () {
     if (select_type_rf.val() === "1") {
         // Проверка полей ж.д. цистерна
         valid = valid && checkIsNullOfMessage(open_rf.railway_num_nak, "Введите номер ж.д. накладной");
+        valid = valid && checkIsNullOfMessage(open_rf.railway_num_tanker, "Введите номер ж.д. цистерны");
         valid = valid && checkIsNullOfMessage(open_rf.railway_provider, "Укажите поставщика");
         valid = valid && checkIsNullOfMessage(open_rf.railway_nak_volume, "Введите объем указаный в накладной");
         valid = valid && checkIsNullOfMessage(open_rf.railway_nak_dens, "Введите плотность указаную в накладной");
@@ -214,6 +221,7 @@ var validationStart = function () {
         if (open_rf.type === "1") {
             // Проверка полей ж.д. цистерна
             valid = valid && checkIsNullOfMessage(open_rf.railway_num_nak, "Введите номер ж.д. накладной");
+            valid = valid && checkIsNullOfMessage(open_rf.railway_num_tanker, "Введите номер ж.д. цистерны");
             valid = valid && checkIsNullOfMessage(open_rf.railway_provider, "Укажите поставщика");
             valid = valid && checkIsNullOfMessage(open_rf.railway_nak_volume, "Введите объем указаный в накладной");
             valid = valid && checkIsNullOfMessage(open_rf.railway_nak_dens, "Введите плотность указаную в накладной");
@@ -244,6 +252,7 @@ var outMasterStep = function () {
             open_rf.truck_weight.attr("disabled", false);
             open_rf.truck_provider.attr("disabled", false);
             open_rf.railway_num_nak.attr("disabled", false);
+            open_rf.railway_num_tanker.attr("disabled", false);
             open_rf.railway_provider.attr("disabled", false);
             open_rf.railway_nak_volume.attr("disabled", false);
             open_rf.railway_nak_dens.attr("disabled", false);
@@ -276,6 +285,7 @@ var outMasterStep = function () {
             open_rf.truck_weight.attr("disabled", true);
             open_rf.truck_provider.attr("disabled", true);
             open_rf.railway_num_nak.attr("disabled", true);
+            open_rf.railway_num_tanker.attr("disabled", true);
             open_rf.railway_provider.attr("disabled", true);
             open_rf.railway_nak_volume.attr("disabled", true);
             open_rf.railway_nak_dens.attr("disabled", true);
@@ -323,7 +333,7 @@ $(function () {
         event.preventDefault();
         var tank_num = select_capacity.val();
         if (tank_num !== "-1") {
-        open_rf.list_tank.push(tank_num); // добавим в список
+            open_rf.list_tank.push(tank_num); // добавим в список
             $('div#add-tanks')
                 .append('<div id="tank-' + tank_num + '" class="fuel-receiving-hopper">' +
                     '<fieldset>' +
@@ -525,6 +535,7 @@ $(function () {
         .add(open_rf.truck_weight)
         .add(open_rf.truck_provider)
         .add(open_rf.railway_num_nak)
+        .add(open_rf.railway_num_tanker)
         .add(open_rf.railway_provider)
         .add(open_rf.railway_nak_volume)
         .add(open_rf.railway_nak_dens)

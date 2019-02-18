@@ -101,6 +101,9 @@ div.fuel-receiving-hopper {
     font-weight: normal;
 }
 
+    .setup-table tr.end {
+        border-bottom:1px solid #808080;
+    }
     .setup-table th {
         font-size: 14px;
         text-align: right;
