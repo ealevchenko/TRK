@@ -74,8 +74,36 @@ var open_rf = {
                 }
             );
         }
-    }
-
+    },
+    // Получить новую строку ReceivingFuel
+    newReceivingFuel() {
+        return receiving_fuel = {
+id
+        }
+    } 
+//    id	int	Unchecked
+//operator_name	nvarchar(50)	Unchecked
+//smena_num	int	Unchecked
+//smena_datetime	datetime	Unchecked
+//type	int	Unchecked
+//fuel	int	Unchecked
+//truck_num_nak	int	Unchecked
+//truck_weight	numeric(18, 2)	Unchecked
+//truck_provider	nvarchar(200)	Unchecked
+//railway_num_nak	int	Unchecked
+//railway_num_tanker	int	Unchecked
+//railway_provider	nvarchar(200)	Unchecked
+//railway_nak_volume	numeric(10, 2)	Unchecked
+//railway_nak_dens	numeric(9, 5)	Unchecked
+//railway_nak_mass	numeric(10, 2)	Unchecked
+//railway_manual_level	numeric(10, 2)	Unchecked
+//railway_manual_volume	numeric(10, 2)	Unchecked
+//railway_manual_dens	numeric(9, 5)	Unchecked
+//railway_manual_mass	numeric(10, 2)	Unchecked
+//start_datetime	datetime	Unchecked
+//stop_datetime	datetime	Checked
+//[close]	datetime	Checked
+//sending	datetime	Checked
 };
 
 // Форма подтверждения создания строки приема
@@ -94,6 +122,7 @@ var confirm_acceptance = {
                     //Вывести на экран шаг
                     outMasterStep();
                     LockScreen('Подождите, идет создание строки в БД');
+
                     //postAsyncSAP_Buffer(
                     //    sap_buffer,
                     //    function (id) {
