@@ -21,6 +21,8 @@ namespace WebUI.Controllers.api
         protected IRepository<Tanks_dt> ef_tdt;
         protected IRepository<Tanks_kerosene> ef_tk;
         protected IUsersActions ef_ua;
+        protected IRepository<ReceivingFuel> ef_rf;
+
 
         public AZSController(IRepository<SAP_Buffer> sap,
             IRepository<FuelSale> fs,
@@ -28,7 +30,8 @@ namespace WebUI.Controllers.api
             IRepository<Tanks_A92> ta92,
             IRepository<Tanks_A95> ta95,
             IRepository<Tanks_dt> tdt,
-            IRepository<Tanks_kerosene> tk
+            IRepository<Tanks_kerosene> tk,
+            IRepository<ReceivingFuel> rf
             )
         {
             this.ef_sap = sap;
@@ -38,7 +41,7 @@ namespace WebUI.Controllers.api
             this.ef_ta95 = ta95;
             this.ef_tdt = tdt;
             this.ef_tk = tk;
-
+            this.ef_rf = rf;
         }
 
         #region sap_buffer
@@ -267,7 +270,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                Tanks_A92 current = this.ef_ta92.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                Tanks_A92 current = this.ef_ta92.Get().OrderByDescending(t => t.changed).FirstOrDefault();
                 if (current == null)
                 {
                     return NotFound();
@@ -307,7 +310,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                Tanks_A95 current = this.ef_ta95.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                Tanks_A95 current = this.ef_ta95.Get().OrderByDescending(t => t.changed).FirstOrDefault();
                 if (current == null)
                 {
                     return NotFound();
@@ -347,7 +350,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                Tanks_dt current = this.ef_tdt.Get().OrderByDescending(t=>t.changed).FirstOrDefault();
+                Tanks_dt current = this.ef_tdt.Get().OrderByDescending(t => t.changed).FirstOrDefault();
                 if (current == null)
                 {
                     return NotFound();
@@ -416,6 +419,27 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:PostSelectTanks_kerosene(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+        #endregion
+
+        #region ReceivingFuel
+        // POST api/azs/receiving_fuel
+        [HttpPost]
+        [Route("receiving_fuel")]
+        public int PostReceivingFuel([FromBody]ReceivingFuel value)
+        {
+            try
+            {
+                this.ef_rf.Add(value);
+                this.ef_rf.Save();
+                this.ef_rf.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostReceivingFuel(value={0})", value).SaveError(e);
                 return -1;
             }
         }

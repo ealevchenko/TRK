@@ -1,6 +1,4 @@
-﻿
-
-var select_type_rf = null;
+﻿var select_type_rf = null;
 var select_type_fuel = null;
 var select_capacity = null;
 
@@ -20,6 +18,9 @@ var button_add_doc;
 var allFields;
 
 var open_rf = {
+    operator_name: null,
+    smena_num: null,
+    smena_datetime: null,
     list_tank: [],
     master: 0, // Уровень прохождения мастера
     type: -1, // не выбран тип 
@@ -48,12 +49,13 @@ var open_rf = {
         this.railway_num_tanker = $('input#tank-railway-num-tanker').val('');
         this.railway_provider = $('textarea#tank-railway-provider').text('');
         this.railway_nak_volume = $('input#tank-railway-nak-volume').val('');
-        this.railway_nak_dens = $('input#tank-railway-nak-dens').val(''); 
+        this.railway_nak_dens = $('input#tank-railway-nak-dens').val('');
         this.railway_nak_mass = $('input#tank-railway-nak-mass').val('');
         this.railway_manual_level = $('input#tank-railway-manual-level').val('');
         this.railway_manual_volume = $('input#tank-railway-manual-volume').val('');
         this.railway_manual_dens = $('input#tank-railway-manual-dens').val('');
         this.railway_manual_mass = $('input#tank-railway-manual-mass').val('');
+
     },
     // Вывести показания тегов выбранных емкостей
     outTank: function () {
@@ -75,35 +77,80 @@ var open_rf = {
             );
         }
     },
+    // Получить текущего пользователя
+    getCurrentUser: function (callback) {
+        // Определим пользователя и смену
+        getAsyncCurrentUsersActions(
+            function (user) {
+                if (user) {
+                    open_rf.operator_name = user.UserName;
+                    open_rf.smena_num = user.SessionID;
+                    open_rf.smena_datetime = user.TimeStmp;
+                }
+                if (typeof callback === 'function') {
+                    callback(user);
+                }
+            });
+    },
     // Получить новую строку ReceivingFuel
-    newReceivingFuel() {
+    newReceivingFuel: function () {
+        var now = new Date();
+        var type = Number(open_rf.type);
+
         return receiving_fuel = {
-id
-        }
-    } 
-//    id	int	Unchecked
-//operator_name	nvarchar(50)	Unchecked
-//smena_num	int	Unchecked
-//smena_datetime	datetime	Unchecked
-//type	int	Unchecked
-//fuel	int	Unchecked
-//truck_num_nak	int	Unchecked
-//truck_weight	numeric(18, 2)	Unchecked
-//truck_provider	nvarchar(200)	Unchecked
-//railway_num_nak	int	Unchecked
-//railway_num_tanker	int	Unchecked
-//railway_provider	nvarchar(200)	Unchecked
-//railway_nak_volume	numeric(10, 2)	Unchecked
-//railway_nak_dens	numeric(9, 5)	Unchecked
-//railway_nak_mass	numeric(10, 2)	Unchecked
-//railway_manual_level	numeric(10, 2)	Unchecked
-//railway_manual_volume	numeric(10, 2)	Unchecked
-//railway_manual_dens	numeric(9, 5)	Unchecked
-//railway_manual_mass	numeric(10, 2)	Unchecked
-//start_datetime	datetime	Unchecked
-//stop_datetime	datetime	Checked
-//[close]	datetime	Checked
-//sending	datetime	Checked
+            id: 0,
+            operator_name: open_rf.operator_name,
+            smena_num: open_rf.smena_num,
+            smena_datetime: open_rf.smena_datetime,
+            type: type,
+            fuel: Number(open_rf.fuel),
+
+            truck_num_nak: type === 0 ? open_rf.truck_num_nak.val() : null,
+            truck_weight: type === 0 ? open_rf.truck_weight.val() : null,
+            truck_provider: type === 0 ? open_rf.truck_provider.text() : null,
+
+            railway_num_nak: type === 1 ? open_rf.railway_num_nak.val() : null,
+            railway_num_tanker: type === 1 ? open_rf.railway_num_tanker.val() : null,
+            railway_provider: type === 1 ? open_rf.railway_provider.text() : null,
+            railway_nak_volume: type === 1 ? open_rf.railway_nak_volume.val() : null,
+            railway_nak_dens: type === 1 ? open_rf.railway_nak_dens.val() : null,
+            railway_nak_mass: type === 1 ? open_rf.railway_nak_mass.val() : null,
+            railway_manual_level: type === 1 ? open_rf.railway_manual_level.val() : null,
+            railway_manual_volume: type === 1 ? open_rf.railway_manual_volume.val() : null,
+            railway_manual_dens: type === 1 ? open_rf.railway_manual_dens.val() : null,
+            railway_manual_mass: type === 1 ? open_rf.railway_manual_mass.val() : null,
+
+            start_datetime: toISOStringTZ(now),
+            stop_datetime: null,
+            close: null,
+            sending: null
+        };
+    },
+    // Получить новую строку ReceivingFuelTanks
+    newReceivingFuelTanks: function (id_receiving_fuel, tank_fuel, tank_result) {
+        var now = new Date();
+        return receiving_fuel_tanks = {
+            id: 0,
+            id_receiving_fuel: id_receiving_fuel,
+            num: tank_result.num_tank,
+            fuel: tank_fuel,
+            start_datetime: toISOStringTZ(now),
+            start_level: tank_result.level,
+            start_volume: tank_result.volume,
+            start_density: tank_result.dens,
+            start_mass: tank_result.mass,
+            start_temp: tank_result.temp,
+            start_water_level: tank_result.water_volume,
+            stop_datetime: null,
+            stop_level: null,
+            stop_volume: null,
+            stop_density: null,
+            stop_mass: null,
+            stop_temp: null,
+            stop_water_level: null,
+            close: null
+        };
+    }
 };
 
 // Форма подтверждения создания строки приема
@@ -122,22 +169,38 @@ var confirm_acceptance = {
                     //Вывести на экран шаг
                     outMasterStep();
                     LockScreen('Подождите, идет создание строки в БД');
+                    // Определим текущего пользователя
+                    open_rf.getCurrentUser(
+                        function (user) {
+                            var receiving_fuel = open_rf.newReceivingFuel();
+                            postAsyncReceivingFuel(
+                                receiving_fuel,
+                                function (id) {
+                                    if (log) { log.info('Запись строки receiving_fuel, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                    LockScreenOff();
+                                    // Данные в  сохранились?
+                                    if (id > 0) {
+                                        // Запись начального состояния емкостей
+                                        if (open_rf.list_tank.length > 0) {
+                                            var tanks = open_rf.list_tank.join(',');
+                                            getTanksTags(
+                                                tanks, function (result) {
+                                                    if (result && result.length > 0) {
+                                                        for (it = 0; it < result.length; it++) {
+                                                            var receiving_fuel_tanks = open_rf.newReceivingFuelTanks(id, receiving_fuel.fuel, result[it]);
 
-                    //postAsyncSAP_Buffer(
-                    //    sap_buffer,
-                    //    function (id) {
-                    //        if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-                    //        LockScreenOff();
-                    //        // Данные в САП сохранились?
-                    //        if (id > 0) {
-                    //            // Запись в базу локальную
-                    //            confirm_df.save_fuelSale(id);
-                    //        } else {
-                    //            // Ошибка, операция отменена (! нужно решить что делать далее).
-                    //            confirm_df.updateTips("Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
-                    //        }
-                    //    }
-                    //);
+                                                        }
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    } else {
+                                        // Ошибка, операция отменена (! нужно решить что делать далее).
+                                        updateMessageTips("Ошибка создания строки для ReceivingFuel в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                                    }
+                                }
+                            );
+                        });
                     $(this).dialog("close");
                 },
                 'Отмена': function () {

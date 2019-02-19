@@ -58,6 +58,8 @@
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFReceivingFuelTanks.cs" />
+    <Compile Include="Concrete\EFReceivingFuel.cs" />
     <Compile Include="Concrete\EFTanks_kerosene.cs" />
     <Compile Include="Concrete\EFTanks_dt.cs" />
     <Compile Include="Concrete\EFTanks_A95.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="Entities\Tanks_A95.cs" />
     <Compile Include="Entities\Tanks_dt.cs" />
     <Compile Include="Entities\Tanks_kerosene.cs" />
+    <Compile Include="Entities\ReceivingFuel.cs" />
+    <Compile Include="Entities\ReceivingFuelTanks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

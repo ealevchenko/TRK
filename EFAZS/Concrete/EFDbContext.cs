@@ -29,6 +29,9 @@
         public virtual DbSet<Tanks_dt> Tanks_dt { get; set; }
         public virtual DbSet<Tanks_kerosene> Tanks_kerosene { get; set; }
 
+        public virtual DbSet<ReceivingFuel> ReceivingFuel { get; set; }
+        public virtual DbSet<ReceivingFuelTanks> ReceivingFuelTanks { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cat_Werks>()
@@ -106,6 +109,88 @@
                 .HasMany(e => e.FuelSale)
                 .WithOptional(e => e.SAP_Buffer)
                 .HasForeignKey(e => e.id_sap);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_nak_volume)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_nak_dens)
+                .HasPrecision(9, 5);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_nak_mass)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_manual_level)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_manual_volume)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_manual_dens)
+                .HasPrecision(9, 5);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .Property(e => e.railway_manual_mass)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuel>()
+                .HasMany(e => e.ReceivingFuelTanks)
+                .WithRequired(e => e.ReceivingFuel)
+                .HasForeignKey(e => e.id_receiving_fuel)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_level)
+                .HasPrecision(8, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_volume)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_density)
+                .HasPrecision(9, 5);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_mass)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_temp)
+                .HasPrecision(4, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.start_water_level)
+                .HasPrecision(7, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_level)
+                .HasPrecision(8, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_volume)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_density)
+                .HasPrecision(9, 5);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_mass)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_temp)
+                .HasPrecision(4, 2);
+
+            modelBuilder.Entity<ReceivingFuelTanks>()
+                .Property(e => e.stop_water_level)
+                .HasPrecision(7, 2);
 
         }
     }
