@@ -22,7 +22,7 @@ namespace WebUI.Controllers.api
         protected IRepository<Tanks_kerosene> ef_tk;
         protected IUsersActions ef_ua;
         protected IRepository<ReceivingFuel> ef_rf;
-
+        protected IRepository<ReceivingFuelTanks> ef_rft;
 
         public AZSController(IRepository<SAP_Buffer> sap,
             IRepository<FuelSale> fs,
@@ -31,7 +31,8 @@ namespace WebUI.Controllers.api
             IRepository<Tanks_A95> ta95,
             IRepository<Tanks_dt> tdt,
             IRepository<Tanks_kerosene> tk,
-            IRepository<ReceivingFuel> rf
+            IRepository<ReceivingFuel> rf,
+            IRepository<ReceivingFuelTanks> rft
             )
         {
             this.ef_sap = sap;
@@ -42,6 +43,7 @@ namespace WebUI.Controllers.api
             this.ef_tdt = tdt;
             this.ef_tk = tk;
             this.ef_rf = rf;
+            this.ef_rft = rft;
         }
 
         #region sap_buffer
@@ -425,6 +427,76 @@ namespace WebUI.Controllers.api
         #endregion
 
         #region ReceivingFuel
+        // GET: api/azs/receiving_fuel/open
+        [Route("receiving_fuel/open")]
+        [ResponseType(typeof(ReceivingFuel))]
+        public IHttpActionResult GetOpenReceivingFuel()
+        {
+            try
+            {
+                List<ReceivingFuel> list = this.ef_rf.Get().Where(c => c.close == null)
+                    .ToList()
+                    .Select(s => new ReceivingFuel
+                    {
+                        id = s.id,
+                        operator_name = s.operator_name,
+                        smena_num = s.smena_num,
+                        smena_datetime = s.smena_datetime,
+                        type = s.type,
+                        fuel = s.fuel,
+                        truck_num_nak = s.truck_num_nak,
+                        truck_weight = s.truck_weight,
+                        truck_provider = s.truck_provider,
+                        railway_num_nak = s.railway_num_nak,
+                        railway_num_tanker = s.railway_num_tanker,
+                        railway_provider = s.railway_provider,
+                        railway_nak_volume = s.railway_nak_volume,
+                        railway_nak_dens = s.railway_nak_dens,
+                        railway_nak_mass = s.railway_nak_mass,
+                        railway_manual_level = s.railway_manual_level,
+                        railway_manual_volume = s.railway_manual_volume,
+                        railway_manual_dens = s.railway_manual_dens,
+                        railway_manual_mass = s.railway_manual_mass,
+                        start_datetime = s.start_datetime,
+                        stop_datetime = s.stop_datetime,
+                        close = s.close,
+                        sending = s.sending,
+                        ReceivingFuelTanks = s.ReceivingFuelTanks.ToList().Select(t => new ReceivingFuelTanks {
+                             id = t.id,
+                            id_receiving_fuel = t.id_receiving_fuel,
+                            num = t.num,
+                            fuel = t.fuel,
+                            start_datetime = t.start_datetime,
+                            start_level = t.start_level,
+                            start_volume = t.start_volume,
+                            start_density = t.start_density,
+                            start_mass = t.start_mass,
+                            start_temp = t.start_temp,
+                            start_water_level = t.start_water_level,
+                            stop_datetime = t.stop_datetime,
+                            stop_level = t.stop_level,
+                            stop_volume = t.stop_volume,
+                            stop_density = t.stop_density,
+                            stop_mass = t.stop_mass,
+                            stop_temp = t.stop_temp,
+                            stop_water_level = t.stop_water_level,
+                            close = t.close,
+                        }).ToList(),
+                    })
+                    .ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetOpenFuelSale()").SaveError(e);
+                return NotFound();
+            }
+        }
+
         // POST api/azs/receiving_fuel
         [HttpPost]
         [Route("receiving_fuel")]
@@ -435,6 +507,28 @@ namespace WebUI.Controllers.api
                 this.ef_rf.Add(value);
                 this.ef_rf.Save();
                 this.ef_rf.Refresh(value);
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostReceivingFuel(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+        #endregion
+
+        #region ReceivingFuelTanks
+        // POST api/azs/receiving_fuel_tanks
+        [HttpPost]
+        [Route("receiving_fuel_tanks")]
+        public int PostReceivingFuelTanks([FromBody]ReceivingFuelTanks value)
+        {
+            try
+            {
+                this.ef_rft.Add(value);
+                this.ef_rft.Save();
+                this.ef_rft.Refresh(value);
+                //String.Format("Ошибка выполнения метода API:PostReceivingFuel(value={0})", value).SaveError(e);
                 return value.id;
             }
             catch (Exception e)

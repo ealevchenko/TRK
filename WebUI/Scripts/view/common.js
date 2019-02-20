@@ -1426,12 +1426,60 @@ var postAsyncTanks_kerosene = function (tanks_kerosene, callback) {
     });
 };
 
+// Веруть список ReceivingFuel открытых 
+var getAsyncOpenReceivingFuel = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/receiving_fuel/open',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 //Добавить ReceivingFuel
 var postAsyncReceivingFuel = function (receiving_fuel, callback) {
     $.ajax({
         url: '../../api/azs/receiving_fuel',
         type: 'POST',
         data: JSON.stringify(receiving_fuel),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+//Добавить ReceivingFuelTanks
+var postAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
+    $.ajax({
+        url: '../../api/azs/receiving_fuel_tanks',
+        type: 'POST',
+        data: JSON.stringify(receiving_fuel_tanks),
         contentType: "application/json;charset=utf-8",
         async: true,
         beforeSend: function () {

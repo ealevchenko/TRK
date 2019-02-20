@@ -71,7 +71,7 @@ namespace EFAZS.Entities
 
         public DateTime? close { get; set; }
 
-        public DateTime? sending { get; set; }
+        public DateTime? sending { get; set; } 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ReceivingFuelTanks> ReceivingFuelTanks { get; set; }

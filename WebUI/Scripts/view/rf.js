@@ -18,6 +18,7 @@ var button_add_doc;
 var allFields;
 
 var open_rf = {
+    list_open: null,
     operator_name: null,
     smena_num: null,
     smena_datetime: null,
@@ -55,7 +56,29 @@ var open_rf = {
         this.railway_manual_volume = $('input#tank-railway-manual-volume').val('');
         this.railway_manual_dens = $('input#tank-railway-manual-dens').val('');
         this.railway_manual_mass = $('input#tank-railway-manual-mass').val('');
+        if (open_rf.list_open && open_rf.list_open.length>0) {
+            var open = open_rf.list_open[0];
+            if (open) {
+                this.master = 2;
+                this.type = open.type;
+                viewPanelType(this.type);
+                this.fuel = open.fuel;
+                this.truck_num_nak.val(open.truck_num_nak);
+                this.truck_weight.val(open.truck_weight);
+                this.truck_provider.text(open.truck_provider);
+                this.railway_num_nak.val(open.railway_num_nak);
+                this.railway_num_tanker.val(open.railway_num_tanker);
+                this.railway_provider.text(open.railway_provider);
+                this.railway_nak_volume.val(open.railway_nak_volume);
+                this.railway_nak_dens.val(open.railway_nak_dens);
+                this.railway_nak_mass.val(open.railway_nak_mass);
+                this.railway_manual_level.val(open.railway_manual_level);
+                this.railway_manual_volume.val(open.railway_manual_volume);
+                this.railway_manual_dens.val(open.railway_manual_dens);
+                this.railway_manual_mass.val(open.railway_manual_mass);
+            }
 
+        }
     },
     // Вывести показания тегов выбранных емкостей
     outTank: function () {
@@ -177,7 +200,7 @@ var confirm_acceptance = {
                                 receiving_fuel,
                                 function (id) {
                                     if (log) { log.info('Запись строки receiving_fuel, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-                                    LockScreenOff();
+
                                     // Данные в  сохранились?
                                     if (id > 0) {
                                         // Запись начального состояния емкостей
@@ -188,7 +211,25 @@ var confirm_acceptance = {
                                                     if (result && result.length > 0) {
                                                         for (it = 0; it < result.length; it++) {
                                                             var receiving_fuel_tanks = open_rf.newReceivingFuelTanks(id, receiving_fuel.fuel, result[it]);
+                                                            postAsyncReceivingFuelTanks(
+                                                                receiving_fuel_tanks,
+                                                                function (id_receiving_fuel_tanks) {
+                                                                    if (log) { log.info('Запись строки receiving_fuel_tanks, результат id=' + id_receiving_fuel_tanks); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                                    // Достигнут конец списка емкостей
+                                                                    if (it >= result.length) {
+                                                                        LockScreenOff();
+                                                                    }
+                                                                    if (id_receiving_fuel_tanks > 0) {
+                                                                        // ОК, операция успешна
+                                                                        updateMessageTips("Запись строки receiving_fuel_tanks, результат id=" + id_receiving_fuel_tanks);
 
+                                                                    }
+                                                                    else {
+                                                                        // Ошибка, операция отменена (! нужно решить что делать далее).
+                                                                        updateMessageTips("Ошибка создания строки для ReceivingFuelTanks в локальной базе данных. Код ошибки=" + id_receiving_fuel_tanks + ". Операция отменена.");
+                                                                    }
+                                                                }
+                                                            );
                                                         }
                                                     }
                                                 }
@@ -389,6 +430,24 @@ var outMasterStep = function () {
     }
 };
 
+var viewPanelType = function (value) {
+    if (value !== -1) {
+        if (value === 0) {
+            // Автоцистерна
+            tank_railway.hide();
+            tank_truck.show();
+        }
+        if (value === 1) {
+            //ж.д. цистерна
+            tank_railway.show();
+            tank_truck.hide();
+        }
+    } else {
+        tank_railway.hide();
+        tank_truck.hide();
+    }
+};
+
 $(function () {
 
     if (log) { log.info('Старт [Прием топлива]'); } // TODO:!!!ТЕСТ УБРАТЬ
@@ -475,172 +534,151 @@ $(function () {
 
 
     // Загрузка библиотек
-    //loadReference = function (callback) {
-    //    LockScreen('Инициализация данных');
-    //    var count = 3;
-    //     Загрузка (common.js)
-    //    getCatalogOZM(function (result) {
-    //        catalog_ozm.list = result;
-    //        count -= 1;
-    //        if (count <= 0) {
-    //            if (typeof callback === 'function') {
-    //                LockScreenOff();
-    //                callback();
-    //            }
-    //        }
-    //    });
-    //     Загрузка (common.js)
-    //    getCatalogDepots(function (result) {
-    //        catalog_depots.list = result;
-    //        count -= 1;
-    //        if (count <= 0) {
-    //            if (typeof callback === 'function') {
-    //                LockScreenOff();
-    //                callback();
-    //            }
-    //        }
-    //    });
-    //     Загрузка (common.js)
-    //    getCatalogWerks(function (result) {
-    //        catalog_werks.list = result;
-    //        count -= 1;
-    //        if (count <= 0) {
-    //            if (typeof callback === 'function') {
-    //                LockScreenOff();
-    //                callback();
-
-    //            }
-    //        }
-    //    });
-    //};
+    loadReference = function (callback) {
+        LockScreen('Инициализация данных');
+        var count = 1;
+        //Загрузка (common.js)
+        getAsyncOpenReceivingFuel(function (result) {
+            open_rf.list_open = result;
+            count -= 1;
+            if (count <= 0) {
+                if (typeof callback === 'function') {
+                    LockScreenOff();
+                    callback();
+                }
+            }
+        });
+    };
 
     // Загрузка библиотек
-    //loadReference(function (result) {
-    open_rf.init(); // инициализируем
+    loadReference(function (result) {
 
-    confirm_acceptance.init(); // инициализируем форму подтверждения приема 
+        confirm_acceptance.init(); // инициализируем форму подтверждения приема 
 
-    tank_railway = $('div#tank-railway').hide(); // документы жд цистерна
-    tank_truck = $('div#tank-truck').hide(); // документы автоцистерна
+        tank_railway = $('div#tank-railway').hide(); // документы жд цистерна
+        tank_truck = $('div#tank-truck').hide(); // документы автоцистерна
 
-    panel_add_tank = $('div.input-tank').hide(); // панель выбора резервуаров
+        panel_add_tank = $('div.input-tank').hide(); // панель выбора резервуаров
 
-    input_reception_take_level = $('input#reception-tank-level');
-    input_reception_take_mass = $('input#reception-tank-mass');
-    input_reception_take_temp = $('input#reception-tank-temp');
-    input_reception_take_volume = $('input#reception-tank-volume');
-    input_reception_take_dens = $('input#reception-tank-dens');
-    input_reception_take_water_level = $('input#reception-tank-water-level');
+        input_reception_take_level = $('input#reception-tank-level');
+        input_reception_take_mass = $('input#reception-tank-mass');
+        input_reception_take_temp = $('input#reception-tank-temp');
+        input_reception_take_volume = $('input#reception-tank-volume');
+        input_reception_take_dens = $('input#reception-tank-dens');
+        input_reception_take_water_level = $('input#reception-tank-water-level');
 
 
-    // Настроим откуда принимаем
-    select_type_rf = initSelect(
-        $('select#type-fuel-receiving'),
-        { width: 150 },
-        [{ value: '0', text: 'Автоцистерна' }, { value: '1', text: 'Ж.д.цистерна' }],
-        null,
-        open_rf.type,
-        function (event, ui) {
-            event.preventDefault();
-            $(".messageTips").text('');
-            open_rf.type = ui.item.value; // Сохраним состояние
-            if (ui.item.value !== '-1') {
-                if (ui.item.value === '0') {
-                    // Автоцистерна
-                    tank_railway.hide();
-                    tank_truck.show();
+        // Настроим откуда принимаем
+        select_type_rf = initSelect(
+            $('select#type-fuel-receiving'),
+            { width: 150 },
+            [{ value: '0', text: 'Автоцистерна' }, { value: '1', text: 'Ж.д.цистерна' }],
+            null,
+            open_rf.type,
+            function (event, ui) {
+                event.preventDefault();
+                $(".messageTips").text('');
+                open_rf.type = ui.item.value; // Сохраним состояние
+                viewPanelType(Number(open_rf.type));
+                //if (ui.item.value !== '-1') {
+                //    if (ui.item.value === '0') {
+                //        // Автоцистерна
+                //        tank_railway.hide();
+                //        tank_truck.show();
+                //    }
+                //    if (ui.item.value === '1') {
+                //        //ж.д. цистерна
+                //        tank_railway.show();
+                //        tank_truck.hide();
+                //    }
+                //} else {
+                //    tank_railway.hide();
+                //    tank_truck.hide();
+                //}
+            },
+            null);
+        // Настроим тип топлива
+        select_type_fuel = initSelect(
+            $('select#type-fuel'),
+            { width: 120 },
+            [{ value: '107000022', text: 'А92' }, { value: '107000023', text: 'А95' }, { value: '107000024', text: 'ДТ' }, { value: '107000027', text: 'Керосин' }],
+            null,
+            open_rf.fuel,
+            function (event, ui) {
+                event.preventDefault();
+                $(".messageTips").text('');
+                // Обновим информацию по баку
+                input_reception_take_level.val('');
+                input_reception_take_mass.val('');
+                input_reception_take_temp.val('');
+                input_reception_take_volume.val('');
+                input_reception_take_dens.val('');
+                input_reception_take_water_level.val('');
+                if (ui.item.value !== '-1') {
+                    open_rf.fuel = ui.item.value;
+                    updateOptionSelect(select_capacity, ozm_bak.getTanks(select_type_fuel.val()), null, -1, open_rf.list_tank);
                 }
-                if (ui.item.value === '1') {
-                    //ж.д. цистерна
-                    tank_railway.show();
-                    tank_truck.hide();
+            },
+            null);
+        // Настроим список емкостей по типу топлива
+        select_capacity = initSelect(
+            $('select#reception-tank'),
+            { width: 120 },
+            null,
+            null,
+            -1,
+            function (event, ui) {
+                event.preventDefault();
+                $(".messageTips").text('');
+                // Обновим информацию по баку
+                input_reception_take_level.val('');
+                input_reception_take_mass.val('');
+                input_reception_take_temp.val('');
+                input_reception_take_volume.val('');
+                input_reception_take_dens.val('');
+                input_reception_take_water_level.val('');
+                if (ui.item.value !== '-1') {
+                    getTankTags(ui.item.value,
+                        function (result) {
+                            // Обновим информацию по баку
+                            input_reception_take_level.val(result.level.toFixed(2));
+                            input_reception_take_mass.val(result.mass.toFixed(2));
+                            input_reception_take_temp.val(result.temp.toFixed(2));
+                            input_reception_take_volume.val(result.volume.toFixed(2));
+                            input_reception_take_dens.val(result.dens.toFixed(2));
+                            input_reception_take_water_level.val(result.water_level.toFixed(2));
+                        }
+                    );
                 }
-            } else {
-                tank_railway.hide();
-                tank_truck.hide();
-            }
-        },
-        null);
-    // Настроим тип топлива
-    select_type_fuel = initSelect(
-        $('select#type-fuel'),
-        { width: 120 },
-        [{ value: '107000022', text: 'А92' }, { value: '107000023', text: 'А95' }, { value: '107000024', text: 'ДТ' }, { value: '107000027', text: 'Керосин' }],
-        null,
-        open_rf.fuel,
-        function (event, ui) {
-            event.preventDefault();
-            $(".messageTips").text('');
-            // Обновим информацию по баку
-            input_reception_take_level.val('');
-            input_reception_take_mass.val('');
-            input_reception_take_temp.val('');
-            input_reception_take_volume.val('');
-            input_reception_take_dens.val('');
-            input_reception_take_water_level.val('');
-            if (ui.item.value !== '-1') {
-                open_rf.fuel = ui.item.value;
-                updateOptionSelect(select_capacity, ozm_bak.getTanks(select_type_fuel.val()), null, -1, open_rf.list_tank);
-            }
-        },
-        null);
-    // Настроим список емкостей по типу топлива
-    select_capacity = initSelect(
-        $('select#reception-tank'),
-        { width: 120 },
-        null,
-        null,
-        -1,
-        function (event, ui) {
-            event.preventDefault();
-            $(".messageTips").text('');
-            // Обновим информацию по баку
-            input_reception_take_level.val('');
-            input_reception_take_mass.val('');
-            input_reception_take_temp.val('');
-            input_reception_take_volume.val('');
-            input_reception_take_dens.val('');
-            input_reception_take_water_level.val('');
-            if (ui.item.value !== '-1') {
-                getTankTags(ui.item.value,
-                    function (result) {
-                        // Обновим информацию по баку
-                        input_reception_take_level.val(result.level.toFixed(2));
-                        input_reception_take_mass.val(result.mass.toFixed(2));
-                        input_reception_take_temp.val(result.temp.toFixed(2));
-                        input_reception_take_volume.val(result.volume.toFixed(2));
-                        input_reception_take_dens.val(result.dens.toFixed(2));
-                        input_reception_take_water_level.val(result.water_level.toFixed(2));
-                    }
-                );
-            }
-        },
-        null);
-    // Вывести на экран шаг
-    outMasterStep();
-    // Определим все поля для проверки валидации
-    allFields = $([])
-        .add(select_type_rf)
-        .add(select_type_fuel)
-        .add(select_capacity)
-        .add(open_rf.truck_num_nak)
-        .add(open_rf.truck_weight)
-        .add(open_rf.truck_provider)
-        .add(open_rf.railway_num_nak)
-        .add(open_rf.railway_num_tanker)
-        .add(open_rf.railway_provider)
-        .add(open_rf.railway_nak_volume)
-        .add(open_rf.railway_nak_dens)
-        .add(open_rf.railway_nak_mass)
-        .add(open_rf.railway_manual_level)
-        .add(open_rf.railway_manual_volume)
-        .add(open_rf.railway_manual_dens)
-        .add(open_rf.railway_manual_mass);
+            },
+            null);
+        //
+        open_rf.init(); // инициализируем
+        // Вывести на экран шаг
+        outMasterStep();
+        // Определим все поля для проверки валидации
+        allFields = $([])
+            .add(select_type_rf)
+            .add(select_type_fuel)
+            .add(select_capacity)
+            .add(open_rf.truck_num_nak)
+            .add(open_rf.truck_weight)
+            .add(open_rf.truck_provider)
+            .add(open_rf.railway_num_nak)
+            .add(open_rf.railway_num_tanker)
+            .add(open_rf.railway_provider)
+            .add(open_rf.railway_nak_volume)
+            .add(open_rf.railway_nak_dens)
+            .add(open_rf.railway_nak_mass)
+            .add(open_rf.railway_manual_level)
+            .add(open_rf.railway_manual_volume)
+            .add(open_rf.railway_manual_dens)
+            .add(open_rf.railway_manual_mass);
 
-    // Загрузка документа
-    $(document).ready(function () {
-        show_rf();
-        setInterval('show_rf()', 1000);
+        // Загрузка документа
+        $(document).ready(function () {
+            show_rf();
+            setInterval('show_rf()', 1000);
+        });
     });
-    //});
 });

@@ -127,7 +127,7 @@ namespace ClientSAPTRK
                     "&XacuteLoginPassword=" + this.pass;
 
                 string response = Select(message, "GET", "text/xml");
-                String.Format("GetReservation(num={0}, pos={1}) url={2} = {3}", num, pos, message, response).SaveInformation();
+                String.Format("\r\n Выполнение метода GetReservation(num={0}, pos={1}) \r\nurl={2} \r\nxml={3}", num, pos, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -179,7 +179,7 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
-                String.Format("GetSupply(post={0}) = {1}", post, response).SaveInformation();
+                String.Format("\r\n Выполнение метода GetSupply(post={0}) \r\nurl={1} \r\nxml={2}", post, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -240,8 +240,7 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
-                String.Format("GetReservationOfDebitor(debitor={0}, ozm={1}, mode={2}) = {3}", debitor, ozm, mode, response).SaveInformation();
-
+                String.Format("\r\n Выполнение метода GetReservationOfDebitor(debitor={0}, ozm={1}, mode={2}) \r\nurl={3} \r\nxml={4}", debitor, ozm, mode, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -303,7 +302,7 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
-                String.Format("GetReservationOfValumeMassDebitor(valume={0}, mass={1}, debitor={2}, ozm={3}, mode={4}) = {5}", valume, mass, debitor, ozm, mode, response).SaveInformation();
+                String.Format("\r\n Выполнение метода GetReservationOfValumeMassDebitor(valume={0}, mass={1}, debitor={2}, ozm={3}, mode={4}) \r\nurl={5} \r\nxml={6}", valume, mass, debitor, ozm, mode, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -362,7 +361,7 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
-                String.Format("GetReservationOfNDopusk(num={0}) = {1}",num, response).SaveInformation();
+                String.Format("\r\n Выполнение метода GetReservationOfNDopusk(num={0}) \r\nurl={1} \r\nxml={2}", num, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -392,7 +391,7 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                String.Format("GetReservationOfNDopusk(num={0}) = {1}", num).SaveError(e);
+                String.Format("GetReservationOfNDopusk(num={0})", num).SaveError(e);
                 Console.WriteLine("Ошибка выполнения метода GetReservationOfNDopusk(num={0}), e={1}", num, e);
                 return null;
             }
