@@ -64,6 +64,9 @@ var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };
 var reservation_vd_debitor_out =
     { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000023", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "27571.260000000002", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
+var reservation_ndopusk =
+    { "RSNUM": "0004074757", "RSPOS": "0002", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "162 ", "UMWRK": "", "BDMNG": "9.0", "ENMNG": null, "LGOBE": "", "MEINS": "", "BWART": "X01" }
+
 // TODO:!!!ТЕСТ УБРАТЬ
 var bunk_out =
     { "num_tank": "B9", "dens": 754.065493, "fill_percent": 35.194191766997911, "level": 1060.24, "mass": 18934.58452923, "status1": 64, "status2": 48, "status": 0, "temp": -1.8, "ullage": 46237, "unit": null, "volume": 2511.0, "water_level": 0.0, "water_volume": 0.0 }    //{ "num_tank": "B2", "dens": 769.206967, "fill_percent": 29.265209819673053, "level": 93490, "mass": 16028.734778345999, "status1": 64, "status2": 48, "status": 0, "temp": -23, "ullage": 50366, "unit": null, "volume": 20838, "water_level": 36, "water_volume": 0 };
@@ -785,7 +788,38 @@ var getReservationOfVolumeMassDebitor = function (valume,  mass, debitor, ozm, m
         }
     });
 };
-
+// Резервирование по наряд-допуску
+var getReservationOfNDopusk = function (num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/sap/reservation/num_dopusk/' + num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 1) {
+                if (typeof callback === 'function') {
+                    callback(reservation_ndopusk);
+                }
+            } else {
+                if (num == "" || num == null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер резервирования.");
+                }
+            }
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 // Поставки
 var getSupply = function (post, callback) {
     $.ajax({

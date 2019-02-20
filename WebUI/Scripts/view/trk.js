@@ -194,7 +194,6 @@ var risers = {
     setDIORisers: function (data) {
         risers.list_dio = data;
     },
-
     setRisers: function (data) {
         risers.list = data;
     },
@@ -817,6 +816,7 @@ var confirm_df = {
     select_variant: null,               // выбор номеров позиций по поставке
     buttom_select_sap: null,            // Запрос на САП
     buttom_select_sap_debitor: null,    // Запрос на САП дебитор
+    buttom_select_sap_ndopusk: null,    // Запрос на САП наряд-допуск
     input_sap_num: null,                // Номер запроса в САП
     input_sap_num_pos: null,            // Номер позиции запроса в САП
     select_sap_num_pos: null,           // выбор номеров позиций по поставке
@@ -864,9 +864,11 @@ var confirm_df = {
                         if (log) { log.info('Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
                     });
             }
+            // Выдать ГСМ через наливной стояк
             if (confirm_df.type == 1) {
                 if (log) { log.info('Производим выдачу через реальный наливной стояк, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
                 updateMessageTips("Производим выдачу через реальный наливной стояк, id=" + id);
+                // !!!!!!! сдесь реализуем выдачу через наливной стояк
             }
 
         } else {
@@ -1137,7 +1139,7 @@ var confirm_df = {
                             var sap_buffer = confirm_df.getNewSAP_Buffer();
                             // TODO:!!!ТЕСТ УБРАТЬ
                             if (log) {
-                                log.info('Сформировали строку для САП sap_buffer');
+                                log.info('Сформировали строку для САП SAP_BUFFER');
                                 log.debug(sap_buffer);
                             }
                             // Передадим управление форме подтверждения данных SAP
@@ -1217,6 +1219,52 @@ var confirm_df = {
                 confirm_df.viewVariant(ui.item.value);
             },
             null);
+        confirm_df.buttom_select_sap_ndopusk = $('button#button-sap-ndopusk').on('click', function () {
+            $(".validateTips").text('');
+            $(".ui-state-error").removeClass("ui-state-error");
+            event.preventDefault();
+            var i = confirm_df.select_variant.val();
+            if (i === "6") {
+                confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+                confirm_df.input_sap_ozm.val('');
+                confirm_df.input_sap_ozm_amount.val('');
+                confirm_df.input_sap_stock_recipient.val('');
+                confirm_df.input_sap_factory_recipient.val('');
+
+            }
+            var valid = true;
+            valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Введите наряд-допуск");
+            valid = valid && confirm_df.checkSelect(confirm_df.input_sap_num, "наряд-допуска", 0, 99999);
+
+            if (valid === true) {
+                confirm_df.input_sap_num.val($.trim(confirm_df.input_sap_num.val())); // Уберем пробелы
+                var num = confirm_df.input_sap_num.val();
+                getReservationOfNDopusk(
+                    num,
+                    function (result) {
+                        // TODO:!!!ТЕСТ УБРАТЬ
+                        if (log) {
+                            log.info('Сформировали строку getReservationOfNDopusk - > result');
+                            log.debug(result);
+                        }
+                        if (result.RSNUM === "") {
+                            OnAJAXErrorOfMessage("Резервирование по наряд-допуску:" + num + " не найдено");
+                        } else {
+                            confirm_df.input_sap_num.val(result.RSNUM);
+                            confirm_df.input_sap_num_pos.val(result.RSPOS);
+                            confirm_df.input_sap_ozm.val(result.MATNR);
+                            confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                            confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                            confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
+                            $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                            var depots = catalog_depots.get($.trim(result.UMLGO));
+                            if (depots) {
+                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                            }
+                        }
+                    });
+            }
+        });
         // нажата кнопка "Получить из САП дебитор"
         confirm_df.buttom_select_sap_debitor = $('button#button-sap-debitor').on('click', function () {
             $(".validateTips").text('');
@@ -1246,11 +1294,18 @@ var confirm_df = {
                         var debitor = confirm_df.card !== null ? confirm_df.card.Debitor : null;
                         var ozm = confirm_df.gun !== null ? confirm_df.gun.type_fuel : (confirm_df.risers !== null ? confirm_df.risers.type_fuel : null);
 
-                        getReservationOfDebitor(
+                        getReservationOfVolumeMassDebitor(
+                            value,
+                            mass,
                             debitor,
                             ozm,
                             i,
                             function (result) {
+                                // TODO:!!!ТЕСТ УБРАТЬ
+                                if (log) {
+                                    log.info('Сформировали строку getReservationOfDebitor - > result');
+                                    log.debug(result);
+                                }
                                 if (result.RSNUM === "") {
                                     OnAJAXErrorOfMessage("Резервирование для цеха не найдено. Код дебитора :" + debitor + ", объем :" + value + ", масса :" + mass);
                                 } else {
@@ -1319,6 +1374,11 @@ var confirm_df = {
                         num,
                         pos,
                         function (result) {
+                            // TODO:!!!ТЕСТ УБРАТЬ
+                            if (log) {
+                                log.info('Сформировали строку getReservation - > result');
+                                log.debug(result);
+                            }
                             if (result.RSNUM == "") {
                                 OnAJAXErrorOfMessage("Номер резервирования №" + num + ", позиции №" + pos + " - не найдет в САП");
                             } else {
@@ -1361,13 +1421,21 @@ var confirm_df = {
                     getSupply(
                         num,
                         function (result) {
+                            // TODO:!!!ТЕСТ УБРАТЬ
+                            if (log) {
+                                log.info('Сформировали строку getSupply - > result');
+                                
+                            }
                             if (result) {
                                 // Проверим на возврат значений
                                 if (result.length > 0 && result[0].posnr != "") {
                                     confirm_df.supply = result;
                                     var pos = [];
                                     for (i = 0; i < result.length; i++) {
-
+                                        // TODO:!!!ТЕСТ УБРАТЬ
+                                        if (log) {
+                                            log.debug(result[i]);
+                                        }
                                         pos.push({ value: result[i].posnr, text: result[i].posnr });
                                     };
                                     // Обновим перечень позиций
@@ -1533,9 +1601,9 @@ var confirm_df = {
                     confirm_df.gun = gun;
                     confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel)).addClass('input_view');
                     confirm_df.input_sap_ozm_bak.val('(' + gun.type_fuel + ') ' + outFuelType(gun.type_fuel));
-                    $('#deliver-Taken').prop('checked', gun.taken);
+                    $('th#label-taken').text('Пистолет снят:');
+                    $('#deliver-Taken').prop('checked', gun.taken).show();
                     // Обновим перечень емкостей
-
                     if (btanks_one == true) {
                         // выбран режим одной емкости
                         confirm_df.select_capacity.selectmenu("widget").show();
@@ -1571,7 +1639,7 @@ var confirm_df = {
 
             case 1:
                 confirm_df.obj.dialog("option", "title", 'Выдать топливо (разливочный стояк-' + num + ')');
-                if (num == 2) {
+                if (num === "2") {
                     // керосин
                     // Обновим варианты выдачи
                     updateOptionSelect(
@@ -1610,8 +1678,33 @@ var confirm_df = {
                     confirm_df.risers = riser;
                     confirm_df.input_deliver_type_fuel.val(outFuelType(riser.type_fuel));
                     confirm_df.input_sap_ozm_bak.val('(' + riser.type_fuel + ') ' + outFuelType(riser.type_fuel));
-                    //$('#deliver-Taken').prop('checked', riser.taken);
-                    // Обновим перецень емкостей
+                    $('th#label-taken').text('Заземление:');
+                    $('#deliver-Taken').prop('checked', riser.inp_kvq2).show();
+                       // Обновим перечень емкостей
+                    if (btanks_one == true) {
+                        // выбран режим одной емкости
+                        confirm_df.select_capacity.selectmenu("widget").show();
+                        confirm_df.textarea_capacity.hide();
+
+                    } else {
+                        // выбран режим нескольких емкостей
+                        confirm_df.select_capacity.selectmenu("widget").hide();
+                        confirm_df.textarea_capacity.show().text('');
+                        confirm_df.viewParmetrTanksOfType(
+                            riser.type_fuel,
+                            function (list_tags) {
+                                var result = confirm_df.viewParamTanks(list_tags);
+                                if (result) {
+                                    confirm_df.input_deliver_take_level.val(result.level.toFixed(2));
+                                    confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
+                                    confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
+                                    confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
+                                    confirm_df.input_deliver_take_dens.val(result.dens.toFixed(5));
+                                    confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
+                                }
+                            }
+                        );
+                    }
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(riser.type_fuel), null, -1, null);
                     // Получить информацию по карте
                     confirm_df.card = cards.getCardOfNumSide((Number(num) + 9), 0);
@@ -1621,13 +1714,13 @@ var confirm_df = {
                 break;
         }
         // Выберем режим.
-        if (confirm_df.type == 0) {
+        if (confirm_df.type === 0) {
             confirm_df.select_variant.val(5).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
             confirm_df.viewVariant('5');
         }
-        if (confirm_df.type == 1 && confirm_df.type == 2) {
-            confirm_df.select_variant.val(-1).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
-            confirm_df.viewVariant('-1');
+        if (confirm_df.type === 1 || confirm_df.type === 2) {
+            confirm_df.select_variant.val(6).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
+            confirm_df.viewVariant('6');
         }
 
         if (num) {
@@ -1694,6 +1787,7 @@ var confirm_df = {
                 confirm_df.clear();
                 $('tr#button-sap').show();
                 $('button#button-sap-debitor').show();
+                $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1712,6 +1806,7 @@ var confirm_df = {
                 confirm_df.clear();
                 $('tr#button-sap').show();
                 $('button#button-sap-debitor').show();
+                $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1732,6 +1827,7 @@ var confirm_df = {
                 confirm_df.clear();
                 $('tr#button-sap').show();
                 $('button#button-sap-debitor').hide();
+                $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер исх.поставки :');
                 $('tr#sap-num-pos').show(); $('#label-sap-num-pos').text('*Номер позиции ИП :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1773,6 +1869,7 @@ var confirm_df = {
                 confirm_df.clear();
                 $('tr#button-sap').show();
                 $('button#button-sap-debitor').show();
+                $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
@@ -1792,8 +1889,9 @@ var confirm_df = {
             case '6':
                 confirm_df.clear();
                 $('tr#button-sap').show();
-                $('button#button-sap-debitor').show();
-                $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд допуска:');
+                $('button#button-sap-debitor').hide();
+                $('button#button-sap-ndopusk').show();
+                $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд-допуска(резервирования):');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
                 $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('*№ КПП :');
@@ -2704,11 +2802,11 @@ $(function () {
         var gun = $(this).attr('data-gun');
         confirm_df.Open(gun, 0);
     });
-    // Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - керосин
-    $('.button-kerosene').on('click', function () {
-        var kerosene = $(this).attr('data-kerosene');
-        confirm_df.Open(kerosene, 2);
-    });
+    //// Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - керосин
+    //$('.button-kerosene').on('click', function () {
+    //    var kerosene = $(this).attr('data-kerosene');
+    //    confirm_df.Open(kerosene, 2);
+    //});
     // Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - стояки
     $('.button-risers').on('click', function () {
         var risers = $(this).attr('data-risers');

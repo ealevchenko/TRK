@@ -1,4 +1,4 @@
-USE [ASU_AZSoperations]
+USE [KRR-PA-REP-SBF]
 GO
 
 drop table [dbo].[ReceivingFuelTanks]

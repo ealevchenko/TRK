@@ -10,7 +10,7 @@ INSERT INTO [dbo].[OPC_RFID]
            ,[id_lo])
      VALUES
            (getdate()
-           ,6
+           ,11
            ,0
            ,909
            ,37

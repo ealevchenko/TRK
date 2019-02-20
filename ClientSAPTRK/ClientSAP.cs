@@ -92,7 +92,6 @@ namespace ClientSAPTRK
                         catch (Exception e)
                         {
                             String.Format("Ошибка создания StreamReader ответа, метод {0}, accept {1}, e {2}", metod, accept, e).SaveError(e);
-                            //Console.WriteLine("Ошибка создания StreamReader ответа, метод {0}, accept {1}, e {2}", metod, accept, e);
                             return null;
                         }
                     }
@@ -100,14 +99,12 @@ namespace ClientSAPTRK
                 catch (Exception e)
                 {
                     String.Format("Ошибка получения ответа WebResponse, метод {0}, accept {1}, e {2}", metod, accept, e).SaveError(e);
-                    //Console.WriteLine("Ошибка получения ответа WebResponse, метод {0}, accept {1}, e {2}", metod, accept, e);
                     return null;
                 }
             }
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода Select(metod={0}, accept={1}, e {2}", metod, accept, e).SaveError(e);
-                //Console.WriteLine("Ошибка выполнения метода Select(metod={0}, accept={1}, e {2}", metod, accept, e);
                 return null;
             }
         }
@@ -130,6 +127,7 @@ namespace ClientSAPTRK
                     "&XacuteLoginPassword=" + this.pass;
 
                 string response = Select(message, "GET", "text/xml");
+                String.Format("GetReservation(num={0}, pos={1}) url={2} = {3}", num, pos, message, response).SaveInformation();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -158,7 +156,7 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                "Ошибка выполнения метода GetReservation".SaveError(e);
+                String.Format("GetReservation(num={0}, pos={1})", num, pos).SaveError(e);
                 Console.WriteLine("Ошибка выполнения метода GetReservation(num={0}, pos={1}, e {2}", num, pos, e);
                 return null;
             }
@@ -180,6 +178,9 @@ namespace ClientSAPTRK
                     "&XacuteLoginPassword=" + this.pass;
 
                 string response = Select(message, "GET", "text/xml");
+
+                String.Format("GetSupply(post={0}) = {1}", post, response).SaveInformation();
+
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
                 XDocument doc = XDocument.Parse(response);
@@ -208,11 +209,18 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                Console.WriteLine("Ошибка выполнения метода GetSupply(post={0}, e {1}", post, e);
+                String.Format("GetSupply(post={0})", post).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetSupply(post={0}) e={1}", post, e);
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить резервирование по дебитору, ОЗМ, режиму
+        /// </summary>
+        /// <param name="debitor"></param>
+        /// <param name="ozm"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
         public Reservation GetReservationOfDebitor(string debitor, string ozm, string mode)
         {
             try
@@ -232,6 +240,9 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
+                String.Format("GetReservationOfDebitor(debitor={0}, ozm={1}, mode={2}) = {3}", debitor, ozm, mode, response).SaveInformation();
+
+
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
 
@@ -260,17 +271,24 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                "Ошибка выполнения метода GetReservationOfDebitor".SaveError(e);
-                Console.WriteLine("Ошибка выполнения метода GetReservation(debitor={0}, ozm={1}, mode={2}, e {3}", debitor, ozm, mode, e);
+                String.Format("GetReservationOfDebitor(debitor={0}, ozm={1}, mode={2})", debitor, ozm, mode).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservationOfDebitor(debitor={0}, ozm={1}, mode={2}, e {3}", debitor, ozm, mode, e);
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить резервирование по объему, массе, дебитору, ОЗМ, режиму
+        /// </summary>
+        /// <param name="valume"></param>
+        /// <param name="mass"></param>
+        /// <param name="debitor"></param>
+        /// <param name="ozm"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
         public Reservation GetReservationOfValumeMassDebitor(double valume , double mass, string debitor, string ozm, string mode)
         {
             try
             {
-
                 string message = this.url + this.transaction_reservation +
                     "&RSNUM=" +
                     "&RSPOS=" +
@@ -285,6 +303,8 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
+                String.Format("GetReservationOfValumeMassDebitor(valume={0}, mass={1}, debitor={2}, ozm={3}, mode={4}) = {5}", valume, mass, debitor, ozm, mode, response).SaveInformation();
+
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
 
@@ -313,8 +333,67 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                "Ошибка выполнения метода GetReservationOfDebitor".SaveError(e);
-                Console.WriteLine("Ошибка выполнения метода GetReservation(debitor={0}, ozm={1}, mode={2}, e {3}", debitor, ozm, mode, e);
+                String.Format("GetReservationOfValumeMassDebitor(valume={0}, mass={1}, debitor={2}, ozm={3}, mode={4})", valume, mass, debitor, ozm, mode).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservationOfValumeMassDebitor(debitor={0}, ozm={1}, mode={2}, e {3}", debitor, ozm, mode, e);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить резервирование по наряд допуску
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public Reservation GetReservationOfNDopusk(string num)
+        {
+            try
+            {
+                string message = this.url + this.transaction_reservation +
+                    "&RSNUM=" +
+                    "&RSPOS=" +
+                    "&KUNNR=" +
+                    "&MATNR=" +
+                    "&OTFT=" + num +
+                    "&FLAG_R=" + 
+                    "&MENGE=" + 
+                    "&MENGE_L=" + 
+                    "&OutputParameter=RSLT" +
+                    "&XacuteLoginName=" + this.login +
+                    "&XacuteLoginPassword=" + this.pass;
+
+                string response = Select(message, "GET", "text/xml");
+
+                String.Format("GetReservationOfNDopusk(num={0}) = {1}",num, response).SaveInformation();
+
+                if (String.IsNullOrWhiteSpace(response)) return null;
+                //Console.WriteLine("Result text/xml = {0}", response);
+
+                XDocument doc = XDocument.Parse(response);
+
+                XElement element = doc.Element("Rowsets").Element("Rowset").Elements("Row").FirstOrDefault();
+
+                Reservation reserv = new Reservation()
+                {
+                    RSNUM = (string)element.Element("RSNUM"), //Номер резервирования
+                    RSPOS = (string)element.Element("RSPOS"), // Позиция резервирования
+                    MATNR = (string)element.Element("MATNR"), //ОЗМ
+                    WERKS = (string)element.Element("WERKS"), //Завод
+                    LGORT = (string)element.Element("LGORT"), //Склад-отправитель
+                    UMLGO = (string)element.Element("UMLGO"), //Склад-получатель
+                    UMWRK = (string)element.Element("UMWRK"), //
+                    BDMNG = (string)element.Element("BDMNG"), //Количество требуемое
+                    //ENMNG = (string)element.Element("ENMNG"), //
+                    LGOBE = (string)element.Element("LGOBE"), //
+                    MEINS = (string)element.Element("MEINS"), //базисная единица
+                    BWART = (string)element.Element("BWART"), //Вид движения"
+
+                };
+                
+                return reserv;
+            }
+            catch (Exception e)
+            {
+                String.Format("GetReservationOfNDopusk(num={0}) = {1}", num).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservationOfNDopusk(num={0}), e={1}", num, e);
                 return null;
             }
         }
