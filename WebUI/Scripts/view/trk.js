@@ -249,7 +249,7 @@ var pb_deliver = {
 
 
     },
-    outValume: function (num_gun, valume) {
+    outValume: function (num_gun, valume, curr_val) {
         // вывести значение
         pb_deliver.obj.each(function (indx, element) {
             var id = $(this).attr('id');
@@ -261,7 +261,7 @@ var pb_deliver = {
         pb_deliver.lab.each(function (indx, element) {
             var id = $(this).attr('id');
             if ('progress-label-gun-' + num_gun == id) {
-                $(this).text(valume + '%');
+                $(this).text(curr_val.toFixed(1));
             }
         });
     },
@@ -422,15 +422,16 @@ var viewGuns = function () {
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             if (gun && gun.volume_to_write > 0) {
                                 var curr = 0;
+                                var curr_val = gun.current_volume>0 ? gun.current_volume/100.00 : 0
                                 curr = ((gun.current_volume * 100.0) / gun.volume_to_write);
-                                pb_deliver.outValume(gun.num_gun, curr);
+                                pb_deliver.outValume(gun.num_gun, curr, curr_val);
                             }
                             break;
                         case 4: //  Выдача стоп
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-deliver').hide();
                             $('div#progressbar-gun-' + gun.num_gun).show();
-                            pb_deliver.outValume(gun.num_gun, 100);
+                            pb_deliver.outValume(gun.num_gun, 100, 100);
                             break;
                         case 128: //  нет ответа
                             $('div#progressbar-gun-' + gun.num_gun).hide();
@@ -1590,7 +1591,7 @@ var confirm_df = {
                         { value: 3, text: 'По исходящей поставке' },
                         { value: 4, text: 'По требованию (самовывоз)' },
                         { value: 5, text: 'Заправка в баки ТС' },
-                        { value: 6, text: 'Заправка в цистерну топливозаправщика', disabled: true },
+                        { value: 6, text: 'Заправка в цистерну топливозаправщика'}, //, disabled: true 
                     ],
                     null,
                     -1,
