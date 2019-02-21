@@ -18,6 +18,7 @@ var button_add_doc;
 var allFields;
 
 var open_rf = {
+    id: 0,
     list_open: null,
     operator_name: null,
     smena_num: null,
@@ -43,6 +44,7 @@ var open_rf = {
     railway_manual_mass: null,
     // Инициализируем при старте
     init: function () {
+
         this.truck_num_nak = $('input#tank-truck-num-nak').val('');
         this.truck_weight = $('input#tank-truck-weight').val('');
         this.truck_provider = $('textarea#tank-truck-provider').text('');
@@ -56,9 +58,10 @@ var open_rf = {
         this.railway_manual_volume = $('input#tank-railway-manual-volume').val('');
         this.railway_manual_dens = $('input#tank-railway-manual-dens').val('');
         this.railway_manual_mass = $('input#tank-railway-manual-mass').val('');
-        if (open_rf.list_open && open_rf.list_open.length>0) {
+        if (open_rf.list_open && open_rf.list_open.length > 0) {
             var open = open_rf.list_open[0];
             if (open) {
+                this.id = open.id;
                 this.master = 2;
                 this.type = open.type;
                 viewPanelType(this.type);
@@ -76,6 +79,15 @@ var open_rf = {
                 this.railway_manual_volume.val(open.railway_manual_volume);
                 this.railway_manual_dens.val(open.railway_manual_dens);
                 this.railway_manual_mass.val(open.railway_manual_mass);
+                var rf_tanks = open.ReceivingFuelTanks;
+                if (rf_tanks && rf_tanks.length > 0) {
+                    this.list_tank = [];
+                    for (it = 0; it < rf_tanks.length; it++) {
+                        if (rf_tanks[it].close === null) {
+                            addTanks(rf_tanks[it].num);
+                        }
+                    }
+                }
             }
 
         }
@@ -447,6 +459,89 @@ var viewPanelType = function (value) {
         tank_truck.hide();
     }
 };
+// Вывести емкости
+var addTanks = function (tank_num) {
+    open_rf.list_tank.push(tank_num); // добавим в список
+    $('div#add-tanks')
+        .append('<div id="tank-' + tank_num + '" class="fuel-receiving-hopper">' +
+            '<fieldset>' +
+            '<legend>Резурвуар № <label>' + tank_num + '</label></legend>' +
+            '<table class="table-striped table-fuel-receiving-hopper">' +
+            '    <tr>' +
+            '        <th>Уровень (мм) :</th>' +
+            '        <td id="tank-level-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '        <th>Объем (л) :</th>' +
+            '        <td id="tank-volume-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '        <th>Плотность (кг/м3) :</th>' +
+            '        <td id="tank-dens-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '        <th>Масса (кг) :</th>' +
+            '        <td id="tank-mass-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '        <th>Температура (С°) :</th>' +
+            '        <td id="tank-temp-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr>' +
+            '        <th>Уровень п-воды (мм) :</th>' +
+            '        <td id="tank-water-level-' + tank_num + '"></td>' +
+            '    </tr>' +
+            '    <tr><th colspan="2"><button id="button-close-tank-' + tank_num + '" data-tank-num="' + tank_num + '" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>' +
+            '</table>' +
+            '</fieldset>' +
+            '</div >');
+    $('button#button-close-tank-' + tank_num).on('click', function () {
+        event.preventDefault();
+        var num_tank = $(this).attr('data-tank-num');
+        getAsyncReceivingFuelTanks(
+            open_rf.id,
+            num_tank,
+            function (result) {
+                var rft = result;
+                getTankTags(rft.num,
+                    function (result) {
+                        // Обновим информацию по баку
+                        var now = new Date();
+                        rft.stop_datetime = toISOStringTZ(now);
+                        rft.stop_level = result.level.toFixed(2);
+                        rft.stop_volume = result.volume.toFixed(2);
+                        rft.stop_density = result.dens.toFixed(5);
+                        rft.stop_mass = result.mass.toFixed(2);
+                        rft.stop_temp = result.temp.toFixed(2);
+                        rft.stop_water_level = result.water_volume.toFixed(2);
+                        rft.close = toISOStringTZ(now);
+
+                        putAsyncReceivingFuelTanks(
+                            rft,
+                            function (id) {
+                                if (id > 0) {
+                                    // Удалим на экране
+                                    var index = open_rf.list_tank.indexOf(num_tank);
+                                    open_rf.list_tank.splice(index, 1);
+                                    $('div#add-tanks').empty();
+                                    var rf_tanks = open_rf.list_tank;
+                                    if (rf_tanks && rf_tanks.length > 0) {
+                                        open_rf.list_tank = [];
+                                        for (it = 0; it < rf_tanks.length; it++) {
+                                            addTanks(rf_tanks[it]);
+                                        }
+                                    }
+                                }
+                            });
+                    }
+                );
+            }
+        );
+
+
+
+    });
+};
 
 $(function () {
 
@@ -484,40 +579,7 @@ $(function () {
         event.preventDefault();
         var tank_num = select_capacity.val();
         if (tank_num !== "-1") {
-            open_rf.list_tank.push(tank_num); // добавим в список
-            $('div#add-tanks')
-                .append('<div id="tank-' + tank_num + '" class="fuel-receiving-hopper">' +
-                    '<fieldset>' +
-                    '<legend>Резурвуар № <label>' + tank_num + '</label></legend>' +
-                    '<table class="table-striped table-fuel-receiving-hopper">' +
-                    '    <tr>' +
-                    '        <th>Уровень (мм) :</th>' +
-                    '        <td id="tank-level-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr>' +
-                    '        <th>Объем (л) :</th>' +
-                    '        <td id="tank-volume-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr>' +
-                    '        <th>Плотность (кг/м3) :</th>' +
-                    '        <td id="tank-dens-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr>' +
-                    '        <th>Масса (кг) :</th>' +
-                    '        <td id="tank-mass-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr>' +
-                    '        <th>Температура (С°) :</th>' +
-                    '        <td id="tank-temp-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr>' +
-                    '        <th>Уровень п-воды (мм) :</th>' +
-                    '        <td id="tank-water-level-' + tank_num + '"></td>' +
-                    '    </tr>' +
-                    '    <tr><th colspan="2"><button id="button-close-tank-' + tank_num + '" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>' +
-                    '</table>' +
-                    '</fieldset>' +
-                    '</div >');
+            addTanks(tank_num);
         } else {
             checkSelectValOfMessage(select_capacity, "Выберите резервуар для приема ГСМ");
         }
@@ -567,6 +629,8 @@ $(function () {
         input_reception_take_dens = $('input#reception-tank-dens');
         input_reception_take_water_level = $('input#reception-tank-water-level');
 
+        //
+        open_rf.init(); // инициализируем
 
         // Настроим откуда принимаем
         select_type_rf = initSelect(
@@ -645,15 +709,13 @@ $(function () {
                             input_reception_take_mass.val(result.mass.toFixed(2));
                             input_reception_take_temp.val(result.temp.toFixed(2));
                             input_reception_take_volume.val(result.volume.toFixed(2));
-                            input_reception_take_dens.val(result.dens.toFixed(2));
+                            input_reception_take_dens.val(result.dens.toFixed(5));
                             input_reception_take_water_level.val(result.water_level.toFixed(2));
                         }
                     );
                 }
             },
             null);
-        //
-        open_rf.init(); // инициализируем
         // Вывести на экран шаг
         outMasterStep();
         // Определим все поля для проверки валидации

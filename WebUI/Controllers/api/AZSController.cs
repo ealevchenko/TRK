@@ -518,6 +518,50 @@ namespace WebUI.Controllers.api
         #endregion
 
         #region ReceivingFuelTanks
+        // GET: api/azs/receiving_fuel_tanks/id/3/num/B3
+        [Route("receiving_fuel_tanks/id/{id:int}/num/{num}")]
+        [ResponseType(typeof(ReceivingFuelTanks))]
+        public IHttpActionResult GetReceivingFuelTanks(int id, string num)
+        {
+            try
+            {
+                ReceivingFuelTanks rft = this.ef_rft.Get().Where(c => c.id_receiving_fuel == id & c.num == num & c.close==null)
+                    //.ToList()
+                    .Select(t => new ReceivingFuelTanks
+                    {
+                        id = t.id,
+                        id_receiving_fuel = t.id_receiving_fuel,
+                        num = t.num,
+                        fuel = t.fuel,
+                        start_datetime = t.start_datetime,
+                        start_level = t.start_level,
+                        start_volume = t.start_volume,
+                        start_density = t.start_density,
+                        start_mass = t.start_mass,
+                        start_temp = t.start_temp,
+                        start_water_level = t.start_water_level,
+                        stop_datetime = t.stop_datetime,
+                        stop_level = t.stop_level,
+                        stop_volume = t.stop_volume,
+                        stop_density = t.stop_density,
+                        stop_mass = t.stop_mass,
+                        stop_temp = t.stop_temp,
+                        stop_water_level = t.stop_water_level,
+                        close = t.close,
+                    }).FirstOrDefault();
+                if (rft == null)
+                {
+                    return NotFound();
+                }
+                return Ok(rft);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReceivingFuelTanks(id={0}, num={1})",id,num).SaveError(e);
+                return NotFound();
+            }
+        }
+
         // POST api/azs/receiving_fuel_tanks
         [HttpPost]
         [Route("receiving_fuel_tanks")]
@@ -534,6 +578,23 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:PostReceivingFuel(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
+        // PUT api/azs/receiving_fuel_tanks/3
+        [HttpPut]
+        [Route("receiving_fuel_tanks/{id:int}")]
+        public int PutReceivingFuelTanks(int id, [FromBody]ReceivingFuelTanks value)
+        {
+            try
+            {
+                this.ef_rft.Update(value);
+                return this.ef_rft.Save();
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PutReceivingFuelTanks(id={0}, value={1})", id, value).SaveError(e);
                 return -1;
             }
         }

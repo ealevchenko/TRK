@@ -1474,6 +1474,29 @@ var postAsyncReceivingFuel = function (receiving_fuel, callback) {
         }
     });
 };
+//Получить ReceivingFuelTanks
+var getAsyncReceivingFuelTanks = function (id, num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/receiving_fuel_tanks/id/'+id+'/num/'+num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 //Добавить ReceivingFuelTanks
 var postAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
     $.ajax({
@@ -1499,6 +1522,31 @@ var postAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
         }
     });
 };
+//Обновить ReceivingFuelTanks
+var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/azs/receiving_fuel_tanks/' + receiving_fuel_tanks.id,
+        data: JSON.stringify(receiving_fuel_tanks),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
 /////////////////////////////////////////////////////////////////////
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {
