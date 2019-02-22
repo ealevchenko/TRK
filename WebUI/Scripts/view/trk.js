@@ -818,6 +818,7 @@ var confirm_df = {
     buttom_select_sap: null,            // Запрос на САП
     buttom_select_sap_debitor: null,    // Запрос на САП дебитор
     buttom_select_sap_ndopusk: null,    // Запрос на САП наряд-допуск
+    input_sap_ndopusk: null,            // Номер наряд допуска
     input_sap_num: null,                // Номер запроса в САП
     input_sap_num_pos: null,            // Номер позиции запроса в САП
     select_sap_num_pos: null,           // выбор номеров позиций по поставке
@@ -1226,6 +1227,7 @@ var confirm_df = {
             event.preventDefault();
             var i = confirm_df.select_variant.val();
             if (i === "6") {
+                confirm_df.input_sap_ndopusk = null;
                 confirm_df.select_sap_num_pos.selectmenu("widget").hide();
                 confirm_df.input_sap_ozm.val('');
                 confirm_df.input_sap_ozm_amount.val('');
@@ -1251,6 +1253,7 @@ var confirm_df = {
                         if (result.RSNUM === "") {
                             OnAJAXErrorOfMessage("Резервирование по наряд-допуску:" + num + " не найдено");
                         } else {
+                            confirm_df.input_sap_ndopusk = num;
                             confirm_df.input_sap_num.val(result.RSNUM);
                             confirm_df.input_sap_num_pos.val(result.RSPOS);
                             confirm_df.input_sap_ozm.val(result.MATNR);
@@ -1883,7 +1886,8 @@ var confirm_df = {
                 $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                 $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
                 if (confirm_df.card) {
-                    confirm_df.input_sap_num_ts.val(confirm_df.card.Debitor + '/' + confirm_df.card.AutoNumber + '/' + confirm_df.card.AutoModel);
+                    confirm_df.input_sap_num_ts.val(confirm_df.card.AutoNumber);
+                    //confirm_df.input_sap_num_ts.val(confirm_df.card.Debitor + '/' + confirm_df.card.AutoNumber + '/' + confirm_df.card.AutoModel);
                     confirm_df.input_sap_id_card.val(confirm_df.card.Id);
                 }
                 break;
@@ -1904,7 +1908,8 @@ var confirm_df = {
                 $('tr#sap-factory-recipient').show(); confirm_df.input_sap_factory_recipient.attr('disabled', 'disabled').show(); $('#label-sap-factory-recipient').text('Завод-получатель :');
                 $('tr#sap-id-card').show(); $('#label-sap-id-card').text('ИД карта :');
                 if (confirm_df.card) {
-                    confirm_df.input_sap_num_ts.val(confirm_df.card.Debitor + '/' + confirm_df.card.AutoNumber + '/' + confirm_df.card.AutoModel)
+                    //confirm_df.input_sap_num_ts.val(confirm_df.card.Debitor + '/' + confirm_df.card.AutoNumber + '/' + confirm_df.card.AutoModel)
+                    confirm_df.input_sap_num_ts.val(confirm_df.card.AutoNumber);
                     confirm_df.input_sap_id_card.val(confirm_df.card.Id);
                 }
                 break;
@@ -2145,7 +2150,8 @@ var confirm_df = {
             N_POST: variant !== "7" ? confirm_df.input_sap_num_kpp.val() : null,
             TRANSP_FAKT: variant !== "7" ? confirm_df.input_sap_num_ts.val() : null,
             N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
-            N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() : null,
+            //N_TREB: variant !== "7" && variant !== "6" ? confirm_df.input_sap_num.val() : variant === "6" ? confirm_df.input_sap_ndopusk : null,
+            N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() :  null,
             N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null,
             LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
             WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
@@ -2187,7 +2193,8 @@ var confirm_df = {
             num: num,
             fuel_type: fuel_type,
             tank_num: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
-            id_card: confirm_df.input_sap_id_card.val(),
+            //id_card: confirm_df.input_sap_id_card.val(),
+            id_card: confirm_df.card !==null ? confirm_df.card.Id : 0,
             dose: confirm_df.input_deliver_dose_fuel.val(),
             passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
             //passage: 'error',
