@@ -59,6 +59,12 @@ div.rf {
     padding:10px;
 }
 
+div.setup-rf {
+    margin-bottom:10px;
+    /*margin-top:10px;*/
+    padding: 5px 0;
+}
+
 div.input-all {
     width: auto;
     border: 1px solid #e5e5e5;

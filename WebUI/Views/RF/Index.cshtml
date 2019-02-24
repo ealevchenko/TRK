@@ -38,6 +38,11 @@
     <div id="content">
         <div>Текущее время :<label id="date-value"></label></div>
         <div class="rf">
+            <div class="setup-rf">
+                <button id="button-add-doc" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Перейти к выбору емкости</button>
+                <button id="button-start" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Начать прием ГСМ</button>
+                <button id="button-close-all" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Закрыть прием ГСМ</button>
+            </div>
             <div class="input-all">
                 <div class="input-document">
                     <fieldset>
@@ -113,8 +118,8 @@
                             <tr>
                                 <th colspan="2">
                                     Емкость для приема:<select id="reception-tank" class="ui-widget-content ui-corner-all"></select>
-                                    <button id="button-add-tank" class="ui-button ui-widget ui-corner-all button-rfid-all">Добавить</button>
-                                    <button id="button-clear" class="ui-button ui-widget ui-corner-all button-close">Сбросить</button>
+                                    <button id="button-add-tank" class="ui-button ui-widget ui-corner-all button-tank-upr">Добавить</button>
+                                    <button id="button-clear" class="ui-button ui-widget ui-corner-all button-tank-upr">Сбросить</button>
                                 </th>
                             </tr>
                             <tr>
@@ -146,11 +151,7 @@
                 </div>
                 <div class="cls"></div>
             </div>
-            <div class="setup-rf">
-                <button id="button-add-doc" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Перейти к выбору емкости</button>
-                <button id="button-start" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Начать прием ГСМ</button>
-                <button id="button-close-all" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Закрыть прием ГСМ</button>
-            </div>
+
 
 
             <div class="fuel-receiving-hopper-all">
@@ -158,69 +159,69 @@
                     <legend>Резурвуары для приема</legend>
                     <div id="add-tanks">
                         @*<div id="tank-1" class="fuel-receiving-hopper">
-                    <fieldset>
-                        <legend>Резурвуар № <label>1</label></legend>
-                        <table class="table-striped table-fuel-receiving-hopper">
-                            <tr>
-                                <th>Уровень (мм) :</th>
-                                <td id="tank-level-1"></td>
-                            </tr>
-                            <tr>
-                                <th>Объем (л) :</th>
-                                <td id="tank-volume-1"></td>
-                            </tr>
-                            <tr>
-                                <th>Плотность (кг/м3) :</th>
-                                <td id="tank-dens-1"></td>
-                            </tr>
-                            <tr>
-                                <th>Масса (кг) :</th>
-                                <td id="tank-mass-1"></td>
-                            </tr>
-                            <tr>
-                                <th>Температура (С°) :</th>
-                                <td id="tank-temp-1"></td>
-                            </tr>
-                            <tr>
-                                <th>Уровень п-воды (мм) :</th>
-                                <td id="tank-water-level-1"></td>
-                            </tr>
-                            <tr><th colspan="2"><button id="button-close-tank-1" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>
-                        </table>
-                    </fieldset>
-                </div>
-                <div id="tank-3" class="fuel-receiving-hopper">
-                    <fieldset>
-                        <legend>Резурвуар № <label>3</label></legend>
-                        <table class="table-striped table-fuel-receiving-hopper">
-                            <tr>
-                                <th>Уровень (мм) :</th>
-                                <td id="tank-level-3"></td>
-                            </tr>
-                            <tr>
-                                <th>Объем (л) :</th>
-                                <td id="tank-volume-3"></td>
-                            </tr>
-                            <tr>
-                                <th>Плотность (кг/м3) :</th>
-                                <td id="tank-dens-3"></td>
-                            </tr>
-                            <tr>
-                                <th>Масса (кг) :</th>
-                                <td id="tank-mass-3"></td>
-                            </tr>
-                            <tr>
-                                <th>Температура (С°) :</th>
-                                <td id="tank-temp-3"></td>
-                            </tr>
-                            <tr>
-                                <th>Уровень п-воды (мм) :</th>
-                                <td id="tank-water-level-3"></td>
-                            </tr>
-                            <tr><th colspan="2"><button id="button-close-tank-3" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>
-                        </table>
-                    </fieldset>
-                </div>*@
+                        <fieldset>
+                            <legend>Резурвуар № <label>1</label></legend>
+                            <table class="table-striped table-fuel-receiving-hopper">
+                                <tr>
+                                    <th>Уровень (мм) :</th>
+                                    <td id="tank-level-1"></td>
+                                </tr>
+                                <tr>
+                                    <th>Объем (л) :</th>
+                                    <td id="tank-volume-1"></td>
+                                </tr>
+                                <tr>
+                                    <th>Плотность (кг/м3) :</th>
+                                    <td id="tank-dens-1"></td>
+                                </tr>
+                                <tr>
+                                    <th>Масса (кг) :</th>
+                                    <td id="tank-mass-1"></td>
+                                </tr>
+                                <tr>
+                                    <th>Температура (С°) :</th>
+                                    <td id="tank-temp-1"></td>
+                                </tr>
+                                <tr>
+                                    <th>Уровень п-воды (мм) :</th>
+                                    <td id="tank-water-level-1"></td>
+                                </tr>
+                                <tr><th colspan="2"><button id="button-close-tank-1" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                    <div id="tank-3" class="fuel-receiving-hopper">
+                        <fieldset>
+                            <legend>Резурвуар № <label>3</label></legend>
+                            <table class="table-striped table-fuel-receiving-hopper">
+                                <tr>
+                                    <th>Уровень (мм) :</th>
+                                    <td id="tank-level-3"></td>
+                                </tr>
+                                <tr>
+                                    <th>Объем (л) :</th>
+                                    <td id="tank-volume-3"></td>
+                                </tr>
+                                <tr>
+                                    <th>Плотность (кг/м3) :</th>
+                                    <td id="tank-dens-3"></td>
+                                </tr>
+                                <tr>
+                                    <th>Масса (кг) :</th>
+                                    <td id="tank-mass-3"></td>
+                                </tr>
+                                <tr>
+                                    <th>Температура (С°) :</th>
+                                    <td id="tank-temp-3"></td>
+                                </tr>
+                                <tr>
+                                    <th>Уровень п-воды (мм) :</th>
+                                    <td id="tank-water-level-3"></td>
+                                </tr>
+                                <tr><th colspan="2"><button id="button-close-tank-3" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>
+                            </table>
+                        </fieldset>
+                    </div>*@
                         <div class="cls"></div>
                     </div>
                 </fieldset>

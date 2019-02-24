@@ -88,6 +88,7 @@ var open_rf = {
                         }
                     }
                 }
+                $('button.button-close').show(); // покажем кнопки оставшиеся
             }
 
         }
@@ -111,6 +112,37 @@ var open_rf = {
                 }
             );
         }
+    },
+    // очистить
+    clear: function () {
+        // Сбросили выбор вариантов
+        select_type_rf.val(-1).selectmenu("refresh");
+        select_type_fuel.val(-1).selectmenu("refresh"); 
+        select_capacity.val(-1).selectmenu("refresh"); 
+        open_rf.id = 0;
+        open_rf.list_open = null;
+        open_rf.operator_name = null;
+        open_rf.smena_num = null;
+        open_rf.smena_datetime = null;
+        open_rf.list_tank = [];
+        open_rf.master = 0; // Уровень прохождения мастера
+        open_rf.type = -1;// не выбран тип 
+        open_rf.fuel = -1; // тип топлива
+            // автоцистерна
+        open_rf.truck_num_nak.val('');
+        open_rf.truck_weight.val('');
+        open_rf.truck_provider.text('');
+            // ж.д. цистерна
+        open_rf.railway_num_nak.val('');
+        open_rf.railway_num_tanker.val('');
+        open_rf.railway_provider.text('');
+        open_rf.railway_nak_volume.val('');
+        open_rf.railway_nak_dens.val('');
+        open_rf.railway_nak_mass.val('');
+        open_rf.railway_manual_level.val('');
+        open_rf.railway_manual_volume.val('');
+        open_rf.railway_manual_dens.val('');
+        open_rf.railway_manual_mass.val('');
     },
     // Получить текущего пользователя
     getCurrentUser: function (callback) {
@@ -215,6 +247,7 @@ var confirm_acceptance = {
 
                                     // Данные в  сохранились?
                                     if (id > 0) {
+                                        open_rf.id = id;
                                         // Запись начального состояния емкостей
                                         if (open_rf.list_tank.length > 0) {
                                             var tanks = open_rf.list_tank.join(',');
@@ -232,6 +265,7 @@ var confirm_acceptance = {
                                                                         LockScreenOff();
                                                                     }
                                                                     if (id_receiving_fuel_tanks > 0) {
+                                                                        $('button.button-close').show();
                                                                         // ОК, операция успешна
                                                                         updateMessageTips("Запись строки receiving_fuel_tanks, результат id=" + id_receiving_fuel_tanks);
 
@@ -386,6 +420,7 @@ var validationStart = function () {
 var outMasterStep = function () {
     switch (open_rf.master) {
         case 0:
+            viewPanelType(Number(open_rf.type));
             button_add_doc.show();
             button_start.hide();
             button_close.hide();
@@ -491,7 +526,7 @@ var addTanks = function (tank_num) {
             '        <th>Уровень п-воды (мм) :</th>' +
             '        <td id="tank-water-level-' + tank_num + '"></td>' +
             '    </tr>' +
-            '    <tr><th colspan="2"><button id="button-close-tank-' + tank_num + '" data-tank-num="' + tank_num + '" class="ui-button ui-widget ui-corner-all button-close">Закрыть</button></th></tr>' +
+        '    <tr><th colspan="2"><button id="button-close-tank-' + tank_num + '" data-tank-num="' + tank_num + '" class="ui-button ui-widget ui-corner-all button-close"  style="display:none">Закрыть</button></th></tr>' +
             '</table>' +
             '</fieldset>' +
             '</div >');
@@ -504,50 +539,54 @@ var addTanks = function (tank_num) {
 // Закрыть емкость
 var closeTank = function (num_tank) {
     getAsyncReceivingFuelTanks(
-    open_rf.id,
-    num_tank,
-    function (result) {
-        var rft = result;
-        getTankTags(rft.num,
-            function (result) {
-                // Обновим информацию по баку
-                var now = new Date();
-                rft.stop_datetime = toISOStringTZ(now);
-                rft.stop_level = result.level.toFixed(2);
-                rft.stop_volume = result.volume.toFixed(2);
-                rft.stop_density = result.dens.toFixed(5);
-                rft.stop_mass = result.mass.toFixed(2);
-                rft.stop_temp = result.temp.toFixed(2);
-                rft.stop_water_level = result.water_volume.toFixed(2);
-                rft.close = toISOStringTZ(now);
+        open_rf.id,
+        num_tank,
+        function (result) {
+            var rft = result;
+            getTankTags(rft.num,
+                function (result) {
+                    // Обновим информацию по баку
+                    var now = new Date();
+                    rft.stop_datetime = toISOStringTZ(now);
+                    rft.stop_level = result.level.toFixed(2);
+                    rft.stop_volume = result.volume.toFixed(2);
+                    rft.stop_density = result.dens.toFixed(5);
+                    rft.stop_mass = result.mass.toFixed(2);
+                    rft.stop_temp = result.temp.toFixed(2);
+                    rft.stop_water_level = result.water_volume.toFixed(2);
+                    rft.close = toISOStringTZ(now);
 
-                putAsyncReceivingFuelTanks(
-                    rft,
-                    function (id) {
-                        if (id > 0) {
-                            // Удалим на экране
-                            var index = open_rf.list_tank.indexOf(num_tank);
-                            open_rf.list_tank.splice(index, 1);
-                            $('div#add-tanks').empty();
-                            var rf_tanks = open_rf.list_tank;
-                            if (rf_tanks && rf_tanks.length > 0) {
-                                open_rf.list_tank = [];
-                                for (it = 0; it < rf_tanks.length; it++) {
-                                    addTanks(rf_tanks[it]);
+                    putAsyncReceivingFuelTanks(
+                        rft,
+                        function (id) {
+                            updateMessageTips("Запись ReceivingFuelTanks обновлена результат = " + id);
+                            if (id > 0) {
+                                // Удалим на экране
+                                var index = open_rf.list_tank.indexOf(num_tank);
+                                open_rf.list_tank.splice(index, 1);
+                                $('div#add-tanks').empty();
+                                var rf_tanks = open_rf.list_tank;
+                                if (rf_tanks && rf_tanks.length > 0) {
+                                    open_rf.list_tank = [];
+                                    for (it = 0; it < rf_tanks.length; it++) {
+                                        addTanks(rf_tanks[it]);
+                                    }
+                                    if (open_rf.master === 2) {
+                                        $('button.button-close').show(); // покажем кнопки оставшиеся
+                                    }
                                 }
                             }
-                        }
-                    });
-            }
-        );
-    }
-);
+                        });
+                }
+            );
+        }
+    );
 };
 // Закрыть все емкости
 var closeTanks = function () {
     if (open_rf.list_tank.length > 0) {
         for (ic = 0; ic < open_rf.list_tank.length; ic++) {
-            closeTank(open_rf.list_tank[it]);
+            closeTank(open_rf.list_tank[ic]);
         }
     }
 };
@@ -575,9 +614,6 @@ $(function () {
         if (valid === true) {
 
             confirm_acceptance.open();
-            // open_rf.master = 2;
-            // Вывести на экран шаг
-            //outMasterStep();
         }
     });
     button_close = $('button#button-close-all');
@@ -585,15 +621,24 @@ $(function () {
     button_close.on('click', function () {
         event.preventDefault();
         closeTanks(); // Закрыть все емкости
-
-        //var valid = validationStart();
-        //if (valid === true) {
-
-            //confirm_acceptance.open();
-            // open_rf.master = 0;
-            // Вывести на экран шаг
-            //outMasterStep();
-        //}
+        $('div#add-tanks').empty();
+        getAsyncReceivingFuel(
+            open_rf.id,
+            function (result) {
+                var rf = result;
+                var now = new Date();
+                rf.stop_datetime = toISOStringTZ(now);
+                rf.close = toISOStringTZ(now);
+                putAsyncReceivingFuel(
+                    rf,
+                    function (id) {
+                        updateMessageTips("Запись ReceivingFuel обновлена результат = " + id);
+                        if (id > 0) {
+                            open_rf.clear();
+                            outMasterStep();
+                        }
+                    });
+            });
     });
     // Инициализаия кнопки
     $('button#button-add-tank').on('click', function () {

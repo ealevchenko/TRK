@@ -1446,7 +1446,30 @@ var getAsyncOpenReceivingFuel = function (callback) {
         },
         complete: function () {
             AJAXComplete();
+        }
+    });
+};
+//Получить ReceivingFuel
+var getAsyncReceivingFuel = function (id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/receiving_fuel/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
         },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
     });
 };
 //Добавить ReceivingFuel
@@ -1467,6 +1490,30 @@ var postAsyncReceivingFuel = function (receiving_fuel, callback) {
         },
         error: function (x, y, z) {
             LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+//Обновить ReceivingFuelTanks
+var putAsyncReceivingFuel = function (receiving_fuel, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/azs/receiving_fuel/' + receiving_fuel.id,
+        data: JSON.stringify(receiving_fuel),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
             OnAJAXError(x, y, z);
         },
         complete: function () {
