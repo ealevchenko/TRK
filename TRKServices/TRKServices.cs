@@ -89,7 +89,7 @@ namespace TRKServices
                     // String.Format("Список считаных RFID-карт = {0}",list.Count()).SaveWarning();
                     foreach (RFID rfid in list)
                     {
-                        if (rfid.hi != null && rfid.lo != null && rfid.hi > 0 && rfid.lo > 0)
+                        if (rfid.hi != null && rfid.lo != null && rfid.hi >= 0 && rfid.lo > 0)
                         {
                             String.Format("Сервис TRKServices - Считана RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo).SaveInformation();
                             bool side = rfid.side == 0 ? false : true;
