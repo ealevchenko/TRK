@@ -265,6 +265,23 @@ var pb_deliver = {
             }
         });
     },
+    // Вывести наливные стояки
+    outNSValume: function (num_ns, valume, curr_val) {
+        // вывести значение
+        pb_deliver.obj.each(function (indx, element) {
+            var id = $(this).attr('id');
+            if ('progressbar-ns-' + num_ns == id) {
+                $(this).progressbar("value", valume);
+            }
+        });
+        // вывести показания
+        pb_deliver.lab.each(function (indx, element) {
+            var id = $(this).attr('id');
+            if ('progress-label-ns-' + num_ns == id) {
+                $(this).text(curr_val.toFixed(1));
+            }
+        });
+    },
     hide: function () {
         pb_deliver.obj.each(function (indx, element) {
             var id = $(this).attr('id');
@@ -397,14 +414,14 @@ var viewGuns = function () {
                 // Проверим сотояние TRK
                 //var id_ofs = openFuelSale.getFuelSaleID(gun.num_trk, gun.side, gun.num_gun);
                 // Определить активную кнопку
-                if (gun.state != null) {
+                if (gun.state !== null) {
                     switch (gun.state) {
                         case 1: //  разрешено выдавать
-                            var card = cards.getCardOfNumSide(gun.num_trk, gun.side);
+                            //var card = cards.getCardOfNumSide(gun.num_trk, gun.side);
                             $('div#progressbar-gun-' + gun.num_gun).hide();
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             // Отобразим кнопки выдать\закрыть
-                            if (id_ofs != null) {
+                            if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
                             } else {
@@ -422,7 +439,7 @@ var viewGuns = function () {
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             if (gun && gun.volume_to_write > 0) {
                                 var curr = 0;
-                                var curr_val = gun.current_volume>0 ? gun.current_volume/100.00 : 0
+                                var curr_val = gun.current_volume > 0 ? gun.current_volume / 100.00 : 0;
                                 curr = ((gun.current_volume * 100.0) / gun.volume_to_write);
                                 pb_deliver.outValume(gun.num_gun, curr, curr_val);
                             }
@@ -436,7 +453,7 @@ var viewGuns = function () {
                         case 128: //  нет ответа
                             $('div#progressbar-gun-' + gun.num_gun).hide();
                             // Отобразим кнопки выдать\закрыть
-                            if (id_ofs != null) {
+                            if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
                             } else {
@@ -527,16 +544,22 @@ var viewRisers = function () {
                 // Проверим сотояние
                 var num_riser = Number(riser.num) + 9;
                 var id_ofs = openFuelSale.getFuelSaleID(num_riser, 0, riser.num);
-                // Отобразим кнопки выдать\закрыть
-                if (id_ofs != null) {
-                    $('#button-ns-' + num_riser + '-deliver').hide();
-                    $('#button-ns-' + num_riser + '-close').show().attr("data-id", id_ofs);
-                } else {
-                    $('#button-ns-' + num_riser + '-deliver').show();
-                    $('#button-ns-' + num_riser + '-close').hide().attr("data-id", '');
+                var fs = null;
+                var DIOriser = null;
+                if (id_ofs > 0) {
+                    fs = openFuelSale.getFuelSale(id_ofs);
+                    DIOriser = risers.getDIORisers(riser.num);
                 }
+                //// Отобразим кнопки выдать\закрыть
+                //if (id_ofs !== null) {
+                //    $('#button-ns-' + num_riser + '-deliver').hide();
+                //    $('#button-ns-' + num_riser + '-close').show().attr("data-id", id_ofs);
+                //} else {
+                //    $('#button-ns-' + num_riser + '-deliver').show();
+                //    $('#button-ns-' + num_riser + '-close').hide().attr("data-id", '');
+                //}
                 //
-                if (riser.flg_kv1 != null) {
+                if (riser.flg_kv1 !== null) {
                     if (riser.flg_kv1) {
                         $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('active');
                     } else {
@@ -546,7 +569,7 @@ var viewRisers = function () {
                     $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('null_active');
                 }
                 //
-                if (riser.flg_kv2 != null) {
+                if (riser.flg_kv2 !== null) {
                     if (riser.flg_kv2) {
                         $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('active');
                     } else {
@@ -555,19 +578,19 @@ var viewRisers = function () {
                 } else {
                     $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('null_active');
                 }
-                //
-                if (riser.inp_km != null) {
-                    if (riser.inp_km) {
-                        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('active');
-                    } else {
-                        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('not_active');
-                    }
-                } else {
-                    $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('null_active');
-                }
-                //
-                if (riser.inp_kvq1 != null) {
-                    if (riser.inp_kvq1) {
+                // состояние включения насоса
+                //if (riser.inp_km !== null) {
+                //    if (riser.inp_km) {
+                //        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('active');
+                //    } else {
+                //        $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('not_active');
+                //    }
+                //} else {
+                //    $('#ns-' + riser.num + '-inp_km').html("").removeClass().addClass('null_active');
+                //}
+                // Датчик перелива
+                if (riser.inp_kvq1 !== null) {
+                    if (riser.inp_kvq1 === true) {
                         $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('active');
                     } else {
                         $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('not_active');
@@ -575,9 +598,9 @@ var viewRisers = function () {
                 } else {
                     $('#ns-' + riser.num + '-inp_kvq1').html("").removeClass().addClass('null_active');
                 }
-                //
-                if (riser.inp_kvq2 != null) {
-                    if (riser.inp_kvq2) {
+                // Датчик заземления
+                if (riser.inp_kvq2 !== null) {
+                    if (riser.inp_kvq2 === false) {
                         $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('active');
                     } else {
                         $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('not_active');
@@ -585,18 +608,18 @@ var viewRisers = function () {
                 } else {
                     $('#ns-' + riser.num + '-inp_kvq2').html("").removeClass().addClass('null_active');
                 }
-                //
-                if (riser.inp_sa2 != null) {
-                    if (riser.inp_sa2) {
-                        $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('active');
+                // Режим
+                if (riser.inp_sa2 !== null) {
+                    if (riser.inp_sa2 === true) {
+                        $('#ns-' + riser.num + '-inp_sa2').html("Ручной");//.removeClass().addClass('active');
                     } else {
-                        $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('not_active');
+                        $('#ns-' + riser.num + '-inp_sa2').html("Авто");//.removeClass().addClass('not_active');
                     }
                 } else {
-                    $('#ns-' + riser.num + '-inp_sa2').html("").removeClass().addClass('null_active');
+                    $('#ns-' + riser.num + '-inp_sa2').html("");//.removeClass().addClass('null_active');
                 }
                 //
-                if (riser.out_kv1 != null) {
+                if (riser.out_kv1 !== null) {
                     if (riser.out_kv1) {
                         $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('active');
                     } else {
@@ -606,7 +629,7 @@ var viewRisers = function () {
                     $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('null_active');
                 }
                 //
-                if (riser.out_kv2 != null) {
+                if (riser.out_kv2 !== null) {
                     if (riser.out_kv2) {
                         $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('active');
                     } else {
@@ -614,6 +637,45 @@ var viewRisers = function () {
                     }
                 } else {
                     $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('null_active');
+                }
+                // Проверка состояния
+                if (riser.inp_km !== null) {
+                    if (riser.inp_km === true) {
+                        // Насос включен
+                        $('button#button-ns-' + riser.num + '-close').hide();
+                        $('button#button-ns-' + riser.num + '-deliver').hide();
+                        // Отобразим прогрес-бар
+                        if (riser && fs && fs.start_counter > 0 && DIOriser) {
+                            $('div#progressbar-ns-' + riser.num).show();
+                            var curr = 0;
+                            var curr_val = DIOriser.Counter > 0 ? ((DIOriser.Counter / 1000000).toFixed(0) - fs.start_counter) : 0;
+                            curr = (curr_val * 100.0) / fs.dose;
+                            pb_deliver.outNSValume(riser.num, curr, Number(curr_val));
+                        } else {
+                            $('div#progressbar-ns-' + riser.num).hide();
+                        }
+                    } else {
+                        // Насос выключен
+                        $('div#progressbar-ns-' + riser.num).hide();
+                        $('button#button-ns-' + riser.num + '-close').hide();
+                        // Отобразим кнопки выдать\закрыть
+                        if (id_ofs !== null) {
+                            $('#button-ns-' + riser.num + '-deliver').hide();
+                            $('#button-ns-' + riser.num + '-close').show().attr("data-id", id_ofs);
+                        } else {
+                            // Режим Авто, Заземление
+                            if (riser && riser.inp_sa2 === false && riser.inp_kvq2 === false) {
+                                $('button#button-ns-' + riser.num + '-deliver').show();
+                            } else {
+                                $('button#button-ns-' + riser.num + '-deliver').hide();
+                            }
+                        }
+                    }
+                } else {
+                    // Статус не определен
+                    $('button#button-ns-' + riser.num + '-close').hide();
+                    $('button#button-ns-' + riser.num + '-deliver').hide();
+                    $('div#progressbar-ns-' + riser.num).hide();
                 }
             }
         }
@@ -652,7 +714,7 @@ var show = function () {
         }
     );
     //  Прочесть теги счетчиков оборотов наливных стояков
-    if (bpollDIO == true) {
+    if (bpollDIO === true) {
         getDIORisersTags(
             function (result_dio) {
                 if (result_dio) {
@@ -794,7 +856,8 @@ var confirm_df = {
 
     type: null,  // текущие тип (пистолет-0, стояк-1, керосин-2)
     gun: null,  // текущие теги пистолета
-    risers: null,  // текущие теги разливочного стояка
+    risers: null,       // текущие теги разливочного стояка
+    DIOrisers: null,    // текущие теги счетчика стояка
     card: null, // текущая карта
     supply: null, // текущая поставка возвращенная от САП
 
@@ -1428,7 +1491,7 @@ var confirm_df = {
                             // TODO:!!!ТЕСТ УБРАТЬ
                             if (log) {
                                 log.info('Сформировали строку getSupply - > result');
-                                
+
                             }
                             if (result) {
                                 // Проверим на возврат значений
@@ -1570,6 +1633,7 @@ var confirm_df = {
         confirm_df.viewCard();  // Обнулим карту
         confirm_df.gun = null;  // Обнулим теги пистолета
         confirm_df.risers = null;  // Обнулим теги РС
+        confirm_df.DIOrisers = null;  // Обнулим теги РС
         confirm_df.kerosenes = null;  // Обнулим теги РС
         // Обновим информацию по баку
         confirm_df.input_deliver_take_level.val('').addClass('input_view');
@@ -1594,7 +1658,7 @@ var confirm_df = {
                         { value: 3, text: 'По исходящей поставке' },
                         { value: 4, text: 'По требованию (самовывоз)' },
                         { value: 5, text: 'Заправка в баки ТС' },
-                        { value: 6, text: 'Заправка в цистерну топливозаправщика'}, //, disabled: true 
+                        { value: 6, text: 'Заправка в цистерну топливозаправщика' }, //, disabled: true 
                     ],
                     null,
                     -1,
@@ -1677,15 +1741,18 @@ var confirm_df = {
                         -1,
                         null);
                 }
+
                 var riser = risers.getRisers(num);
+                var DIOriser = risers.getDIORisers(num);
                 if (riser) {
                     confirm_df.risers = riser;
+                    confirm_df.DIOrisers = DIOriser;
                     confirm_df.input_deliver_type_fuel.val(outFuelType(riser.type_fuel));
                     confirm_df.input_sap_ozm_bak.val('(' + riser.type_fuel + ') ' + outFuelType(riser.type_fuel));
                     $('th#label-taken').text('Заземление:');
-                    $('#deliver-Taken').prop('checked', riser.inp_kvq2).show();
-                       // Обновим перечень емкостей
-                    if (btanks_one == true) {
+                    $('#deliver-Taken').prop('checked', !riser.inp_kvq2).show(); // Заземление есть если false
+                    // Обновим перечень емкостей
+                    if (btanks_one === true) {
                         // выбран режим одной емкости
                         confirm_df.select_capacity.selectmenu("widget").show();
                         confirm_df.textarea_capacity.hide();
@@ -2151,7 +2218,7 @@ var confirm_df = {
             TRANSP_FAKT: variant !== "7" ? confirm_df.input_sap_num_ts.val() : null,
             N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
             //N_TREB: variant !== "7" && variant !== "6" ? confirm_df.input_sap_num.val() : variant === "6" ? confirm_df.input_sap_ndopusk : null,
-            N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() :  null,
+            N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() : null,
             N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null,
             LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
             WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
@@ -2179,7 +2246,7 @@ var confirm_df = {
                 num = confirm_df.risers !== null ? confirm_df.risers.num : null;
                 trk_num = (9 + Number(num));
                 fuel_type = confirm_df.risers !== null ? confirm_df.risers.type_fuel : null;
-                counter = 0; // Добавить счетчик
+                counter = confirm_df.DIOrisers !== null ? (confirm_df.DIOrisers.Counter / 1000000).toFixed(0) : 0; // Добавить счетчик
                 break;
         }
 
@@ -2194,7 +2261,7 @@ var confirm_df = {
             fuel_type: fuel_type,
             tank_num: btanks_one === true ? confirm_df.select_capacity.val() : confirm_df.textarea_capacity.text(),
             //id_card: confirm_df.input_sap_id_card.val(),
-            id_card: confirm_df.card !==null ? confirm_df.card.Id : 0,
+            id_card: confirm_df.card !== null ? confirm_df.card.Id : 0,
             dose: confirm_df.input_deliver_dose_fuel.val(),
             passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? 'A' : 'B',
             //passage: 'error',
@@ -2321,7 +2388,7 @@ var confirm_close_fuel = {
                             }
                             // расчет для наливного стояка
                             if (confirm_close_fuel.type === 1) {
-                                confirm_close_fuel.sap.PLOTNOST = ((confirm_close_fuel.fs.start_density + confirm_close_fuel.fs.stop_density) / 2);
+                                confirm_close_fuel.sap.PLOTNOST = (Number(confirm_close_fuel.fs.start_density) + Number(confirm_close_fuel.fs.stop_density)) / 2.0;
                             }
 
                             confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
@@ -2455,14 +2522,15 @@ var confirm_close_fuel = {
                     $('tr#type-1').show();
                     $('tr#type-0').hide();
                     var riser = risers.getRisers(fs.num);
+                    var DIOriser = risers.getDIORisers(fs.num);
                     // TODO:!!!ТЕСТ УБРАТЬ
                     if (log) {
                         log.info('Текущее состояние тегов наливного стояка fs.num=' + fs.num);
                         log.debug(riser);
                     }
-                    if (riser) {
-                        fs.volume = 0;//riser.last_out_volume; // выдано
-                        fs.stop_counter = 0;//riser.total_volume; // по счетчику
+                    if (DIOriser) {
+                        fs.stop_counter = (DIOriser.Counter / 1000000).toFixed(0); // по счетчику
+                        fs.volume = fs.stop_counter - fs.start_counter; // выдано
                     }
                 }
 
@@ -2526,7 +2594,10 @@ var confirm_close_fuel = {
         // Считаем разица посчетчикам
         fs.volume = fs.stop_counter - fs.start_counter;
         if (fs.volume > 0) {
-            fs.volume = fs.volume / 100.0;
+            if (confirm_close_fuel.type === 0) {
+                // если пистолет приведем к литрам (наливной стояк уже в литрах \1000000)
+                fs.volume = fs.volume / 100.0;
+            }
             if (log) { log.info('В режиме выдачи топлива, выданно топлива fs.volume=fs.stop_counter - fs.start_counter / 100' + fs.volume); } // TODO:!!!ТЕСТ УБРАТЬ
         }
         //}
@@ -2538,11 +2609,12 @@ var confirm_close_fuel = {
         if (fs.volume > 0) {
             // расчет для пистолета
             if (confirm_close_fuel.type === 0) {
-                fs.mass = (fs.volume * fs.stop_density) * 0.001;
+                fs.mass = fs.volume * fs.stop_density * 0.001;
             }
             // расчет для наливного стояка
             if (confirm_close_fuel.type === 1) {
-                fs.mass = (fs.volume * ((fs.start_density + fs.stop_density) / 2)) * 0.001;
+                var avg_dens = (Number(fs.start_density) + Number(fs.stop_density)) / 2.0;
+                fs.mass = fs.volume * avg_dens * 0.001;
             }
         }
         //

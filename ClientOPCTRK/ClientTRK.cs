@@ -757,6 +757,9 @@ namespace ClientOPCTRK
                     out_kv1 = list[start + 8].Value != null ? list[start + 8].Value as bool? : null,
                     out_kv2 = list[start + 9].Value != null ? list[start + 9].Value as bool? : null,
                 };
+
+                String.Format("НС №{0} [flg_kv1 - {1}; flg_kv2 - {2}; inp_km - {3}; inp_kvq1 - {4}; inp_kvq2 - {5}; inp_sa2 - {6}; out_kv1 - {7}; out_kv2 - {8}]",
+                    risers.num, risers.flg_kv1, risers.flg_kv2,risers.inp_km,risers.inp_kvq1,risers.inp_kvq2,risers.inp_sa2,risers.out_kv1,risers.out_kv2).SaveInformation();
                 return risers;
 
             }
