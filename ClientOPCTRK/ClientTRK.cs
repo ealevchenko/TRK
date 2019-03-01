@@ -102,6 +102,7 @@ namespace ClientOPCTRK
         public bool? inp_sa2 { get; set; }  //Inp_SHBUS_SA2_1 - (Inp)Выбор режима управления насосом стояка 1
         public bool? out_kv1 { get; set; }  //Out_SHBUS_KV - (OUT)Реле управления контактором включения насоса стояка 1
         public bool? out_kv2 { get; set; }  //Out_SHBUS_KV - (OUT)Реле предельного уровня в резервуарах стояка 1
+        public UInt16? TScut { get; set; }  // Доза
     }
 
     public class ClientTRK
@@ -114,8 +115,10 @@ namespace ClientOPCTRK
             url = new Opc.URL("opcda://localhost/Kepware.KEPServerEX.V6");
         }
 
-        private void getTRKOfGun(int gun, out int trk_num, out int side) {
-            switch (gun) {
+        private void getTRKOfGun(int gun, out int trk_num, out int side)
+        {
+            switch (gun)
+            {
                 case 1: trk_num = 1; side = 0; break;
                 case 2: trk_num = 1; side = 5; break;
                 case 3: trk_num = 2; side = 0; break;
@@ -145,7 +148,7 @@ namespace ClientOPCTRK
                 case 27: trk_num = 8; side = 7; break;
                 case 28: trk_num = 8; side = 8; break;
                 case 29: trk_num = 9; side = 0; break;
-                default:trk_num = 0; side = 0; break;
+                default: trk_num = 0; side = 0; break;
             }
         }
         /// <summary>
@@ -362,6 +365,7 @@ namespace ClientOPCTRK
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "TS.C" + num + ".TimerOn"; //UInt16[2]
                 i++;
+
             }
             catch (Exception e)
             {
@@ -409,6 +413,10 @@ namespace ClientOPCTRK
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "AZS_SHBUS.SHBUS.Out_SHBUS_KV" + (3 + num).ToString(); // Out_SHBUS_KV4 - (OUT)Реле предельного уровня в резервуарах стояка 1
                 i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "TScutter.DOSE_CUTTER.TS" + num + "cut"; // TS1cut - Доза
+                i++;
+
             }
             catch (Exception e)
             {
@@ -756,10 +764,11 @@ namespace ClientOPCTRK
                     inp_sa2 = list[start + 7].Value != null ? list[start + 7].Value as bool? : null,
                     out_kv1 = list[start + 8].Value != null ? list[start + 8].Value as bool? : null,
                     out_kv2 = list[start + 9].Value != null ? list[start + 9].Value as bool? : null,
+                    TScut = list[start + 10].Value != null ? list[start + 10].Value as UInt16? : null,
                 };
 
-                String.Format("НС №{0} [flg_kv1 - {1}; flg_kv2 - {2}; inp_km - {3}; inp_kvq1 - {4}; inp_kvq2 - {5}; inp_sa2 - {6}; out_kv1 - {7}; out_kv2 - {8}]",
-                    risers.num, risers.flg_kv1, risers.flg_kv2,risers.inp_km,risers.inp_kvq1,risers.inp_kvq2,risers.inp_sa2,risers.out_kv1,risers.out_kv2).SaveInformation();
+                String.Format("НС №{0} [flg_kv1 - {1}; flg_kv2 - {2}; inp_km - {3}; inp_kvq1 - {4}; inp_kvq2 - {5}; inp_sa2 - {6}; out_kv1 - {7}; out_kv2 - {8}; TScut - {9}]",
+                    risers.num, risers.flg_kv1, risers.flg_kv2, risers.inp_km, risers.inp_kvq1, risers.inp_kvq2, risers.inp_sa2, risers.out_kv1, risers.out_kv2, risers.TScut).SaveInformation();
                 return risers;
 
             }
@@ -858,7 +867,8 @@ namespace ClientOPCTRK
         /// </summary>
         /// <param name="num_tanks"></param>
         /// <returns></returns>
-        public List<Tank> ReadTagsOPSOfTank(string[] num_tanks) {
+        public List<Tank> ReadTagsOPSOfTank(string[] num_tanks)
+        {
             try
             {
                 Opc.Da.Server server = null;
@@ -877,8 +887,9 @@ namespace ClientOPCTRK
                 //добавление айтемов в группу
                 Opc.Da.Item[] items = new Opc.Da.Item[13 * num_tanks.Count()];
                 int i = 0;
-                foreach (string tk in num_tanks) { 
-                    AddTank(ref items, ref i, tk); 
+                foreach (string tk in num_tanks)
+                {
+                    AddTank(ref items, ref i, tk);
                 }
                 items = group.AddItems(items);
 
@@ -886,8 +897,9 @@ namespace ClientOPCTRK
 
                 ItemValueResult[] res = group.Read(items);
                 i = 0;
-                foreach (string tk in num_tanks) {
-                    result_list.Add(GetTank(tk, res, i)); 
+                foreach (string tk in num_tanks)
+                {
+                    result_list.Add(GetTank(tk, res, i));
                     i += 13;
                 }
                 return result_list;
@@ -1155,7 +1167,7 @@ namespace ClientOPCTRK
             }
         }
         /// <summary>
-        /// Прочесть теги (дискретные) наливных стояков
+        /// Прочесть теги (дискретные и дозу) наливных стояков
         /// </summary>
         /// <returns></returns>
         public List<Risers> ReadTagOPCOfRisers()
@@ -1177,7 +1189,7 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[3 * 10];
+                Opc.Da.Item[] items = new Opc.Da.Item[3 * 11];
                 int i = 0;
                 AddRisers(ref items, ref i, 1);
                 AddRisers(ref items, ref i, 2);
@@ -1190,9 +1202,9 @@ namespace ClientOPCTRK
                 List<Risers> list_result = new List<Risers>();
                 i = 0;
                 list_result.Add(GetRisers(1, res, i));
-                i += 10;
+                i += 11;
                 list_result.Add(GetRisers(2, res, i));
-                i += 10;
+                i += 11;
                 list_result.Add(GetRisers(3, res, i));
                 return list_result;
             }
@@ -1202,6 +1214,49 @@ namespace ClientOPCTRK
                 return null;
             }
         }
+        /// <summary>
+        /// Прочесть теги (дискретные и дозу) указанного наливного стояка
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public Risers ReadTagOPCOfRisers(int num)
+        {
+            try
+            {
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "Risers";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[11];
+                int i = 0;
+                AddRisers(ref items, ref i, num);
+
+                items = group.AddItems(items);
+
+                ItemValueResult[] res = group.Read(items);
+
+                i = 0;
+                Risers result_resers = GetRisers(num, res, i);
+
+                return result_resers;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ReadTagOPCOfRisers(num={0})", num).SaveError(e);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Записать значение passage в пистолет
         /// </summary>
@@ -1215,7 +1270,7 @@ namespace ClientOPCTRK
                 int num_trk;
                 int side;
                 getTRKOfGun(num_gun, out num_trk, out side);
-                
+
                 Opc.Da.Server server = null;
                 OpcCom.Factory fact = new OpcCom.Factory();
                 server = new Opc.Da.Server(fact, null);
@@ -1364,7 +1419,7 @@ namespace ClientOPCTRK
                 int num_trk;
                 int side;
                 getTRKOfGun(num_gun, out num_trk, out side);
-                
+
                 Opc.Da.Server server = null;
                 OpcCom.Factory fact = new OpcCom.Factory();
                 server = new Opc.Da.Server(fact, null);
@@ -1526,6 +1581,250 @@ namespace ClientOPCTRK
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода ResetTRK(num_gun={0})", num_gun).SaveError(e);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Записать флаг разрешения на включение от скады
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsNSResolution(int num, bool value)
+        {
+            try
+            {
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "NSResolution";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + (3 + num).ToString();
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (bool)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsNSResolution(num={0}, value={1})", num, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Записать флаг разрешения на включение НАСОСА
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsNSStart(int num, bool value)
+        {
+            try
+            {
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "NSResolution";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + num.ToString();
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (bool)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsNSStart(num={0}, value={1})", num, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Задать дозу для НС
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsNSVolume(int num, uint value)
+        {
+            try
+            {
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "NSvolume";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TScutter.DOSE_CUTTER.TS" + num + "cut";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (uint)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsNSVolume(num={0}, value={1})", num, value).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Произвести выдачу через наливной стояк
+        /// </summary>
+        /// <param name="num_ns"></param>
+        /// <param name="value"></param>
+        /// <param name="advance"></param>
+        /// <returns></returns>
+        public int IssueFuelNS(int num_ns, uint value, uint advance)
+        {
+            try
+            {
+                if (value <= advance)
+                {
+                    String.Format("Значение дозы {0} <= значения упреждения {1}", value, advance).SaveWarning();
+                    return 0;
+                }
+                // прочесть состояние НС
+                Risers riesers = ReadTagOPCOfRisers(num_ns);
+                if (riesers == null)
+                {
+                    String.Format("Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
+                    return -1;
+                }
+                // Проверим занят наливной стояк?
+                if (riesers.inp_km == true)
+                {
+                    // Проверим заземление
+                    if (riesers.inp_kvq2 == false)
+                    {
+                        // Проверим режим управления
+                        if (riesers.inp_sa2 == false)
+                        {
+
+                            // Задать разрешение от включения скада riesers.flg_kv2 = true
+                            bool res_resolution = WriteTagsNSResolution(num_ns, true);
+                            if (res_resolution)
+                            {
+                                // Задать разрешение от включения скада riesers.TScut = (value - advance)
+                                bool res_volume = WriteTagsNSVolume(num_ns, value - advance);
+                                if (res_volume)
+                                {
+                                    // Задать включить насос riesers.flg_kv1 = true  
+                                    bool res_start = WriteTagsNSStart(num_ns, true);
+                                    if (res_start)
+                                    {
+                                        // Прочесть и вернуть состояние насоса после старта
+                                        Risers riesers_start = ReadTagOPCOfRisers(num_ns);
+                                        if (riesers_start != null)
+                                        {
+                                            // вернем если запущен номер стояка, если нет код ошибки -9
+                                            return riesers_start.inp_km == false ? num_ns : -9;
+                                        }
+                                        else {
+                                            // НС не удается прочесть значение тегов НС
+                                            String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
+                                            return -8;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // НС ошибка записи бита 'Запустить насос'
+                                        String.Format("Ошибка -7. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
+                                        return -7;
+                                    }
+                                }
+                                else
+                                {
+                                    // НС ошибка записи дозы с уприждением
+                                    String.Format("Ошибка -6. Наливной стояк {0} - ошибка записи дозы с уприждением {1}", num_ns, value - advance).SaveWarning();
+                                    return -6;
+                                }
+                            }
+                            else
+                            {
+                                // НС ошибка записи бита 'Разрешение на включение от SCADA'
+                                String.Format("Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Разрешение на включение от SCADA' ", num_ns).SaveWarning();
+                                return -5;
+                            }
+                        }
+                        else
+                        {
+                            // НС нет заземления
+                            String.Format("Ошибка -4. Наливной стояк {0} - режим управления 'Ручной' inp_sa2 = {1}  ", num_ns, riesers.inp_sa2).SaveWarning();
+                            return -4;
+                        }
+                    }
+                    else
+                    {
+                        // НС нет заземления
+                        String.Format("Ошибка -3. Наливной стояк {0} - нет заземления inp_kvq2 = {1}  ", num_ns, riesers.inp_kvq2).SaveWarning();
+                        return -3;
+                    }
+                }
+                else
+                {
+                    // НС занят выдачей
+                    String.Format("Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
+                    return -2;
+                }
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода IssueFuelNS(num_ns={0}, value={1}, advance={2})", num_ns, value, advance).SaveError(e);
                 return -1;
             }
         }

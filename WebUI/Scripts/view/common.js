@@ -20,6 +20,10 @@ if (log) { log.info('Включен опрос датчиков ДИО (нали
 var btanks_one = $.parseJSON(tanks_one);
 if (log) { log.info('Включен выбор одной емкости - ', btanks_one); }
 // TODO:!!!ТЕСТ УБРАТЬ
+var ins_advance = $.parseJSON(ns_advance);
+if (log) { log.info('Упреждение выдачи НС - ', ins_advance); }
+
+// TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
         {
@@ -141,12 +145,13 @@ var risers_out = [
         "power": false,
         "flg_kv1": false,
         "flg_kv2": false,
-        "inp_km": false, // Насос включен
+        "inp_km": true, // Насос включен
         "inp_kvq1": true,
         "inp_kvq2": false, // Заземление
         "inp_sa2": false, // Режим 0-Авто 1 ручной
         "out_kv1": false,
-        "out_kv2": false
+        "out_kv2": false,
+         "TScut": 100,       
     },
     {
         "num": 2,
@@ -160,7 +165,8 @@ var risers_out = [
         "inp_kvq2": true,
         "inp_sa2": false,
         "out_kv1": false,
-        "out_kv2": false
+        "out_kv2": false,
+        "TScut": 0,
     },
     {
         "num": 3,
@@ -174,7 +180,8 @@ var risers_out = [
         "inp_kvq2": false,
         "inp_sa2": true,
         "out_kv1": false,
-        "out_kv2": false
+        "out_kv2": false,
+        "TScut": 0,
     }
 ];
 // TODO:!!!ТЕСТ УБРАТЬ
@@ -1189,6 +1196,31 @@ var postAsyncGunClear = function (gun_clear, callback) {
         url: '/api/trk/gun/clear',
         type: 'POST',
         data: JSON.stringify(gun_clear),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Включить наливной стояк
+var postAsyncNSStart = function (ns_start, callback) {
+    $.ajax({
+        url: '/api/trk/ns/start',
+        type: 'POST',
+        data: JSON.stringify(ns_start),
         contentType: "application/json;charset=utf-8",
         async: true,
         beforeSend: function () {

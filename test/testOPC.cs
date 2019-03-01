@@ -223,7 +223,41 @@ namespace test
                     Console.WriteLine("riser.inp_sa2 - {0}", riser.inp_sa2);
                     Console.WriteLine("riser.out_kv1 - {0}", riser.out_kv1);
                     Console.WriteLine("riser.out_kv2 - {0}", riser.out_kv2);
+                    Console.WriteLine("riser.TScut - {0}", riser.TScut);
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        public void Test_ClientTRK_ReadTagOPCOfRisersOfNum()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                Risers ris = client.ReadTagOPCOfRisers(1);
+                if (ris == null)
+                {
+                    Console.WriteLine("Risers ris =null");
+                    return;
+                }
+
+                Console.WriteLine("riser.door - {0}", ris.door);
+                Console.WriteLine("riser.power - {0}", ris.power);
+                Console.WriteLine("riser.flg_kv1 - {0}", ris.flg_kv1);
+                Console.WriteLine("riser.flg_kv2 - {0}", ris.flg_kv2);
+                Console.WriteLine("riser.inp_km - {0}", ris.inp_km);
+                Console.WriteLine("riser.inp_kvq1 - {0}", ris.inp_kvq1);
+                Console.WriteLine("riser.inp_kvq2 - {0}", ris.inp_kvq2);
+                Console.WriteLine("riser.inp_sa2 - {0}", ris.inp_sa2);
+                Console.WriteLine("riser.out_kv1 - {0}", ris.out_kv1);
+                Console.WriteLine("riser.out_kv2 - {0}", ris.out_kv2);
+                Console.WriteLine("riser.TScut - {0}", ris.TScut);
+                
             }
             catch (Exception e)
             {

@@ -28,6 +28,12 @@ namespace WebUI.Controllers.api
             public int num { get; set; }
         }
 
+        public class NSStart {
+            public int id { get; set;}
+            public int num { get; set; }
+            public uint volume { get; set; }
+            public uint advance { get; set; }
+        }
 
         public TRKController() {
 
@@ -195,6 +201,23 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:PostGunClear(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
+        // POST api/trk/ns/start
+        [HttpPost]
+        [Route("ns/start")]
+        public int PostNSStart([FromBody]NSStart value)
+        {
+            try
+            {
+                int res = client.IssueFuelNS(value.num, value.volume, value.advance);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostNSStart(value={0})", value).SaveError(e);
                 return -1;
             }
         }

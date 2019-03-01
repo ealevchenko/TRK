@@ -559,25 +559,25 @@ var viewRisers = function () {
                 //    $('#button-ns-' + num_riser + '-close').hide().attr("data-id", '');
                 //}
                 //
-                if (riser.flg_kv1 !== null) {
-                    if (riser.flg_kv1) {
-                        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('active');
-                    } else {
-                        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('not_active');
-                    }
-                } else {
-                    $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('null_active');
-                }
+                //if (riser.flg_kv1 !== null) {
+                //    if (riser.flg_kv1) {
+                //        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('active');
+                //    } else {
+                //        $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('not_active');
+                //    }
+                //} else {
+                //    $('#ns-' + riser.num + '-flg_kv1').html("").removeClass().addClass('null_active');
+                //}
                 //
-                if (riser.flg_kv2 !== null) {
-                    if (riser.flg_kv2) {
-                        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('active');
-                    } else {
-                        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('not_active');
-                    }
-                } else {
-                    $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('null_active');
-                }
+                //if (riser.flg_kv2 !== null) {
+                //    if (riser.flg_kv2) {
+                //        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('active');
+                //    } else {
+                //        $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('not_active');
+                //    }
+                //} else {
+                //    $('#ns-' + riser.num + '-flg_kv2').html("").removeClass().addClass('null_active');
+                //}
                 // состояние включения насоса
                 //if (riser.inp_km !== null) {
                 //    if (riser.inp_km) {
@@ -618,29 +618,29 @@ var viewRisers = function () {
                 } else {
                     $('#ns-' + riser.num + '-inp_sa2').html("");//.removeClass().addClass('null_active');
                 }
-                //
-                if (riser.out_kv1 !== null) {
-                    if (riser.out_kv1) {
-                        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('active');
-                    } else {
-                        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('not_active');
-                    }
-                } else {
-                    $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('null_active');
-                }
-                //
-                if (riser.out_kv2 !== null) {
-                    if (riser.out_kv2) {
-                        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('active');
-                    } else {
-                        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('not_active');
-                    }
-                } else {
-                    $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('null_active');
-                }
+                ////
+                //if (riser.out_kv1 !== null) {
+                //    if (riser.out_kv1) {
+                //        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('active');
+                //    } else {
+                //        $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('not_active');
+                //    }
+                //} else {
+                //    $('#ns-' + riser.num + '-out_kv1').html("").removeClass().addClass('null_active');
+                //}
+                ////
+                //if (riser.out_kv2 !== null) {
+                //    if (riser.out_kv2) {
+                //        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('active');
+                //    } else {
+                //        $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('not_active');
+                //    }
+                //} else {
+                //    $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('null_active');
+                //}
                 // Проверка состояния
                 if (riser.inp_km !== null) {
-                    if (riser.inp_km === true) {
+                    if (riser.inp_km === false) {
                         // Насос включен
                         $('button#button-ns-' + riser.num + '-close').hide();
                         $('button#button-ns-' + riser.num + '-deliver').hide();
@@ -934,6 +934,23 @@ var confirm_df = {
                 if (log) { log.info('Производим выдачу через реальный наливной стояк, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
                 updateMessageTips("Производим выдачу через реальный наливной стояк, id=" + id);
                 // !!!!!!! сдесь реализуем выдачу через наливной стояк
+                var ns_start = {
+                    id: id,
+                    num: confirm_df.risers != null ? confirm_df.risers.num : 0,
+                    volume: confirm_df.input_deliver_dose_fuel.val(),
+                    advance: ins_advance
+                };
+                // TODO:!!!ТЕСТ УБРАТЬ
+                if (log) {
+                    log.info('Сформировали строку ns_start');
+                    log.debug(ns_start);
+                }
+                postAsyncNSStart(
+                    ns_start,
+                    function (status) {
+                        updateMessageTips("Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =" + status + ".");
+                        if (log) { log.info('Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
+                    });
             }
 
         } else {
@@ -1174,7 +1191,12 @@ var confirm_df = {
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_water_level, "Нет значения уровень п-воды в баке");
         // Проверка колонки
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
-        valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 99999);
+        if (confirm_df.type === 0) {
+            valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 999);
+        } else {
+            valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы (для НС)", ins_advance, 99999);
+        }
+        
 
 
 

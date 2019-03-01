@@ -75,9 +75,11 @@ namespace test
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
-                //test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
+                test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
                 //test_opc.Test_ClientTRK_WriteTagsGun();
                 //test_opc.Test_ClientTRK_IssueFuelTRK();
+                test_opc.Test_ClientTRK_ReadTagOPCOfRisersOfNum();
+
                 #endregion
 
                 #region TEST SAP
@@ -85,7 +87,7 @@ namespace test
                 //test_sap.Test_ClientSAP_GetReservation();
                 //test_sap.Test_ClientSAP_GetSupply();
                 //test_sap.Test_ClientSAP_GetReservationOfDebitor();
-                test_sap.Test_ClientSAP_GetReservationOfValumeMassDebitor();
+                //test_sap.Test_ClientSAP_GetReservationOfValumeMassDebitor();
                 #endregion
 
             }
