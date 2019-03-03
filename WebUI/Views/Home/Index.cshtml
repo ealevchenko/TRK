@@ -1434,9 +1434,13 @@
                                         <th>Расход:</th>
                                         <td><input id="ns-1-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
-                                    <tr>
+                                    @*<tr>
                                         <th>Время:</th>
                                         <td><input id="ns-1-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>*@
+                                    <tr>
+                                        <th>Зад.(л):</th>
+                                        <td><input id="ns-1-dose" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -1487,9 +1491,13 @@
                                         <th>Расход:</th>
                                         <td><input id="ns-2-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
-                                    <tr>
+                                    @*<tr>
                                         <th>Время:</th>
                                         <td><input id="ns-2-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>*@
+                                    <tr>
+                                        <th>Зад.(л):</th>
+                                        <td><input id="ns-2-dose" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -1540,9 +1548,13 @@
                                         <th>Расход:</th>
                                         <td><input id="ns-3-Flow" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
-                                    <tr>
+                                    @*<tr>
                                         <th>Время:</th>
                                         <td><input id="ns-3-TimerLiveOn" type="text" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
+                                    </tr>*@
+                                    <tr>
+                                        <th>Зад.(л):</th>
+                                        <td><input id="ns-3-dose" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-ns-volume" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">
@@ -1880,6 +1892,10 @@
                                     <tr>
                                         <th>Уровень ГСМ в баке (мм) :</th>
                                         <td><input id="deliver-take-level" name="take-level" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                                    </tr>
+                                    <tr id="deliver-take-volume-all">
+                                        <th>Объем ГСМ во всех баках (л) :</th>
+                                        <td><input id="deliver-take-volume-all" name="take-volume" type="number" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
                                     </tr>
                                     <tr>
                                         <th>Объем ГСМ в баке (л) :</th>

@@ -494,13 +494,13 @@ var viewDIORisers = function () {
                 var riser = list[i];
 
                 // Counter
-                if (riser.Counter != null) {
+                if (riser.Counter !== null) {
                     $('#ns-' + riser.num + '-Counter').val((riser.Counter / 1000000).toFixed(2)).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-Counter').val('').addClass('error');
                 }
                 // Counter
-                if (riser.Flow != null) {
+                if (riser.Flow !== null) {
                     $('#ns-' + riser.num + '-Flow').val((riser.Flow / 1000000).toFixed(2)).removeClass('error');
                 } else {
                     $('#ns-' + riser.num + '-Flow').val('').addClass('error');
@@ -518,11 +518,11 @@ var viewDIORisers = function () {
                 //    $('#ns-' + riser.num + '-Temp').val('').addClass('error');
                 //}
                 // TimerLiveOn
-                if (riser.TimerLiveOn != null) {
-                    $('#ns-' + riser.num + '-TimerLiveOn').val(riser.TimerLiveOn).removeClass('error');
-                } else {
-                    $('#ns-' + riser.num + '-TimerLiveOn').val('').addClass('error');
-                }
+                //if (riser.TimerLiveOn !== null) {
+                //    $('#ns-' + riser.num + '-TimerLiveOn').val(riser.TimerLiveOn).removeClass('error');
+                //} else {
+                //    $('#ns-' + riser.num + '-TimerLiveOn').val('').addClass('error');
+                //}
                 //// TimerOn
                 //if (riser.TimerOn != null) {
                 //    $('#ns-' + riser.num + '-TimerOn').text(riser.TimerOn).removeClass('error');
@@ -638,6 +638,11 @@ var viewRisers = function () {
                 //} else {
                 //    $('#ns-' + riser.num + '-out_kv2').html("").removeClass().addClass('null_active');
                 //}
+                if (riser.TScut !== null) {
+                    $('#ns-' + riser.num + '-dose').val(riser.TScut).removeClass('error');
+                } else {
+                    $('#ns-' + riser.num + '-dose').val('').addClass('error');
+                }
                 // Проверка состояния
                 if (riser.inp_km !== null) {
                     if (riser.inp_km === false) {
@@ -870,6 +875,7 @@ var confirm_df = {
     input_deliver_take_level: null,     // уровень
     input_deliver_take_mass: null,      // масса
     input_deliver_take_temp: null,      // температура
+    input_deliver_take_volume_all: null,    // объем по всем
     input_deliver_take_volume: null,    // объем
     input_deliver_take_dens: null,      // плотность
     input_deliver_take_water_level: null,      // уровень воды
@@ -1269,12 +1275,13 @@ var confirm_df = {
             },
             null);
         // основные параметры емкости
-        confirm_df.input_deliver_take_level = $('#deliver-take-level');
-        confirm_df.input_deliver_take_mass = $('#deliver-take-mass');
-        confirm_df.input_deliver_take_temp = $('#deliver-take-temp');
-        confirm_df.input_deliver_take_volume = $('#deliver-take-volume');
-        confirm_df.input_deliver_take_dens = $('#deliver-take-dens');
-        confirm_df.input_deliver_take_water_level = $('#deliver-take-water-level');
+        confirm_df.input_deliver_take_level = $('input#deliver-take-level');
+        confirm_df.input_deliver_take_mass = $('input#deliver-take-mass');
+        confirm_df.input_deliver_take_temp = $('input#deliver-take-temp');
+        confirm_df.input_deliver_take_volume_all = $('input#deliver-take-volume-all');
+        confirm_df.input_deliver_take_volume = $('input#deliver-take-volume');
+        confirm_df.input_deliver_take_dens = $('input#deliver-take-dens');
+        confirm_df.input_deliver_take_water_level = $('input#deliver-take-water-level');
         // доза топлива
         confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel').on("change", function (event) {
             event.preventDefault();
@@ -1661,6 +1668,7 @@ var confirm_df = {
         confirm_df.input_deliver_take_level.val('').addClass('input_view');
         confirm_df.input_deliver_take_mass.val('').addClass('input_view');
         confirm_df.input_deliver_take_temp.val('').addClass('input_view');
+        confirm_df.input_deliver_take_volume_all.val('').addClass('input_view');
         confirm_df.input_deliver_take_volume.val('').addClass('input_view');
         confirm_df.input_deliver_take_dens.val('').addClass('input_view');
         confirm_df.input_deliver_take_water_level.val('').addClass('input_view');
@@ -1694,15 +1702,17 @@ var confirm_df = {
                     $('th#label-taken').text('Пистолет снят:');
                     $('#deliver-Taken').prop('checked', gun.taken).show();
                     // Обновим перечень емкостей
-                    if (btanks_one == true) {
+                    if (btanks_one === true) {
                         // выбран режим одной емкости
                         confirm_df.select_capacity.selectmenu("widget").show();
                         confirm_df.textarea_capacity.hide();
+                        $('tr#deliver-take-volume-all').hide();
 
                     } else {
                         // выбран режим нескольких емкостей
                         confirm_df.select_capacity.selectmenu("widget").hide();
                         confirm_df.textarea_capacity.show().text('');
+                        $('tr#deliver-take-volume-all').show();
                         confirm_df.viewParmetrTanksOfType(
                             gun.type_fuel,
                             function (list_tags) {
@@ -1711,6 +1721,7 @@ var confirm_df = {
                                     confirm_df.input_deliver_take_level.val(result.level.toFixed(2));
                                     confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
                                     confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
+                                    confirm_df.input_deliver_take_volume_all.val(result.volume_sum.toFixed(2));
                                     confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
                                     confirm_df.input_deliver_take_dens.val(result.dens.toFixed(5));
                                     confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
@@ -1791,6 +1802,7 @@ var confirm_df = {
                                     confirm_df.input_deliver_take_level.val(result.level.toFixed(2));
                                     confirm_df.input_deliver_take_mass.val(result.mass.toFixed(2));
                                     confirm_df.input_deliver_take_temp.val(result.temp.toFixed(2));
+                                    confirm_df.input_deliver_take_volume_all.val(result.volume_sum.toFixed(2));
                                     confirm_df.input_deliver_take_volume.val(result.volume.toFixed(2));
                                     confirm_df.input_deliver_take_dens.val(result.dens.toFixed(5));
                                     confirm_df.input_deliver_take_water_level.val(result.water_level.toFixed(2));
@@ -2173,6 +2185,7 @@ var confirm_df = {
     // Показать параметры баков
     viewParamTanks: function (list_tags) {
         var count = list_tags.length;
+        var volume_sum = 0;
         var level = 0;
         var mass = 0;
         var temp = 0;
@@ -2187,6 +2200,7 @@ var confirm_df = {
             dens += list_tags[ip].dens;
             water_level += list_tags[ip].water_level;
         }
+        volume_sum = volume;
         level = level / count;
         mass = mass / count;
         temp = temp / count;
@@ -2195,6 +2209,7 @@ var confirm_df = {
         water_level = water_level / count;
 
         var result = {
+            volume_sum: volume_sum,
             level: level,
             mass: mass,
             temp: temp,
