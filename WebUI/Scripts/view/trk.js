@@ -2160,9 +2160,9 @@ var confirm_df = {
                 getAsyncSelectTanks_kerosene(
                     function (tanks_kerosene) {
                         if (tanks_kerosene) {
-                            if (tanks_kerosene.C33) { tanks += 'C33,'; }
-                            if (tanks_kerosene.C38) { tanks += 'C38,'; }
-                            if (tanks_kerosene.C39) { tanks += 'C39,'; }
+                            if (tanks_kerosene.C33) { tanks += '33,'; }
+                            if (tanks_kerosene.C38) { tanks += '38,'; }
+                            if (tanks_kerosene.C39) { tanks += '39,'; }
                             if (tanks.length > 0) {
                                 tanks = tanks.substring(0, tanks.length - 1);
                                 confirm_df.textarea_capacity.show().text(tanks);  // Покажем список баков
