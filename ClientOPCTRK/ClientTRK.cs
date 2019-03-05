@@ -621,9 +621,9 @@ namespace ClientOPCTRK
                     case 29:
                         type_fuel = 107000024; // ДТ
                         break;
-                    //case 4:
-                    //    type_fuel = 107000027; // Керосин
-                    //    break;
+                        //case 4:
+                        //    type_fuel = 107000027; // Керосин
+                        //    break;
                 }
 
                 Gun gun = new Gun()
@@ -767,8 +767,8 @@ namespace ClientOPCTRK
                     TScut = list[start + 10].Value != null ? list[start + 10].Value as UInt16? : null,
                 };
 
-                String.Format("НС №{0} [flg_kv1 - {1}; flg_kv2 - {2}; inp_km - {3}; inp_kvq1 - {4}; inp_kvq2 - {5}; inp_sa2 - {6}; out_kv1 - {7}; out_kv2 - {8}; TScut - {9}]",
-                    risers.num, risers.flg_kv1, risers.flg_kv2, risers.inp_km, risers.inp_kvq1, risers.inp_kvq2, risers.inp_sa2, risers.out_kv1, risers.out_kv2, risers.TScut).SaveInformation();
+                //String.Format("НС №{0} [flg_kv1 - {1}; flg_kv2 - {2}; inp_km - {3}; inp_kvq1 - {4}; inp_kvq2 - {5}; inp_sa2 - {6}; out_kv1 - {7}; out_kv2 - {8}; TScut - {9}]",
+                //    risers.num, risers.flg_kv1, risers.flg_kv2, risers.inp_km, risers.inp_kvq1, risers.inp_kvq2, risers.inp_sa2, risers.out_kv1, risers.out_kv2, risers.TScut).SaveInformation();
                 return risers;
 
             }
@@ -1751,7 +1751,7 @@ namespace ClientOPCTRK
                     if (riesers.inp_kvq2 == false)
                     {
                         // Проверим режим управления
-                        if (riesers.inp_sa2 == false)
+                        if (riesers.inp_sa2 == true)
                         {
 
                             // Задать разрешение от включения скада riesers.flg_kv2 = true
@@ -1773,7 +1773,8 @@ namespace ClientOPCTRK
                                             // вернем если запущен номер стояка, если нет код ошибки -9
                                             return riesers_start.inp_km == false ? num_ns : -9;
                                         }
-                                        else {
+                                        else
+                                        {
                                             // НС не удается прочесть значение тегов НС
                                             String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
                                             return -8;
@@ -1826,6 +1827,77 @@ namespace ClientOPCTRK
             {
                 String.Format("Ошибка выполнения метода IssueFuelNS(num_ns={0}, value={1}, advance={2})", num_ns, value, advance).SaveError(e);
                 return -1;
+            }
+        }
+        /// <summary>
+        /// Сбросить теги наливного стояка
+        /// </summary>
+        /// <param name="num_ns"></param>
+        /// <returns></returns>
+        public int ResetNS(int num_ns)
+        {
+            // прочесть состояние НС
+            Risers riesers = ReadTagOPCOfRisers(num_ns);
+            if (riesers == null)
+            {
+                String.Format("Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
+                return -1;
+            }
+            // Проверим занят наливной стояк?
+            if (riesers.inp_km == false)
+            {
+                // Сбросить разрешение от включения скада riesers.flg_kv2 = true
+                bool res_resolution = WriteTagsNSResolution(num_ns, false);
+                if (res_resolution)
+                {
+                    // Задать разрешение от включения скада riesers.TScut = (value - advance)
+                    bool res_volume = WriteTagsNSVolume(num_ns, 0);
+                    if (res_volume)
+                    {
+                        // Збросить флаг включения насос riesers.flg_kv1 = true  
+                        bool res_start = WriteTagsNSStart(num_ns, false);
+                        if (res_start)
+                        {
+                            // Прочесть и вернуть состояние насоса после сброса
+                            Risers riesers_stop = ReadTagOPCOfRisers(num_ns);
+                            if (riesers_stop != null)
+                            {
+                                // вернем если запущен номер стояка, если нет код ошибки -7
+                                return riesers_stop.inp_km == false ? num_ns : -7;
+                            }
+                            else
+                            {
+                                // НС не удается прочесть значение тегов НС
+                                String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
+                                return -6;
+                            }
+                        }
+                        else
+                        {
+                            // НС ошибка записи бита 'Запустить насос'
+                            String.Format("Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
+                            return -5;
+                        }
+                    }
+                    else
+                    {
+                        // НС ошибка записи дозы с уприждением
+                        String.Format("Ошибка -4. Наливной стояк {0} - ошибка сброса дозы", num_ns).SaveWarning();
+                        return -4;
+                    }
+                }
+                else
+                {
+                    // НС ошибка записи бита 'Запрет на включение от SCADA'
+                    String.Format("Ошибка -3. Наливной стояк {0} - ошибка записи бита 'Запрет на включение от SCADA' ", num_ns).SaveWarning();
+                    return -3;
+                }
+            }
+            else
+            {
+                // НС занят выдачей
+                String.Format("Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
+                return -2;
             }
         }
 

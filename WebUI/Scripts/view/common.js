@@ -148,7 +148,7 @@ var risers_out = [
         "inp_km": true, // Насос включен
         "inp_kvq1": true,
         "inp_kvq2": false, // Заземление
-        "inp_sa2": false, // Режим 0-Авто 1 ручной
+        "inp_sa2": true, // Режим 0-Авто 1 ручной
         "out_kv1": false,
         "out_kv2": false,
          "TScut": 100,       
@@ -1221,6 +1221,31 @@ var postAsyncNSStart = function (ns_start, callback) {
         url: '/api/trk/ns/start',
         type: 'POST',
         data: JSON.stringify(ns_start),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Сбросить настройки наливного стояка
+var postAsyncNSClear = function (ns_clear, callback) {
+    $.ajax({
+        url: '/api/trk/ns/clear',
+        type: 'POST',
+        data: JSON.stringify(ns_clear),
         contentType: "application/json;charset=utf-8",
         async: true,
         beforeSend: function () {

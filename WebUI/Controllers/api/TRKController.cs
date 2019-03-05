@@ -35,6 +35,12 @@ namespace WebUI.Controllers.api
             public uint advance { get; set; }
         }
 
+        public class NSClear
+        {
+            public int id { get; set; }
+            public int num { get; set; }
+        }
+
         public TRKController() {
 
         }
@@ -84,8 +90,6 @@ namespace WebUI.Controllers.api
         }
 
         #endregion
-
-
 
         // GET: api/trk/guns
         [Route("guns")]
@@ -222,5 +226,21 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // POST api/trk/ns/clear
+        [HttpPost]
+        [Route("ns/clear")]
+        public int PostNSClear([FromBody]NSClear value)
+        {
+            try
+            {
+                int res = client.ResetNS(value.num);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostNSClear(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
     }
 }

@@ -360,14 +360,15 @@ var viewGuns = function () {
                 }
                 // Проверим сотояние TRK
                 var id_ofs = openFuelSale.getFuelSaleID(gun.num_trk, gun.side, gun.num_gun);
-                // Отобразим кнопки выдать\закрыть
-                if (id_ofs != null) {
-                    $('#button-gun-' + gun.num_gun + '-deliver').hide();
-                    $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
-                } else {
-                    $('#button-gun-' + gun.num_gun + '-deliver').show();
-                    $('#button-gun-' + gun.num_gun + '-close').hide().attr("data-id", '');
-                }
+                //// Отобразим кнопки выдать\закрыть
+                //if (id_ofs !== null) {
+                //    $('#button-gun-' + gun.num_gun + '-deliver').hide();
+                //    $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                //    // ttt
+                //} else {
+                //    $('#button-gun-' + gun.num_gun + '-deliver').show();
+                //    $('#button-gun-' + gun.num_gun + '-close').hide().attr("data-id", '');
+                //}
                 // Вывод связь
                 if (gun.online != null) {
                     if (gun.online) {
@@ -409,7 +410,7 @@ var viewGuns = function () {
                 }
 
                 //gun.state = 2;
-                //gun.volume_to_write = 2000;
+                //gun.volume_to_write = 10000;
                 //gun.current_volume = 150;
                 // Проверим сотояние TRK
                 //var id_ofs = openFuelSale.getFuelSaleID(gun.num_trk, gun.side, gun.num_gun);
@@ -420,10 +421,18 @@ var viewGuns = function () {
                             //var card = cards.getCardOfNumSide(gun.num_trk, gun.side);
                             $('div#progressbar-gun-' + gun.num_gun).hide();
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
+                            $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             // Отобразим кнопки выдать\закрыть
                             if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                                var cont = (gun.volume_to_write - gun.current_volume) / 100.0;
+                                if (cont >= 5) {
+                                    $('button#button-gun-' + gun.num_gun + '-continue').show().attr("data-dose", cont).attr("data-id", id_ofs);
+                                }
+                                //var fs = openFuelSale.getFuelSale(id_ofs);
+
+
                             } else {
                                 //if (card && gun && card.Active && gun.online && gun.taken) {
                                 if (gun && gun.online && gun.taken) {
@@ -436,6 +445,7 @@ var viewGuns = function () {
                         case 2: //  Выдача
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             if (gun && gun.volume_to_write > 0) {
                                 var curr = 0;
@@ -447,6 +457,7 @@ var viewGuns = function () {
                         case 4: //  Выдача стоп
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             pb_deliver.outValume(gun.num_gun, 100, 100);
                             break;
@@ -456,9 +467,11 @@ var viewGuns = function () {
                             if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                                $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             } else {
                                 $('button#button-gun-' + gun.num_gun + '-close').hide();
                                 $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                                $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             }
                             break;
                         default: {
@@ -467,9 +480,11 @@ var viewGuns = function () {
                             if (id_ofs != null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                                $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             } else {
                                 $('button#button-gun-' + gun.num_gun + '-close').hide();
                                 $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                                $('button#button-gun-' + gun.num_gun + '-continue').hide();
                             }
                             break;
                         }
@@ -479,6 +494,7 @@ var viewGuns = function () {
                     // Статус не определен
                     $('button#button-gun-' + gun.num_gun + '-close').hide();
                     $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                    $('button#button-gun-' + gun.num_gun + '-continue').hide();
                     $('div#progressbar-gun-' + gun.num_gun).hide();
                 }
             }
@@ -610,7 +626,7 @@ var viewRisers = function () {
                 }
                 // Режим
                 if (riser.inp_sa2 !== null) {
-                    if (riser.inp_sa2 === true) {
+                    if (riser.inp_sa2 === false) {
                         $('#ns-' + riser.num + '-inp_sa2').html("Ручной");//.removeClass().addClass('active');
                     } else {
                         $('#ns-' + riser.num + '-inp_sa2').html("Авто");//.removeClass().addClass('not_active');
@@ -644,7 +660,8 @@ var viewRisers = function () {
                     $('#ns-' + riser.num + '-dose').val('').addClass('error');
                 }
                 // Проверка состояния
-                if (riser.inp_km !== null) {
+                if (riser.inp_km !== null)
+                {
                     if (riser.inp_km === false) {
                         // Насос включен
                         $('button#button-ns-' + riser.num + '-close').hide();
@@ -669,7 +686,7 @@ var viewRisers = function () {
                             $('#button-ns-' + riser.num + '-close').show().attr("data-id", id_ofs);
                         } else {
                             // Режим Авто, Заземление
-                            if (riser && riser.inp_sa2 === false && riser.inp_kvq2 === false) {
+                            if (riser && riser.inp_sa2 === true && riser.inp_kvq2 === false) {
                                 $('button#button-ns-' + riser.num + '-deliver').show();
                             } else {
                                 $('button#button-ns-' + riser.num + '-deliver').hide();
@@ -910,7 +927,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-        if (bcontrolTRK_ban == false) {
+        if (bcontrolTRK_ban === false) {
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type == 0) {
                 if (log) { log.info('Производим выдачу на реальную колонку, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
@@ -2471,8 +2488,8 @@ var confirm_close_fuel = {
                                         // проверим колонка
                                         if (confirm_close_fuel.fs.trk_num > 0 && confirm_close_fuel.fs.trk_num < 10) {
                                             var gun_clear = {
-                                                id: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.id : 0,
-                                                num: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.num : 0
+                                                id: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.id : 0,
+                                                num: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.num : 0
                                             };
                                             // TODO:!!!ТЕСТ УБРАТЬ
                                             if (log) {
@@ -2488,9 +2505,22 @@ var confirm_close_fuel = {
                                         }
                                         // Проверим н-стояк
                                         if (confirm_close_fuel.fs.trk_num >= 10 && confirm_close_fuel.fs.trk_num <= 12) {
-                                            updateMessageTips("Сброс настроек на наливного стояка, статуса пока нет.");
+                                            var ns_clear = {
+                                                id: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.id : 0,
+                                                num: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.num : 0
+                                            };
+                                            // TODO:!!!ТЕСТ УБРАТЬ
+                                            if (log) {
+                                                log.info('Команда на наливной стояк (сбросить настройки) ns_clear');
+                                                log.debug(ns_clear);
+                                            }
+                                            postAsyncNSClear(
+                                                ns_clear,
+                                                function (reset_status) {
+                                                    if (log) { log.info('Сброс настроек на наливном стояке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                    updateMessageTips("Сброс настроек на наливном стояке, статус =" + reset_status + ".");
+                                                });
                                         }
-
                                     }
                                     confirm_close_fuel.obj.dialog("close");
                                 }
@@ -2940,9 +2970,33 @@ $(function () {
         var id = $(this).attr('data-id');
         confirm_close_fuel.open(id);
     });
-
+    // Инициализаия кнопки вывода панели "Продолжить выдачу"
+    $('button.button-continue').on('click', function () {
+        var id = $(this).attr('data-id');
+        var dose = $(this).attr('data-dose');
+        var num = $(this).attr('data-gun');  
+        if (bcontrolTRK_ban === false) {
+            // Выдать ГСМ через ТРК по пистолету
+                updateMessageTips("Производим выдачу на реальную колонку, id=" + id);
+                var gun_start = {
+                    id: id,
+                    num: num,
+                    passage: false,
+                    volume: dose
+                };
+                postAsyncGunStart(
+                    gun_start,
+                    function (status) {
+                        updateMessageTips("Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =" + status + ".");
+                    });
+        } else {
+            updateMessageTips("Выдача на колонку или наливной стояк - заблокированна, id=" + id);
+        }
+        openFuelSale.init(); // Обновим данные по открытим выдачам
+    });
     $('.button-deliver').hide();
     $('.button-close').hide();
+    $('.button-continue').hide();
 
     // инициализация progresbar
     pb_deliver.init();
