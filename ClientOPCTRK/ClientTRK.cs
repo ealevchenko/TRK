@@ -1905,46 +1905,50 @@ namespace ClientOPCTRK
         /// <param name="num"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        //public bool WriteTagsRFID(int num, int PulseA, int PulseB)
-        //{
-        //    try
-        //    {
+        public bool WritePulseTagsRFID(int num, int side, byte PulseA, byte PulseB)
+        {
+            try
+            {
 
-        //        Opc.Da.Server server = null;
-        //        OpcCom.Factory fact = new OpcCom.Factory();
-        //        server = new Opc.Da.Server(fact, null);
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
 
-        //        server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
 
-        //        //
-        //        Opc.Da.Subscription group;
-        //        Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
-        //        groupState.Name = "NSResolution";
-        //        groupState.Active = true;
-        //        group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "NSpulse";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
-        //        //добавление айтемов в группу
-        //        Opc.Da.Item[] items = new Opc.Da.Item[1];
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[2];
 
-        //        items[0] = new Opc.Da.Item();
-        //        items[0].ItemName = "AZS_SHBUS.SHBUS.Flg_SHBUS_KV" + (3 + num).ToString();
-        //        items = group.AddItems(items);
-        //        //
-        //        Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
-        //        writeValues[0] = new Opc.Da.ItemValue();
-
-        //        writeValues[0].ServerHandle = group.Items[0].ServerHandle;
-        //        writeValues[0].Value = (bool)value;
-
-        //        IdentifiedResult[] res = group.Write(writeValues);
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        String.Format("Ошибка выполнения метода WriteTagsNSResolution(num={0}, value={1})", num, value).SaveError(e);
-        //        return false;
-        //    }
-        //}
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseA";
+                //items = group.AddItems(items);
+                items[1] = new Opc.Da.Item();
+                items[1].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseB";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[2];
+                writeValues[0] = new Opc.Da.ItemValue();
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (byte)PulseA;
+                writeValues[1] = new Opc.Da.ItemValue();
+                writeValues[1].ServerHandle = group.Items[1].ServerHandle;
+                writeValues[1].Value = (byte)PulseB;
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WritePulseTagsRFID(num={0}, side={1}, PulseA={2}, PulseB={3})", num, side, PulseA, PulseB).SaveError(e);
+                return false;
+            }
+        }
 
 
 

@@ -113,6 +113,7 @@ namespace TRKServices
                                 {
                                     int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
                                     String.Format("Сервис TRKServices - добавлена новая RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4} - id строки - {5}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo, res).SaveInformation();
+                                    client.WritePulseTagsRFID(rfid.num_trk, side == true ? 1 : 2, 99, 1);
                                 }
                             }
                         }
@@ -129,15 +130,16 @@ namespace TRKServices
                                 SqlParameter trk = new SqlParameter("@trk", i);
                                 SqlParameter side = new SqlParameter("@side", false);
                                 int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
+                                client.WritePulseTagsRFID(i, 1, 0, 1);
                                 String.Format("Сбросим RFID-карту TRK={0}, сторона левая, результат={1}", i, res).SaveWarning();
-
                             }
-                            if (guns_trk_right != null && !IsTaken(guns_trk_right))
+                            if (i<9 && guns_trk_right != null && !IsTaken(guns_trk_right))
                             {
                                 // Сбросим правую сторону
                                 SqlParameter trk = new SqlParameter("@trk", i);
                                 SqlParameter side = new SqlParameter("@side", true);
                                 int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
+                                client.WritePulseTagsRFID(i, 2, 0, 1);
                                 String.Format("Сбросим RFID-карту TRK={0}, сторона правая, результат={1}", i, res).SaveWarning();
                             }
                         }

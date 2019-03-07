@@ -302,7 +302,7 @@ var viewRFID = function () {
                     // Покажем состояние
                     if (c_rfid.num_trk > 0 && c_rfid.num_trk < 13) {
                         // Вывод связь
-                        if (c_rfid.online != null) {
+                        if (c_rfid.online !== null) {
                             if (c_rfid.online) {
                                 $('#trk-' + c_rfid.num_trk + '-' + c_rfid.side + '-online').html("").removeClass().addClass('active');
                             } else {
