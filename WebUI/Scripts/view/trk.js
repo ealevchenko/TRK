@@ -422,10 +422,12 @@ var viewGuns = function () {
                             $('div#progressbar-gun-' + gun.num_gun).hide();
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-continue').hide();
+                            $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-active');
                             // Отобразим кнопки выдать\закрыть
                             if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
                                 $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                                $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-close');
                                 var cont = (gun.volume_to_write - gun.current_volume) / 100.0;
                                 if (cont >= 5) {
                                     $('button#button-gun-' + gun.num_gun + '-continue').show().attr("data-dose", cont).attr("data-id", id_ofs);
@@ -446,6 +448,7 @@ var viewGuns = function () {
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-deliver').hide();
                             $('button#button-gun-' + gun.num_gun + '-continue').hide();
+                            $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-run');
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             if (gun && gun.volume_to_write > 0) {
                                 var curr = 0;
@@ -458,11 +461,13 @@ var viewGuns = function () {
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
                             $('button#button-gun-' + gun.num_gun + '-deliver').hide();
                             $('button#button-gun-' + gun.num_gun + '-continue').hide();
+                            $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-stop');
                             $('div#progressbar-gun-' + gun.num_gun).show();
                             pb_deliver.outValume(gun.num_gun, 100, 100);
                             break;
                         case 128: //  нет ответа
                             $('div#progressbar-gun-' + gun.num_gun).hide();
+                            $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-error');
                             // Отобразим кнопки выдать\закрыть
                             if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();

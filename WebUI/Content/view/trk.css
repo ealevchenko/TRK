@@ -192,6 +192,25 @@ div.trk-rfid {
     font-weight: normal;
 }
 
+.trk-gun-active {
+    background-color:#fff8bb;
+}
+
+.trk-gun-run {
+    background-color: #e1faa4;
+}
+
+.trk-gun-stop {
+    background-color: #9cd905;
+}
+
+.trk-gun-close {
+    background-color:#d0ebfe;
+}
+
+.trk-gun-error {
+    background-color: #ffc3c3;
+}
     .table-gun th {
         text-align: right;
         font-weight: bold;
@@ -268,6 +287,14 @@ div.ns {
 }
 
 .button-close {
+    margin: 3px;
+    height: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    background-color: khaki;
+}
+
+.button-continue {
     margin: 3px;
     height: 20px;
     font-size: 11px;
