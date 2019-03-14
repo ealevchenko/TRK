@@ -1925,12 +1925,20 @@ namespace ClientOPCTRK
 
                 //добавление айтемов в группу
                 Opc.Da.Item[] items = new Opc.Da.Item[2];
-
-                items[0] = new Opc.Da.Item();
-                items[0].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseA";
-                //items = group.AddItems(items);
-                items[1] = new Opc.Da.Item();
-                items[1].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseB";
+                if (num >= 1 && num <= 9)
+                {
+                    items[0] = new Opc.Da.Item();
+                    items[0].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseA";
+                    items[1] = new Opc.Da.Item();
+                    items[1].ItemName = "RFID.Rfid0" + num + "_" + side + ".PulseB";
+                }
+                if (num >= 10 && num <= 12)
+                {
+                    items[0] = new Opc.Da.Item();
+                    items[0].ItemName = "RFID.Rfid" + num + ".PulseA";
+                    items[1] = new Opc.Da.Item();
+                    items[1].ItemName = "RFID.Rfid" + num + ".PulseB";
+                }
                 items = group.AddItems(items);
                 //
                 Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[2];

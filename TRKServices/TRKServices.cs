@@ -76,9 +76,11 @@ namespace TRKServices
             String.Format("Сервис TRKServices - стоп").SaveInformation();
         }
         // проверим по колонке и стороне есть хоть один снятый пистолет
-        private bool IsTaken(List<Gun> guns_trk) {
-            foreach (Gun g in guns_trk) {
-                if (g.taken==true) return true;
+        private bool IsTaken(List<Gun> guns_trk)
+        {
+            foreach (Gun g in guns_trk)
+            {
+                if (g.taken == true) return true;
             }
             return false;
         }
@@ -89,61 +91,82 @@ namespace TRKServices
                 //String.Format("Сервис TRKServices - чтение RFID").SaveInformation();
                 ClientTRK client = new ClientTRK();
                 EFOPC_RFID ef_opc_rfid = new EFOPC_RFID();
-                
+
 
                 List<RFID> list = client.ReadTagsOPSOfRFID(true);
                 List<Gun> guns = client.ReadTagOPCOfGun();
 
-                if (list != null && guns!=null)
+                if (list != null && guns != null)
                 {
                     // String.Format("Список считаных RFID-карт = {0}",list.Count()).SaveWarning();
                     // Проверим RFID
                     foreach (RFID rfid in list)
                     {
+                        // Определим сторону
+                        bool side = rfid.side == 0 ? false : true;
+                        // Получим список пистолетов относящихся к RFID
+                        List<Gun> guns_trk = guns.Where(g => g.num_trk == rfid.num_trk && g.side == rfid.side).ToList();
+                        // Пистолет поднят
+                        if (guns_trk != null && IsTaken(guns_trk))
+                        {
+                            // Блымкнем
+                            client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 99, 1);
+                            //String.Format("Пистолет поднят RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
+                        }
+                        else {
+                            if (rfid.num_trk < 10)
+                            {
+                                SqlParameter trk = new SqlParameter("@trk", rfid.num_trk);
+                                SqlParameter bside = new SqlParameter("@side", side);
+                                int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, bside);
+                                client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 0, 1);
+                                //String.Format("Сбросим RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
+                            }
+                        }
+                        // Проверим RFID поднесена
                         if (rfid.hi != null && rfid.lo != null && rfid.hi >= 0 && rfid.lo > 0)
                         {
+                            // Да, поднесена
                             String.Format("Сервис TRKServices - Считана RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo).SaveInformation();
-                            bool side = rfid.side == 0 ? false : true;
+                            // Проверим эта карта есть в базе
                             OPC_RFID rfid_old = ef_opc_rfid.OPC_RFID.Where(o => o.id_hi == (int)rfid.hi && o.id_lo == rfid.lo && o.side == side).OrderByDescending(o => o.id).FirstOrDefault();
+                            // Карты в базе нет?
                             if (rfid_old == null)
                             {
-                                List<Gun> guns_trk = guns.Where(g => g.num_trk == rfid.num_trk && g.side == rfid.side).ToList();
                                 // проверим по колонке есть снятый пистолет
-                                if (guns_trk != null && IsTaken(guns_trk))
+                                if (guns_trk != null && ((rfid.num_trk < 10 && IsTaken(guns_trk)) || (rfid.num_trk >= 10 && rfid.num_trk <= 12)))
                                 {
                                     int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
-                                    String.Format("Сервис TRKServices - добавлена новая RFID-Карта ТРК={0}, сторона={1}, id_card={2}, hi={3}, lo={4} - id строки - {5}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, rfid.hi, rfid.lo, res).SaveInformation();
-                                    client.WritePulseTagsRFID(rfid.num_trk, side == true ? 1 : 2, 99, 1);
                                 }
                             }
                         }
                     }
-                    // сбросим RFID
-                    for (int i = 1; i <= 9; i++)
-                    {
-                        List<Gun> guns_trk_left = guns.Where(g => g.num_trk == i && g.side == 0).ToList();
-                        List<Gun> guns_trk_right = guns.Where(g => g.num_trk == i && g.side == 1).ToList();
-                        if (guns_trk_left != null && !IsTaken(guns_trk_left))
-                        {
-                            // Сбросим левую сторону
-                            {
-                                SqlParameter trk = new SqlParameter("@trk", i);
-                                SqlParameter side = new SqlParameter("@side", false);
-                                int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
-                                client.WritePulseTagsRFID(i, 1, 0, 1);
-                                String.Format("Сбросим RFID-карту TRK={0}, сторона левая, результат={1}", i, res).SaveWarning();
-                            }
-                            if (i<9 && guns_trk_right != null && !IsTaken(guns_trk_right))
-                            {
-                                // Сбросим правую сторону
-                                SqlParameter trk = new SqlParameter("@trk", i);
-                                SqlParameter side = new SqlParameter("@side", true);
-                                int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
-                                client.WritePulseTagsRFID(i, 2, 0, 1);
-                                String.Format("Сбросим RFID-карту TRK={0}, сторона правая, результат={1}", i, res).SaveWarning();
-                            }
-                        }
-                    }
+                    //// сбросим RFID
+                    //for (int i = 1; i <= 9; i++)
+                    //{
+                    //    List<Gun> guns_trk_left = guns.Where(g => g.num_trk == i && g.side == 0).ToList();
+                    //    List<Gun> guns_trk_right = guns.Where(g => g.num_trk == i && g.side == 1).ToList();
+                    //    if (guns_trk_left != null && !IsTaken(guns_trk_left))
+                    //    {
+                    //        // Сбросим левую сторону
+                    //        {
+                    //            SqlParameter trk = new SqlParameter("@trk", i);
+                    //            SqlParameter side = new SqlParameter("@side", false);
+                    //            int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
+                    //            client.WritePulseTagsRFID(i, 1, 0, 1);
+                    //            //String.Format("Сбросим RFID-карту TRK={0}, сторона левая, результат={1}", i, res).SaveWarning();
+                    //        }
+                    //        if (i < 9 && guns_trk_right != null && !IsTaken(guns_trk_right))
+                    //        {
+                    //            // Сбросим правую сторону
+                    //            SqlParameter trk = new SqlParameter("@trk", i);
+                    //            SqlParameter side = new SqlParameter("@side", true);
+                    //            int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
+                    //            client.WritePulseTagsRFID(i, 2, 0, 1);
+                    //            //String.Format("Сбросим RFID-карту TRK={0}, сторона правая, результат={1}", i, res).SaveWarning();
+                    //        }
+                    //    }
+                    //}
                 }
                 else
                 {
