@@ -28,7 +28,7 @@ legend {
 }
 
 .ui-progressbar-value {
-    background-color:#b6ff00;
+    background-color: #b6ff00;
 }
 
 .progress-label {
@@ -193,7 +193,7 @@ div.trk-rfid {
 }
 
 .trk-gun-active {
-    background-color:#fff8bb;
+    background-color: #fff8bb;
 }
 
 .trk-gun-run {
@@ -205,27 +205,28 @@ div.trk-rfid {
 }
 
 .trk-gun-close {
-    background-color:#d0ebfe;
+    background-color: #d0ebfe;
 }
 
 .trk-gun-error {
     background-color: #ffc3c3;
 }
-    .table-gun th {
-        text-align: right;
-        font-weight: bold;
-    }
 
-    .table-gun td {
-        font-size: 12px;
-        font-weight: bold;
-        text-align: left;
-        width: 70px;
-    }
+.table-gun th {
+    text-align: right;
+    font-weight: bold;
+}
 
-        .table-gun td input {
-            width: 95%;
-        }
+.table-gun td {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    width: 70px;
+}
+
+    .table-gun td input {
+        width: 95%;
+    }
 
 /*ns*/
 
@@ -242,6 +243,7 @@ div.ns {
     margin-right: 5px;
     margin-bottom: 5px;
 }
+
 .trk-ns {
     padding: 0 3px;
 }
@@ -282,7 +284,7 @@ div.ns {
     margin: 3px;
     height: 20px;
     font-size: 11px;
-    font-weight:bold;
+    font-weight: bold;
     background-color: aquamarine;
 }
 
@@ -302,8 +304,16 @@ div.ns {
     background-color: khaki;
 }
 
-/*Окно confirm-rfid-all*/
+.button-stop {
+    margin: 3px;
+    height: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    background-color: #ff7259;
+    float: left;
+}
 
+/*Окно confirm-rfid-all*/
 body div[aria-describedby="confirm-rfid-all"] {
     font-size: 14px;
 }
@@ -428,15 +438,16 @@ body div[aria-describedby="confirm-deliver-fuel"] {
         border-top: 1px solid #c0c0c0;
         margin-top: 3px;
     }
+
     .table-delivery-sap th {
         width: 200px;
         text-align: right;
         font-weight: normal;
     }
 
-    .table-delivery-sap th label {
-        font-weight: normal;
-    }
+        .table-delivery-sap th label {
+            font-weight: normal;
+        }
 
     .table-delivery-sap td {
         width: 300px;
@@ -454,6 +465,10 @@ body div[aria-describedby="confirm-deliver-fuel"] {
             font-style: italic;
         }
 
+
+.input-varning {
+    background-color: #b6ff00;
+}
 
 .input_edit {
     background-color: #e3efc5;
@@ -476,23 +491,24 @@ body div[aria-describedby="dialog-message"] {
 .table-dialog-message {
     border-collapse: collapse;
     border-spacing: 0;
-
 }
 
     .table-dialog-message th {
-        width:200px;
+        width: 200px;
         text-align: right;
         font-weight: normal;
     }
+
     .table-dialog-message td {
-        width:200px;
+        width: 200px;
         text-align: left;
     }
-    .table-dialog-message td label{
-        font-weight: normal;
-        font-style:italic;
-        color:blue;
-    }
+
+        .table-dialog-message td label {
+            font-weight: normal;
+            font-style: italic;
+            color: blue;
+        }
 
 /*Окно dialog-close-fuel*/
 body div[aria-describedby="dialog-close-fuel"] {
@@ -510,15 +526,18 @@ body div[aria-describedby="dialog-close-fuel"] {
         text-align: right;
         font-weight: normal;
     }
+
     .table-dialog-close-fuel td {
         /*width: 200px;*/
         text-align: center;
     }
+
         .table-dialog-close-fuel td input {
             font-weight: normal;
             font-style: italic;
             color: blue;
         }
+
             .table-dialog-close-fuel td input.new_data {
                 color: crimson;
             }
@@ -549,7 +568,7 @@ body div[aria-describedby="dialog-tags-gun"] {
             width: 95%;
             font-style: italic;
         }
-        
+
 /*Окно confirm-tanks*/
 
 body div[aria-describedby="confirm-tanks"] {
@@ -566,11 +585,11 @@ body div[aria-describedby="confirm-tanks"] {
     .table-confirm-tanks th {
         text-align: center;
         font-weight: normal;
-        font-size:14px;
+        font-size: 14px;
     }
 
     .table-confirm-tanks td {
         text-align: right;
-        font-size:14px;
-        font-weight:bold;
+        font-size: 14px;
+        font-weight: bold;
     }

@@ -133,7 +133,7 @@ var rfid_out = [
 var dio_out =
     [
         { "num": 1, "type_fuel": 107000024, "Counter": 69950387261, "CounterResetable": 0, "CountOn": 1781, "Error": 0, "Flow": 0, "Flow2": 0.0, "Freq": 0, "PiontsCount": 6, "Status": 0, "Temp": -0.9375, "TimerLiveOn": 5530357, "TimerOn": 365495 },
-        { "num": 2, "type_fuel": 107000027, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null },
+        { "num": 2, "type_fuel": 107000027, "Counter": 69950387261, "CounterResetable": 0, "CountOn": 1781, "Error": 0, "Flow": 0, "Flow2": 0.0, "Freq": 0, "PiontsCount": 6, "Status": 0, "Temp": -0.9375, "TimerLiveOn": 5530357, "TimerOn": 365495 },
         { "num": 3, "type_fuel": 107000022, "Counter": null, "CounterResetable": null, "CountOn": null, "Error": null, "Flow": null, "Flow2": null, "Freq": null, "PiontsCount": null, "Status": null, "Temp": null, "TimerLiveOn": null, "TimerOn": null }
 ];
 // TODO:!!!ТЕСТ УБРАТЬ
@@ -162,8 +162,8 @@ var risers_out = [
         "flg_kv2": false,
         "inp_km": true,
         "inp_kvq1": true,
-        "inp_kvq2": true,
-        "inp_sa2": false,
+        "inp_kvq2": false,
+        "inp_sa2": true,
         "out_kv1": false,
         "out_kv2": false,
         "TScut": 0,
@@ -1215,6 +1215,32 @@ var postAsyncGunClear = function (gun_clear, callback) {
         },
     });
 };
+// Остановить колонку
+var postAsyncGunStop = function (gun_stop, callback) {
+    $.ajax({
+        url: '/api/trk/gun/stop',
+        type: 'POST',
+        data: JSON.stringify(gun_stop),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
 // Включить наливной стояк
 var postAsyncNSStart = function (ns_start, callback) {
     $.ajax({

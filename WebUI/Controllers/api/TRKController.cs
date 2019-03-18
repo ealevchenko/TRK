@@ -28,6 +28,11 @@ namespace WebUI.Controllers.api
             public int num { get; set; }
         }
 
+        public class GunStop {
+            public int num { get; set; }
+            public bool value { get; set; }
+        }
+
         public class NSStart {
             public int id { get; set;}
             public int num { get; set; }
@@ -206,6 +211,23 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:PostGunClear(value={0})", value).SaveError(e);
                 return -1;
+            }
+        }
+
+        // POST api/trk/gun/stop
+        [HttpPost]
+        [Route("gun/stop")]
+        public bool PostGunStop([FromBody]GunStop value)
+        {
+            try
+            {
+                bool res = client.WriteTagsGunStop(value.num, value.value);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostGunStop(value={0})", value).SaveError(e);
+                return false;
             }
         }
 

@@ -1255,7 +1255,6 @@ namespace ClientOPCTRK
                 return null;
             }
         }
-
         /// <summary>
         /// Записать значение passage в пистолет
         /// </summary>
@@ -1406,6 +1405,54 @@ namespace ClientOPCTRK
             }
         }
         /// <summary>
+        /// Сбросим выдачу
+        /// </summary>
+        /// <param name="num_gun"></param>
+        /// <returns></returns>
+        public bool WriteTagsGunClearLastOut(int num_gun)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "last_out_volume";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".last_out_volume";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = 0;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsGunClearLastOut(num_gun={0})", num_gun).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
         /// Прочесть сотояние колонки пистолета
         /// </summary>
         /// <param name="num_trk"></param>
@@ -1468,39 +1515,50 @@ namespace ClientOPCTRK
                     bool res_pas = WriteTagsGunPassage(num_gun, passage);
                     if (res_pas)
                     {
-                        // Запишем дозу
-                        bool res_val = WriteTagsGunVolume(num_gun, value);
-                        if (res_val)
+                        bool res_lo = WriteTagsGunClearLastOut(num_gun);
+                        if (res_lo)
                         {
-                            // запустим колонку
-                            bool res_start = WriteTagsGunStart(num_gun, true);
-                            if (res_start)
+                            // Запишем дозу
+                            bool res_val = WriteTagsGunVolume(num_gun, value);
+                            if (res_val)
                             {
-                                int? res_status_trk = ReadTagsGunStatus(num_gun);
-                                if (res_status_trk >= 0)
+                                // запустим колонку
+                                bool res_start = WriteTagsGunStart(num_gun, true);
+                                if (res_start)
                                 {
-                                    return (int)res_status_trk;
+                                    int? res_status_trk = ReadTagsGunStatus(num_gun);
+                                    if (res_status_trk >= 0)
+                                    {
+                                        return (int)res_status_trk;
+                                    }
+                                    else
+                                    {
+                                        // Ошибка чтения состояния колонки
+                                        String.Format("Ошибка -6. Пистолет {0} - ошибка чтения сотояния колонки после команды 'старт', сотояние = {1}", num_gun, res_status_trk).SaveWarning();
+                                        return -6;
+                                    }
                                 }
                                 else
                                 {
-                                    // Ошибка чтения состояния колонки
-                                    String.Format("Ошибка -6. Пистолет {0} - ошибка чтения сотояния колонки после команды 'старт', сотояние = {1}", num_gun, res_status_trk).SaveWarning();
-                                    return -6;
+                                    // Ошибка записи бита старт
+                                    String.Format("Ошибка -5. Пистолет {0} - ошибка записи бита 'старт'", num_gun).SaveWarning();
+                                    return -5;
                                 }
                             }
                             else
                             {
-                                // Ошибка записи бита старт
-                                String.Format("Ошибка -5. Пистолет {0} - ошибка записи бита 'старт'", num_gun).SaveWarning();
-                                return -5;
+                                // Ошибка записи дозы
+                                String.Format("Ошибка -4. Пистолет {0} - ошибка записи дозы = {1}", num_gun, value).SaveWarning();
+                                return -4;
                             }
                         }
                         else
                         {
-                            // Ошибка записи дозы
-                            String.Format("Ошибка -4. Пистолет {0} - ошибка записи дозы = {1}", num_gun, value).SaveWarning();
-                            return -4;
+                            // Ошибка сброса выдачи
+                            String.Format("Ошибка -7. Пистолет {0} -  Ошибка сброса выдачи", num_gun).SaveWarning();
+                            return -7;
                         }
+
                     }
                     else
                     {
@@ -1954,6 +2012,55 @@ namespace ClientOPCTRK
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода WritePulseTagsRFID(num={0}, side={1}, PulseA={2}, PulseB={3})", num, side, PulseA, PulseB).SaveError(e);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Задать тег "СТОП"
+        /// </summary>
+        /// <param name="num_gun"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool WriteTagsGunStop(int num_gun, bool value)
+        {
+            try
+            {
+                int num_trk;
+                int side;
+                getTRKOfGun(num_gun, out num_trk, out side);
+
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "stop";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[1];
+
+                items[0] = new Opc.Da.Item();
+                items[0].ItemName = "TRK.Trk0" + num_trk + "_" + side + ".stop";
+                items = group.AddItems(items);
+                //
+                Opc.Da.ItemValue[] writeValues = new Opc.Da.ItemValue[1];
+                writeValues[0] = new Opc.Da.ItemValue();
+
+                writeValues[0].ServerHandle = group.Items[0].ServerHandle;
+                writeValues[0].Value = (bool)value;
+
+                IdentifiedResult[] res = group.Write(writeValues);
+                return true;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода WriteTagsGunStop(num_gun={0}, value={1})", num_gun, value).SaveError(e);
                 return false;
             }
         }
