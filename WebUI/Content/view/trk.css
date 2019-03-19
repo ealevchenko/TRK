@@ -304,7 +304,7 @@ div.ns {
     background-color: khaki;
 }
 
-.button-stop {
+.button-stop, button-stop-ns {
     margin: 3px;
     height: 20px;
     font-size: 11px;

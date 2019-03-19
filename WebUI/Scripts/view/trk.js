@@ -682,16 +682,19 @@ var viewRisers = function () {
                         $('button#button-ns-' + riser.num + '-deliver').hide();
                         // Отобразим прогрес-бар
                         if (riser && fs && fs.start_counter > 0 && DIOriser) {
+                            $('button#button-ns-' + riser.num + '-stop').show();
                             $('div#progressbar-ns-' + riser.num).show();
                             var curr = 0;
                             var curr_val = DIOriser.Counter > 0 ? ((DIOriser.Counter / 1000000).toFixed(0) - fs.start_counter) : 0;
                             curr = (curr_val * 100.0) / fs.dose;
                             pb_deliver.outNSValume(riser.num, curr, Number(curr_val));
                         } else {
+                            $('button#button-ns-' + riser.num + '-stop').hide();
                             $('div#progressbar-ns-' + riser.num).hide();
                         }
                     } else {
                         // Насос выключен
+                        $('button#button-ns-' + riser.num + '-stop').hide();
                         $('div#progressbar-ns-' + riser.num).hide();
                         $('button#button-ns-' + riser.num + '-close').hide();
                         // Отобразим кнопки выдать\закрыть
@@ -711,6 +714,7 @@ var viewRisers = function () {
                     // Статус не определен
                     $('button#button-ns-' + riser.num + '-close').hide();
                     $('button#button-ns-' + riser.num + '-deliver').hide();
+                    $('button#button-ns-' + riser.num + '-stop').hide();
                     $('div#progressbar-ns-' + riser.num).hide();
                 }
             }
@@ -940,35 +944,35 @@ var confirm_df = {
 
     // старт выдачи
     issuance_start: function (id) {
-        if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+        //if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
         if (bcontrolTRK_ban === false) {
             // Выдать ГСМ через ТРК по пистолету
-            if (confirm_df.type == 0) {
-                if (log) { log.info('Производим выдачу на реальную колонку, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+            if (confirm_df.type === 0) {
+                //if (log) { log.info('Производим выдачу на реальную колонку, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
                 updateMessageTips("Производим выдачу на реальную колонку, id=" + id);
                 var gun_start = {
                     id: id,
-                    num: confirm_df.gun != null ? confirm_df.gun.num_gun : 0,
+                    num: confirm_df.gun !== null ? confirm_df.gun.num_gun : 0,
                     // !! отменили режим пасаж
                     //passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? true : false,
                     passage: false,
-                    volume: confirm_df.input_deliver_dose_fuel.val()
+                    volume: Number(Number(confirm_df.input_deliver_dose_fuel.val()).toFixed(2))*100
                 };
                 // TODO:!!!ТЕСТ УБРАТЬ
-                if (log) {
-                    log.info('Сформировали строку gun_start');
-                    log.debug(gun_start);
-                }
+                //if (log) {
+                //    log.info('Сформировали строку gun_start');
+                //    log.debug(gun_start);
+                //}
                 postAsyncGunStart(
                     gun_start,
                     function (status) {
                         updateMessageTips("Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =" + status + ".");
-                        if (log) { log.info('Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
+                        //if (log) { log.info('Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
                     });
             }
             // Выдать ГСМ через наливной стояк
-            if (confirm_df.type == 1) {
-                if (log) { log.info('Производим выдачу через реальный наливной стояк, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+            if (confirm_df.type === 1) {
+                //if (log) { log.info('Производим выдачу через реальный наливной стояк, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
                 updateMessageTips("Производим выдачу через реальный наливной стояк, id=" + id);
                 // !!!!!!! сдесь реализуем выдачу через наливной стояк
                 var ns_start = {
@@ -977,21 +981,21 @@ var confirm_df = {
                     volume: confirm_df.input_deliver_dose_fuel.val(),
                     advance: ins_advance
                 };
-                // TODO:!!!ТЕСТ УБРАТЬ
-                if (log) {
-                    log.info('Сформировали строку ns_start');
-                    log.debug(ns_start);
-                }
+                //// TODO:!!!ТЕСТ УБРАТЬ
+                //if (log) {
+                //    log.info('Сформировали строку ns_start');
+                //    log.debug(ns_start);
+                //}
                 postAsyncNSStart(
                     ns_start,
                     function (status) {
                         updateMessageTips("Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =" + status + ".");
-                        if (log) { log.info('Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
+                        //if (log) { log.info('Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
                     });
             }
 
         } else {
-            if (log) { log.info('Выдача на колонку или наливной стояк - заблокированна, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+            //if (log) { log.info('Выдача на колонку или наливной стояк - заблокированна, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
             updateMessageTips("Выдача на колонку или наливной стояк - заблокированна, id=" + id);
         }
         openFuelSale.init(); // Обновим данные по открытим выдачам
@@ -1163,6 +1167,16 @@ var confirm_df = {
             return true;
         }
     },
+    // Проверка на "0"
+    checkIsZeroOfMessage: function (o, message) {
+        if (o.val() === 0) {
+            o.addClass("ui-state-error");
+            confirm_df.updateTips(message);
+            return false;
+        } else {
+            return true;
+        }
+    },
     // Проверка на пустой объект
     checkCheckboxOfMessage: function (o, condition, message) {
         if (o.prop('checked') != condition) {
@@ -1221,6 +1235,7 @@ var confirm_df = {
         // Проверка выбранного бака
         //valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_capacity, "Выберите бак с топливом");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_dens, "Нет значения плотности ГСМ в баке");
+        valid = valid && confirm_df.checkIsZeroOfMessage(confirm_df.input_deliver_take_dens, "Значение плотности ГСМ в баке = 0, вычисление массы невозможно");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_level, "Нет значения уровень ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_mass, "Нет значения массы ГСМ в баке");
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_take_temp, "Нет значения температуры ГСМ в баке");
@@ -1233,10 +1248,6 @@ var confirm_df = {
         } else {
             valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы (для НС)", ins_advance, 99999);
         }
-
-
-
-
         return valid;
     },
     // инициализация формы
@@ -3045,6 +3056,19 @@ $(function () {
             function (result_stop) {
                 updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - "+ result_stop);
             });
+    });
+
+    $('button.button-stop-ns').on('click', function () {
+        //var gun = $(this).attr('data-gun');
+        //var gun_stop = {
+        //    num: gun,
+        //    value: true
+        //};
+        //postAsyncGunStop(
+        //    gun_stop,
+        //    function (result_stop) {
+        //        updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - "+ result_stop);
+        //    });
     });
 
     // Инициализаия кнопки вывода панели "Продолжить выдачу"

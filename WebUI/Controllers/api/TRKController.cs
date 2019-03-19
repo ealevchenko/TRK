@@ -187,7 +187,8 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                int res = client.IssueFuelTRK(value.num, value.passage, value.volume * 100);
+                //int res = client.IssueFuelTRK(value.num, value.passage, value.volume * 100);
+                int res = client.IssueFuelTRK(value.num, value.passage, value.volume);
                 return res;
             }
             catch (Exception e)
