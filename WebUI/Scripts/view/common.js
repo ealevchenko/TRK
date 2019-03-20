@@ -1291,6 +1291,31 @@ var postAsyncNSClear = function (ns_clear, callback) {
         },
     });
 };
+// Остановить наливной стояк
+var postAsyncNSStop = function (ns_stop, callback) {
+    $.ajax({
+        url: '/api/trk/ns/stop',
+        type: 'POST',
+        data: JSON.stringify(ns_stop),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            //LockScreenOff();
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 // Сбросить RFID карту
 var postAsyncRFIDClear = function (rfid_clear, callback) {
     $.ajax({

@@ -1815,7 +1815,7 @@ namespace ClientOPCTRK
                             bool res_resolution = WriteTagsNSResolution(num_ns, true);
                             if (res_resolution)
                             {
-                                // Задать разрешение от включения скада riesers.TScut = (value - advance)
+                                // Задать дозу с учетом предварения riesers.TScut = (value - advance)
                                 bool res_volume = WriteTagsNSVolume(num_ns, value - advance);
                                 if (res_volume)
                                 {
@@ -2062,6 +2062,82 @@ namespace ClientOPCTRK
             {
                 String.Format("Ошибка выполнения метода WriteTagsGunStop(num_gun={0}, value={1})", num_gun, value).SaveError(e);
                 return false;
+            }
+        }
+        /// <summary>
+        /// Остановить наливной стояк
+        /// </summary>
+        /// <param name="num_ns"></param>
+        /// <returns></returns>
+        public int StopNS(int num_ns)
+        {
+            try
+            {
+                // прочесть состояние НС
+                Risers riesers = ReadTagOPCOfRisers(num_ns);
+                if (riesers == null)
+                {
+                    String.Format("Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
+                    return -1;
+                }
+                // Проверим занят наливной стояк?
+                if (riesers.inp_km == false)
+                {
+                    // Задать выключить насос riesers.flg_kv1 = false  
+                    bool res_stop = WriteTagsNSStart(num_ns, false);
+                    if (res_stop)
+                    {
+                        // Прочесть и вернуть состояние насоса после старта
+                        Risers riesers_stop = ReadTagOPCOfRisers(num_ns);
+                        if (riesers_stop != null)
+                        {
+                            // Насос остановился?
+                            if (riesers_stop.inp_km == false)
+                            {
+                                 // Сбросим значение дозы в 0
+                                 bool res_volume = WriteTagsNSVolume(num_ns, 0);
+                                 if (res_volume) {
+                                     return num_ns;
+                                 }
+                                 else
+                                 {
+                                     // НС ошибка записи дозы с уприждением
+                                     String.Format("Ошибка -6. Наливной стояк {0} - ошибка сброса дозы в 0", num_ns).SaveWarning();
+                                     return -6;
+                                 }
+                            }
+                            else {
+                                String.Format("Не удалось остановить НС {0} после команды 'СТОП'", num_ns).SaveWarning();
+                                return -5;                            
+                            
+                            }
+                        }
+                        else
+                        {
+                            // НС не удается прочесть значение тегов НС
+                            String.Format("Не удается прочесть значение тегов НС{0} после останова насоса ", num_ns).SaveWarning();
+                            return -4;
+                        }
+                    }
+                    else
+                    {
+                        // НС ошибка записи бита 'Остановить насос'
+                        String.Format("Ошибка -3. Наливной стояк {0} - ошибка записи бита 'Остановить насос' ", num_ns).SaveWarning();
+                        return -3;
+                    }
+                }
+                else
+                {
+                    // НС Выключен
+                    String.Format("Ошибка -2. Наливной стояк {0} не выдает ГСМ (inp_km={1}), команда стоп отменена ", num_ns, riesers.inp_km).SaveWarning();
+                    return -2;
+                }
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода StopNS(num_ns={0})", num_ns).SaveError(e);
+                return -1;
             }
         }
 

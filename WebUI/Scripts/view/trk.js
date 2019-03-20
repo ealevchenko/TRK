@@ -3043,6 +3043,7 @@ $(function () {
         var id = $(this).attr('data-id');
         confirm_close_fuel.open(id);
     });
+    // Инициализаия кнопки "Остановить выдачу - пистолет"
     $('button.button-stop').on('click', function () {
         var gun = $(this).attr('data-gun');
         var gun_stop = {
@@ -3055,20 +3056,18 @@ $(function () {
                 updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - "+ result_stop);
             });
     });
-
+    // Инициализаия кнопки "Остановить выдачу - НС"
     $('button.button-stop-ns').on('click', function () {
-        //var gun = $(this).attr('data-gun');
-        //var gun_stop = {
-        //    num: gun,
-        //    value: true
-        //};
-        //postAsyncGunStop(
-        //    gun_stop,
-        //    function (result_stop) {
-        //        updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - "+ result_stop);
-        //    });
+        var risers = $(this).attr('data-risers');
+        var ns_stop = {
+            num: risers,
+        };
+        postAsyncNSStop(
+            ns_stop,
+            function (result_stop) {
+                updateMessageTips("Остановить выдачу, НС №" + risers + ". Ответ - " + result_stop);
+            });
     });
-
     // Инициализаия кнопки вывода панели "Продолжить выдачу"
     $('button.button-continue').on('click', function () {
         var id = $(this).attr('data-id');

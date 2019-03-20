@@ -46,6 +46,11 @@ namespace WebUI.Controllers.api
             public int num { get; set; }
         }
 
+        public class NSStop
+        {
+            public int num { get; set; }
+        }
+
         public TRKController() {
 
         }
@@ -265,5 +270,23 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
+
+        // POST api/trk/ns/stop
+        [HttpPost]
+        [Route("ns/stop")]
+        public int PostNSStop([FromBody]NSStop value)
+        {
+            try
+            {
+                int res = client.StopNS(value.num);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostNSStop(value={0})", value).SaveError(e);
+                return -1;
+            }
+        }
+
     }
 }
