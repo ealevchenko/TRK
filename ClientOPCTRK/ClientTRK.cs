@@ -621,9 +621,9 @@ namespace ClientOPCTRK
                     case 29:
                         type_fuel = 107000024; // ДТ
                         break;
-                        //case 4:
-                        //    type_fuel = 107000027; // Керосин
-                        //    break;
+                    //case 4:
+                    //    type_fuel = 107000027; // Керосин
+                    //    break;
                 }
 
                 Gun gun = new Gun()
@@ -1815,41 +1815,54 @@ namespace ClientOPCTRK
                             bool res_resolution = WriteTagsNSResolution(num_ns, true);
                             if (res_resolution)
                             {
-                                // Задать дозу с учетом предварения riesers.TScut = (value - advance)
-                                bool res_volume = WriteTagsNSVolume(num_ns, value - advance);
-                                if (res_volume)
+                                // Сбросим дозу
+                                bool res_value_clear = WriteTagsNSVolume(num_ns, 0);
+                                if (res_value_clear)
                                 {
-                                    // Задать включить насос riesers.flg_kv1 = true  
-                                    bool res_start = WriteTagsNSStart(num_ns, true);
-                                    if (res_start)
+                                    // Задать дозу с учетом предварения riesers.TScut = (value - advance)
+                                    bool res_volume = WriteTagsNSVolume(num_ns, value - advance);
+                                    if (res_volume)
                                     {
-                                        // Прочесть и вернуть состояние насоса после старта
-                                        Risers riesers_start = ReadTagOPCOfRisers(num_ns);
-                                        if (riesers_start != null)
+                                        // Задать включить насос riesers.flg_kv1 = true  
+                                        bool res_start = WriteTagsNSStart(num_ns, true);
+                                        if (res_start)
                                         {
-                                            // вернем если запущен номер стояка, если нет код ошибки -9
-                                            return riesers_start.inp_km == false ? num_ns : -9;
+                                            // Прочесть и вернуть состояние насоса после старта
+                                            Risers riesers_start = ReadTagOPCOfRisers(num_ns);
+                                            if (riesers_start != null)
+                                            {
+                                                // вернем если запущен номер стояка, если нет код ошибки -9
+                                                return riesers_start.inp_km == false ? num_ns : -9;
+                                            }
+                                            else
+                                            {
+                                                // НС не удается прочесть значение тегов НС
+                                                String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
+                                                return -8;
+                                            }
                                         }
                                         else
                                         {
-                                            // НС не удается прочесть значение тегов НС
-                                            String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
-                                            return -8;
+                                            // НС ошибка записи бита 'Запустить насос'
+                                            String.Format("Ошибка -7. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
+                                            return -7;
                                         }
                                     }
                                     else
                                     {
-                                        // НС ошибка записи бита 'Запустить насос'
-                                        String.Format("Ошибка -7. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
-                                        return -7;
+                                        // НС ошибка записи дозы с уприждением
+                                        String.Format("Ошибка -6. Наливной стояк {0} - ошибка записи дозы с уприждением {1}", num_ns, value - advance).SaveWarning();
+                                        return -6;
                                     }
                                 }
                                 else
                                 {
-                                    // НС ошибка записи дозы с уприждением
-                                    String.Format("Ошибка -6. Наливной стояк {0} - ошибка записи дозы с уприждением {1}", num_ns, value - advance).SaveWarning();
-                                    return -6;
+                                    // НС не удается прочесть значение тегов НС
+                                    String.Format("Ошибка -10. Наливной стояк {0} - ошибка записи сброса дозы", num_ns).SaveWarning();
+                                    return -10;
                                 }
+
+
                             }
                             else
                             {
@@ -2094,22 +2107,24 @@ namespace ClientOPCTRK
                             // Насос остановился?
                             if (riesers_stop.inp_km == false)
                             {
-                                 // Сбросим значение дозы в 0
-                                 bool res_volume = WriteTagsNSVolume(num_ns, 0);
-                                 if (res_volume) {
-                                     return num_ns;
-                                 }
-                                 else
-                                 {
-                                     // НС ошибка записи дозы с уприждением
-                                     String.Format("Ошибка -6. Наливной стояк {0} - ошибка сброса дозы в 0", num_ns).SaveWarning();
-                                     return -6;
-                                 }
+                                // Сбросим значение дозы в 0
+                                bool res_volume = WriteTagsNSVolume(num_ns, 0);
+                                if (res_volume)
+                                {
+                                    return num_ns;
+                                }
+                                else
+                                {
+                                    // НС ошибка записи дозы с уприждением
+                                    String.Format("Ошибка -6. Наливной стояк {0} - ошибка сброса дозы в 0", num_ns).SaveWarning();
+                                    return -6;
+                                }
                             }
-                            else {
+                            else
+                            {
                                 String.Format("Не удалось остановить НС {0} после команды 'СТОП'", num_ns).SaveWarning();
-                                return -5;                            
-                            
+                                return -5;
+
                             }
                         }
                         else

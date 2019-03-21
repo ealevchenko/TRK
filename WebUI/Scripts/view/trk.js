@@ -1230,7 +1230,25 @@ var confirm_df = {
                 var max_mass = confirm_df.input_sap_ozm_amount.val() !== null ? Number(confirm_df.input_sap_ozm_amount.val()) : 0;
                 valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_mase_fuel, "расчетной массы", 0, max_mass * confirm_df.sap_ozm_amount_multiplier);
             }
-
+            // Проверка на совподение ОЗМ -------------------------------------------------
+            var ozm_tanks;
+            // Пистолет
+            if (confirm_df.type === 0) {
+                ozm_tanks = confirm_df.gun != null ? confirm_df.gun.type_fuel : null;
+            }
+            // НС
+            if (confirm_df.type === 1) {
+                ozm_tanks = confirm_df.risers != null ? confirm_df.risers.type_fuel : null;
+            }
+            var ozm_sap = variant === "4" ? confirm_df.select_sap_ozm.val() : confirm_df.input_sap_ozm.val();
+            if (ozm_sap && ozm_sap !== "") {
+                ozm_sap = Number(ozm_sap);
+                if (ozm_sap !== ozm_tanks) {
+                    confirm_df.updateTips("ОЗМ выбранной емкости и ОЗМ требования – не совпадают!");
+                    valid = false;
+                }
+            }
+            //-------------------------------------------------------------------------------
         }
         // Проверка выбранного бака
         //valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_capacity, "Выберите бак с топливом");
