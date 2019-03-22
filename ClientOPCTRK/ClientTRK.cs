@@ -1791,14 +1791,14 @@ namespace ClientOPCTRK
             {
                 if (value <= advance)
                 {
-                    String.Format("Значение дозы {0} <= значения упреждения {1}", value, advance).SaveWarning();
+                    String.Format("[IssueFuelNS] Значение дозы {0} <= значения упреждения {1}", value, advance).SaveWarning();
                     return 0;
                 }
                 // прочесть состояние НС
                 Risers riesers = ReadTagOPCOfRisers(num_ns);
                 if (riesers == null)
                 {
-                    String.Format("Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
+                    String.Format("[IssueFuelNS] Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
                     return -1;
                 }
                 // Проверим занят наливной стояк?
@@ -1837,28 +1837,28 @@ namespace ClientOPCTRK
                                             else
                                             {
                                                 // НС не удается прочесть значение тегов НС
-                                                String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
+                                                String.Format("[IssueFuelNS] Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
                                                 return -8;
                                             }
                                         }
                                         else
                                         {
                                             // НС ошибка записи бита 'Запустить насос'
-                                            String.Format("Ошибка -7. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
+                                            String.Format("[IssueFuelNS] Ошибка -7. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
                                             return -7;
                                         }
                                     }
                                     else
                                     {
                                         // НС ошибка записи дозы с уприждением
-                                        String.Format("Ошибка -6. Наливной стояк {0} - ошибка записи дозы с уприждением {1}", num_ns, value - advance).SaveWarning();
+                                        String.Format("[IssueFuelNS] Ошибка -6. Наливной стояк {0} - ошибка записи дозы с уприждением {1}", num_ns, value - advance).SaveWarning();
                                         return -6;
                                     }
                                 }
                                 else
                                 {
                                     // НС не удается прочесть значение тегов НС
-                                    String.Format("Ошибка -10. Наливной стояк {0} - ошибка записи сброса дозы", num_ns).SaveWarning();
+                                    String.Format("[IssueFuelNS] Ошибка -10. Наливной стояк {0} - ошибка записи сброса дозы", num_ns).SaveWarning();
                                     return -10;
                                 }
 
@@ -1867,28 +1867,28 @@ namespace ClientOPCTRK
                             else
                             {
                                 // НС ошибка записи бита 'Разрешение на включение от SCADA'
-                                String.Format("Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Разрешение на включение от SCADA' ", num_ns).SaveWarning();
+                                String.Format("[IssueFuelNS] Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Разрешение на включение от SCADA' ", num_ns).SaveWarning();
                                 return -5;
                             }
                         }
                         else
                         {
                             // НС нет заземления
-                            String.Format("Ошибка -4. Наливной стояк {0} - режим управления 'Ручной' inp_sa2 = {1}  ", num_ns, riesers.inp_sa2).SaveWarning();
+                            String.Format("[IssueFuelNS] Ошибка -4. Наливной стояк {0} - режим управления 'Ручной' inp_sa2 = {1}  ", num_ns, riesers.inp_sa2).SaveWarning();
                             return -4;
                         }
                     }
                     else
                     {
                         // НС нет заземления
-                        String.Format("Ошибка -3. Наливной стояк {0} - нет заземления inp_kvq2 = {1}  ", num_ns, riesers.inp_kvq2).SaveWarning();
+                        String.Format("[IssueFuelNS] Ошибка -3. Наливной стояк {0} - нет заземления inp_kvq2 = {1}  ", num_ns, riesers.inp_kvq2).SaveWarning();
                         return -3;
                     }
                 }
                 else
                 {
                     // НС занят выдачей
-                    String.Format("Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
+                    String.Format("[IssueFuelNS] Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
                     return -2;
                 }
 
@@ -1913,9 +1913,9 @@ namespace ClientOPCTRK
                 String.Format("Не удается прочесть значение тегов НС{0} ", num_ns).SaveWarning();
                 return -1;
             }
-            // Проверим занят наливной стояк?
-            if (riesers.inp_km == false)
-            {
+            //// Проверим занят наливной стояк?
+            //if (riesers.inp_km == false)
+            //{
                 // Сбросить разрешение от включения скада riesers.flg_kv2 = true
                 bool res_resolution = WriteTagsNSResolution(num_ns, false);
                 if (res_resolution)
@@ -1938,37 +1938,37 @@ namespace ClientOPCTRK
                             else
                             {
                                 // НС не удается прочесть значение тегов НС
-                                String.Format("Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
+                                String.Format("[ResetNS] Не удается прочесть значение тегов НС{0} после запуска насоса ", num_ns).SaveWarning();
                                 return -6;
                             }
                         }
                         else
                         {
                             // НС ошибка записи бита 'Запустить насос'
-                            String.Format("Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
+                            String.Format("[ResetNS] Ошибка -5. Наливной стояк {0} - ошибка записи бита 'Запустить насос' ", num_ns).SaveWarning();
                             return -5;
                         }
                     }
                     else
                     {
                         // НС ошибка записи дозы с уприждением
-                        String.Format("Ошибка -4. Наливной стояк {0} - ошибка сброса дозы", num_ns).SaveWarning();
+                        String.Format("[ResetNS] Ошибка -4. Наливной стояк {0} - ошибка сброса дозы", num_ns).SaveWarning();
                         return -4;
                     }
                 }
                 else
                 {
                     // НС ошибка записи бита 'Запрет на включение от SCADA'
-                    String.Format("Ошибка -3. Наливной стояк {0} - ошибка записи бита 'Запрет на включение от SCADA' ", num_ns).SaveWarning();
+                    String.Format("[ResetNS] Ошибка -3. Наливной стояк {0} - ошибка записи бита 'Запрет на включение от SCADA' ", num_ns).SaveWarning();
                     return -3;
                 }
-            }
-            else
-            {
-                // НС занят выдачей
-                String.Format("Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
-                return -2;
-            }
+            //}
+            //else
+            //{
+            //    // НС занят выдачей
+            //    String.Format("[ResetNS] Ошибка -2. Наливной стояк {0} выдает ГСМ (inp_km={1}), нельзя произвести выдачу ГСМ пока занят НС ", num_ns, riesers.inp_km).SaveWarning();
+            //    return -2;
+            //}
         }
         /// <summary>
         /// Записать флаг разрешения на включение от скады
