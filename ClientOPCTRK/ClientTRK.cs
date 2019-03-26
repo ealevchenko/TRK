@@ -721,6 +721,7 @@ namespace ClientOPCTRK
                     TimerLiveOn = ArrUInt16ToULong(list[start + 10].Value),
                     TimerOn = ArrUInt16ToULong(list[start + 11].Value),
                 };
+                String.Format("Чтение счетчиков DIO НС={0}, counter={1})", num, risers!=null ? risers.Counter : 0).SaveInformation();
                 return risers;
 
             }

@@ -914,8 +914,10 @@ var confirm_df = {
     input_deliver_take_volume: null,    // объем
     input_deliver_take_dens: null,      // плотность
     input_deliver_take_water_level: null,      // уровень воды
+    input_deliver_start_counter: null,      // нач значение счетчика
     input_deliver_dose_fuel: null,      // доза топлива
     input_deliver_mase_fuel: null,      // расчетная масса топлива
+
     checkbox_deliver_Passage: null,     // Режим пролив
     // SAP ********************************************************
     select_variant: null,               // выбор номеров позиций по поставке
@@ -1196,6 +1198,15 @@ var confirm_df = {
 
         if (ntype_test === 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
+        if (confirm_df.input_deliver_start_counter.val() !== null && Number(confirm_df.input_deliver_start_counter.val()) > 0) {
+
+        } else {
+            confirm_df.input_deliver_start_counter.addClass("ui-state-error");
+            confirm_df.updateTips("Начальное значение счетчика неопределенно или равно '0'");
+
+            return false;
+        }
+
         if (!confirm_df.checkbox_deliver_Passage.prop('checked')) {
 
             if (confirm_df.card === null) {
@@ -1342,6 +1353,9 @@ var confirm_df = {
         confirm_df.input_deliver_take_volume = $('input#deliver-take-volume');
         confirm_df.input_deliver_take_dens = $('input#deliver-take-dens');
         confirm_df.input_deliver_take_water_level = $('input#deliver-take-water-level');
+
+        confirm_df.input_deliver_start_counter = $('input#deliver-counter');
+
         // доза топлива
         confirm_df.input_deliver_dose_fuel = $('input#deliver-DoseFuel').on("change", function (event) {
             event.preventDefault();
@@ -1702,6 +1716,7 @@ var confirm_df = {
             .add(confirm_df.input_sap_stock_recipient)
             .add(confirm_df.select_sap_factory_recipient)
             .add(confirm_df.input_sap_factory_recipient)
+            .add(confirm_df.input_deliver_start_counter)
             .add(confirm_df.input_sap_id_card);
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
@@ -1733,6 +1748,7 @@ var confirm_df = {
         confirm_df.input_deliver_take_dens.val('').addClass('input_view');
         confirm_df.input_deliver_take_water_level.val('').addClass('input_view');
 
+        confirm_df.input_deliver_start_counter.val('').addClass('input_view');
 
         confirm_df.checkbox_deliver_Passage.prop('checked', false); // Сбросили технический пролив
 
@@ -1757,6 +1773,7 @@ var confirm_df = {
                 var gun = guns.getGun(num);
                 if (gun) {
                     confirm_df.gun = gun;
+                    confirm_df.input_deliver_start_counter.val((confirm_df.gun.total_volume / 100).toFixed(2))
                     confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel)).addClass('input_view');
                     confirm_df.input_sap_ozm_bak.val('(' + gun.type_fuel + ') ' + outFuelType(gun.type_fuel));
                     $('th#label-taken').text('Пистолет снят:');
@@ -1837,9 +1854,10 @@ var confirm_df = {
 
                 var riser = risers.getRisers(num);
                 var DIOriser = risers.getDIORisers(num);
-                if (riser) {
+                if (riser != null && DIOriser != null) {
                     confirm_df.risers = riser;
                     confirm_df.DIOrisers = DIOriser;
+                    confirm_df.input_deliver_start_counter.val((confirm_df.DIOrisers.Counter / 1000000).toFixed(0));
                     confirm_df.input_deliver_type_fuel.val(outFuelType(riser.type_fuel));
                     confirm_df.input_sap_ozm_bak.val('(' + riser.type_fuel + ') ' + outFuelType(riser.type_fuel));
                     $('th#label-taken').text('Заземление:');
