@@ -32,6 +32,8 @@
         public virtual DbSet<ReceivingFuel> ReceivingFuel { get; set; }
         public virtual DbSet<ReceivingFuelTanks> ReceivingFuelTanks { get; set; }
 
+        public virtual DbSet<TRKLogs> TRKLogs { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cat_Werks>()

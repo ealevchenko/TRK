@@ -5,11 +5,11 @@ var log = (blog_view == true ? log4javascript.getDefaultLogger() : null);
 var ntype_test = Number(type_test);
 if (log) { log.info('Тип запущенного проекта - ', ntype_test); }
 // TODO:!!!ТЕСТ УБРАТЬ
-var bIssue_test = $.parseJSON(issue_test);
-if (log) {log.info('Включен тестовый расчет массы и объема (по дозе) - ', bIssue_test);}
+//var bIssue_test = $.parseJSON(issue_test);
+//if (log) {log.info('Включен тестовый расчет массы и объема (по дозе) - ', bIssue_test);}
 // TODO:!!!ТЕСТ УБРАТЬ
-var btransferSAP_ban = $.parseJSON(transferSAP_ban);
-if (log) {log.info('Включена блокировка передачи данных в САП (режим отладки) - ', btransferSAP_ban);}
+//var btransferSAP_ban = $.parseJSON(transferSAP_ban);
+//if (log) {log.info('Включена блокировка передачи данных в САП (режим отладки) - ', btransferSAP_ban);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
 if (log) {log.info('Включена блокировка передачи управления на колонку - ', bcontrolTRK_ban);}
@@ -62,7 +62,7 @@ var supply_out =
     ];
 // TODO:!!!ТЕСТ УБРАТЬ
 var reservation_out =
-    { "RSNUM": "0003947680", "RSPOS": "0001", "MATNR": "000000000107000027", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "080 ", "UMWRK": "0010", "BDMNG": "0.05", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "TO ", "BWART": "X01" };
+    { "RSNUM": "0003947680", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "080 ", "UMWRK": "0010", "BDMNG": "0.05", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "TO ", "BWART": "X01" };
     //{ "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
 var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };
@@ -78,8 +78,8 @@ var bunk_out =
 var guns_out = [
     { "num_trk": 1, "num_gun": 1, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": null, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 1, "num_gun": 2, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": null, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
-    { "num_trk": 2, "num_gun": 3, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
-    { "num_trk": 2, "num_gun": 4, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 2, "num_gun": 3, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 5555555, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
+    { "num_trk": 2, "num_gun": 4, "side": 1, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 6666666, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 3, "num_gun": 5, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": true, "passage": false, "price_to_write": 0, "start": false, "state": 1, "stop": false, "taken": true, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 3, "num_gun": 6, "side": 1, "current_volume": 300, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 2, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 5000, "write_price": false, "type_fuel": 107000024 },
     { "num_trk": 4, "num_gun": 7, "side": 0, "current_volume": 0, "density": 0, "last_out_volume": 0, "online": false, "passage": false, "price_to_write": 0, "start": false, "state": 4, "stop": false, "taken": false, "total_volume": 0, "status": 0, "volume_to_write": 0, "write_price": false, "type_fuel": 107000024 },
@@ -1760,4 +1760,29 @@ var getReference_azsCards = function (callback) {
         //},
     };
     ref.initObject();
+};
+
+/////////////////////////////////////////////////////////////////////
+var postAsyncTRKLogs = function (trk_logs, callback) {
+    $.ajax({
+        url: '/api/logs/ins/',
+        type: 'POST',
+        data: JSON.stringify(trk_logs),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
 };

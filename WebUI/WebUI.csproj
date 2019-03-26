@@ -193,6 +193,7 @@
     <Compile Include="Controllers\api\azsCardsController.cs" />
     <Compile Include="Controllers\api\AZSController.cs" />
     <Compile Include="Controllers\api\CatalogController.cs" />
+    <Compile Include="Controllers\api\LogsController.cs" />
     <Compile Include="Controllers\api\RFIDController.cs" />
     <Compile Include="Controllers\api\SAPController.cs" />
     <Compile Include="Controllers\api\TRKController.cs" />

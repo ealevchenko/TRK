@@ -86,6 +86,7 @@ namespace WebUI.App_Start
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Tanks_kerosene>>().To<EFAZS.Concrete.EFTanks_kerosene>();
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.ReceivingFuel>>().To<EFAZS.Concrete.EFReceivingFuel>();
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.ReceivingFuelTanks>>().To<EFAZS.Concrete.EFReceivingFuelTanks>();
+            kernel.Bind<ITRKLogs>().To<EFTRKLogs>();
         }
     }
 }

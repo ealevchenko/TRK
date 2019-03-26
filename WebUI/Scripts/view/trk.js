@@ -13,11 +13,11 @@
 $(document).keypress(
     function (event) {
 
-        if (event.which == '13') {
+        if (event.which === 13) {
             $(".validateTips").text('');
             $(".ui-state-error").removeClass("ui-state-error");
             event.preventDefault();
-            if (event.target.name == 'DoseFuel') {
+            if (event.target.name === 'DoseFuel') {
                 confirm_df.viewCalcMass();
             }
 
@@ -2512,11 +2512,11 @@ var confirm_close_fuel = {
 
                                 confirm_close_fuel.sap.VOLUME = confirm_close_fuel.fs.volume;
                                 confirm_close_fuel.sap.MASS = confirm_close_fuel.fs.mass;
-                                // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В САП
-                                if (btransferSAP_ban) {
-                                    var now = new Date();
-                                    confirm_close_fuel.sap.sending = toISOStringTZ(now);
-                                }
+                                //// TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В САП
+                                //if (btransferSAP_ban) {
+                                //    var now = new Date();
+                                //    confirm_close_fuel.sap.sending = toISOStringTZ(now);
+                                //}
                                 // TODO:!!!ТЕСТ УБРАТЬ
                                 if (log) {
                                     log.info('Обновим строку SAP confirm_close_fuel.sap');
@@ -2530,11 +2530,11 @@ var confirm_close_fuel = {
                                     });
                             }
                             // строка FuelSales есть обновить выдачу
-                            // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В Отчетность 
-                            if (btransferSAP_ban) {
-                                var now = new Date();
-                                confirm_close_fuel.fs.sending = toISOStringTZ(now);
-                            }
+                            //// TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ЗАПРЕТ ВЫДАЧИ В Отчетность 
+                            //if (btransferSAP_ban) {
+                            //    var now = new Date();
+                            //    confirm_close_fuel.fs.sending = toISOStringTZ(now);
+                            //}
                             // TODO:!!!ТЕСТ УБРАТЬ
                             if (log) {
                                 log.info('Обновим строку FuelSales confirm_close_fuel.fs');
@@ -2784,10 +2784,10 @@ var confirm_close_fuel = {
         }
         //}
 
-        // TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
-        if (bIssue_test) {
-            confirm_close_fuel.fs.volume = confirm_close_fuel.fs.dose;
-        }
+        //// TODO:!!!ТЕСТ УБРАТЬ ТЕСТОВЫЙ ПЕРЕСЧЕТ
+        //if (bIssue_test) {
+        //    confirm_close_fuel.fs.volume = confirm_close_fuel.fs.dose;
+        //}
         if (confirm_close_fuel.fs.volume > 0) {
             // расчет для пистолета
             if (confirm_close_fuel.type === 0) {
@@ -3048,6 +3048,19 @@ var confirm_tanks = {
 $(function () {
 
     if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
+    //trk_logs = {
+    //    ID: 0,
+    //    DateTime: toISOStringTZ(new Date()),
+    //    UserName: 'user_test',
+    //    Level: 0,
+    //    Log: 'Старт проект'
+    //};
+    //postAsyncTRKLogs(trk_logs,
+    //    function (result) {
+
+    //    }
+    //);
+
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
