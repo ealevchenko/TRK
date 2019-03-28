@@ -1273,7 +1273,7 @@ var confirm_df = {
         // Проверка колонки
         valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_deliver_dose_fuel, "Нет значения дозы");
         if (confirm_df.type === 0) {
-            valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 999);
+            valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы", 0, 4999);
         } else {
             valid = valid && confirm_df.checkSelect(confirm_df.input_deliver_dose_fuel, "дозы (для НС)", ins_advance, 99999);
         }
@@ -2808,7 +2808,7 @@ var confirm_close_fuel = {
         $('input#close-num').val(confirm_close_fuel.fs.num);
         $('input#close-fuel_type').val(confirm_close_fuel.fs.fuel_type);
         $('input#close-tank_num').val(confirm_close_fuel.fs.tank_num);
-        $('input#close-id_card').val(confirm_close_fuel.fs.id_card + (confirm_close_fuel.card ? ' / ' + confirm_close_fuel.card.AutoNumber: ''));
+        $('input#close-id_card').val(confirm_close_fuel.fs.id_card + (confirm_close_fuel.card !==null ? ' / ' + confirm_close_fuel.card.AutoNumber : ''));
         $('input#close-dose').val(confirm_close_fuel.fs.dose);
         $('input#close-passage').val(confirm_close_fuel.fs.passage);
         $('input#close-volume').val(confirm_close_fuel.fs.volume);
