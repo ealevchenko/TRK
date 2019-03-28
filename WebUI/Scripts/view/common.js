@@ -1786,3 +1786,78 @@ var postAsyncTRKLogs = function (trk_logs, callback) {
         }
     });
 };
+
+var logInfo = function (user, message) {
+    trk_logs = {
+        ID: 0,
+        DateTime: toISOStringTZ(new Date()),
+        UserName: user,
+        Level: 0,
+        Log: message
+    };
+    postAsyncTRKLogs(trk_logs,
+        function (result) {
+
+        }
+    );
+};
+
+var logWarn = function (user, message) {
+    trk_logs = {
+        ID: 0,
+        DateTime: toISOStringTZ(new Date()),
+        UserName: user,
+        Level: 1,
+        Log: message
+    };
+    postAsyncTRKLogs(trk_logs,
+        function (result) {
+
+        }
+    );
+};
+
+var logError = function (user, message) {
+    trk_logs = {
+        ID: 0,
+        DateTime: toISOStringTZ(new Date()),
+        UserName: user,
+        Level: 2,
+        Log: message
+    };
+    postAsyncTRKLogs(trk_logs,
+        function (result) {
+
+        }
+    );
+};
+
+var logDebug = function (user, message) {
+    trk_logs = {
+        ID: 0,
+        DateTime: toISOStringTZ(new Date()),
+        UserName: user,
+        Level: 3,
+        Log: message
+    };
+    postAsyncTRKLogs(trk_logs,
+        function (result) {
+
+        }
+    );
+};
+
+var logEvent = function (user, message) {
+    trk_logs = {
+        ID: 0,
+        DateTime: toISOStringTZ(new Date()),
+        UserName: user,
+        Level: 4,
+        Log: message
+    };
+    postAsyncTRKLogs(trk_logs,
+        function (result) {
+
+        }
+    );
+};

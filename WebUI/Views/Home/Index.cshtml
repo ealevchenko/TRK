@@ -37,7 +37,7 @@
 </head>
 <body>
     <div id="lockPanel" class="LockOff"></div>
-
+    <input id="username" type="hidden" value="@User.Identity.Name" />
     <div id="content">
         <div>
             <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID-считыватели</button>
@@ -2524,3 +2524,7 @@
 </body>
 
 </html>
+
+<script>
+    var user_name = $('input#username').val();
+</script>

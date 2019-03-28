@@ -10,6 +10,7 @@
 
 
 
+
 $(document).keypress(
     function (event) {
 
@@ -947,6 +948,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         //if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+        logInfo(user_name,'Начинаем выдачу на колонку. id открытой выдачи = ' + id);
         if (bcontrolTRK_ban === false) {
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type === 0) {
@@ -1025,6 +1027,7 @@ var confirm_df = {
                 } else {
                     // Ошибка, операция отменена (! нужно решить что делать далее).
                     confirm_df.updateTips("Ошибка создания строки FuelSale в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                    logError(user_name, "Ошибка создания строки FuelSale в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
                 }
             }
         );
@@ -1055,6 +1058,7 @@ var confirm_df = {
                                 } else {
                                     // Ошибка, операция отменена (! нужно решить что делать далее).
                                     confirm_df.updateTips("Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                                    logError(user_name, "Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
                                 }
                             }
                         );
@@ -1199,7 +1203,7 @@ var confirm_df = {
         if (ntype_test === 0 && confirm_df.gun) { valid = valid && confirm_df.checkCheckboxOfMessage($('#deliver-Taken'), true, "Пистолет не снят - выдача запрещена!") }
 
         if (confirm_df.input_deliver_start_counter.val() !== null && Number(confirm_df.input_deliver_start_counter.val()) > 0) {
-
+            //
         } else {
             confirm_df.input_deliver_start_counter.addClass("ui-state-error");
             confirm_df.updateTips("Начальное значение счетчика неопределенно или равно '0'");
@@ -2480,6 +2484,7 @@ var confirm_close_fuel = {
                     if (confirm_close_fuel.fs) {
                         LockScreen("Подождите, закрываю ведомость в БД");
                         if (confirm_close_fuel.fs.stop_datetime !== null) {
+                            logInfo(user_name, 'Закрыть выдачу. id = ' + confirm_close_fuel.fs.id);
                             //var fs = confirm_close_fuel.fs;
                             //--------------------------
                             // Сбросим RFID-карту
@@ -2487,11 +2492,11 @@ var confirm_close_fuel = {
                                 trk: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.trk_num : 0,
                                 side: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.side : 0
                             };
-                            // TODO:!!!ТЕСТ УБРАТЬ
-                            if (log) {
-                                log.info('Сброcим RFID-карту rfid_clear');
-                                log.debug(rfid_clear);
-                            }
+                            //// TODO:!!!ТЕСТ УБРАТЬ
+                            //if (log) {
+                            //    log.info('Сброcим RFID-карту rfid_clear');
+                            //    log.debug(rfid_clear);
+                            //}
                             postAsyncRFIDClear(
                                 rfid_clear,
                                 function (result_rfid_clear) {
@@ -2517,16 +2522,17 @@ var confirm_close_fuel = {
                                 //    var now = new Date();
                                 //    confirm_close_fuel.sap.sending = toISOStringTZ(now);
                                 //}
-                                // TODO:!!!ТЕСТ УБРАТЬ
-                                if (log) {
-                                    log.info('Обновим строку SAP confirm_close_fuel.sap');
-                                    log.debug(confirm_close_fuel.sap);
-                                }
+                                //// TODO:!!!ТЕСТ УБРАТЬ
+                                //if (log) {
+                                //    log.info('Обновим строку SAP confirm_close_fuel.sap');
+                                //    log.debug(confirm_close_fuel.sap);
+                                //}
                                 putAsyncSAP_Buffer(confirm_close_fuel.sap,
                                     function (result) {
-                                        if (log) { log.info('Запись САП обновлена результат = ' + result); } // TODO:!!!ТЕСТ УБРАТЬ
+                                        //if (log) { log.info('Запись САП обновлена результат = ' + result); } // TODO:!!!ТЕСТ УБРАТЬ
                                         LockScreenOff();
                                         updateMessageTips("Запись САП обновлена результат = " + result);
+                                        logInfo(user_name, "Запись САП обновлена результат = " + result);
                                     });
                             }
                             // строка FuelSales есть обновить выдачу
@@ -2535,15 +2541,16 @@ var confirm_close_fuel = {
                             //    var now = new Date();
                             //    confirm_close_fuel.fs.sending = toISOStringTZ(now);
                             //}
-                            // TODO:!!!ТЕСТ УБРАТЬ
-                            if (log) {
-                                log.info('Обновим строку FuelSales confirm_close_fuel.fs');
-                                log.debug(confirm_close_fuel.fs);
-                            }
+                            //// TODO:!!!ТЕСТ УБРАТЬ
+                            //if (log) {
+                            //    log.info('Обновим строку FuelSales confirm_close_fuel.fs');
+                            //    log.debug(confirm_close_fuel.fs);
+                            //}
                             putAsyncFuelSales(
                                 confirm_close_fuel.fs,
                                 function (id) {
-                                    if (log) { log.info('Запись FuelSales обновлена результат = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                    //if (log) { log.info('Запись FuelSales обновлена результат = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                    //logInfo(user_name, 'Запись FuelSales обновлена результат = ' + id);
                                     if (id > 0) {
                                         LockScreenOff();
                                         // Инициализация открытых выдач
@@ -2556,16 +2563,17 @@ var confirm_close_fuel = {
                                                     id: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.id : 0,
                                                     num: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.num : 0
                                                 };
-                                                // TODO:!!!ТЕСТ УБРАТЬ
-                                                if (log) {
-                                                    log.info('Команда на колонку (сбросить настройки) gun_clear');
-                                                    log.debug(gun_clear);
-                                                }
+                                                //// TODO:!!!ТЕСТ УБРАТЬ
+                                                //if (log) {
+                                                //    log.info('Команда на колонку (сбросить настройки) gun_clear');
+                                                //    log.debug(gun_clear);
+                                                //}
                                                 postAsyncGunClear(
                                                     gun_clear,
                                                     function (reset_status) {
-                                                        if (log) { log.info('Сброс настроек на колонке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                        //if (log) { log.info('Сброс настроек на колонке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
                                                         updateMessageTips("Сброс настроек на колонке, статус =" + reset_status + ".");
+                                                        logInfo(user_name, "Сброс настроек на колонке, статус =" + reset_status + ".");
                                                     });
                                             }
                                             // Проверим н-стояк
@@ -2575,26 +2583,29 @@ var confirm_close_fuel = {
                                                     num: confirm_close_fuel.fs !== null ? confirm_close_fuel.fs.num : 0
                                                 };
                                                 // TODO:!!!ТЕСТ УБРАТЬ
-                                                if (log) {
-                                                    log.info('Команда на наливной стояк (сбросить настройки) ns_clear');
-                                                    log.debug(ns_clear);
-                                                }
+                                                //if (log) {
+                                                //    log.info('Команда на наливной стояк (сбросить настройки) ns_clear');
+                                                //    log.debug(ns_clear);
+                                                //}
                                                 postAsyncNSClear(
                                                     ns_clear,
                                                     function (reset_status) {
-                                                        if (log) { log.info('Сброс настроек на наливном стояке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                        //if (log) { log.info('Сброс настроек на наливном стояке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
                                                         updateMessageTips("Сброс настроек на наливном стояке, статус =" + reset_status + ".");
+                                                        logInfo(user_name, "Сброс настроек на наливном стояке, статус =" + reset_status + ".");
                                                     });
                                             }
                                         }
                                         confirm_close_fuel.obj.dialog("close");
                                     }
                                     updateMessageTips("Запись FuelSales обновлена результат = " + id);
+                                    logInfo(user_name, "Запись FuelSales обновлена результат = " + id);
                                 }
                             );
                             //--------------------------
                         } else {
-                            updateMessageTips("Отмена нет данных состояния емкастей в конце выдачи");
+                            updateMessageTips("Отмена нет данных состояния емкостей в конце выдачи");
+                            logError(user_name, "Отмена нет данных состояния емкостей в конце выдачи");
                         }
                     }
                 },
@@ -3048,19 +3059,7 @@ var confirm_tanks = {
 $(function () {
 
     if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
-    //trk_logs = {
-    //    ID: 0,
-    //    DateTime: toISOStringTZ(new Date()),
-    //    UserName: 'user_test',
-    //    Level: 0,
-    //    Log: 'Старт проект'
-    //};
-    //postAsyncTRKLogs(trk_logs,
-    //    function (result) {
-
-    //    }
-    //);
-
+    logInfo(user_name,'TRK - старт');
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
@@ -3145,6 +3144,7 @@ $(function () {
     // Инициализаия кнопки "Остановить выдачу - пистолет"
     $('button.button-stop').on('click', function () {
         var gun = $(this).attr('data-gun');
+        logInfo(user_name, 'Нажата кнопка остановить выдачу пистолет №' + gun);
         var gun_stop = {
             num: gun,
             value: true
@@ -3152,12 +3152,14 @@ $(function () {
         postAsyncGunStop(
             gun_stop,
             function (result_stop) {
-                updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - "+ result_stop);
+                updateMessageTips("Остановить выдачу, пистолет №" + gun + ". Ответ - " + result_stop);
+                logInfo(user_name, "Остановить выдачу, пистолет №" + gun + ". Ответ - " + result_stop);
             });
     });
     // Инициализаия кнопки "Остановить выдачу - НС"
     $('button.button-stop-ns').on('click', function () {
         var risers = $(this).attr('data-risers');
+        logInfo(user_name, 'Нажата кнопка остановить выдачу НС №' + risers);
         var ns_stop = {
             num: risers,
         };
@@ -3165,6 +3167,7 @@ $(function () {
             ns_stop,
             function (result_stop) {
                 updateMessageTips("Остановить выдачу, НС №" + risers + ". Ответ - " + result_stop);
+                logInfo(user_name, "Остановить выдачу, НС №" + risers + ". Ответ - " + result_stop);
             });
     });
     // Инициализаия кнопки вывода панели "Продолжить выдачу"
