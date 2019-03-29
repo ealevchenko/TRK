@@ -948,7 +948,7 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         //if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-        logInfo(user_name,'Начинаем выдачу на колонку. id открытой выдачи = ' + id);
+        logInfo(user_name, 'Начинаем выдачу на колонку. id открытой выдачи = ' + id);
         if (bcontrolTRK_ban === false) {
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type === 0) {
@@ -960,7 +960,7 @@ var confirm_df = {
                     // !! отменили режим пасаж
                     //passage: confirm_df.checkbox_deliver_Passage.prop('checked') ? true : false,
                     passage: false,
-                    volume: Number(Number(confirm_df.input_deliver_dose_fuel.val()).toFixed(2))*100
+                    volume: Number(Number(confirm_df.input_deliver_dose_fuel.val()).toFixed(2)) * 100
                 };
                 // TODO:!!!ТЕСТ УБРАТЬ
                 //if (log) {
@@ -2625,141 +2625,91 @@ var confirm_close_fuel = {
             confirm_close_fuel.card = null;
             confirm_close_fuel.clear_input();
             confirm_close_fuel.fs = openFuelSale.getFuelSale(id);
-            //// TODO:!!!ТЕСТ УБРАТЬ
-            //if (log) {
-            //    log.info('Определим открытую выдачу fs');
-            //    log.debug(fs);
-            //}
+            // Если данные FS есть - продолжить
             if (confirm_close_fuel.fs) {
-                confirm_close_fuel.card = cards.getCardOfNumSide(confirm_close_fuel.fs.trk_num, confirm_close_fuel.fs.side);
-                // Определим запись SAP
-                confirm_close_fuel.updateTips('Определим запись SAP');
-                getAsyncSAP_Buffer(
-                    confirm_close_fuel.fs.id_sap,
-                    function (result) {
-                        confirm_close_fuel.sap = result;
-                        //// TODO:!!!ТЕСТ УБРАТЬ
-                        //if (log) {
-                        //    log.info('Определим открытую запись SAP');
-                        //    log.debug(result);
-                        //}
-                    });
-                // обновим FuelSale
-                var now = new Date();
-                var trk_num = confirm_close_fuel.fs.trk_num;
-                // Это пистолеты ?
-                if (trk_num > 0 && trk_num < 10) {
-                    confirm_close_fuel.type = 0;
-                    //if (log) { log.info('Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
-                    confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + confirm_close_fuel.fs.num + ')');
-                    $('tr#type-0').show();
-                    $('tr#type-1').hide();
-                    var gun = guns.getGun(confirm_close_fuel.fs.num);
-                    //// TODO:!!!ТЕСТ УБРАТЬ
-                    //if (log) {
-                    //    log.info('Текущее состояние тегов пистолета fs.num=' + fs.num);
-                    //    log.debug(gun);
-                    //}
-                    if (gun) {
-                        confirm_close_fuel.fs.volume = gun.current_volume > 0 ? gun.current_volume / 100.0 : 0; // выдано
-                        confirm_close_fuel.fs.stop_counter = gun.total_volume; // по счетчику
-                    }
-                }
-                // Это наливные стояки
-                if (trk_num >= 10 && trk_num <= 12) {
-                    confirm_close_fuel.type = 1;
-                    //if (log) { log.info('Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
-                    confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (наливной стояк-' + confirm_close_fuel.fs.num + ')');
-                    $('tr#type-1').show();
-                    $('tr#type-0').hide();
-                    var riser = risers.getRisers(confirm_close_fuel.fs.num);
-                    var DIOriser = risers.getDIORisers(confirm_close_fuel.fs.num);
-                    //// TODO:!!!ТЕСТ УБРАТЬ
-                    //if (log) {
-                    //    log.info('Текущее состояние тегов наливного стояка fs.num=' + fs.num);
-                    //    log.debug(riser);
-                    //}
-                    if (DIOriser) {
-                        confirm_close_fuel.fs.stop_counter = (DIOriser.Counter / 1000000).toFixed(0); // по счетчику
-                        confirm_close_fuel.fs.volume = confirm_close_fuel.fs.stop_counter - confirm_close_fuel.fs.start_counter; // выдано
-                    }
-                }
-
-                if (gun || riser) {
-                    //confirm_close_fuel.set_fs_tank_close(fs,
-                    //    function (fs_close) {
-
-                    //    });
-
-                    confirm_close_fuel.fs.close = toISOStringTZ(now);
-                    confirm_close_fuel.updateTips('Определим текущее состояние емкостей');
-                    if (btanks_one === true) {
-                        // выбран режим одной емкости
-                        getTankTags(confirm_close_fuel.fs.tank_num,
-                            function (result) {
-                                // Обновим информацию по баку
-                                //confirm_close_fuel.confirm_close_fuel.fs = confirm_close_fuel.set_fs_Close(confirm_close_fuel.fs, result);
-                                confirm_close_fuel.set_fs_Close(result);
-                            }
-                        );
-                    } else {
-                        // выбран режим нескольких емкостей
-                        confirm_df.viewParmetrTanksOfType(
-                            confirm_close_fuel.fs.fuel_type,
-                            function (list_tags) {
-                                var result = confirm_df.viewParamTanks(list_tags);
-                                if (result) {
-                                    // Обновим информацию по баку
-                                    //confirm_close_fuel.fs = confirm_close_fuel.set_fs_Close(confirm_close_fuel.fs, result);
-                                    confirm_close_fuel.set_fs_Close(result);
-                                }
-                            }
-                        );
-                    }
+                //confirm_close_fuel.card = cards.getCardOfNumSide(confirm_close_fuel.fs.trk_num, confirm_close_fuel.fs.side);
+                if (confirm_close_fuel.fs.id_sap != null) {
+                    // Определим запись SAP
+                    confirm_close_fuel.updateTips('Определим запись SAP');
+                    getAsyncSAP_Buffer(
+                        confirm_close_fuel.fs.id_sap,
+                        function (result) {
+                            confirm_close_fuel.sap = result;
+                            confirm_close_fuel.update_FuelSale();
+                        });
                 } else {
-                    updateMessageTips("Ошибка чтения тегов , пистолета или наливного стояка [gun || riser]");
-                    //confirm_close_fuel.fs = fs;
+                    confirm_close_fuel.update_FuelSale();
                 }
-                
             }
         }
     },
-    //set_fs_tank_close: function (fs, callback) {
-    //    var now = new Date();
-    //    fs.close = toISOStringTZ(now);
-    //    if (btanks_one === true) {
-    //        // выбран режим одной емкости
-    //        getTankTags(fs.tank_num,
-    //            function (result) {
-    //                // Обновим информацию по баку
-    //                fs = confirm_close_fuel.set_fs_Close(fs, result);
-    //                confirm_close_fuel.fs = fs;
-    //                if (typeof callback === 'function') {
-    //                    callback(fs);
-    //                }
-    //            }
-    //        );
-    //    } else {
-    //        // выбран режим нескольких емкостей
-    //        confirm_df.viewParmetrTanksOfType(
-    //            fs.fuel_type,
-    //            function (list_tags) {
-    //                var result = confirm_df.viewParamTanks(list_tags);
-    //                if (result) {
-    //                    // Обновим информацию по баку
-    //                    fs = confirm_close_fuel.set_fs_Close(fs, result);
-    //                    confirm_close_fuel.fs = fs;
-    //                    if (typeof callback === 'function') {
-    //                        callback(fs);
-    //                    }
-    //                }
-    //            }
-    //        );
-    //    }
-    //},
+    // Обновим выдачу
+    update_FuelSale: function () {
+        // обновим FuelSale
+        var now = new Date();
+        var trk_num = confirm_close_fuel.fs.trk_num;
+        // Это пистолеты ?
+        if (trk_num > 0 && trk_num < 10) {
+            confirm_close_fuel.type = 0;
+            //if (log) { log.info('Закрыть ведомость выдачи топлива (пистолет-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
+            confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (пистолет-' + confirm_close_fuel.fs.num + ')');
+            $('tr#type-0').show();
+            $('tr#type-1').hide();
+            var gun = guns.getGun(confirm_close_fuel.fs.num);
+            if (gun) {
+                confirm_close_fuel.fs.volume = gun.current_volume > 0 ? gun.current_volume / 100.0 : 0; // выдано
+                confirm_close_fuel.fs.stop_counter = gun.total_volume; // по счетчику
+            }
+        }
+        // Это наливные стояки
+        if (trk_num >= 10 && trk_num <= 12) {
+            confirm_close_fuel.type = 1;
+            //if (log) { log.info('Закрыть ведомость выдачи топлива (наливной стояк-' + fs.num + ')'); } // TODO:!!!ТЕСТ УБРАТЬ
+            confirm_close_fuel.obj.dialog("option", "title", 'Закрыть ведомость выдачи топлива (наливной стояк-' + confirm_close_fuel.fs.num + ')');
+            $('tr#type-1').show();
+            $('tr#type-0').hide();
+            var riser = risers.getRisers(confirm_close_fuel.fs.num);
+            var DIOriser = risers.getDIORisers(confirm_close_fuel.fs.num);
+            if (DIOriser) {
+                confirm_close_fuel.fs.stop_counter = (DIOriser.Counter / 1000000).toFixed(0); // по счетчику
+                confirm_close_fuel.fs.volume = confirm_close_fuel.fs.stop_counter - confirm_close_fuel.fs.start_counter; // выдано
+            }
+        }
+
+        if (gun || riser) {
+            confirm_close_fuel.fs.close = toISOStringTZ(now);
+            confirm_close_fuel.updateTips('Определим текущее состояние емкостей');
+            if (btanks_one === true) {
+                // выбран режим одной емкости
+                getTankTags(confirm_close_fuel.fs.tank_num,
+                    function (result) {
+                        // Обновим информацию по баку
+                        //confirm_close_fuel.confirm_close_fuel.fs = confirm_close_fuel.set_fs_Close(confirm_close_fuel.fs, result);
+                        confirm_close_fuel.set_fs_Close(result);
+                    }
+                );
+            } else {
+                // выбран режим нескольких емкостей
+                confirm_df.viewParmetrTanksOfType(
+                    confirm_close_fuel.fs.fuel_type,
+                    function (list_tags) {
+                        var result = confirm_df.viewParamTanks(list_tags);
+                        if (result) {
+                            // Обновим информацию по баку
+                            //confirm_close_fuel.fs = confirm_close_fuel.set_fs_Close(confirm_close_fuel.fs, result);
+                            confirm_close_fuel.set_fs_Close(result);
+                        }
+                    }
+                );
+            }
+        } else {
+            updateMessageTips("Ошибка чтения тегов , пистолета или наливного стояка [gun || riser]");
+            //confirm_close_fuel.fs = fs;
+        }
+    },
     // метод обновляет информацию о закрытии
     set_fs_Close: function (result) {
-        
+
         var now = new Date();
         // Обновим информацию по баку
         confirm_close_fuel.fs.stop_level = result.level.toFixed(2);
@@ -2776,11 +2726,6 @@ var confirm_close_fuel = {
         $('input#close-stop_water_level').val(confirm_close_fuel.fs.stop_water_level);
         //
         confirm_close_fuel.fs.stop_datetime = toISOStringTZ(now);
-        //// TODO:!!!ТЕСТ УБРАТЬ
-        //if (log) {
-        //    log.info('Обновим информацию по баку');
-        //    log.debug(fs_out);
-        //}
         // Выполним расчет выданного объема и массы
         confirm_close_fuel.fs.mass = 0;
         //if (fs_out.passage === "B") {
@@ -2819,7 +2764,7 @@ var confirm_close_fuel = {
         $('input#close-num').val(confirm_close_fuel.fs.num);
         $('input#close-fuel_type').val(confirm_close_fuel.fs.fuel_type);
         $('input#close-tank_num').val(confirm_close_fuel.fs.tank_num);
-        $('input#close-id_card').val(confirm_close_fuel.fs.id_card + (confirm_close_fuel.card !==null ? ' / ' + confirm_close_fuel.card.AutoNumber : ''));
+        $('input#close-id_card').val(confirm_close_fuel.fs.id_card + (confirm_close_fuel.sap !== null && confirm_close_fuel.sap.TRANSP_FAKT !== null ? ' / ' + confirm_close_fuel.sap.TRANSP_FAKT : ''));
         $('input#close-dose').val(confirm_close_fuel.fs.dose);
         $('input#close-passage').val(confirm_close_fuel.fs.passage);
         $('input#close-volume').val(confirm_close_fuel.fs.volume);
@@ -3059,7 +3004,7 @@ var confirm_tanks = {
 $(function () {
 
     if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
-    logInfo(user_name,'TRK - старт');
+    logInfo(user_name, 'TRK - старт');
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
