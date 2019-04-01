@@ -114,7 +114,7 @@ namespace ClientSAPTRK
         /// <param name="num"></param>
         /// <param name="pos"></param>
         /// <returns></returns>
-        public Reservation GetReservation(string num, string pos)
+        public Reservation GetReservation(string num, string pos, string mode)
         {
             try
             {
@@ -122,12 +122,13 @@ namespace ClientSAPTRK
                 string message = this.url + this.transaction_reservation +
                     "&RSNUM=" + num +
                     "&RSPOS=" + pos +
+                    "&FLAG_R=" + mode +
                     "&OutputParameter=RSLT" +
                     "&XacuteLoginName=" + this.login +
                     "&XacuteLoginPassword=" + this.pass;
 
                 string response = Select(message, "GET", "text/xml");
-                String.Format("\r\n Выполнение метода GetReservation(num={0}, pos={1}) \r\nurl={2} \r\nxml={3}", num, pos, message, response).SaveDebug();
+                String.Format("\r\n Выполнение метода GetReservation(num={0}, pos={1}, mode={2}) \r\nurl={3} \r\nxml={4}", num, pos, mode, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);
@@ -156,8 +157,8 @@ namespace ClientSAPTRK
             }
             catch (Exception e)
             {
-                String.Format("GetReservation(num={0}, pos={1})", num, pos).SaveError(e);
-                Console.WriteLine("Ошибка выполнения метода GetReservation(num={0}, pos={1}, e {2}", num, pos, e);
+                String.Format("GetReservation(num={0}, pos={1}, mode={2})", num, pos, mode).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservation(num={0}, pos={1},  mode={2}, e {3}", num, pos, mode, e);
                 return null;
             }
         }

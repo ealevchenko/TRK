@@ -19,14 +19,14 @@ namespace WebUI.Controllers.api
 
         }
 
-        // GET: api/sap/reservation/num/3052703/pos/1
-        [Route("reservation/num/{num}/pos/{pos}")]
+        // GET: api/sap/reservation/num/3052703/pos/1/mode/5
+        [Route("reservation/num/{num}/pos/{pos}/mode/{mode}")]
         [ResponseType(typeof(Reservation))]
-        public IHttpActionResult GetReservation(string num, string pos)
+        public IHttpActionResult GetReservation(string num, string pos, string mode)
         {
             try
             {
-                Reservation reservation = sap.GetReservation(num, pos);
+                Reservation reservation = sap.GetReservation(num, pos, mode);
                 if (reservation == null)
                 {
                     return NotFound();

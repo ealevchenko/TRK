@@ -727,7 +727,8 @@ var show = function () {
     // Время
     var d = new Date();
     $('#date-value').text(toISOStringTZ(d));
-
+    $('#date-user').text(user_name);
+    $('#date-host').text(host_name);
     // Считаем RFID из буфера локальной базы
     getRFIDDB(
         function (result_cards) {
@@ -1547,12 +1548,13 @@ var confirm_df = {
                     getReservation(
                         num,
                         pos,
+                        i,
                         function (result) {
-                            // TODO:!!!ТЕСТ УБРАТЬ
-                            if (log) {
-                                log.info('Сформировали строку getReservation - > result');
-                                log.debug(result);
-                            }
+                            //// TODO:!!!ТЕСТ УБРАТЬ
+                            //if (log) {
+                            //    log.info('Сформировали строку getReservation - > result');
+                            //    log.debug(result);
+                            //}
                             if (result.RSNUM == "") {
                                 OnAJAXErrorOfMessage("Номер резервирования №" + num + ", позиции №" + pos + " - не найдет в САП");
                             } else {
@@ -3003,7 +3005,7 @@ var confirm_tanks = {
 
 $(function () {
 
-    if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
+    //if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
     logInfo(user_name, 'TRK - старт');
     // Загрузка библиотек
     loadReference = function (callback) {

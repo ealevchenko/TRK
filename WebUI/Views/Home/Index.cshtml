@@ -37,11 +37,12 @@
 </head>
 <body>
     <div id="lockPanel" class="LockOff"></div>
-    <input id="username" type="hidden" value="@User.Identity.Name" />
+    <input id="username" type="hidden" value="@System.Environment.UserName" />
+    <input id="hostname" type="hidden" value="@System.Environment.MachineName" />
     <div id="content">
         <div>
             <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID-считыватели</button>
-            <button id="button-tanks" class="ui-button ui-widget ui-corner-all button-tanks">Емкости</button>  Текущее время :<label id="date-value"></label>
+            <button id="button-tanks" class="ui-button ui-widget ui-corner-all button-tanks">Емкости</button>  Текущее время :<label id="date-value"></label> Пользователь :<label id="date-user"></label>  Host :<label id="date-host"></label> 
         </div>
 
         <div class="trk-all">
@@ -2527,4 +2528,5 @@
 
 <script>
     var user_name = $('input#username').val();
+    var host_name = $('input#hostname').val();
 </script>

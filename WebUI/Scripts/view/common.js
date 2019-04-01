@@ -685,10 +685,10 @@ var getRFIDDB = function (callback) {
     });
 };
 // Резервирование
-var getReservation = function (num, pos, callback) {
+var getReservation = function (num, pos, mode, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/sap/reservation/num/' + num + '/pos/' + pos,
+        url: '/api/sap/reservation/num/' + num + '/pos/' + pos + '/mode/'+ mode,
         async: true,
         dataType: 'json',
         beforeSend: function () {

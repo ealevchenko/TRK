@@ -19,7 +19,7 @@ namespace test
         {
             ClientSAP sap = new ClientSAP();
 
-            Reservation reserv = sap.GetReservation("3052703", "1");
+            Reservation reserv = sap.GetReservation("3052703", "1", "5");
 
             Console.WriteLine("RSNUM = {0}", reserv.RSNUM);
             Console.WriteLine("RSPOS = {0}", reserv.RSPOS);
