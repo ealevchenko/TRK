@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -23,6 +24,12 @@ namespace WebUI.Controllers.api
         protected IUsersActions ef_ua;
         protected IRepository<ReceivingFuel> ef_rf;
         protected IRepository<ReceivingFuelTanks> ef_rft;
+
+        public class GunStatus
+        {
+            public int num { get; set; }
+            public int status { get; set; }
+        }
 
         public AZSController(IRepository<SAP_Buffer> sap,
             IRepository<FuelSale> fs,
@@ -461,8 +468,9 @@ namespace WebUI.Controllers.api
                         stop_datetime = s.stop_datetime,
                         close = s.close,
                         sending = s.sending,
-                        ReceivingFuelTanks = s.ReceivingFuelTanks.ToList().Select(t => new ReceivingFuelTanks {
-                             id = t.id,
+                        ReceivingFuelTanks = s.ReceivingFuelTanks.ToList().Select(t => new ReceivingFuelTanks
+                        {
+                            id = t.id,
                             id_receiving_fuel = t.id_receiving_fuel,
                             num = t.num,
                             fuel = t.fuel,
@@ -531,8 +539,9 @@ namespace WebUI.Controllers.api
                         stop_datetime = s.stop_datetime,
                         close = s.close,
                         sending = s.sending,
-                        ReceivingFuelTanks = s.ReceivingFuelTanks.ToList().Select(t => new ReceivingFuelTanks {
-                             id = t.id,
+                        ReceivingFuelTanks = s.ReceivingFuelTanks.ToList().Select(t => new ReceivingFuelTanks
+                        {
+                            id = t.id,
                             id_receiving_fuel = t.id_receiving_fuel,
                             num = t.num,
                             fuel = t.fuel,
@@ -613,7 +622,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                ReceivingFuelTanks rft = this.ef_rft.Get().Where(c => c.id_receiving_fuel == id & c.num == num & c.close==null)
+                ReceivingFuelTanks rft = this.ef_rft.Get().Where(c => c.id_receiving_fuel == id & c.num == num & c.close == null)
                     //.ToList()
                     .Select(t => new ReceivingFuelTanks
                     {
@@ -645,7 +654,7 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода API:GetReceivingFuelTanks(id={0}, num={1})",id,num).SaveError(e);
+                String.Format("Ошибка выполнения метода API:GetReceivingFuelTanks(id={0}, num={1})", id, num).SaveError(e);
                 return NotFound();
             }
         }
@@ -684,6 +693,145 @@ namespace WebUI.Controllers.api
             {
                 String.Format("Ошибка выполнения метода API:PutReceivingFuelTanks(id={0}, value={1})", id, value).SaveError(e);
                 return -1;
+            }
+        }
+        #endregion
+
+        #region status
+        // GET: api/azs/gun/status
+        [Route("gun/status")]
+        [ResponseType(typeof(GunStatus))]
+        public IHttpActionResult GetGunStatus()
+        {
+            try
+            {
+
+                //object test = HttpContext.Current.Application["gun_num"];
+                GunStatus gstatus = new GunStatus()
+                {
+                    num = (int)(object)HttpContext.Current.Application["gun_num"],
+                    status = (int)(object)HttpContext.Current.Application["gun_status"]
+                };
+                if (gstatus == null)
+                {
+                    return NotFound();
+                }
+                return Ok(gstatus);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetGunStatus()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // POST api/azs/gun/status
+        [HttpPost]
+        [Route("gun/status")]
+        public void PostGunStatus([FromBody]GunStatus value)
+        {
+            try
+            {
+                HttpContext.Current.Application["gun_num"] = value.num;
+                HttpContext.Current.Application["gun_status"] = value.status;
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostGunStatus(value={0})", value).SaveError(e);
+            }
+        }
+
+
+
+        // GET: api/azs/guns
+        [Route("guns")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GetGuns()
+        {
+            try
+            {
+
+                if (HttpContext.Current.Application["guns"] != null)
+                {
+                    string guns = (string)(object)HttpContext.Current.Application["guns"];
+                    if (!String.IsNullOrWhiteSpace(guns))
+                    {
+                        string[] arr_guns = guns.Split(';');
+                        return Ok(arr_guns.ToList());
+                    }
+                }
+                return Ok(new List<string>());
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetGuns()").SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // POST api/azs/guns
+        [HttpPost]
+        [Route("guns")]
+        public void PostGuns([FromBody]int value)
+        {
+            try
+            {
+                if (HttpContext.Current.Application["guns"] != null)
+                {
+                    string guns = (string)(object)HttpContext.Current.Application["guns"];
+                    if (String.IsNullOrWhiteSpace(guns))
+                    {
+                        guns = value.ToString();
+                    }
+                    else
+                    {
+                        string[] arr_guns = guns.Split(';');
+                        foreach (string gun in arr_guns)
+                        {
+                            if (gun == value.ToString()) return;
+                        }
+                        guns = guns + ";" + value.ToString();
+                    }
+
+                    HttpContext.Current.Application["guns"] = guns;
+                }
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:PostGuns(value={0})", value).SaveError(e);
+            }
+        }
+
+        // PUT api/azs/guns/5
+        [HttpDelete]
+        [Route("guns/{num:int}")]
+        public void DeleteGuns(int num)
+        {
+            try
+            {
+                if (HttpContext.Current.Application["guns"] != null)
+                {
+                    string guns_new = "";
+                    string guns = (string)(object)HttpContext.Current.Application["guns"];
+                    if (!String.IsNullOrWhiteSpace(guns))
+                    {
+                        string[] arr_guns = guns.Split(';');
+                        foreach (string gun in arr_guns)
+                        {
+                            if (gun != num.ToString())
+                            {
+                                guns_new = guns_new + gun + ";";
+                            };
+                        }
+                        HttpContext.Current.Application["guns"] = !String.IsNullOrWhiteSpace(guns_new) ? guns_new.Remove(guns_new.Length - 1) : "";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:DeleteGuns(num={0})", num).SaveError(e);
             }
         }
         #endregion

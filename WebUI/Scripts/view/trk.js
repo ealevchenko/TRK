@@ -170,20 +170,44 @@ var risers = {
     }
 
 };
-// список тегов керосина
-var kerosenes = {
+
+var select_guns = {
     list: [],
-    setKerosenes: function (data) {
-        kerosenes.list = data;
+    set: function (data) {
+        select_guns.list = data;
     },
-    getKerosenes: function (num) {
-        var obj = getObjects(kerosenes.list, 'num', num);
-        if (obj && obj.length > 0) {
-            return obj[0];
+    get: function (num_gun) {
+
+        for (ig = 0; ig < select_guns.list.length; ig++) {
+            if (Number(select_guns.list[ig]) === num_gun) {
+                return select_guns.list[ig];
+            }
         }
         return null;
     }
 };
+
+//var stat = {
+//    data: [],
+//    set: function (data) {
+//        stat.data = data;
+//    }
+//};
+
+//// список тегов керосина
+//var kerosenes = {
+//    list: [],
+//    setKerosenes: function (data) {
+//        kerosenes.list = data;
+//    },
+//    getKerosenes: function (num) {
+//        var obj = getObjects(kerosenes.list, 'num', num);
+//        if (obj && obj.length > 0) {
+//            return obj[0];
+//        }
+//        return null;
+//    }
+//};
 
 var pb_deliver = {
     pb: [],
@@ -385,9 +409,15 @@ var viewGuns = function () {
                                 $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun');
                             }
                             // Отобразим кнопки выдать\закрыть
+
                             if (id_ofs !== null) {
                                 $('#button-gun-' + gun.num_gun + '-deliver').hide();
-                                $('#button-gun-' + gun.num_gun + '-close').show().attr("data-id", id_ofs);
+                                $('#button-gun-' + gun.num_gun + '-close').attr("data-id", id_ofs);
+                                if (select_guns && select_guns.get(gun.num_gun) === null) {
+                                    $('#button-gun-' + gun.num_gun + '-close').show();
+                                } else {
+                                    $('#button-gun-' + gun.num_gun + '-close').hide();
+                                }
                                 $('div#trk-gun-' + gun.num_gun).removeClass().addClass('trk-gun').addClass('trk-gun-close');
                                 //var cont = (gun.volume_to_write - gun.current_volume) / 100.0;
                                 //if (cont >= 5) {
@@ -399,11 +429,21 @@ var viewGuns = function () {
                             } else {
                                 //if (card && gun && card.Active && gun.online && gun.taken) {
                                 if (gun && gun.online && gun.taken) {
-                                    $('button#button-gun-' + gun.num_gun + '-deliver').show();
+                                    if (select_guns && select_guns.get(gun.num_gun) === null) {
+                                        $('button#button-gun-' + gun.num_gun + '-deliver').show();
+                                    } else {
+                                        $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                                    }
                                 } else {
                                     $('button#button-gun-' + gun.num_gun + '-deliver').hide();
                                 }
                             }
+                            //} else {
+                            //    $('button#button-gun-' + gun.num_gun + '-close').hide();
+                            //    $('button#button-gun-' + gun.num_gun + '-deliver').hide();
+                            //}
+
+
                             break;
                         case 2: //  Выдача
                             $('button#button-gun-' + gun.num_gun + '-close').hide();
@@ -684,6 +724,20 @@ var show = function () {
     $('#date-value').text(toISOStringTZ(d));
     $('#date-user').text(user_name);
     $('#date-host').text(host_name);
+
+    //// Прочтем статус
+    //getAsyncGunStatus(
+    //    function (result_gstatus) {
+    //        stat.set(result_gstatus);
+    //    }
+    //);
+
+    getAsyncGuns(
+        function (result_guns) {
+            select_guns.set(result_guns);
+        }
+    );
+
     // Считаем RFID из буфера локальной базы
     getRFIDDB(
         function (result_cards) {
@@ -709,7 +763,7 @@ var show = function () {
                 // Перед отображением состояния пистолетов проверим не закрытые выдачи
                 openFuelSale.init(function (result_init) {
                     viewGuns();
-                })
+                });
 
             }
         }
@@ -734,6 +788,7 @@ var show = function () {
             }
         }
     );
+
 };
 // Панель "Состояние RFID-считывателей"
 var confirm_rfid_all = {
@@ -854,6 +909,8 @@ var confirm_df = {
     operator_name: null,// 'Оператор тест',
     smena_num: null,// 0,
     smena_datetime: null,// new Date(2019, 0, 10, 0, 0, 0, 0),
+
+    open_num: null,
 
     type: null,  // текущие тип (пистолет-0, стояк-1, керосин-2)
     gun: null,  // текущие теги пистолета
@@ -1251,6 +1308,22 @@ var confirm_df = {
             autoOpen: false,
             height: "auto",
             width: 900,
+            close: function (event, ui) {
+
+                deleteAsyncGuns(Number(confirm_df.open_num));
+
+                //getAsyncGunStatus(
+                //    function (result_gstatus) {
+                //        if (result_gstatus.num === Number(confirm_df.open_num)) {
+                //            // Установим статус
+                //            postAsyncGunStatus(
+                //                { num: 0, status: 0 }
+                //            );
+                //        }
+                //    }
+                //);
+
+            },
             buttons: {
                 'Начать выдачу': function () {
                     var variant = confirm_df.select_variant.val();
@@ -1686,6 +1759,13 @@ var confirm_df = {
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
+        confirm_df.open_num = num;
+        //// Установим статус
+        //postAsyncGunStatus(
+        //    { num: num, status: 1 }
+        //);
+        postAsyncGuns(num);
+
         // Определим пользователя и смену
         getAsyncCurrentUsersActions(
             function (user) {
@@ -2430,6 +2510,7 @@ var confirm_tags_gun = {
 
 var confirm_close_fuel = {
     obj: null,
+    open_num: null,
     type: null,
     fs: null,
     sap: null,
@@ -2440,6 +2521,9 @@ var confirm_close_fuel = {
             autoOpen: false,
             height: "auto",
             width: 700,
+            close: function (event, ui) {
+                deleteAsyncGuns(Number(confirm_close_fuel.open_num));
+            },
             buttons: {
                 'Закрыть': function () {
                     if (confirm_close_fuel.fs) {
@@ -2579,6 +2663,7 @@ var confirm_close_fuel = {
     },
     open: function (id) {
         if (id) {
+
             if (log) { log.info('Производим закрытие открытой выдачи, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
             confirm_close_fuel.obj.dialog("open");
             confirm_close_fuel.fs = null;
@@ -2588,6 +2673,12 @@ var confirm_close_fuel = {
             confirm_close_fuel.fs = openFuelSale.getFuelSale(id);
             // Если данные FS есть - продолжить
             if (confirm_close_fuel.fs) {
+                confirm_close_fuel.open_num = confirm_close_fuel.fs.num;
+                postAsyncGuns(confirm_close_fuel.fs.num);
+                //// Установим статус
+                //postAsyncGunStatus(
+                //    { num: confirm_close_fuel.fs.num, status: 2 }
+                //);
                 //confirm_close_fuel.card = cards.getCardOfNumSide(confirm_close_fuel.fs.trk_num, confirm_close_fuel.fs.side);
                 if (confirm_close_fuel.fs.id_sap != null) {
                     // Определим запись SAP

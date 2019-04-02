@@ -1861,3 +1861,114 @@ var logEvent = function (user, message) {
         }
     );
 };
+
+//var getAsyncGunStatus = function (callback) {
+//    $.ajax({
+//        type: 'GET',
+//        url: '/api/azs/gun/status',
+//        async: true,
+//        dataType: 'json',
+//        beforeSend: function () {
+//            AJAXBeforeSend();
+//        },
+//        success: function (data) {
+//            if (typeof callback === 'function') {
+//                callback(data);
+//            }
+//        },
+//        error: function (x, y, z) {
+//            OnAJAXError(x, y, z);
+//        },
+//        complete: function () {
+//            AJAXComplete();
+//        },
+//    });
+//};
+
+//var postAsyncGunStatus = function (gun_status) {
+//    $.ajax({
+//        url: '/api/azs/gun/status/',
+//        type: 'POST',
+//        data: JSON.stringify(gun_status),
+//        contentType: "application/json;charset=utf-8",
+//        async: true,
+//        beforeSend: function () {
+//            AJAXBeforeSend();
+//        },
+//        success: function () {
+
+//        },
+//        error: function (x, y, z) {
+//            OnAJAXError(x, y, z);
+//        },
+//        complete: function () {
+//            AJAXComplete();
+//        }
+//    });
+//};
+
+var getAsyncGuns = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/guns',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
+var postAsyncGuns = function (num_gun) {
+    $.ajax({
+        url: '/api/azs/guns/',
+        type: 'POST',
+        data: JSON.stringify(num_gun),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function () {
+
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+
+var deleteAsyncGuns = function (num) {
+    $.ajax({
+        url: '/api/azs/guns/' + num,
+        type: 'DELETE',
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
