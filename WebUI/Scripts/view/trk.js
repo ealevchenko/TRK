@@ -54,11 +54,14 @@ var catalog_werks = {
 // Список открытых выдач
 var openFuelSale = {
     list: null,
-    init: function () {
+    init: function (callback) {
         openFuelSale.list = null;
         // Загрузка (common.js)
         getAsyncOpenFuelSale(function (result) {
             openFuelSale.list = result;
+            if (typeof callback === 'function') {
+                callback(result);
+            }
         });
     },
     getFuelSaleID: function (trk_num, side, num) {
@@ -102,54 +105,6 @@ var cards = {
         }
         return null;
     },
-    //// Получить карточку
-    //getCardOfGun: function (num) {
-    //    var trk_num = 0;
-    //    var side = 0;
-    //    switch (num) {
-    //        case 1: trk_num = 1; side = 0; break;
-    //        case 2: trk_num = 1; side = 1; break;
-    //        case 3: trk_num = 2; side = 0; break;
-    //        case 4: trk_num = 2; side = 1; break;
-    //        case 5: trk_num = 3; side = 0; break;
-    //        case 6: trk_num = 3; side = 1; break;
-    //        case 7: trk_num = 4; side = 0; break;
-    //        case 8: trk_num = 4; side = 1; break;
-    //        case 9: trk_num = 5; side = 0; break;
-    //        case 10: trk_num = 5; side = 1; break;
-    //        case 11: trk_num = 6; side = 0; break;
-    //        case 12: trk_num = 6; side = 1; break;
-    //        case 13:
-    //        case 14:
-    //        case 15:
-    //        case 16: trk_num = 7; side = 0; break;
-    //        case 17:
-    //        case 18:
-    //        case 19:
-    //        case 20: trk_num = 7; side = 1; break;
-    //        case 21:
-    //        case 22:
-    //        case 23:
-    //        case 24: trk_num = 8; side = 0; break;
-    //        case 25:
-    //        case 26:
-    //        case 27:
-    //        case 28: trk_num = 8; side = 1; break;
-    //        case 29: trk_num = 9; side = 0; break;
-    //    }
-    //    // Считаем карту
-    //    if (cards.list && cards.list.length > 0) {
-    //        var card = getObjects(cards.list, 'num_trk', trk_num)
-    //        if (card && card.length > 0) {
-    //            for (ic = 0; ic < card.length; ic++) {
-    //                if (card[ic].side == side) {
-    //                    return card[ic].card;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    return null;
-    //},
     // Получить всю запись с карточкой
     getRFIDCardOfNumSide: function (trk_num, side) {
         // Считаем карту
@@ -751,7 +706,11 @@ var show = function () {
         function (result_guns) {
             if (result_guns) {
                 guns.setGuns(result_guns);
-                viewGuns();
+                // Перед отображением состояния пистолетов проверим не закрытые выдачи
+                openFuelSale.init(function (result_init) {
+                    viewGuns();
+                })
+
             }
         }
     );
@@ -1003,7 +962,7 @@ var confirm_df = {
             //if (log) { log.info('Выдача на колонку или наливной стояк - заблокированна, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
             updateMessageTips("Выдача на колонку или наливной стояк - заблокированна, id=" + id);
         }
-        openFuelSale.init(); // Обновим данные по открытим выдачам
+        //openFuelSale.init(); // Обновим данные по открытим выдачам
         confirm_df.obj.dialog("close");
     },
     //сохраним данные в локальной базе fuelSale
@@ -2556,7 +2515,7 @@ var confirm_close_fuel = {
                                     if (id > 0) {
                                         LockScreenOff();
                                         // Инициализация открытых выдач
-                                        openFuelSale.init();
+                                        //openFuelSale.init();
                                         // Сбросить настройки калонки или наливного стояка если есть разрешение на выдачу команд на колонку
                                         if (bcontrolTRK_ban === false) {
                                             // проверим колонка
@@ -3139,7 +3098,7 @@ $(function () {
         } else {
             updateMessageTips("Выдача на колонку или наливной стояк - заблокированна, id=" + id);
         }
-        openFuelSale.init(); // Обновим данные по открытим выдачам
+        //openFuelSale.init(); // Обновим данные по открытим выдачам
     });
     $('.button-deliver').hide();
     $('.button-close').hide();
@@ -3149,7 +3108,7 @@ $(function () {
     pb_deliver.init();
     pb_deliver.hide();
     // Инициализация открытых выдач
-    openFuelSale.init();
+    openFuelSale.init(null);
     // Загрузка библиотек
     loadReference(function (result) {
         // Инициализаия панели  "Выбранные емкости"
@@ -3165,7 +3124,7 @@ $(function () {
         // Загрузка документа
         $(document).ready(function () {
             show();
-            setInterval('show()', 1000);
+            setInterval('show()', 1500);
         });
     });
 });
