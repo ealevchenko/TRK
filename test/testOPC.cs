@@ -304,5 +304,84 @@ namespace test
 
         }
 
+        public void Test_ClientTRK_ReadAllTagOPC()
+        {
+            try
+            {
+                ClientTRK client = new ClientTRK();
+
+                TagsOPC all = client.ReadAllTagOPC();
+                if (all == null)
+                {
+                    Console.WriteLine("TagsOPC all  = null");
+                    return;
+                }
+
+                foreach (RFID rfid in all.rfids)
+                {
+                    Console.WriteLine("rfid.num_trk - {0} ************************************", rfid.num_trk);
+                    Console.WriteLine("rfid.side - {0}", rfid.side);
+                    Console.WriteLine("rfid.online - {0}", rfid.online);
+                    Console.WriteLine("rfid.ready - {0}", rfid.ready);
+                    Console.WriteLine("rfid.status - {0}", rfid.status);
+                    Console.WriteLine("rfid.hi - {0}", rfid.hi);
+                    Console.WriteLine("rfid.lo - {0}", rfid.lo);
+                    if (rfid.card != null)
+                    {
+                        Console.WriteLine("rfid.card - {0}", rfid.card);
+                        Console.WriteLine("rfid.card.Id - {0}", rfid.card.Id);
+                        Console.WriteLine("rfid.card.Name - {0}", rfid.card.Name);
+
+                    }
+                    Console.WriteLine("--------------------------------------");
+
+                }
+
+                foreach (Gun gun in all.guns)
+                {
+                    Console.WriteLine("gun.num_tank - {0}", gun.num_trk);
+                    Console.WriteLine("gun.side - {0}", gun.side);
+                    Console.WriteLine("gun.num_gun - {0}", gun.num_gun);
+                    Console.WriteLine("gun.current_volume - {0}", gun.current_volume);
+                    Console.WriteLine("gun.density - {0}", gun.density);
+                    Console.WriteLine("gun.last_out_volume - {0}", gun.last_out_volume);
+                    Console.WriteLine("gun.online - {0}", gun.online);
+                    Console.WriteLine("gun.passage - {0}", gun.passage);
+                    Console.WriteLine("gun.price_to_write - {0}", gun.price_to_write);
+                    Console.WriteLine("gun.start - {0}", gun.start);
+                    Console.WriteLine("gun.state - {0}", gun.state);
+                    Console.WriteLine("gun.stop - {0}", gun.stop);
+                    Console.WriteLine("gun.taken - {0}", gun.taken);
+                    Console.WriteLine("gun.total_volume - {0}", gun.total_volume);
+                    Console.WriteLine("gun.status - {0}", gun.status);
+                    Console.WriteLine("gun.volume_to_write - {0}", gun.volume_to_write);
+                    Console.WriteLine("gun.write_price - {0}", gun.write_price);
+                    Console.WriteLine("gun.type_fuel - {0}", gun.type_fuel);
+                }
+
+                foreach (Risers riser in all.risers)
+                {
+                    Console.WriteLine("riser.door - {0}", riser.door);
+                    Console.WriteLine("riser.power - {0}", riser.power);
+                    Console.WriteLine("riser.flg_kv1 - {0}", riser.flg_kv1);
+                    Console.WriteLine("riser.flg_kv2 - {0}", riser.flg_kv2);
+                    Console.WriteLine("riser.inp_km - {0}", riser.inp_km);
+                    Console.WriteLine("riser.inp_kvq1 - {0}", riser.inp_kvq1);
+                    Console.WriteLine("riser.inp_kvq2 - {0}", riser.inp_kvq2);
+                    Console.WriteLine("riser.inp_sa2 - {0}", riser.inp_sa2);
+                    Console.WriteLine("riser.out_kv1 - {0}", riser.out_kv1);
+                    Console.WriteLine("riser.out_kv2 - {0}", riser.out_kv2);
+                    Console.WriteLine("riser.TScut - {0}", riser.TScut);
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

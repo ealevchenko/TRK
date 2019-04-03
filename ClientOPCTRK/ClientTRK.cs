@@ -105,6 +105,13 @@ namespace ClientOPCTRK
         public UInt16? TScut { get; set; }  // Доза
     }
 
+    public class TagsOPC {
+        public List<RFID> rfids { get; set; }
+        public List<Gun> guns { get; set; }
+        public List<Risers> risers { get; set; }
+        public List<DIORisers> dios { get; set; }
+    }
+
     public class ClientTRK
     {
         private OpcCom.Factory fact = new OpcCom.Factory();
@@ -1253,6 +1260,199 @@ namespace ClientOPCTRK
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода ReadTagOPCOfRisers(num={0})", num).SaveError(e);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Прочесть все теги OPC
+        /// </summary>
+        /// <returns></returns>
+        public TagsOPC ReadAllTagOPC() {
+            try
+            {
+                Opc.Da.Server server = null;
+                OpcCom.Factory fact = new OpcCom.Factory();
+                server = new Opc.Da.Server(fact, null);
+
+                server.Connect(url, new Opc.ConnectData(new System.Net.NetworkCredential()));
+
+                //
+                Opc.Da.Subscription group;
+                Opc.Da.SubscriptionState groupState = new Opc.Da.SubscriptionState();
+                groupState.Name = "all_tag_opc";
+                groupState.Active = true;
+                group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
+
+                //добавление айтемов в группу
+                Opc.Da.Item[] items = new Opc.Da.Item[20 * 5 + 29 * 14 + 3 * 11];
+                int i = 0;
+                // rfid
+                AddRFID(ref items, ref i, 1, 1);
+                AddRFID(ref items, ref i, 1, 2);
+                AddRFID(ref items, ref i, 2, 1);
+                AddRFID(ref items, ref i, 2, 2);
+                AddRFID(ref items, ref i, 3, 1);
+                AddRFID(ref items, ref i, 3, 2);
+                AddRFID(ref items, ref i, 4, 1);
+                AddRFID(ref items, ref i, 4, 2);
+                AddRFID(ref items, ref i, 5, 1);
+                AddRFID(ref items, ref i, 5, 2);
+                AddRFID(ref items, ref i, 6, 1);
+                AddRFID(ref items, ref i, 6, 2);
+                AddRFID(ref items, ref i, 7, 1);
+                AddRFID(ref items, ref i, 7, 2);
+                AddRFID(ref items, ref i, 8, 1);
+                AddRFID(ref items, ref i, 8, 2);
+                AddRFID(ref items, ref i, 9, 1);
+                AddRFID(ref items, ref i, 10, 0);
+                AddRFID(ref items, ref i, 11, 0);
+                AddRFID(ref items, ref i, 12, 0);
+                // guns
+                AddGun(ref items, ref i, 1, 0); // левая
+                AddGun(ref items, ref i, 1, 5); // правая 
+                AddGun(ref items, ref i, 2, 0); // левая
+                AddGun(ref items, ref i, 2, 5); // правая  
+                AddGun(ref items, ref i, 3, 0); // левая
+                AddGun(ref items, ref i, 3, 5); // правая                  
+                AddGun(ref items, ref i, 4, 0); // левая
+                AddGun(ref items, ref i, 4, 5); // правая                 
+                AddGun(ref items, ref i, 5, 0); // левая
+                AddGun(ref items, ref i, 5, 5); // правая               
+                AddGun(ref items, ref i, 6, 0); // левая
+                AddGun(ref items, ref i, 6, 5); // правая
+
+                AddGun(ref items, ref i, 7, 0); // левая
+                AddGun(ref items, ref i, 7, 1); // левая
+                AddGun(ref items, ref i, 7, 2); // левая
+                AddGun(ref items, ref i, 7, 3); // левая
+                AddGun(ref items, ref i, 7, 5); // правая 
+                AddGun(ref items, ref i, 7, 6); // правая
+                AddGun(ref items, ref i, 7, 7); // правая 
+                AddGun(ref items, ref i, 7, 8); // правая 
+
+                AddGun(ref items, ref i, 8, 0); // левая
+                AddGun(ref items, ref i, 8, 1); // левая
+                AddGun(ref items, ref i, 8, 2); // левая
+                AddGun(ref items, ref i, 8, 3); // левая
+                AddGun(ref items, ref i, 8, 5); // правая 
+                AddGun(ref items, ref i, 8, 6); // правая
+                AddGun(ref items, ref i, 8, 7); // правая 
+                AddGun(ref items, ref i, 8, 8); // правая 
+
+                AddGun(ref items, ref i, 9, 0); // левая
+                //Risers
+                AddRisers(ref items, ref i, 1);
+                AddRisers(ref items, ref i, 2);
+                AddRisers(ref items, ref i, 3);
+
+                items = group.AddItems(items);
+
+                ItemValueResult[] res = group.Read(items);
+
+                List<RFID> result_rfid = new List<RFID>();
+                List<Gun> result_gun = new List<Gun>();
+                List<Risers> result_risers = new List<Risers>();
+
+                i = 0;
+                result_rfid.Add(GetRFIDOfNum(1, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(1, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(2, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(2, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(3, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(3, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(4, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(4, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(5, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(5, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(6, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(6, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(7, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(7, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(8, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(8, 1, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(9, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(10, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(11, 0, res, ref i, false));
+                result_rfid.Add(GetRFIDOfNum(12, 0, res, ref i, false));
+
+                result_gun.Add(GetGun(1, 1, 0, res, i)); // пистолет 1
+                i += 14;
+                result_gun.Add(GetGun(1, 2, 1, res, i)); // пистолет 2
+                i += 14;
+                result_gun.Add(GetGun(2, 3, 0, res, i)); // пистолет 3
+                i += 14;
+                result_gun.Add(GetGun(2, 4, 1, res, i)); // пистолет 4
+                i += 14;
+                result_gun.Add(GetGun(3, 5, 0, res, i)); // пистолет 5
+                i += 14;
+                result_gun.Add(GetGun(3, 6, 1, res, i)); // пистолет 6
+                i += 14;
+                result_gun.Add(GetGun(4, 7, 0, res, i)); // пистолет 7
+                i += 14;
+                result_gun.Add(GetGun(4, 8, 1, res, i)); // пистолет 8
+                i += 14;
+                result_gun.Add(GetGun(5, 9, 0, res, i)); // пистолет 9
+                i += 14;
+                result_gun.Add(GetGun(5, 10, 1, res, i)); // пистолет 10
+                i += 14;
+                result_gun.Add(GetGun(6, 11, 0, res, i)); // пистолет 11
+                i += 14;
+                result_gun.Add(GetGun(6, 12, 1, res, i)); // пистолет 12
+                i += 14;
+                result_gun.Add(GetGun(7, 13, 0, res, i)); // пистолет 13
+                i += 14;
+                result_gun.Add(GetGun(7, 14, 0, res, i)); // пистолет 14
+                i += 14;
+                result_gun.Add(GetGun(7, 15, 0, res, i)); // пистолет 15
+                i += 14;
+                result_gun.Add(GetGun(7, 16, 0, res, i)); // пистолет 16
+                i += 14;
+                result_gun.Add(GetGun(7, 17, 1, res, i)); // пистолет 17
+                i += 14;
+                result_gun.Add(GetGun(7, 18, 1, res, i)); // пистолет 18
+                i += 14;
+                result_gun.Add(GetGun(7, 19, 1, res, i)); // пистолет 19
+                i += 14;
+                result_gun.Add(GetGun(7, 20, 1, res, i)); // пистолет 20
+                i += 14;
+                result_gun.Add(GetGun(8, 21, 0, res, i)); // пистолет 21
+                i += 14;
+                result_gun.Add(GetGun(8, 22, 0, res, i)); // пистолет 22
+                i += 14;
+                result_gun.Add(GetGun(8, 23, 0, res, i)); // пистолет 23
+                i += 14;
+                result_gun.Add(GetGun(8, 24, 0, res, i)); // пистолет 24
+                i += 14;
+                result_gun.Add(GetGun(8, 25, 1, res, i)); // пистолет 25
+                i += 14;
+                result_gun.Add(GetGun(8, 26, 1, res, i)); // пистолет 26
+                i += 14;
+                result_gun.Add(GetGun(8, 27, 1, res, i)); // пистолет 27
+                i += 14;
+                result_gun.Add(GetGun(8, 28, 1, res, i)); // пистолет 28
+                i += 14;
+                result_gun.Add(GetGun(9, 29, 0, res, i)); // пистолет 29
+
+                i += 14;
+                result_risers.Add(GetRisers(1, res, i));
+                i += 11;
+                result_risers.Add(GetRisers(2, res, i));
+                i += 11;
+                result_risers.Add(GetRisers(3, res, i));
+
+                TagsOPC all_tags = new TagsOPC()
+                {
+                    rfids = result_rfid,
+                    guns = result_gun,
+                    risers = result_risers,
+                    dios = null
+                };
+
+                return all_tags;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода ReadAllTagOPC()").SaveError(e);
                 return null;
             }
         }

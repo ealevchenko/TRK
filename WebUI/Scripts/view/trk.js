@@ -245,7 +245,7 @@ var pb_deliver = {
 // Вывести информацию по считывателям
 var viewRFID = function () {
     if (rfid) {
-        list = rfid.list;
+        var list = rfid.list;
         if (list) {
             confirm_rfid_all.Out(list);
             for (i = 0, count_rfid = list.length; i < count_rfid; i++) {
@@ -303,7 +303,7 @@ var viewRFID = function () {
 // Показать все пистолеты
 var viewGuns = function () {
     if (guns) {
-        list = guns.list;
+        var list = guns.list;
         if (list) {
             for (i = 0, count_gun = list.length; i < count_gun; i++) {
                 var gun = list[i];
@@ -488,7 +488,7 @@ var viewGuns = function () {
 // Показать значения счетчиков НС
 var viewDIORisers = function () {
     if (risers) {
-        list = risers.list_dio;
+        var list = risers.list_dio;
         if (list) {
             for (i = 0, count_risers_dio = list.length; i < count_risers_dio; i++) {
                 var riser = list[i];
@@ -536,7 +536,7 @@ var viewDIORisers = function () {
 // Показать состояние НС
 var viewRisers = function () {
     if (risers) {
-        list = risers.list;
+        var list = risers.list;
         if (list) {
             for (i = 0, count_risers = list.length; i < count_risers; i++) {
                 var riser = list[i];
@@ -758,6 +758,56 @@ var show = function () {
 };
 
 var showWindow = function () {
+    // Время
+    var d = new Date();
+    $('#date-value').text(toISOStringTZ(d));
+    $('#date-user').text(user_name);
+    $('#date-host').text(host_name);
+    // Прочесть открытые выдачи
+    openFuelSale.init(
+        function (result_init) {
+        
+        });
+    // Оприсим номера пистолетов по которым идет настройка выдачи или закрытие
+    getAsyncGuns(
+        function (result_guns) {
+            select_guns.set(result_guns);
+            $('#date-guns').text(result_guns);
+        }
+    );
+    // Считаем RFID из буфера локальной базы (карточки)
+    getRFIDDB(
+        function (result_cards) {
+            if (result_cards) {
+                cards.setCards(result_cards);
+            }
+        }
+    );
+    // прочтем все теги
+    getAllTags(
+        function (result_allTag) {
+            if (result_allTag) {
+                // Rfid
+                rfid.setRFID(result_allTag.rfids); viewRFID();
+                // Пистолеты
+                guns.setGuns(result_allTag.guns); viewGuns();
+                // Пистолеты
+                risers.setRisers(result_allTag.risers); viewRisers();
+            }
+        }
+    );
+
+    //  Прочесть теги счетчиков оборотов наливных стояков из OPC
+    if (bpollDIO === true) {
+        getDIORisersTags(
+            function (result_dio) {
+                if (result_dio) {
+                    risers.setDIORisers(result_dio);
+                    viewDIORisers();
+                }
+            }
+        );
+    }
 
 };
 //=========== ДИАЛОГОВЫЕ ОКНА ====================================================
@@ -3155,10 +3205,10 @@ $(function () {
         confirm_close_fuel.init();
         // Загрузка документа
         $(document).ready(function () {
-            show();
+            //show();
             showWindow();
-            setInterval('show()', 1500);
-            setInterval('showWindow()', 500);
+            //setInterval('show()', 1500);
+            setInterval('showWindow()', 1000);
         });
     });
 });

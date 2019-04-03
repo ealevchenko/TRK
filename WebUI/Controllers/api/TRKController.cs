@@ -101,6 +101,7 @@ namespace WebUI.Controllers.api
 
         #endregion
 
+        #region Tags OPC
         // GET: api/trk/guns
         [Route("guns")]
         [ResponseType(typeof(Gun))]
@@ -185,6 +186,29 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // GET: api/trk/all/tags
+        [Route("all/tags")]
+        [ResponseType(typeof(TagsOPC))]
+        public IHttpActionResult GetReadAllTagOPC()
+        {
+            try
+            {
+                TagsOPC tags_all = client.ReadAllTagOPC();
+                if (tags_all == null)
+                {
+                    return NotFound();
+                }
+                return Ok(tags_all);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReadAllTagOPC()").SaveError(e);
+                return NotFound();
+            }
+        }
+        #endregion
+
+        #region upr trk
         // POST api/trk/gun/start
         [HttpPost]
         [Route("gun/start")]
@@ -287,6 +311,6 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
-
+        #endregion
     }
 }
