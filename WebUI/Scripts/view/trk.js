@@ -1,16 +1,4 @@
-﻿// не использую
-//function replaceWith(html) {
-//    var StyledError = "<div class=\"ui-state-error ui-corner-all\" style=\"padding: 0 .7em;\">";
-//    StyledError += "<p><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: .3em;\">";
-//    StyledError += "</span><strong>Attention : </strong>";
-//    StyledError += html;
-//    StyledError += "</p></div>";
-//    return StyledError;
-//};
-
-
-
-
+﻿// Контроль нажатия кнопки на клавиатуре (исключить сворачивание окон по нажатию "ENTER")
 $(document).keypress(
     function (event) {
 
@@ -24,20 +12,12 @@ $(document).keypress(
 
         }
     });
-
-//function updateMessageTips(t) {
-//    $(".messageTips")
-//        .text(t)
-//        .addClass("ui-state-highlight");
-//    setTimeout(function () {
-//        $(".messageTips").removeClass("ui-state-highlight", 1500);
-//    }, 500);
-//}
-
+//========= СПРАВОЧНИКИ ======================================================
+// Справочник ОЗМ
 var catalog_ozm = {
     list: null
 };
-
+// Справочник 
 var catalog_depots = {
     list: null,
     get: function (id) {
@@ -47,7 +27,7 @@ var catalog_depots = {
         }
     }
 };
-
+// Справочник 
 var catalog_werks = {
     list: null
 };
@@ -55,7 +35,7 @@ var catalog_werks = {
 var openFuelSale = {
     list: null,
     init: function (callback) {
-        openFuelSale.list = null;
+        //openFuelSale.list = null;
         // Загрузка (common.js)
         getAsyncOpenFuelSale(function (result) {
             openFuelSale.list = result;
@@ -84,6 +64,7 @@ var openFuelSale = {
         return null;
     }
 };
+//=========== СПИСКИ ОБНОВЛЯЕМЫЕ SHOW() ====================================================
 // Список rfid-карт и тегов считывателей
 var cards = {
     list: [],
@@ -170,7 +151,7 @@ var risers = {
     }
 
 };
-
+// список пистолетов в настройке для синхронизации
 var select_guns = {
     list: [],
     set: function (data) {
@@ -186,14 +167,6 @@ var select_guns = {
         return null;
     }
 };
-
-//var stat = {
-//    data: [],
-//    set: function (data) {
-//        stat.data = data;
-//    }
-//};
-
 //// список тегов керосина
 //var kerosenes = {
 //    list: [],
@@ -208,7 +181,7 @@ var select_guns = {
 //        return null;
 //    }
 //};
-
+//=========== МЕТОДЫ ОТОБРАЖЕНИЯ СОСТОЯНИЯ TRK ====================================================
 var pb_deliver = {
     pb: [],
     obj: null,
@@ -512,7 +485,7 @@ var viewGuns = function () {
         }
     }
 };
-//
+// Показать значения счетчиков НС
 var viewDIORisers = function () {
     if (risers) {
         list = risers.list_dio;
@@ -560,7 +533,7 @@ var viewDIORisers = function () {
         }
     }
 };
-//
+// Показать состояние НС
 var viewRisers = function () {
     if (risers) {
         list = risers.list;
@@ -717,28 +690,22 @@ var viewRisers = function () {
         }
     }
 };
-// Вывод информации на экран 
+// Вывод информации на экран (основная функция запускаемая переодически)
 var show = function () {
     // Время
     var d = new Date();
     $('#date-value').text(toISOStringTZ(d));
     $('#date-user').text(user_name);
     $('#date-host').text(host_name);
-
-    //// Прочтем статус
-    //getAsyncGunStatus(
-    //    function (result_gstatus) {
-    //        stat.set(result_gstatus);
-    //    }
-    //);
-
+    
+    // Оприсим номера пистолетов по которым идет настройка выдачи или закрытие
     getAsyncGuns(
         function (result_guns) {
             select_guns.set(result_guns);
+            $('#date-guns').text(result_guns);
         }
     );
-
-    // Считаем RFID из буфера локальной базы
+    // Считаем RFID из буфера локальной базы (карточки)
     getRFIDDB(
         function (result_cards) {
             if (result_cards) {
@@ -746,7 +713,7 @@ var show = function () {
             }
         }
     );
-    // Считаем RFID из буфера локальной базы
+    // Считаем сотояние RFID из OPC
     getRFIDTags(
         function (result_rfid) {
             if (result_rfid) {
@@ -768,7 +735,7 @@ var show = function () {
             }
         }
     );
-    //  Прочесть теги счетчиков оборотов наливных стояков
+    //  Прочесть теги счетчиков оборотов наливных стояков из OPC
     if (bpollDIO === true) {
         getDIORisersTags(
             function (result_dio) {
@@ -779,7 +746,7 @@ var show = function () {
             }
         );
     }
-    // Прочесть теги наливных стояков
+    // Прочесть теги наливных стояков из OPC
     getRisersTags(
         function (result_risers) {
             if (result_risers) {
@@ -788,8 +755,13 @@ var show = function () {
             }
         }
     );
+};
+
+var showWindow = function () {
 
 };
+//=========== ДИАЛОГОВЫЕ ОКНА ====================================================
+//--------------------------------------------------------------------------------
 // Панель "Состояние RFID-считывателей"
 var confirm_rfid_all = {
     obj: null,
@@ -851,6 +823,7 @@ var confirm_rfid_all = {
 
     }
 };
+//--------------------------------------------------------------------------------
 // Панель "Информация по RFID-карте"
 var confirm_rfid_card = {
     obj: null,
@@ -902,6 +875,7 @@ var confirm_rfid_card = {
         }
     }
 };
+//--------------------------------------------------------------------------------
 // Панель "Задания выдачи и работе с SAP MII"
 var confirm_df = {
     obj: null,
@@ -1309,20 +1283,8 @@ var confirm_df = {
             height: "auto",
             width: 900,
             close: function (event, ui) {
-
+                // Удалим номер пистолета из списка по которым производятся настройки
                 deleteAsyncGuns(Number(confirm_df.open_num));
-
-                //getAsyncGunStatus(
-                //    function (result_gstatus) {
-                //        if (result_gstatus.num === Number(confirm_df.open_num)) {
-                //            // Установим статус
-                //            postAsyncGunStatus(
-                //                { num: 0, status: 0 }
-                //            );
-                //        }
-                //    }
-                //);
-
             },
             buttons: {
                 'Начать выдачу': function () {
@@ -1760,12 +1722,8 @@ var confirm_df = {
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
         confirm_df.open_num = num;
-        //// Установим статус
-        //postAsyncGunStatus(
-        //    { num: num, status: 1 }
-        //);
+        // Добавить номер пистолета по которому будет производится настройка выдачи
         postAsyncGuns(num);
-
         // Определим пользователя и смену
         getAsyncCurrentUsersActions(
             function (user) {
@@ -2448,9 +2406,9 @@ var confirm_df = {
             sending: null
         };
     }
-
 };
-
+//--------------------------------------------------------------------------------
+// Панель "Состояние тегов TRK"
 var confirm_tags_gun = {
     obj: null,
     current: null,
@@ -2507,7 +2465,8 @@ var confirm_tags_gun = {
         $('#type_fuel-value').text('');
     }
 };
-
+//--------------------------------------------------------------------------------
+// Панель "Закрыть выдачу по колонке"
 var confirm_close_fuel = {
     obj: null,
     open_num: null,
@@ -2522,6 +2481,7 @@ var confirm_close_fuel = {
             height: "auto",
             width: 700,
             close: function (event, ui) {
+                // Удалим номер пистолета из списка по которым производилось закрытие
                 deleteAsyncGuns(Number(confirm_close_fuel.open_num));
             },
             buttons: {
@@ -2537,11 +2497,6 @@ var confirm_close_fuel = {
                                 trk: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.trk_num : 0,
                                 side: confirm_close_fuel.fs != null ? confirm_close_fuel.fs.side : 0
                             };
-                            //// TODO:!!!ТЕСТ УБРАТЬ
-                            //if (log) {
-                            //    log.info('Сброcим RFID-карту rfid_clear');
-                            //    log.debug(rfid_clear);
-                            //}
                             postAsyncRFIDClear(
                                 rfid_clear,
                                 function (result_rfid_clear) {
@@ -2663,7 +2618,6 @@ var confirm_close_fuel = {
     },
     open: function (id) {
         if (id) {
-
             if (log) { log.info('Производим закрытие открытой выдачи, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
             confirm_close_fuel.obj.dialog("open");
             confirm_close_fuel.fs = null;
@@ -2674,12 +2628,8 @@ var confirm_close_fuel = {
             // Если данные FS есть - продолжить
             if (confirm_close_fuel.fs) {
                 confirm_close_fuel.open_num = confirm_close_fuel.fs.num;
+                // Добавить номер пистолета по которому будет производится закрытие
                 postAsyncGuns(confirm_close_fuel.fs.num);
-                //// Установим статус
-                //postAsyncGunStatus(
-                //    { num: confirm_close_fuel.fs.num, status: 2 }
-                //);
-                //confirm_close_fuel.card = cards.getCardOfNumSide(confirm_close_fuel.fs.trk_num, confirm_close_fuel.fs.side);
                 if (confirm_close_fuel.fs.id_sap != null) {
                     // Определим запись SAP
                     confirm_close_fuel.updateTips('Определим запись SAP');
@@ -2692,6 +2642,8 @@ var confirm_close_fuel = {
                 } else {
                     confirm_close_fuel.update_FuelSale();
                 }
+            } else {
+                confirm_close_fuel.updateTips('Ошибка чтения openFuelSale! id=' + id + ', открытых выдач = ' + (openFuelSale.list !== null ? openFuelSale.list.length : 'null'));
             }
         }
     },
@@ -2761,7 +2713,6 @@ var confirm_close_fuel = {
     },
     // метод обновляет информацию о закрытии
     set_fs_Close: function (result) {
-
         var now = new Date();
         // Обновим информацию по баку
         confirm_close_fuel.fs.stop_level = result.level.toFixed(2);
@@ -2870,7 +2821,7 @@ var confirm_close_fuel = {
         $('input#close-close').val('');
         $('input#close-id_sap').val('');
     },
-
+    // Вывести сообщение
     updateTips: function (t) {
         $(".closeTips")
             .text(t)
@@ -2880,7 +2831,7 @@ var confirm_close_fuel = {
         }, 500);
     },
 };
-
+//--------------------------------------------------------------------------------
 // Панель "Выбор емкостей"
 var confirm_tanks = {
     obj: null,
@@ -3052,10 +3003,8 @@ var confirm_tanks = {
             });
     }
 };
-
+//=========== ЗАГРУЗКА СТРАНИЦЫ СТАРТ ПРОЕКТА ====================================================
 $(function () {
-
-    //if (log) { log.info('Старт проект'); } // TODO:!!!ТЕСТ УБРАТЬ
     logInfo(user_name, 'TRK - старт');
     // Загрузка библиотек
     loadReference = function (callback) {
@@ -3104,24 +3053,17 @@ $(function () {
     $('.button-tanks').on('click', function () {
         confirm_tanks.Open();
     });
-
     // Инициализаия кнопки вывода панели "Информация по RFID-карте"
     $('.button-rfid').on('click', function () {
         var trk_num = $(this).attr('data-trk');
         var side = $(this).attr('data-side');
         confirm_rfid_card.Open(trk_num, side);
     });
-
     // Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - пистолет
     $('.button-deliver').on('click', function () {
         var gun = $(this).attr('data-gun');
         confirm_df.Open(gun, 0);
     });
-    //// Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - керосин
-    //$('.button-kerosene').on('click', function () {
-    //    var kerosene = $(this).attr('data-kerosene');
-    //    confirm_df.Open(kerosene, 2);
-    //});
     // Инициализаия кнопки вывода панели "Задания выдачи и работе с SAP MII" - стояки
     $('.button-risers').on('click', function () {
         var risers = $(this).attr('data-risers');
@@ -3194,7 +3136,6 @@ $(function () {
     $('.button-deliver').hide();
     $('.button-close').hide();
     $('.button-continue').hide();
-
     // инициализация progresbar
     pb_deliver.init();
     pb_deliver.hide();
@@ -3215,7 +3156,9 @@ $(function () {
         // Загрузка документа
         $(document).ready(function () {
             show();
+            showWindow();
             setInterval('show()', 1500);
+            setInterval('showWindow()', 500);
         });
     });
 });

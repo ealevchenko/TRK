@@ -1,15 +1,10 @@
-﻿// TODO:!!!ТЕСТ УБРАТЬ
+﻿// Бит вкл\откл. логирования для отладки
 var blog_view = $.parseJSON(log_view);
 var log = (blog_view == true ? log4javascript.getDefaultLogger() : null);
+//=========== ПЕРЕМЕННЫЕ ДЛЯ ТЕСТОВ ====================================================
 // TODO:!!!ТЕСТ УБРАТЬ
 var ntype_test = Number(type_test);
 if (log) { log.info('Тип запущенного проекта - ', ntype_test); }
-// TODO:!!!ТЕСТ УБРАТЬ
-//var bIssue_test = $.parseJSON(issue_test);
-//if (log) {log.info('Включен тестовый расчет массы и объема (по дозе) - ', bIssue_test);}
-// TODO:!!!ТЕСТ УБРАТЬ
-//var btransferSAP_ban = $.parseJSON(transferSAP_ban);
-//if (log) {log.info('Включена блокировка передачи данных в САП (режим отладки) - ', btransferSAP_ban);}
 // TODO:!!!ТЕСТ УБРАТЬ
 var bcontrolTRK_ban = $.parseJSON(controlTRK_ban);
 if (log) {log.info('Включена блокировка передачи управления на колонку - ', bcontrolTRK_ban);}
@@ -22,7 +17,6 @@ if (log) { log.info('Включен выбор одной емкости - ', bt
 // TODO:!!!ТЕСТ УБРАТЬ
 var ins_advance = $.parseJSON(ns_advance);
 if (log) { log.info('Упреждение выдачи НС - ', ins_advance); }
-
 // TODO:!!!ТЕСТ УБРАТЬ
 var supply_out =
     [
@@ -190,7 +184,9 @@ var bunks_out = [
     { "num_tank": "B3", "dens": 757.904171, "fill_percent": 35.737970982049163, "level": 1082.59, "mass": 19361.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.1, "ullage": 45930, "unit": null, "volume": 2554.3, "water_level": 1.1, "water_volume": 0.2 }
 ];
 
-// список баков
+
+//=========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================================================
+// список емкостей
 var ozm_bak = {
     list: [
         {
@@ -243,7 +239,7 @@ var ozm_bak = {
             tanks: [{ value: '33', text: '3' }, { value: '38', text: '38' }, { value: '39', text: '39' }]
         }
     ],
-    // Вернуть список баков по типу
+    // Вернуть список емкостей по типу
     getTanks: function (type) {
         var tanks = getObjects(ozm_bak.list, 'type', type);
         if (tanks && tanks.length > 0) {
@@ -252,6 +248,8 @@ var ozm_bak = {
     }
 };
 
+//=========== ГЛОБАЛЬНЫЕ МЕТОДЫ ====================================================
+// Вывести сообщение на основной экран
 var updateMessageTips = function(t) {
     $(".messageTips")
         .text(t)
@@ -260,8 +258,6 @@ var updateMessageTips = function(t) {
         $(".messageTips").removeClass("ui-state-highlight", 1500);
     }, 500);
 }
-
-
 /* ----------------------------------------------------------
     Блокировка экрана
 -------------------------------------------------------------*/
@@ -322,16 +318,18 @@ var getChildObjects = function (obj, key, val) {
     }
     return objects;
 };
-
+/* ----------------------------------------------------------
+    Общие спомогательные функции
+-------------------------------------------------------------*/
 // Коррекция вывода даты с учетом зоны
 var toISOStringTZ = function (date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
 };
-
+//
 var outVal = function (i) {
     return i != null ? Number(i) : '';
 };
-// Тип топлива
+// Вернуть тип топлива по коду SAP
 var outFuelType = function (i) {
     switch (i) {
         case 107000022: return "А92";
@@ -438,11 +436,11 @@ var OnAJAXErrorOfMessage = function (message) {
     //        break;
     //}
 };
-
 // Событие после выполнения
 var AJAXComplete = function () {
     //LockScreenOff();
 };
+// ---- запросы к OPC -----------------------------------
 // Прочесть теги бака
 var getTankTags = function (num, callback) {
     $.ajax({
@@ -661,6 +659,9 @@ var getRisersTags = function (callback) {
         },
     });
 };
+
+
+// ---- запросы к БД -----------------------------------
 // Считать считаные карты по ТРК из буфера БД
 var getRFIDDB = function (callback) {
     $.ajax({
@@ -684,6 +685,7 @@ var getRFIDDB = function (callback) {
         },
     });
 };
+// ---- запросы к SAP -----------------------------------
 // Резервирование
 var getReservation = function (num, pos, mode, callback) {
     $.ajax({
@@ -860,6 +862,7 @@ var getSupply = function (post, callback) {
         },
     });
 };
+// ---- запросы к БД (Справочники АЗС) -------------------
 //Получить OZM из внутрененго справочника
 var getCatalogOfOZM = function (id, callback) {
     $.ajax({
@@ -975,6 +978,7 @@ var getCatalogWerks = function (callback) {
         },
     });
 };
+// ---- запросы к БД (FuelSale & Buffer_SAP) -------------------
 //Получить sap_buffer по id
 var getAsyncSAP_Buffer = function (id, callback) {
     $.ajax({
@@ -1142,6 +1146,7 @@ var putAsyncFuelSales = function (fuel_sale, callback) {
         },
     });
 };
+// ---- запросы к БД (Пользователи) -------------------
 // Веруть последний UsersActions
 var getAsyncCurrentUsersActions = function (callback) {
     $.ajax({
@@ -1165,6 +1170,7 @@ var getAsyncCurrentUsersActions = function (callback) {
         },
     });
 };
+// ---- Управление колонками и наливными стояками -----
 // Включить колонку
 var postAsyncGunStart = function (gun_start, callback) {
     $.ajax({
@@ -1240,7 +1246,6 @@ var postAsyncGunStop = function (gun_stop, callback) {
         },
     });
 };
-
 // Включить наливной стояк
 var postAsyncNSStart = function (ns_start, callback) {
     $.ajax({
@@ -1316,6 +1321,7 @@ var postAsyncNSStop = function (ns_stop, callback) {
         },
     });
 };
+// ---- Управление RFID- считывателями -----------------
 // Сбросить RFID карту
 var postAsyncRFIDClear = function (rfid_clear, callback) {
     $.ajax({
@@ -1341,6 +1347,7 @@ var postAsyncRFIDClear = function (rfid_clear, callback) {
         },
     });
 };
+// ---- Запросы к БД (настройка емкостей) -----------------
 // Веруть выбранные емкости по А92
 var getAsyncSelectTanks_A92 = function (callback) {
     $.ajax({
@@ -1533,7 +1540,7 @@ var postAsyncTanks_kerosene = function (tanks_kerosene, callback) {
         }
     });
 };
-
+// ---- Запросы к БД (Режим прием ГСМ в емкостя) -----------------
 // Веруть список ReceivingFuel открытых 
 var getAsyncOpenReceivingFuel = function (callback) {
     $.ajax({
@@ -1701,8 +1708,7 @@ var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
         },
     });
 };
-
-/////////////////////////////////////////////////////////////////////
+// ---- Запросы к БД [KRR-PA-CNT-Oil2] (карточки АЗС) -----------------
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {
     $.ajax({
@@ -1761,8 +1767,7 @@ var getReference_azsCards = function (callback) {
     };
     ref.initObject();
 };
-
-/////////////////////////////////////////////////////////////////////
+//----ЛОГИРОВАНИЕ-----------------------------------------------
 var postAsyncTRKLogs = function (trk_logs, callback) {
     $.ajax({
         url: '/api/logs/ins/',
@@ -1786,7 +1791,7 @@ var postAsyncTRKLogs = function (trk_logs, callback) {
         }
     });
 };
-
+// Лог информация
 var logInfo = function (user, message) {
     trk_logs = {
         ID: 0,
@@ -1801,7 +1806,7 @@ var logInfo = function (user, message) {
         }
     );
 };
-
+// Лог внимание
 var logWarn = function (user, message) {
     trk_logs = {
         ID: 0,
@@ -1816,7 +1821,7 @@ var logWarn = function (user, message) {
         }
     );
 };
-
+// Лог ошибка
 var logError = function (user, message) {
     trk_logs = {
         ID: 0,
@@ -1831,7 +1836,7 @@ var logError = function (user, message) {
         }
     );
 };
-
+// Лог отладка
 var logDebug = function (user, message) {
     trk_logs = {
         ID: 0,
@@ -1846,7 +1851,7 @@ var logDebug = function (user, message) {
         }
     );
 };
-
+// Лог события системы
 var logEvent = function (user, message) {
     trk_logs = {
         ID: 0,
@@ -1861,52 +1866,8 @@ var logEvent = function (user, message) {
         }
     );
 };
-
-//var getAsyncGunStatus = function (callback) {
-//    $.ajax({
-//        type: 'GET',
-//        url: '/api/azs/gun/status',
-//        async: true,
-//        dataType: 'json',
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function (data) {
-//            if (typeof callback === 'function') {
-//                callback(data);
-//            }
-//        },
-//        error: function (x, y, z) {
-//            OnAJAXError(x, y, z);
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        },
-//    });
-//};
-
-//var postAsyncGunStatus = function (gun_status) {
-//    $.ajax({
-//        url: '/api/azs/gun/status/',
-//        type: 'POST',
-//        data: JSON.stringify(gun_status),
-//        contentType: "application/json;charset=utf-8",
-//        async: true,
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function () {
-
-//        },
-//        error: function (x, y, z) {
-//            OnAJAXError(x, y, z);
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        }
-//    });
-//};
-
+//----СИНХРОНИЗАЦИЯ-----------------------------------------------
+// Прочесть номера пистолетов по которым идет заполнение выдачи или закрытия
 var getAsyncGuns = function (callback) {
     $.ajax({
         type: 'GET',
@@ -1929,7 +1890,7 @@ var getAsyncGuns = function (callback) {
         },
     });
 };
-
+// Добавить номер пистолета по которму идет заполнение выдачи или закрытия
 var postAsyncGuns = function (num_gun) {
     $.ajax({
         url: '/api/azs/guns/',
@@ -1951,7 +1912,7 @@ var postAsyncGuns = function (num_gun) {
         }
     });
 };
-
+// Убрать номер пистолета по которму идет заполнение выдачи или закрытия
 var deleteAsyncGuns = function (num) {
     $.ajax({
         url: '/api/azs/guns/' + num,
@@ -1961,7 +1922,7 @@ var deleteAsyncGuns = function (num) {
         beforeSend: function () {
             AJAXBeforeSend();
         },
-        success: function (data) {
+        success: function () {
 
         },
         error: function (x, y, z) {
