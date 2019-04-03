@@ -348,7 +348,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
         options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
     }
     if (data != null) {
-        for (i = 0; i < data.length; i++) {
+        for (i = 0, count_data_select = data.length; i < count_data_select; i++) {
             var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled }
             // Преобразовать формат
             if (typeof callback_option === 'function') {
@@ -386,7 +386,7 @@ var updateOptionSelect = function (obj_select, data, callback_option, value_sele
         options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
     }
     if (data != null) {
-        for (i = 0; i < data.length; i++) {
+        for (i = 0, count_data_update = data.length; i < count_data_update; i++) {
             var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled };
             // Преобразовать формат
             if (typeof callback_option === 'function') {
@@ -1871,7 +1871,7 @@ var logEvent = function (user, message) {
 var getAsyncGuns = function (callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/azs/guns',
+        url: '/api/global/guns',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1893,7 +1893,7 @@ var getAsyncGuns = function (callback) {
 // Добавить номер пистолета по которму идет заполнение выдачи или закрытия
 var postAsyncGuns = function (num_gun) {
     $.ajax({
-        url: '/api/azs/guns/',
+        url: '/api/global/guns/',
         type: 'POST',
         data: JSON.stringify(num_gun),
         contentType: "application/json;charset=utf-8",
@@ -1915,7 +1915,7 @@ var postAsyncGuns = function (num_gun) {
 // Убрать номер пистолета по которму идет заполнение выдачи или закрытия
 var deleteAsyncGuns = function (num) {
     $.ajax({
-        url: '/api/azs/guns/' + num,
+        url: '/api/global/guns/' + num,
         type: 'DELETE',
         contentType: "application/json;charset=utf-8",
         async: true,

@@ -77,7 +77,7 @@ var cards = {
         if (cards.list && cards.list.length > 0) {
             var card = getObjects(cards.list, 'num_trk', trk_num);
             if (card && card.length > 0) {
-                for (ic = 0; ic < card.length; ic++) {
+                for (ic = 0, count_ic1 = card.length; ic < count_ic1; ic++) {
                     if (card[ic].side == side) {
                         return card[ic].card;
                     }
@@ -92,7 +92,7 @@ var cards = {
         if (cards.list && cards.list.length > 0) {
             var card = getObjects(cards.list, 'num_trk', trk_num);
             if (card && card.length > 0) {
-                for (ic = 0; ic < card.length; ic++) {
+                for (ic = 0, count_ic2 = card.length; ic < count_ic2; ic++) {
                     if (card[ic].side == side) {
                         return card[ic];
                     }
@@ -159,7 +159,7 @@ var select_guns = {
     },
     get: function (num_gun) {
 
-        for (ig = 0; ig < select_guns.list.length; ig++) {
+        for (ig = 0, count_ig = select_guns.list.length; ig < count_ig; ig++) {
             if (Number(select_guns.list[ig]) === num_gun) {
                 return select_guns.list[ig];
             }
@@ -248,7 +248,7 @@ var viewRFID = function () {
         list = rfid.list;
         if (list) {
             confirm_rfid_all.Out(list);
-            for (i = 0; i < list.length; i++) {
+            for (i = 0, count_rfid = list.length; i < count_rfid; i++) {
                 var c_rfid = list[i];
                 if (c_rfid) {
 
@@ -305,7 +305,7 @@ var viewGuns = function () {
     if (guns) {
         list = guns.list;
         if (list) {
-            for (i = 0; i < list.length; i++) {
+            for (i = 0, count_gun = list.length; i < count_gun; i++) {
                 var gun = list[i];
                 // вывод тегов тест
                 if (gun.num_gun == confirm_tags_gun.current) {
@@ -490,7 +490,7 @@ var viewDIORisers = function () {
     if (risers) {
         list = risers.list_dio;
         if (list) {
-            for (i = 0; i < list.length; i++) {
+            for (i = 0, count_risers_dio = list.length; i < count_risers_dio; i++) {
                 var riser = list[i];
 
                 // Counter
@@ -538,7 +538,7 @@ var viewRisers = function () {
     if (risers) {
         list = risers.list;
         if (list) {
-            for (i = 0; i < list.length; i++) {
+            for (i = 0, count_risers = list.length; i < count_risers; i++) {
                 var riser = list[i];
 
                 // Проверим сотояние
@@ -784,7 +784,7 @@ var confirm_rfid_all = {
         confirm_rfid_all.obj.dialog("open");
     },
     Out: function (rfid_list) {
-        for (i = 0; i < rfid_list.length; i++) {
+        for (i = 0, count_rfid_list = rfid_list.length; i < count_rfid_list; i++) {
             var rfid = rfid_list[i];
             if (rfid.num_trk > 0 && rfid.num_trk < 13) {
                 // Вывод связь
@@ -1601,7 +1601,7 @@ var confirm_df = {
                                 if (result.length > 0 && result[0].posnr != "") {
                                     confirm_df.supply = result;
                                     var pos = [];
-                                    for (i = 0; i < result.length; i++) {
+                                    for (i = 0, count_result_supply = result.length; i < count_result_supply; i++) {
                                         // TODO:!!!ТЕСТ УБРАТЬ
                                         if (log) {
                                             log.debug(result[i]);
@@ -2273,7 +2273,7 @@ var confirm_df = {
         var volume = 0;
         var dens = 0;
         var water_level = 0;
-        for (ip = 0; ip < list_tags.length; ip++) {
+        for (ip = 0, count_list_tags = list_tags.length; ip < count_list_tags; ip++) {
             level += list_tags[ip].level;
             mass += list_tags[ip].mass;
             temp += list_tags[ip].temp;
