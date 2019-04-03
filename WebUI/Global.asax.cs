@@ -19,11 +19,7 @@ namespace WebUI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //Application["gun_num"] = 0;
-            //Application["gun_status"] = 0;
-
             Application["guns"] = "";
-
 
         }
     }
