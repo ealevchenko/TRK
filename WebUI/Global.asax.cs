@@ -20,6 +20,16 @@ namespace WebUI
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Application["guns"] = "";
+            for (int i = 1; i <= 29; i++) { 
+                Application["id_gun_"+i.ToString()] = 0;
+            }
+            for (int i = 1; i <= 3; i++)
+            {
+                Application["id_ns_" + i.ToString()] = 0;
+                Application["dose_ns_" + i.ToString()] = 0;
+                Application["counter_ns_" + i.ToString()] = 0;
+            }
+            
 
         }
     }

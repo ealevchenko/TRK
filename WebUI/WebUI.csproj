@@ -193,10 +193,12 @@
     <Compile Include="Controllers\api\azsCardsController.cs" />
     <Compile Include="Controllers\api\AZSController.cs" />
     <Compile Include="Controllers\api\CatalogController.cs" />
+    <Compile Include="Controllers\api\FuelSaleController.cs" />
     <Compile Include="Controllers\api\GlobalController.cs" />
     <Compile Include="Controllers\api\LogsController.cs" />
     <Compile Include="Controllers\api\RFIDController.cs" />
     <Compile Include="Controllers\api\SAPController.cs" />
+    <Compile Include="Controllers\api\SAP_BufferController.cs" />
     <Compile Include="Controllers\api\TRKController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RFController.cs" />

@@ -1261,6 +1261,29 @@ var getAsyncOpenFuelSale = function (callback) {
         },
     });
 };
+// Получить строку из базы данных
+var getAsyncFuelSale = function (id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: 'api/azs/fuel_sale/'+id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 //Обновить FuelSale
 var putAsyncFuelSales = function (fuel_sale, callback) {
     $.ajax({
@@ -2063,6 +2086,121 @@ var deleteAsyncGuns = function (num) {
         },
         success: function () {
 
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+var deleteAsyncClearGuns = function () {
+    $.ajax({
+        url: '/api/global/guns/clear',
+        type: 'DELETE',
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function () {
+
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Прочесть список открытых выдач
+var getAsyncOFS = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/global/open_fuel_sale',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Добавить id открытой выдача
+var putAsyncOFS = function (ofs_put, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/global/open_fuel_sale/' + ofs_put.num,
+        data: JSON.stringify(ofs_put),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+//  Убрать id открытой выдача
+var putAsyncClearOFS = function (num, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '/api/global/open_fuel_sale/'+num,
+        data: JSON.stringify({num:num, id:0, dose:0, counter:0 }),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Очистить список открытых выдач
+var deleteAsyncOFS = function (callback) {
+    $.ajax({
+        url: '/api/global/open_fuel_sale/clear',
+        type: 'DELETE',
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
         },
         error: function (x, y, z) {
             OnAJAXError(x, y, z);
