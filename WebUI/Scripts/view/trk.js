@@ -757,7 +757,21 @@ var show = function () {
     );
 };
 
-var showWindow = function () {
+var showDIOView = function () {
+    //  Прочесть теги счетчиков оборотов наливных стояков из OPC
+    if (bpollDIO === true) {
+        getDIORisersTags(
+            function (result_dio) {
+                if (result_dio) {
+                    risers.setDIORisers(result_dio);
+                    viewDIORisers();
+                }
+            }
+        );
+    }
+}
+
+var showView = function () {
     // Время
     var d = new Date();
     $('#date-value').text(toISOStringTZ(d));
@@ -796,19 +810,6 @@ var showWindow = function () {
             }
         }
     );
-
-    //  Прочесть теги счетчиков оборотов наливных стояков из OPC
-    if (bpollDIO === true) {
-        getDIORisersTags(
-            function (result_dio) {
-                if (result_dio) {
-                    risers.setDIORisers(result_dio);
-                    viewDIORisers();
-                }
-            }
-        );
-    }
-
 };
 //=========== ДИАЛОГОВЫЕ ОКНА ====================================================
 //--------------------------------------------------------------------------------
@@ -1771,9 +1772,10 @@ var confirm_df = {
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
-        confirm_df.open_num = num;
+
+        confirm_df.open_num = type === 0 ? Number(num) : Number(num) + 29;
         // Добавить номер пистолета по которому будет производится настройка выдачи
-        postAsyncGuns(num);
+        postAsyncGuns(confirm_df.open_num);
         // Определим пользователя и смену
         getAsyncCurrentUsersActions(
             function (user) {
@@ -2677,9 +2679,9 @@ var confirm_close_fuel = {
             confirm_close_fuel.fs = openFuelSale.getFuelSale(id);
             // Если данные FS есть - продолжить
             if (confirm_close_fuel.fs) {
-                confirm_close_fuel.open_num = confirm_close_fuel.fs.num;
+                confirm_close_fuel.open_num = confirm_close_fuel.fs.trk_num < 10 ? confirm_close_fuel.fs.num : confirm_close_fuel.fs.num + 29;
                 // Добавить номер пистолета по которому будет производится закрытие
-                postAsyncGuns(confirm_close_fuel.fs.num);
+                postAsyncGuns(confirm_close_fuel.open_num);
                 if (confirm_close_fuel.fs.id_sap != null) {
                     // Определим запись SAP
                     confirm_close_fuel.updateTips('Определим запись SAP');
@@ -3206,9 +3208,11 @@ $(function () {
         // Загрузка документа
         $(document).ready(function () {
             //show();
-            showWindow();
+            showView();
+            showDIOView();
             //setInterval('show()', 1500);
-            setInterval('showWindow()', 1000);
+            setInterval('showView()', 1000);
+            setInterval('showDIOView()', 2500);
         });
     });
 });
