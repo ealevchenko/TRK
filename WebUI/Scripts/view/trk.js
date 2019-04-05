@@ -1,9 +1,7 @@
-﻿var inFormOrLink;
-//$('a').live('click', function () { inFormOrLink = true; });
-//$('form').bind('submit', function () { inFormOrLink = true; });
-
-$(window).bind("beforeunload", function () {
-    return inFormOrLink ? "Do you really want to close?" : null;
+﻿
+$(window).on("beforeunload", function () {
+    if (confirm_df.obj !== null) confirm_df.obj.dialog("close");
+    if (confirm_close_fuel.obj !== null) confirm_close_fuel.obj.dialog("close");
 })
 
 // Контроль нажатия кнопки на клавиатуре (исключить сворачивание окон по нажатию "ENTER")
@@ -103,14 +101,14 @@ var ofs = {
                     for (iobj = 0, count_iobj = obj.length; iobj < count_iobj; iobj++) {
                         if (obj[iobj].trk_num > 9) {
                             putAsyncOFS(
-                                { num: obj[iobj].num+29, id: obj[iobj].id, dose: obj[iobj].dose, counter: obj[iobj].start_counter },
+                                { num: obj[iobj].num + 29, id: obj[iobj].id, dose: obj[iobj].dose, counter: obj[iobj].start_counter },
                                 function (result_set_put) {
 
                                 });
                         }
                     }
                 } else {
-                    putAsyncClearOFS(iofs+29, null);
+                    putAsyncClearOFS(iofs + 29, null);
                 }
             };
             //deleteAsyncOFS(function (result_delete) {
@@ -2541,6 +2539,7 @@ var confirm_df = {
             sending: null
         };
     }
+
 };
 //--------------------------------------------------------------------------------
 // Панель "Состояние тегов TRK"
