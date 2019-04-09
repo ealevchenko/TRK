@@ -32,5 +32,60 @@ namespace WebUI
             
 
         }
+
+        void Session_Start(object sender, EventArgs e)
+        {
+            // More secure than storing it application variables(does not rest on application start
+
+            try
+            {
+                Application.Lock();
+                int count = 0;
+
+                if (Application["UsersCount"] != null)
+                    count = (int)Application["UsersCount"];
+
+                count++;
+                Application["UsersCount"] = count;
+
+                // Снять закрытый доступ        
+                Application.UnLock();  
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                
+            }
+        }
+
+        void Session_End(Object sender, EventArgs e) {
+
+            try
+            {
+                Application.Lock();
+                int count = 0;
+
+                if (Application["UsersCount"] != null)
+                    count = (int)Application["UsersCount"];
+
+                count--;
+                Application["UsersCount"] = count;
+
+                // Снять закрытый доступ        
+                Application.UnLock();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+
+            }
+        }
+
     }
 }

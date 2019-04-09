@@ -854,11 +854,16 @@ var showView = function () {
     $('#date-value').text(toISOStringTZ(d));
     $('#date-user').text(user_name);
     $('#date-host').text(host_name);
+
     //// Прочесть открытые выдачи
     //openFuelSale.init(
     //    function (result_init) {
 
     //    });
+
+    getAsyncClient(function (result_client) {
+        $('#date-client').text(result_client);
+    });
     // Прочесть открытые выдачи
     getAsyncOFS(
         function (result_ofs) {
@@ -1064,7 +1069,8 @@ var confirm_df = {
     // старт выдачи
     issuance_start: function (id) {
         //if (log) { log.info('Начинаем выдачу на колонку. id открытой выдачи = ' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-        logInfo(user_name, 'Начинаем выдачу на колонку. id открытой выдачи = ' + id);
+        //logInfo(user_name, 'Начинаем выдачу на колонку. id открытой выдачи = ' + id);
+        logInfo(user_name, 'Начинаем выдачу на колонку [FuelSale].[id] = ' + id + ' (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
         if (bcontrolTRK_ban === false) {
             // Выдать ГСМ через ТРК по пистолету
             if (confirm_df.type === 0) {
@@ -1087,6 +1093,7 @@ var confirm_df = {
                     gun_start,
                     function (status) {
                         updateMessageTips("Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =" + status + ".");
+                        logInfo(user_name, 'Команда на отпуск ГСМ отправлена на колонку ([FuelSale].[id] - ' + gun_start.id + ', num - ' + gun_start.num + ', volume - ' + gun_start.volume + '). Код состояния колонки = ' + status);
                         //if (log) { log.info('Команда на отпуск ГСМ отправлена на колонку. Код состояния колонки =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
                     });
             }
@@ -1110,6 +1117,7 @@ var confirm_df = {
                     ns_start,
                     function (status) {
                         updateMessageTips("Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =" + status + ".");
+                        logInfo(user_name, 'Команда на отпуск ГСМ отправлена на НС ([FuelSale].[id] - ' + ns_start.id + ', num - ' + ns_start.num + ', volume - ' + ns_start.volume + ', advance - ' + ns_start.advance + '). Код состояния НС = ' + status);
                         //if (log) { log.info('Команда на отпуск ГСМ отправлена на наливной стояк. Код состояния наливного стояка =' + status); } // TODO:!!!ТЕСТ УБРАТЬ
                     });
             }
@@ -1124,16 +1132,17 @@ var confirm_df = {
     //сохраним данные в локальной базе fuelSale
     save_fuelSale: function (id) {
         var fuel_sale = confirm_df.getNewFuelSale(id);
-        // TODO:!!!ТЕСТ УБРАТЬ
-        if (log) {
-            log.info('Сформировали строку fuel_sale');
-            log.debug(fuel_sale);
-        }
+        //// TODO:!!!ТЕСТ УБРАТЬ
+        //if (log) {
+        //    log.info('Сформировали строку fuel_sale');
+        //    log.debug(fuel_sale);
+        //}
         LockScreen('Подождите, идет создание строки ведомости выдачи ГСМ в БД');
         postAsyncFuelSale(
             fuel_sale,
             function (id) {
-                if (log) { log.info('Запись строки fuel_sale, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                //if (log) { log.info('Запись строки fuel_sale, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                logInfo(user_name, 'Создать строку [FuelSale].[id] = ' + id + ' (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                 LockScreenOff();
                 // Данные в САП сохранились?
                 if (id > 0) {
@@ -1143,14 +1152,13 @@ var confirm_df = {
                     } else {
                         putAsyncOFS({ num: fuel_sale.num + 29, id: id, dose: Number(Number(fuel_sale.dose).toFixed(0)), counter: fuel_sale.start_counter }, null);
                     }
-
                     // Начнем выдавать
                     confirm_df.issuance_start(id);
 
                 } else {
                     // Ошибка, операция отменена (! нужно решить что делать далее).
                     confirm_df.updateTips("Ошибка создания строки FuelSale в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
-                    logError(user_name, "Ошибка создания строки FuelSale в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                    //logError(user_name, "Ошибка создания строки FuelSale в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
                 }
             }
         );
@@ -1166,13 +1174,19 @@ var confirm_df = {
                 autoOpen: false,
                 height: "auto",
                 width: 500,
+                close: function (event, ui) {
+                    // Удалим номер пистолета из списка по которым производятся настройки
+                    logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Закрыто окно «Проверьте данные отправляемые в САП после завершения выдачи ГСМ!». (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                },
                 buttons: {
                     'Начать выдачу': function () {
+                        logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Окно «Проверьте данные отправляемые в САП после завершения выдачи ГСМ!». -> Нажата кнопка «Начать выдачу, данные САП проверены» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                         LockScreen('Подождите, идет создание строки БД для САП');
                         postAsyncSAP_Buffer(
                             sap_buffer,
                             function (id) {
                                 if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                logInfo(user_name, 'Создать строку САП [SAP_BUFFER].[id] = ' + id + ' (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                                 LockScreenOff();
                                 // Данные в САП сохранились?
                                 if (id > 0) {
@@ -1181,13 +1195,14 @@ var confirm_df = {
                                 } else {
                                     // Ошибка, операция отменена (! нужно решить что делать далее).
                                     confirm_df.updateTips("Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
-                                    logError(user_name, "Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                                    //logError(user_name, "Ошибка создания строки для SAP в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
                                 }
                             }
                         );
                         $(this).dialog("close");
                     },
                     'Вернутся к выбору режимов': function () {
+                        logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Окно «Проверьте данные отправляемые в САП после завершения выдачи ГСМ!». -> Нажата кнопка «Вернутся к выбору режимов» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                         $(this).dialog("close");
                     }
                 }
@@ -1195,6 +1210,7 @@ var confirm_df = {
         },
         open: function (sap_buffer) {
             confirm_df.fsap.obj.dialog("open");
+            logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Открыто окно «Проверьте данные отправляемые в САП после завершения выдачи ГСМ!». (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
             if (sap_buffer) {
                 $('label#SAP-DATE').text(sap_buffer.DATE);
                 $('label#SAP-TIME').text(sap_buffer.TIME);
@@ -1352,7 +1368,7 @@ var confirm_df = {
             if (variant !== "4" && variant !== "3") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
             if (variant === "3") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
-            if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
+            //if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
             if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
             //Проверка возврата САП
             if (variant !== "4") valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
@@ -1416,27 +1432,30 @@ var confirm_df = {
             width: 900,
             close: function (event, ui) {
                 // Удалим номер пистолета из списка по которым производятся настройки
+                logInfo(user_name, 'Закрыто окно «Настроить выдачу ГСМ». № пистолета(НС) = ' + confirm_df.open_num);
                 deleteAsyncGuns(Number(confirm_df.open_num));
             },
             buttons: {
                 'Начать выдачу': function () {
                     var variant = confirm_df.select_variant.val();
+                    logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num+ ')');
                     if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
                         variant = 7;
                     }
                     // проверка правильности заполнения формы
                     var valid = confirm_df.validationConfirm(variant);
+                    logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = '+ valid + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                     // Все заполненно?
                     if (valid) {
                         // Да форма заполнена
                         if (variant >= 1 && variant <= 7) {
                             // получим данные для SAP
                             var sap_buffer = confirm_df.getNewSAP_Buffer();
-                            // TODO:!!!ТЕСТ УБРАТЬ
-                            if (log) {
-                                log.info('Сформировали строку для САП SAP_BUFFER');
-                                log.debug(sap_buffer);
-                            }
+                            //// TODO:!!!ТЕСТ УБРАТЬ
+                            //if (log) {
+                            //    log.info('Сформировали строку для САП SAP_BUFFER');
+                            //    log.debug(sap_buffer);
+                            //}
                             // Передадим управление форме подтверждения данных SAP
                             confirm_df.fsap.init();
                             confirm_df.fsap.open(sap_buffer);
@@ -1853,8 +1872,8 @@ var confirm_df = {
     },
     // Открыть панель "Задания выдачи и работе с SAP MII"
     Open: function (num, type) {
-
         confirm_df.open_num = type === 0 ? Number(num) : Number(num) + 29;
+        logInfo(user_name, 'Открыто окно «Настроить выдачу ГСМ». num = ' + num + ', type = ' + type + ', № пистолета(НС) = ' + confirm_df.open_num);
         // Добавить номер пистолета по которому будет производится настройка выдачи
         postAsyncGuns(confirm_df.open_num);
         // Определим пользователя и смену
@@ -2608,6 +2627,7 @@ var confirm_close_fuel = {
     fs: null,
     sap: null,
     card: null,
+    id_open: null,
     init: function () {
         confirm_close_fuel.obj = $("#dialog-close-fuel").dialog({
             modal: true,
@@ -2615,6 +2635,7 @@ var confirm_close_fuel = {
             height: "auto",
             width: 700,
             close: function (event, ui) {
+                logInfo(user_name, 'Закрыто окно «Закрыть выдачу ГСМ». [FuelSale].[id] = ' + confirm_close_fuel.id_open);
                 // Удалим номер пистолета из списка по которым производилось закрытие
                 deleteAsyncGuns(Number(confirm_close_fuel.open_num));
             },
@@ -2623,8 +2644,7 @@ var confirm_close_fuel = {
                     if (confirm_close_fuel.fs) {
                         LockScreen("Подождите, закрываю ведомость в БД");
                         if (confirm_close_fuel.fs.stop_datetime !== null) {
-                            logInfo(user_name, 'Закрыть выдачу. id = ' + confirm_close_fuel.fs.id);
-                            //var fs = confirm_close_fuel.fs;
+                            logInfo(user_name, 'Закрыть выдачу [FuelSale].[id] = ' + confirm_close_fuel.fs.id + ', [SAP_BUFFER].[id] = ' + confirm_close_fuel.fs.id_sap + ' (trk - ' + confirm_close_fuel.fs.trk_num + ', side - ' + confirm_close_fuel.fs.side + ', num - ' + confirm_close_fuel.fs.num + ')');
                             //--------------------------
                             // Сбросим RFID-карту
                             var rfid_clear = {
@@ -2666,7 +2686,7 @@ var confirm_close_fuel = {
                                         //if (log) { log.info('Запись САП обновлена результат = ' + result); } // TODO:!!!ТЕСТ УБРАТЬ
                                         LockScreenOff();
                                         updateMessageTips("Запись САП обновлена результат = " + result);
-                                        logInfo(user_name, "Запись САП обновлена результат = " + result);
+                                        logInfo(user_name, 'Запись строки САП [SAP_BUFFER].[id] = ' + confirm_close_fuel.sap.id + ') - обновлена. Код выполнения = ' + result + '. (PLOTNOST = ' + confirm_close_fuel.sap.PLOTNOST + ', VOLUME = ' + confirm_close_fuel.sap.VOLUME + ', MASS = ' + confirm_close_fuel.sap.MASS + ')');
                                     });
                             }
                             // строка FuelSales есть обновить выдачу
@@ -2709,7 +2729,7 @@ var confirm_close_fuel = {
                                                     function (reset_status) {
                                                         //if (log) { log.info('Сброс настроек на колонке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
                                                         updateMessageTips("Сброс настроек на колонке, статус =" + reset_status + ".");
-                                                        logInfo(user_name, "Сброс настроек на колонке, статус =" + reset_status + ".");
+                                                        logInfo(user_name, 'Сброс настроек на колонке (trk - ' + confirm_close_fuel.fs.trk_num + ', side - ' + confirm_close_fuel.fs.side + ', num - ' + confirm_close_fuel.fs.num + '). Код выполнения = ' + reset_status + '. [FuelSale].[id] = ' + confirm_close_fuel.fs.id);
                                                     });
                                             }
                                             // Проверим н-стояк
@@ -2728,14 +2748,16 @@ var confirm_close_fuel = {
                                                     function (reset_status) {
                                                         //if (log) { log.info('Сброс настроек на наливном стояке, статус =' + reset_status); } // TODO:!!!ТЕСТ УБРАТЬ
                                                         updateMessageTips("Сброс настроек на наливном стояке, статус =" + reset_status + ".");
-                                                        logInfo(user_name, "Сброс настроек на наливном стояке, статус =" + reset_status + ".");
+                                                        logInfo(user_name, 'Сброс настроек на НС (trk - ' + confirm_close_fuel.fs.trk_num + ', side - ' + confirm_close_fuel.fs.side + ', num - ' + confirm_close_fuel.fs.num + '). Код выполнения = ' + reset_status + '. [FuelSale].[id] = ' + confirm_close_fuel.fs.id);
+
                                                     });
                                             }
                                         }
                                         confirm_close_fuel.obj.dialog("close");
                                     }
                                     updateMessageTips("Запись FuelSales обновлена результат = " + id);
-                                    logInfo(user_name, "Запись FuelSales обновлена результат = " + id);
+                                    logInfo(user_name, 'Запись строки FuelSales [FuelSales].[id] = ' + confirm_close_fuel.fs.id + ') - обновлена. Код выполнения = ' + id + '.');
+
                                 }
                             );
                             //--------------------------
@@ -2754,8 +2776,10 @@ var confirm_close_fuel = {
     },
     open: function (id) {
         if (id) {
-            if (log) { log.info('Производим закрытие открытой выдачи, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+            //if (log) { log.info('Производим закрытие открытой выдачи, id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+            logInfo(user_name, 'Открыто окно «Закрыть выдачу ГСМ». [FuelSale].[id] = ' + id);
             confirm_close_fuel.obj.dialog("open");
+            confirm_close_fuel.id_open = id;
             confirm_close_fuel.fs = null;
             confirm_close_fuel.sap = null;
             confirm_close_fuel.card = null;

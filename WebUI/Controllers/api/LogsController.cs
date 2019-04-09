@@ -26,6 +26,15 @@ namespace WebUI.Controllers.api
         {
             try
             {
+                String mess = String.Format("[ CLIENT datetime: {0}, user : {1} ] Message - ({2})", value.DateTime, value.UserName, value.Log);
+                switch (value.Level)
+                {
+                    case 0: mess.SaveInformation(); break;
+                    case 1: mess.SaveWarning(); break;
+                    case 2: mess.SaveError(); break;
+                    case 3: mess.SaveDebug(); break;
+                    case 4: mess.SaveInformation(); break;
+                }
                 return this.ef_logs.AddTRKLogs(value);
             }
             catch (Exception e)

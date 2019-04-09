@@ -275,5 +275,27 @@ namespace WebUI.Controllers.api
             }
         }
         #endregion
+
+        // GET: api/global/client
+        [Route("client")]
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GetClient()
+        {
+            try
+            {
+
+                if (HttpContext.Current.Application["UsersCount"] != null)
+                {
+                    int client = (int)(object)HttpContext.Current.Application["UsersCount"];
+                    return Ok(client.ToString());
+                }
+                return Ok("");
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetClient()").SaveError(e);
+                return NotFound();
+            }
+        }
     }
 }

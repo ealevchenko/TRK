@@ -2209,4 +2209,27 @@ var deleteAsyncOFS = function (callback) {
             AJAXComplete();
         },
     });
-}
+};
+// Прочесть количество клиентов
+var getAsyncClient = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/global/client',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
