@@ -343,7 +343,7 @@ namespace ClientSAPTRK
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public Reservation GetReservationOfNDopusk(string num)
+        public Reservation GetReservationOfNDopusk(string num, string mode)
         {
             try
             {
@@ -353,7 +353,7 @@ namespace ClientSAPTRK
                     "&KUNNR=" +
                     "&MATNR=" +
                     "&OTFT=" + num +
-                    "&FLAG_R=" + 
+                    "&FLAG_R=" + mode +
                     "&MENGE=" + 
                     "&MENGE_L=" + 
                     "&OutputParameter=RSLT" +
@@ -362,7 +362,7 @@ namespace ClientSAPTRK
 
                 string response = Select(message, "GET", "text/xml");
 
-                String.Format("\r\n Выполнение метода GetReservationOfNDopusk(num={0}) \r\nurl={1} \r\nxml={2}", num, message, response).SaveDebug();
+                String.Format("\r\n Выполнение метода GetReservationOfNDopusk(num={0}, mode={1}) \r\nurl={2} \r\nxml={3}", num, mode, message, response).SaveDebug();
 
                 if (String.IsNullOrWhiteSpace(response)) return null;
                 //Console.WriteLine("Result text/xml = {0}", response);

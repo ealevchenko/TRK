@@ -1185,7 +1185,7 @@ var confirm_df = {
                         postAsyncSAP_Buffer(
                             sap_buffer,
                             function (id) {
-                                if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                //if (log) { log.info('Запись строки sap_buffer, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
                                 logInfo(user_name, 'Создать строку САП [SAP_BUFFER].[id] = ' + id + ' (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                                 LockScreenOff();
                                 // Данные в САП сохранились?
@@ -1437,36 +1437,45 @@ var confirm_df = {
             },
             buttons: {
                 'Начать выдачу': function () {
-                    var variant = confirm_df.select_variant.val();
-                    logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num+ ')');
-                    if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
-                        variant = 7;
-                    }
-                    // проверка правильности заполнения формы
-                    var valid = confirm_df.validationConfirm(variant);
-                    logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = '+ valid + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                    // Все заполненно?
-                    if (valid) {
-                        // Да форма заполнена
-                        if (variant >= 1 && variant <= 7) {
-                            // получим данные для SAP
-                            var sap_buffer = confirm_df.getNewSAP_Buffer();
-                            //// TODO:!!!ТЕСТ УБРАТЬ
-                            //if (log) {
-                            //    log.info('Сформировали строку для САП SAP_BUFFER');
-                            //    log.debug(sap_buffer);
-                            //}
-                            // Передадим управление форме подтверждения данных SAP
-                            confirm_df.fsap.init();
-                            confirm_df.fsap.open(sap_buffer);
+                    LockScreen('Подождите... идет проверка введенных данных');
+                    getAsyncOpenFuelSaleOfNum(confirm_df.open_num, function (id_open_num) {
+                        LockScreenOff();
+                        if (id_open_num === null || id_open_num === 0) {
+                            // Продолжим выполнение
+                            var variant = confirm_df.select_variant.val();
+                            logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                            if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                                variant = 7;
+                            }
+                            // проверка правильности заполнения формы
+                            var valid = confirm_df.validationConfirm(variant);
+                            logInfo(user_name, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = ' + valid + ', режим = ' + variant + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                            // Все заполненно?
+                            if (valid) {
+                                // Да форма заполнена
+                                if (variant >= 1 && variant <= 7) {
+                                    // получим данные для SAP
+                                    var sap_buffer = confirm_df.getNewSAP_Buffer();
+                                    //// TODO:!!!ТЕСТ УБРАТЬ
+                                    //if (log) {
+                                    //    log.info('Сформировали строку для САП SAP_BUFFER');
+                                    //    log.debug(sap_buffer);
+                                    //}
+                                    // Передадим управление форме подтверждения данных SAP
+                                    confirm_df.fsap.init();
+                                    confirm_df.fsap.open(sap_buffer);
+                                } else {
+                                    // Запись в базу локальную
+                                    confirm_df.save_fuelSale(null);
+                                }
+                            } else {
+                                // Нет форма не заполнена
+                                // .....
+                            }
                         } else {
-                            // Запись в базу локальную
-                            confirm_df.save_fuelSale(null);
+                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу=" + id_open_num + ". Проверьте в окне другого оператора");
                         }
-                    } else {
-                        // Нет форма не заполнена
-                        // .....
-                    }
+                    });
                 },
                 'Отмена': function () {
                     $(this).dialog("close");
@@ -1559,13 +1568,13 @@ var confirm_df = {
                 confirm_df.input_sap_num.val($.trim(confirm_df.input_sap_num.val())); // Уберем пробелы
                 var num = confirm_df.input_sap_num.val();
                 getReservationOfNDopusk(
-                    num,
+                    num, i,
                     function (result) {
-                        // TODO:!!!ТЕСТ УБРАТЬ
-                        if (log) {
-                            log.info('Сформировали строку getReservationOfNDopusk - > result');
-                            log.debug(result);
-                        }
+                        //// TODO:!!!ТЕСТ УБРАТЬ
+                        //if (log) {
+                        //    log.info('Сформировали строку getReservationOfNDopusk - > result');
+                        //    log.debug(result);
+                        //}
                         if (result.RSNUM === "") {
                             OnAJAXErrorOfMessage("Резервирование по наряд-допуску:" + num + " не найдено");
                         } else {
@@ -3332,7 +3341,7 @@ $(function () {
             showCardView();
             //setInterval('show()', 1500);
             setInterval('showView()', 1000);
-            setInterval('showDIOView()', 2500);
+            setInterval('showDIOView()', 1500);
             setInterval('showCardView()', 5000);
         });
     });

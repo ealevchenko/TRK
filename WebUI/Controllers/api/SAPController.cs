@@ -79,14 +79,14 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // GET: api/sap/reservation/num_dopusk/435
-        [Route("reservation/num_dopusk/{num}")]
+        // GET: api/sap/reservation/num_dopusk/435/mode/5
+        [Route("reservation/num_dopusk/{num}/mode/{mode}")]
         [ResponseType(typeof(Reservation))]
-        public IHttpActionResult GetReservationOfNDopusk(string num)
+        public IHttpActionResult GetReservationOfNDopusk(string num, string mode)
         {
             try
             {
-                Reservation reservation = sap.GetReservationOfNDopusk(num);
+                Reservation reservation = sap.GetReservationOfNDopusk(num, mode);
                 if (reservation == null)
                 {
                     return NotFound();

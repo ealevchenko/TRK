@@ -937,10 +937,10 @@ var getReservationOfVolumeMassDebitor = function (valume, mass, debitor, ozm, mo
     });
 };
 // Резервирование по наряд-допуску
-var getReservationOfNDopusk = function (num, callback) {
+var getReservationOfNDopusk = function (num, mode, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/sap/reservation/num_dopusk/' + num,
+        url: '/api/sap/reservation/num_dopusk/' + num + '/mode/' + mode,
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1261,6 +1261,30 @@ var getAsyncOpenFuelSale = function (callback) {
         },
     });
 };
+// Веруть id если по указаному номеру пистолета\НС есть открытая выдача
+var getAsyncOpenFuelSaleOfNum = function (num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/fuel_sale/num/'+num+'/open',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
 // Получить строку из базы данных
 var getAsyncFuelSale = function (id, callback) {
     $.ajax({

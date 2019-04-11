@@ -22,7 +22,7 @@ namespace WebUI.Controllers.api
         {
             this.ef_fs = fs;
         }
-        
+
         #region fuel_sale
         // GET: api/azs/fuel_sale/open
         [Route("fuel_sale/open")]
@@ -135,7 +135,7 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода API:GetFuelSale(id={0})",id).SaveError(e);
+                String.Format("Ошибка выполнения метода API:GetFuelSale(id={0})", id).SaveError(e);
                 return NotFound();
             }
         }
@@ -175,6 +175,109 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
+
+        // GET: api/azs/fuel_sale/num/1/open
+        [Route("fuel_sale/num/{num:int}/open")]
+        public int GetOpenFuelSaleOfNum(int num)
+        {
+            try
+            {
+                FuelSale fs_open = null;
+                if (num <= 29)
+                {
+                    // пистолет
+                    fs_open = this.ef_fs.Get().Where(c => c.close == null &&  c.num == num && c.trk_num <= 9)
+                    .ToList()
+                    .Select(s => new FuelSale
+                    {
+                        id = s.id,
+                        operator_name = s.operator_name,
+                        smena_num = s.smena_num,
+                        smena_datetime = s.smena_datetime,
+                        trk_num = s.trk_num,
+                        side = s.side,
+                        num = s.num,
+                        fuel_type = s.fuel_type,
+                        tank_num = s.tank_num,
+                        id_card = s.id_card,
+                        dose = s.dose,
+                        passage = s.passage,
+                        volume = s.volume,
+                        mass = s.mass,
+                        start_datetime = s.start_datetime,
+                        start_level = s.start_level,
+                        start_volume = s.start_volume,
+                        start_density = s.start_density,
+                        start_mass = s.start_mass,
+                        start_temp = s.start_temp,
+                        start_water_level = s.start_water_level,
+                        start_counter = s.start_counter,
+                        stop_datetime = s.stop_datetime,
+                        stop_level = s.stop_level,
+                        stop_volume = s.stop_volume,
+                        stop_density = s.stop_density,
+                        stop_mass = s.stop_mass,
+                        stop_temp = s.stop_temp,
+                        stop_water_level = s.stop_water_level,
+                        stop_counter = s.stop_counter,
+                        close = s.close,
+                        id_sap = s.id_sap,
+                    }).FirstOrDefault();
+                }
+                if (num > 29)
+                {
+                    // НС
+                    fs_open = this.ef_fs.Get().Where(c => c.close == null && c.num == (num - 29) && c.trk_num > 9)
+                        .ToList()
+                        .Select(s => new FuelSale
+                        {
+                            id = s.id,
+                            operator_name = s.operator_name,
+                            smena_num = s.smena_num,
+                            smena_datetime = s.smena_datetime,
+                            trk_num = s.trk_num,
+                            side = s.side,
+                            num = s.num,
+                            fuel_type = s.fuel_type,
+                            tank_num = s.tank_num,
+                            id_card = s.id_card,
+                            dose = s.dose,
+                            passage = s.passage,
+                            volume = s.volume,
+                            mass = s.mass,
+                            start_datetime = s.start_datetime,
+                            start_level = s.start_level,
+                            start_volume = s.start_volume,
+                            start_density = s.start_density,
+                            start_mass = s.start_mass,
+                            start_temp = s.start_temp,
+                            start_water_level = s.start_water_level,
+                            start_counter = s.start_counter,
+                            stop_datetime = s.stop_datetime,
+                            stop_level = s.stop_level,
+                            stop_volume = s.stop_volume,
+                            stop_density = s.stop_density,
+                            stop_mass = s.stop_mass,
+                            stop_temp = s.stop_temp,
+                            stop_water_level = s.stop_water_level,
+                            stop_counter = s.stop_counter,
+                            close = s.close,
+                            id_sap = s.id_sap,
+                        }).FirstOrDefault();
+                }
+                if (fs_open == null)
+                {
+                    return 0;
+                }
+                return fs_open.id;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetOpenFuelSaleOfNum()").SaveError(e);
+                return -1;
+            }
+        }
+
         #endregion
     }
 }

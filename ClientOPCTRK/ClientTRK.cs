@@ -339,33 +339,33 @@ namespace ClientOPCTRK
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "TS.C" + num + ".Counter"; //UInt16[4]
                 i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".CounterResetable"; //UInt16[4]
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".CountOn"; //UInt16[2]
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".Error"; //UInt16
-                i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".CounterResetable"; //UInt16[4]
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".CountOn"; //UInt16[2]
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".Error"; //UInt16
+                //i++;
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "TS.C" + num + ".Flow"; //UInt16[2]
                 i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".Flow2"; //float
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".Freq"; //UInt16
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".PiontsCount"; //UInt16
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".Status"; //UInt16
-                i++;
-                items[i] = new Opc.Da.Item();
-                items[i].ItemName = "TS.C" + num + ".Temp"; //float
-                i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".Flow2"; //float
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".Freq"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".PiontsCount"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".Status"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "TS.C" + num + ".Temp"; //float
+                //i++;
                 items[i] = new Opc.Da.Item();
                 items[i].ItemName = "TS.C" + num + ".TimerLiveOn"; //UInt16[4]
                 i++;
@@ -1148,7 +1148,7 @@ namespace ClientOPCTRK
                 group = (Opc.Da.Subscription)server.CreateSubscription(groupState);
 
                 //добавление айтемов в группу
-                Opc.Da.Item[] items = new Opc.Da.Item[3 * 12];
+                Opc.Da.Item[] items = new Opc.Da.Item[3 * 4]; // 3*12
                 int i = 0;
                 AddDIORisers(ref items, ref i, 1);
                 AddDIORisers(ref items, ref i, 2);
