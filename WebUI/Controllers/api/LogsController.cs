@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace WebUI.Controllers.api
 {
@@ -17,6 +18,27 @@ namespace WebUI.Controllers.api
 
         public LogsController(ITRKLogs logs) {
             this.ef_logs = logs;
+        }
+
+        // GET: api/logs/last/lines/100
+        [Route("last/lines/{count:int}")]
+        [ResponseType(typeof(TRKLogs))]
+        public IHttpActionResult GetLastLines(int count)
+        {
+            try
+            {
+                List<TRKLogs> list = this.ef_logs.GetTRKLogsLastLines(count).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetLastLines(count={0})", count).SaveError(e);
+                return NotFound();
+            }
         }
 
         // POST api/logs/ins

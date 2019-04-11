@@ -61,6 +61,19 @@ namespace EFAZS.Concrete
             }
         }
 
+        public IQueryable<TRKLogs> GetTRKLogsLastLines(int lines)
+        {
+            try
+            {
+                return TRKLogs.OrderByDescending(l=>l.ID).Take(lines);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода GetTRKLogs(lines={0})", lines).SaveError(e);
+                return null;
+            }
+        }
+
         public TRKLogs GetTRKLogs(long ID)
         {
             try

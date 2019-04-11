@@ -14,6 +14,7 @@ namespace EFAZS.Abstract
         IQueryable<TRKLogs> TRKLogs { get; }
         IQueryable<TRKLogs> GetTRKLogs();
         TRKLogs GetTRKLogs(long ID);
+        IQueryable<TRKLogs> GetTRKLogsLastLines(int lines);
         long AddTRKLogs(TRKLogs TRKLogs);
     }
 }

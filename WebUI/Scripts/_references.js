@@ -12,4 +12,8 @@
 /// <reference path="log4javascript_uncompressed.js" />
 /// <reference path="log4javascript.js" />
 /// <reference path="view/rf.js" />
+/// <reference path="view/log.js" />
+/// <reference path="jquery.datatables.min.js" />
+/// <reference path="jquery-ui-1.11.4.min.js" />
+/// <reference path="datatables.jqueryui.min.js" />
 

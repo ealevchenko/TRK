@@ -1954,6 +1954,30 @@ var getReference_azsCards = function (callback) {
     ref.initObject();
 };
 //----ЛОГИРОВАНИЕ-----------------------------------------------
+// Вывести последние lines записи
+var getAsyncTRKLogsLastLines= function (lines, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/logs/last/lines/' + lines,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+//
 var postAsyncTRKLogs = function (trk_logs, callback) {
     $.ajax({
         url: '/api/logs/ins/',

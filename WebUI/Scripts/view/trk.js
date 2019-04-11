@@ -2133,6 +2133,7 @@ var confirm_df = {
             case '1':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap').show();
                 $('button#button-sap-debitor').show();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
@@ -2152,7 +2153,8 @@ var confirm_df = {
             case '2':
                 confirm_df.clear();
                 $('tr#button-sap').show();
-                $('button#button-sap-debitor').show();
+                $('button#button-sap').show();
+                $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
                 $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
@@ -2173,6 +2175,7 @@ var confirm_df = {
             case '3':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap').show();
                 $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер исх.поставки :');
@@ -2215,6 +2218,7 @@ var confirm_df = {
             case '5':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap').hide();
                 $('button#button-sap-debitor').show();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
@@ -2237,6 +2241,7 @@ var confirm_df = {
             case '6':
                 confirm_df.clear();
                 $('tr#button-sap').show();
+                $('button#button-sap').hide();
                 $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').show();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд-допуска(резервирования):');

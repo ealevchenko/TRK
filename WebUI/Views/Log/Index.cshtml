@@ -1,0 +1,49 @@
+﻿<html>
+
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; Charset=UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery-ui.structure.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery-ui.theme.css">
+
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/view/log.css">
+
+    <link rel="stylesheet" type="text/css" href="~/Content/Datatables/dataTables.jqueryui.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/Datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/Datatables/jquery.dataTables_themeroller.css">
+
+    <script type="text/javascript" src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/jquery.dataTables.min.js"></script>  
+    <script type="text/javascript" src="~/Scripts/dataTables.jqueryui.min.js"></script>
+
+    <script src="~/Scripts/log4javascript.js" type="text/javascript"></script>
+
+    <script>
+        var log_view = '@System.Configuration.ConfigurationManager.AppSettings["Log_view"]';
+        var type_test = '@System.Configuration.ConfigurationManager.AppSettings["Type_test"]';
+        var controlTRK_ban = '@System.Configuration.ConfigurationManager.AppSettings["ControlTRK_ban"]';
+        var pollDIO = '@System.Configuration.ConfigurationManager.AppSettings["PollDIO"]';
+        var tanks_one = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_one"]';
+        var ns_advance = '@System.Configuration.ConfigurationManager.AppSettings["NS_advance"]';
+    </script>
+
+    <script src="~/Scripts/view/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/view/log.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div id="content">
+        <table class='display compact' id="table-trk-logs" style="width:100%" cellpadding="0">
+        </table>
+</div>
+</body>
+
+</html>

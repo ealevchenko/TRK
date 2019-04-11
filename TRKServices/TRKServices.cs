@@ -31,6 +31,8 @@ namespace TRKServices
             SERVICE_PAUSED = 0x00000007,
         }
 
+        private bool[] guns_taken = new bool[32] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+
         [StructLayout(LayoutKind.Sequential)]
         public struct ServiceStatus
         {
@@ -84,17 +86,65 @@ namespace TRKServices
             }
             return false;
         }
+
         public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
         {
             try
             {
                 //String.Format("Сервис TRKServices - чтение RFID").SaveInformation();
                 ClientTRK client = new ClientTRK();
+                EFTRKLogs trk_log = new EFTRKLogs();
+
+
                 EFOPC_RFID ef_opc_rfid = new EFOPC_RFID();
 
 
                 List<RFID> list = client.ReadTagsOPSOfRFID(true);
                 List<Gun> guns = client.ReadTagOPCOfGun();
+
+                string log_mes;
+
+                // Сравним масив с памятью (выставим сообщения
+                foreach (Gun gn in guns) { 
+
+                    int num = gn.num_trk>9 ? gn.num_gun+29 : gn.num_gun;
+                    if (gn.taken != guns_taken[num])
+                    {
+                        if (gn.num_trk > 9)
+                        {
+                            log_mes = String.Format("Наливной стояк № {0} заземлен : {1}", gn.num_gun, gn.taken);
+                        }
+                        else
+                        {
+                            log_mes = String.Format("Пистолет № {0} снят : {1}", gn.num_gun, gn.taken);
+                        }
+                        log_mes.SaveWarning(); // Запишим в лог
+                        // Пистолет подняли
+                        trk_log.AddTRKLogs(new TRKLogs()
+                        {
+                            ID = 0,
+                            DateTime = DateTime.Now,
+                            Level = 4,
+                            UserName = "TRKServeces",
+                            Log = log_mes
+                        });
+                        // Отобразим световую индикацию
+                        if (gn.num_trk <= 9)
+                        {
+                            if (gn.taken == true)
+                            {
+                                // Блымкнем
+                                client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 99, 1);
+                            }
+                            else
+                            {
+                                // Перестаним блымкать
+                                client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 0, 1);
+                            }
+                        }
+                        guns_taken[num] = (bool)gn.taken;
+                    }
+                }
 
                 if (list != null && guns != null)
                 {
@@ -106,23 +156,30 @@ namespace TRKServices
                         bool side = rfid.side == 0 ? false : true;
                         // Получим список пистолетов относящихся к RFID
                         List<Gun> guns_trk = guns.Where(g => g.num_trk == rfid.num_trk && g.side == rfid.side).ToList();
-                        // Пистолет поднят
-                        if (guns_trk != null && IsTaken(guns_trk))
+                        // Если все пистолеты опущены и это колонка - тогда удалим карточку
+                        if ((guns_trk == null || !IsTaken(guns_trk)) && rfid.num_trk < 10)
                         {
-                            // Блымкнем
-                            client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 99, 1);
-                            //String.Format("Пистолет поднят RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
+                            SqlParameter trk = new SqlParameter("@trk", rfid.num_trk);
+                            SqlParameter bside = new SqlParameter("@side", side);
+                            int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, bside);
                         }
-                        else {
-                            if (rfid.num_trk < 10)
-                            {
-                                SqlParameter trk = new SqlParameter("@trk", rfid.num_trk);
-                                SqlParameter bside = new SqlParameter("@side", side);
-                                int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, bside);
-                                client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 0, 1);
-                                //String.Format("Сбросим RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
-                            }
-                        }
+                        //// Пистолет поднят
+                        //if (guns_trk != null && IsTaken(guns_trk))
+                        //{
+                        //    // Блымкнем
+                        //    client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 99, 1);
+                        //    //String.Format("Пистолет поднят RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
+                        //}
+                        //else {
+                        //    if (rfid.num_trk < 10)
+                        //    {
+                        //        SqlParameter trk = new SqlParameter("@trk", rfid.num_trk);
+                        //        SqlParameter bside = new SqlParameter("@side", side);
+                        //        int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, bside);
+                        //        client.WritePulseTagsRFID(rfid.num_trk, side == false ? 1 : 2, 0, 1);
+                        //        //String.Format("Сбросим RFID-карту TRK={0}, сторона {1}, результат={2}", rfid.num_trk, side == false ? 1 : 2, res).SaveWarning();
+                        //    }
+                        //}
                         // Проверим RFID поднесена
                         if (rfid.hi != null && rfid.lo != null && rfid.hi >= 0 && rfid.lo > 0)
                         {
@@ -137,36 +194,28 @@ namespace TRKServices
                                 if (guns_trk != null && ((rfid.num_trk < 10 && IsTaken(guns_trk)) || (rfid.num_trk >= 10 && rfid.num_trk <= 12)))
                                 {
                                     int res = ef_opc_rfid.AddOPC_RFID(rfid.num_trk, rfid.side == 0 ? false : true, rfid.card != null ? (int?)rfid.card.Id : null, (int)rfid.hi, (int)rfid.lo);
+
+                                    if (rfid.num_trk > 9)
+                                    {
+                                        log_mes = String.Format("Наливной стояк № {0} считана RFID-карта : {1} Код записи в БД - {2}", rfid.num_trk - 10, rfid.card != null ? (int?)rfid.card.Id : null, res);
+                                    }
+                                    else
+                                    {
+                                        log_mes = String.Format("ТРК № {0}, сторона {1}, считана RFID-карта : {2} Код записи в БД - {3}", rfid.num_trk, rfid.side, rfid.card != null ? (int?)rfid.card.Id : null, res);
+                                    }
+                                    log_mes.SaveWarning(); // Запишим в лог
+                                    trk_log.AddTRKLogs(new TRKLogs()
+                                    {
+                                        ID = 0,
+                                        DateTime = DateTime.Now,
+                                        Level = 4,
+                                        UserName = "TRKServeces",
+                                        Log = log_mes
+                                    });
                                 }
                             }
                         }
                     }
-                    //// сбросим RFID
-                    //for (int i = 1; i <= 9; i++)
-                    //{
-                    //    List<Gun> guns_trk_left = guns.Where(g => g.num_trk == i && g.side == 0).ToList();
-                    //    List<Gun> guns_trk_right = guns.Where(g => g.num_trk == i && g.side == 1).ToList();
-                    //    if (guns_trk_left != null && !IsTaken(guns_trk_left))
-                    //    {
-                    //        // Сбросим левую сторону
-                    //        {
-                    //            SqlParameter trk = new SqlParameter("@trk", i);
-                    //            SqlParameter side = new SqlParameter("@side", false);
-                    //            int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
-                    //            client.WritePulseTagsRFID(i, 1, 0, 1);
-                    //            //String.Format("Сбросим RFID-карту TRK={0}, сторона левая, результат={1}", i, res).SaveWarning();
-                    //        }
-                    //        if (i < 9 && guns_trk_right != null && !IsTaken(guns_trk_right))
-                    //        {
-                    //            // Сбросим правую сторону
-                    //            SqlParameter trk = new SqlParameter("@trk", i);
-                    //            SqlParameter side = new SqlParameter("@side", true);
-                    //            int res = ef_opc_rfid.Database.ExecuteSqlCommand("DELETE FROM [dbo].[OPC_RFID] where [num_trk]=@trk and [side]=@side", trk, side);
-                    //            client.WritePulseTagsRFID(i, 2, 0, 1);
-                    //            //String.Format("Сбросим RFID-карту TRK={0}, сторона правая, результат={1}", i, res).SaveWarning();
-                    //        }
-                    //    }
-                    //}
                 }
                 else
                 {
