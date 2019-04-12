@@ -32,6 +32,8 @@ namespace TRKServices
         }
 
         private bool[] guns_taken = new bool[32] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+        //private bool[,] trk_rfid = new bool[12, 2]; 
+
 
         [StructLayout(LayoutKind.Sequential)]
         public struct ServiceStatus
@@ -108,7 +110,7 @@ namespace TRKServices
                 foreach (Gun gn in guns) { 
 
                     int num = gn.num_trk>9 ? gn.num_gun+29 : gn.num_gun;
-                    if (gn.taken != guns_taken[num])
+                    if (gn.taken!=null && gn.taken != guns_taken[num])
                     {
                         if (gn.num_trk > 9)
                         {
@@ -134,16 +136,22 @@ namespace TRKServices
                             if (gn.taken == true)
                             {
                                 // Блымкнем
-                                client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 99, 1);
+                                    client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 99, 1);
                             }
-                            else
-                            {
-                                // Перестаним блымкать
-                                client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 0, 1);
-                            }
+                            //else
+                            //{
+                            //    // Перестаним блымкать
+                            //    client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 0, 1);
+                            //}
                         }
                         guns_taken[num] = (bool)gn.taken;
                     }
+                }
+                // Проверим на выключение
+                foreach (bool gt in guns_taken)
+                {
+                    //    // Перестаним блымкать
+                    //    client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 0, 1);
                 }
 
                 if (list != null && guns != null)
