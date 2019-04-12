@@ -74,12 +74,12 @@ namespace test
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFID();
                 //test_opc.Test_ClientTRK_ReadTagsOPSOfRFIDSaveDB();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfGun();
-                //test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
+                test_opc.Test_ClientTRK_ReadTagOPCOfDIORisers();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfRisers();
                 //test_opc.Test_ClientTRK_WriteTagsGun();
                 //test_opc.Test_ClientTRK_IssueFuelTRK();
                 //test_opc.Test_ClientTRK_ReadTagOPCOfRisersOfNum();
-                test_opc.Test_ClientTRK_ReadAllTagOPC();
+                //test_opc.Test_ClientTRK_ReadAllTagOPC();
 
                 #endregion
 

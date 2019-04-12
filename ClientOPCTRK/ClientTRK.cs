@@ -715,18 +715,23 @@ namespace ClientOPCTRK
                 {
                     num = num,
                     type_fuel = type_fuel,
+                    //Counter = ArrUInt16ToULong(list[start].Value),
+                    //CounterResetable = ArrUInt16ToULong(list[start + 1].Value),
+                    //CountOn = ArrUInt16ToULong(list[start + 2].Value),
+                    //Error = list[start + 3].Value != null ? list[start + 3].Value as UInt16? : null,
+                    //Flow = ArrUInt16ToULong(list[start + 4].Value),
+                    //Flow2 = list[start + 5].Value != null ? list[start + 5].Value as float? : null,
+                    //Freq = list[start + 6].Value != null ? list[start + 6].Value as UInt16? : null,
+                    //PiontsCount = list[start + 7].Value != null ? list[start + 7].Value as UInt16? : null,
+                    //Status = list[start + 8].Value != null ? list[start + 8].Value as UInt16? : null,
+                    //Temp = list[start + 9].Value != null ? list[start + 9].Value as float? : null,
+                    //TimerLiveOn = ArrUInt16ToULong(list[start + 10].Value),
+                    //TimerOn = ArrUInt16ToULong(list[start + 11].Value),
                     Counter = ArrUInt16ToULong(list[start].Value),
-                    CounterResetable = ArrUInt16ToULong(list[start + 1].Value),
-                    CountOn = ArrUInt16ToULong(list[start + 2].Value),
-                    Error = list[start + 3].Value != null ? list[start + 3].Value as UInt16? : null,
-                    Flow = ArrUInt16ToULong(list[start + 4].Value),
-                    Flow2 = list[start + 5].Value != null ? list[start + 5].Value as float? : null,
-                    Freq = list[start + 6].Value != null ? list[start + 6].Value as UInt16? : null,
-                    PiontsCount = list[start + 7].Value != null ? list[start + 7].Value as UInt16? : null,
-                    Status = list[start + 8].Value != null ? list[start + 8].Value as UInt16? : null,
-                    Temp = list[start + 9].Value != null ? list[start + 9].Value as float? : null,
-                    TimerLiveOn = ArrUInt16ToULong(list[start + 10].Value),
-                    TimerOn = ArrUInt16ToULong(list[start + 11].Value),
+                    Flow = ArrUInt16ToULong(list[start + 1].Value),
+                    TimerLiveOn = ArrUInt16ToULong(list[start + 2].Value),
+                    TimerOn = ArrUInt16ToULong(list[start + 3].Value),
+
                 };
                 //String.Format("Чтение счетчиков DIO НС={0}, counter={1})", num, risers!=null ? risers.Counter : 0).SaveInformation();
                 return risers;
@@ -1161,9 +1166,9 @@ namespace ClientOPCTRK
                 List<DIORisers> list_result = new List<DIORisers>();
                 i = 0;
                 list_result.Add(GetDIORisers(1, res, i));
-                i += 12;
+                i += 4;
                 list_result.Add(GetDIORisers(2, res, i));
-                i += 12;
+                i += 4;
                 list_result.Add(GetDIORisers(3, res, i));
                 return list_result;
             }
