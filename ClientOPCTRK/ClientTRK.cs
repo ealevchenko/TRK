@@ -2139,7 +2139,7 @@ namespace ClientOPCTRK
                             if (riesers_stop != null)
                             {
                                 // вернем если запущен номер стояка, если нет код ошибки -7
-                                return riesers_stop.inp_km == false ? num_ns : -7;
+                                return riesers_stop.inp_km == true ? num_ns : -7;
                             }
                             else
                             {
