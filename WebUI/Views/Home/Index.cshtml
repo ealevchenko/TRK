@@ -37,6 +37,7 @@
     <div id="lockPanel" class="LockOff"></div>
     <input id="username" type="hidden" value="@System.Environment.UserName" />
     <input id="hostname" type="hidden" value="@System.Environment.MachineName" />
+    <input id="clientnumber" type="hidden" value='@Request.RequestContext.HttpContext.Session["session_id"]' />
     <div id="content">
         <div>
             <button id="button-rfid-all" class="ui-button ui-widget ui-corner-all button-rfid-all">RFID-считыватели</button>
@@ -2528,4 +2529,6 @@
 <script>
     var user_name = $('input#username').val();
     var host_name = $('input#hostname').val();
+    var client_number = $('input#clientnumber').val();
+    user_name = user_name + '-' + client_number;
 </script>

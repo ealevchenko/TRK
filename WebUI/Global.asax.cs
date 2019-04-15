@@ -33,12 +33,15 @@ namespace WebUI
 
         }
 
-        void Session_Start(object sender, EventArgs e)
+
+        protected void Session_Start(object sender, EventArgs e)
         {
             // More secure than storing it application variables(does not rest on application start
 
             try
             {
+                
+                
                 Application.Lock();
                 int count = 0;
 
@@ -47,6 +50,7 @@ namespace WebUI
 
                 count++;
                 Application["UsersCount"] = count;
+                Session["session_id"] = count;
 
                 // Снять закрытый доступ        
                 Application.UnLock();  
@@ -61,7 +65,7 @@ namespace WebUI
             }
         }
 
-        void Session_End(Object sender, EventArgs e) {
+        protected void Session_End(Object sender, EventArgs e) {
 
             try
             {

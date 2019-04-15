@@ -1,5 +1,6 @@
 ﻿
 $(window).on("beforeunload", function () {
+    logInfo(user_name, 'Панель оператора "Выдача по ТРК" - ЗАКРЫТА. (Окно настройки выдачи - ' + (confirm_df.open_num !== null ? confirm_df.open_num : ' закрыто') + ', Окно закрытия выдачи - ' + (confirm_close_fuel.open_num !== null ? confirm_close_fuel.open_num : ' закрыто') + ')');
     if (confirm_df.obj !== null) confirm_df.obj.dialog("close");
     if (confirm_close_fuel.obj !== null) confirm_close_fuel.obj.dialog("close");
 })
@@ -37,40 +38,6 @@ var catalog_depots = {
 var catalog_werks = {
     list: null
 };
-//// Список открытых выдач
-//var openFuelSale = {
-//    list: null,
-//    init: function (callback) {
-//        //openFuelSale.list = null;
-//        // Загрузка (common.js)
-//        getAsyncOpenFuelSale(function (result) {
-//            openFuelSale.list = result;
-//            if (typeof callback === 'function') {
-//                callback(result);
-//            }
-//        });
-//    },
-//    getFuelSaleID: function (trk_num, side, num) {
-//        // Считаем карту
-//        var fs_trk = getObjects(openFuelSale.list, 'trk_num', trk_num);
-//        if (fs_trk && fs_trk.length > 0) {
-//            var fs_num = getObjects(openFuelSale.list, 'num', num);
-//            if (fs_num && fs_num.length > 0) {
-//                return fs_num[0].id;
-//            }
-//        }
-//        return null;
-//    },
-//    getFuelSale: function (id) {
-//        // Считаем карту
-//        var fs = getObjects(openFuelSale.list, 'id', id);
-//        if (fs && fs.length > 0) {
-//            return fs[0];
-//        }
-//        return null;
-//    }
-//};
-
 var ofs = {
     list: null,
     init: function () {
@@ -756,72 +723,6 @@ var viewRisers = function () {
         }
     }
 };
-//// Вывод информации на экран (основная функция запускаемая переодически)
-//var show = function () {
-//    // Время
-//    var d = new Date();
-//    $('#date-value').text(toISOStringTZ(d));
-//    $('#date-user').text(user_name);
-//    $('#date-host').text(host_name);
-
-//    // Оприсим номера пистолетов по которым идет настройка выдачи или закрытие
-//    getAsyncGuns(
-//        function (result_guns) {
-//            select_guns.set(result_guns);
-//            $('#date-guns').text(result_guns);
-//        }
-//    );
-//    // Считаем RFID из буфера локальной базы (карточки)
-//    getRFIDDB(
-//        function (result_cards) {
-//            if (result_cards) {
-//                cards.setCards(result_cards);
-//            }
-//        }
-//    );
-//    // Считаем сотояние RFID из OPC
-//    getRFIDTags(
-//        function (result_rfid) {
-//            if (result_rfid) {
-//                rfid.setRFID(result_rfid);
-//                viewRFID();
-//            }
-//        }
-//    );
-//    // Прочтем теги пистолетов из OPC
-//    getGunTags(
-//        function (result_guns) {
-//            if (result_guns) {
-//                guns.setGuns(result_guns);
-//                // Перед отображением состояния пистолетов проверим не закрытые выдачи
-//                openFuelSale.init(function (result_init) {
-//                    viewGuns();
-//                });
-
-//            }
-//        }
-//    );
-//    //  Прочесть теги счетчиков оборотов наливных стояков из OPC
-//    if (bpollDIO === true) {
-//        getDIORisersTags(
-//            function (result_dio) {
-//                if (result_dio) {
-//                    risers.setDIORisers(result_dio);
-//                    viewDIORisers();
-//                }
-//            }
-//        );
-//    }
-//    // Прочесть теги наливных стояков из OPC
-//    getRisersTags(
-//        function (result_risers) {
-//            if (result_risers) {
-//                risers.setRisers(result_risers);
-//                viewRisers();
-//            }
-//        }
-//    );
-//};
 
 var showCardView = function () {
     // Считаем RFID из буфера локальной базы (карточки)
@@ -855,15 +756,11 @@ var showView = function () {
     $('#date-user').text(user_name);
     $('#date-host').text(host_name);
 
-    //// Прочесть открытые выдачи
-    //openFuelSale.init(
-    //    function (result_init) {
-
-    //    });
-
     getAsyncClient(function (result_client) {
         $('#date-client').text(result_client);
     });
+    //$('#date-client').text(natIP());
+
     // Прочесть открытые выдачи
     getAsyncOFS(
         function (result_ofs) {
@@ -1434,6 +1331,7 @@ var confirm_df = {
                 // Удалим номер пистолета из списка по которым производятся настройки
                 logInfo(user_name, 'Закрыто окно «Настроить выдачу ГСМ». № пистолета(НС) = ' + confirm_df.open_num);
                 deleteAsyncGuns(Number(confirm_df.open_num));
+                confirm_df.open_num = null;
             },
             buttons: {
                 'Начать выдачу': function () {
@@ -2652,6 +2550,7 @@ var confirm_close_fuel = {
                 logInfo(user_name, 'Закрыто окно «Закрыть выдачу ГСМ». [FuelSale].[id] = ' + confirm_close_fuel.id_open);
                 // Удалим номер пистолета из списка по которым производилось закрытие
                 deleteAsyncGuns(Number(confirm_close_fuel.open_num));
+                confirm_close_fuel.open_num = null;
             },
             buttons: {
                 'Закрыть': function () {
@@ -3185,7 +3084,7 @@ var confirm_tanks = {
 };
 //=========== ЗАГРУЗКА СТРАНИЦЫ СТАРТ ПРОЕКТА ====================================================
 $(function () {
-    logInfo(user_name, 'TRK - старт');
+    logInfo(user_name, 'Панель оператора "Выдача по ТРК" - ОТКРЫТА');
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
