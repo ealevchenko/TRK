@@ -32,7 +32,7 @@ namespace TRKServices
         }
 
         private bool[] guns_taken = new bool[32] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
-        //private bool[,] trk_rfid = new bool[12, 2]; 
+        private bool[,] trk_rfid = new bool[12, 2]; 
 
 
         [StructLayout(LayoutKind.Sequential)]
@@ -133,10 +133,11 @@ namespace TRKServices
                         // Отобразим световую индикацию
                         if (gn.num_trk <= 9)
                         {
-                            if (gn.taken == true)
+                            if (gn.taken == true && trk_rfid[gn.num_trk, gn.side] == false)
                             {
                                 // Блымкнем
                                     client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 99, 1);
+                                    trk_rfid[gn.num_trk, gn.side] = true;
                             }
                             //else
                             //{
@@ -148,12 +149,92 @@ namespace TRKServices
                     }
                 }
                 // Проверим на выключение
-                foreach (bool gt in guns_taken)
+                if (guns_taken[1] == false && trk_rfid[1, 0]== true)
                 {
-                    //    // Перестаним блымкать
-                    //    client.WritePulseTagsRFID(gn.num_trk, gn.side == 0 ? 1 : 2, 0, 1);
+                    client.WritePulseTagsRFID(1, 1, 0, 1);
+                    trk_rfid[1, 0] = false;
                 }
-
+                if (guns_taken[2] == false && trk_rfid[1, 1]== true)
+                {
+                    client.WritePulseTagsRFID(1, 2, 0, 1);
+                    trk_rfid[1, 1] = false;
+                }
+                if (guns_taken[3] == false && trk_rfid[2, 0]== true)
+                {
+                    client.WritePulseTagsRFID(2, 1, 0, 1);
+                    trk_rfid[2, 0] = false;
+                }
+                if (guns_taken[4] == false && trk_rfid[2, 1]== true)
+                {
+                    client.WritePulseTagsRFID(2, 2, 0, 1);
+                    trk_rfid[2, 1] = false;
+                }
+                if (guns_taken[5] == false && trk_rfid[3, 0]== true)
+                {
+                    client.WritePulseTagsRFID(3, 1, 0, 1);
+                    trk_rfid[3, 0] = false;
+                }
+                if (guns_taken[6] == false && trk_rfid[3, 1]== true)
+                {
+                    client.WritePulseTagsRFID(3, 2, 0, 1);
+                    trk_rfid[3, 1] = false;
+                }
+                if (guns_taken[7] == false && trk_rfid[4, 0]== true)
+                {
+                    client.WritePulseTagsRFID(4, 1, 0, 1);
+                    trk_rfid[4, 0] = false;
+                }
+                if (guns_taken[8] == false && trk_rfid[4, 1]== true)
+                {
+                    client.WritePulseTagsRFID(4, 2, 0, 1);
+                    trk_rfid[4, 1] = false;
+                }
+                if (guns_taken[9] == false && trk_rfid[5, 0]== true)
+                {
+                    client.WritePulseTagsRFID(5, 1, 0, 1);
+                    trk_rfid[5, 0] = false;
+                }
+                if (guns_taken[10] == false && trk_rfid[5, 1]== true)
+                {
+                    client.WritePulseTagsRFID(5, 2, 0, 1);
+                    trk_rfid[5, 1] = false;
+                }
+                if (guns_taken[11] == false && trk_rfid[6, 0]== true)
+                {
+                    client.WritePulseTagsRFID(6, 1, 0, 1);
+                    trk_rfid[6, 0] = false;
+                }
+                if (guns_taken[12] == false && trk_rfid[6, 1]== true)
+                {
+                    client.WritePulseTagsRFID(6, 2, 0, 1);
+                    trk_rfid[6, 1] = false;
+                }
+                if (guns_taken[13] == false && guns_taken[14] == false && guns_taken[15] == false && guns_taken[16] == false && trk_rfid[7, 0]== true)
+                {
+                    client.WritePulseTagsRFID(7, 1, 0, 1);
+                    trk_rfid[7, 0] = false;
+                }
+                if (guns_taken[17] == false && guns_taken[18] == false && guns_taken[19] == false && guns_taken[20] == false && trk_rfid[7, 1]== true)
+                {
+                    client.WritePulseTagsRFID(7, 2, 0, 1);
+                    trk_rfid[7, 1] = false;
+                }
+                if (guns_taken[21] == false && guns_taken[22] == false && guns_taken[23] == false && guns_taken[24] == false && trk_rfid[8, 0]== true)
+                {
+                    client.WritePulseTagsRFID(8, 1, 0, 1);
+                    trk_rfid[8, 0] = false;
+                }
+                if (guns_taken[25] == false && guns_taken[26] == false && guns_taken[27] == false && guns_taken[28] == false && trk_rfid[8, 1]== true)
+                {
+                    client.WritePulseTagsRFID(8, 2, 0, 1);
+                    trk_rfid[8, 1] = false;
+                }
+                if (guns_taken[29] == false && trk_rfid[9, 0]== true)
+                {
+                    client.WritePulseTagsRFID(9, 1, 0, 1);
+                    trk_rfid[9, 0] = false;
+                }
+                // Можно добавить НС
                 if (list != null && guns != null)
                 {
                     // String.Format("Список считаных RFID-карт = {0}",list.Count()).SaveWarning();
