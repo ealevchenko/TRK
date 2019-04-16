@@ -50,7 +50,7 @@ namespace WebUI
 
                 count++;
                 Application["UsersCount"] = count;
-                Session["session_id"] = count;
+                Session["session_id"] = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
 
                 // Снять закрытый доступ        
                 Application.UnLock();  
