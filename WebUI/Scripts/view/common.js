@@ -2143,7 +2143,7 @@ var deleteAsyncGuns = function (num) {
         },
     });
 }
-
+// Очистить список пистолета по которму идет заполнение выдачи или закрытия
 var deleteAsyncClearGuns = function () {
     $.ajax({
         url: '/api/global/guns/clear',

@@ -7,6 +7,9 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using MessageLog;
+using EFAZS.Abstract;
+using EFAZS.Entities;
+using EFAZS.Concrete;
 
 namespace WebUI.Controllers.api
 {
@@ -20,6 +23,8 @@ namespace WebUI.Controllers.api
             public int dose { get; set; }
             public int counter { get; set; }
         }
+
+        EFTRKLogs trk_log = new EFTRKLogs();
 
         #region status
         // GET: api/global/guns
@@ -75,6 +80,16 @@ namespace WebUI.Controllers.api
                     }
 
                     HttpContext.Current.Application["guns"] = guns;
+                    string messsage = String.Format("Добавим номер пистолета {0} в список номеров по которым идет настройка. [guns] = {1}",value,guns);
+                    String.Format("[WEB-SERVER datetime: {0}] - ({1})", DateTime.Now, messsage).SaveWarning(); 
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "Web-server TRK",
+                        Log = messsage
+                    });
                 }
                 // Снять закрытый доступ        
                 HttpContext.Current.Application.UnLock();
@@ -113,6 +128,16 @@ namespace WebUI.Controllers.api
                         }
                         HttpContext.Current.Application["guns"] = !String.IsNullOrWhiteSpace(guns_new) ? guns_new.Remove(guns_new.Length - 1) : "";
                     }
+                    string messsage = String.Format("Удалить номер пистолета {0} из списка номеров по которым идет настройка. [guns] = {1}", num, HttpContext.Current.Application["guns"]);
+                    String.Format("[WEB-SERVER datetime: {0}] - ({1})", DateTime.Now, messsage).SaveWarning();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "Web-server TRK",
+                        Log = messsage
+                    });
                 }
                 // Снять закрытый доступ        
                 HttpContext.Current.Application.UnLock();
@@ -138,6 +163,16 @@ namespace WebUI.Controllers.api
                 {
                     HttpContext.Current.Application["guns"] = "";
                 }
+                string messsage = String.Format("Сбросить список номеров по которым идет настройка. [guns] = {0}", HttpContext.Current.Application["guns"]);
+                String.Format("[WEB-SERVER datetime: {0}] - ({1})", DateTime.Now, messsage).SaveWarning();
+                trk_log.AddTRKLogs(new TRKLogs()
+                {
+                    ID = 0,
+                    DateTime = DateTime.Now,
+                    Level = 4,
+                    UserName = "Web-server TRK",
+                    Log = messsage
+                });
                 // Снять закрытый доступ        
                 HttpContext.Current.Application.UnLock();
             }
