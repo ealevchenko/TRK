@@ -45,6 +45,7 @@ var catalog_user = {
     smena_datetime: null,
     name_log: null,
 };
+//
 var ofs = {
     list: null,
     init: function () {
@@ -709,11 +710,24 @@ var viewRisers = function () {
                         // Отобразим кнопки выдать\закрыть
                         if (id_ofs !== null && id_ofs > 0) {
                             $('#button-ns-' + riser.num + '-deliver').hide();
-                            $('#button-ns-' + riser.num + '-close').show().attr("data-id", id_ofs);
+                            $('#button-ns-' + riser.num + '-close').attr("data-id", id_ofs);
+                            var num_gun = Number(riser.num) + 29;
+                            if (select_guns && select_guns.get(num_gun) === null) {
+                                $('button#button-ns-' + riser.num + '-close').show();
+                            } else {
+                                $('button#button-ns-' + riser.num + '-close').hide();
+                            }
                         } else {
                             // Режим Авто, Заземление
                             if (riser && riser.inp_sa2 === true && riser.inp_kvq2 === false) {
-                                $('button#button-ns-' + riser.num + '-deliver').show();
+                                //$('button#button-ns-' + riser.num + '-deliver').show();
+                                var num_gun = Number(riser.num) + 29;
+                                if (select_guns && select_guns.get(num_gun) === null) {
+                                    $('button#button-ns-' + riser.num + '-deliver').show();
+                                } else {
+                                    $('button#button-ns-' + riser.num + '-deliver').hide();
+                                }
+
                             } else {
                                 $('button#button-ns-' + riser.num + '-deliver').hide();
                             }
@@ -2714,7 +2728,7 @@ var confirm_close_fuel = {
                         confirm_close_fuel.open_num = confirm_close_fuel.fs.trk_num < 10 ? confirm_close_fuel.fs.num : confirm_close_fuel.fs.num + 29;
                         // Добавить номер пистолета по которому будет производится закрытие
                         postAsyncGuns(confirm_close_fuel.open_num);
-                        if (confirm_close_fuel.fs.id_sap != null) {
+                        if (confirm_close_fuel.fs.id_sap !== null) {
                             // Определим запись SAP
                             confirm_close_fuel.updateTips('Определим запись SAP');
                             getAsyncSAP_Buffer(
