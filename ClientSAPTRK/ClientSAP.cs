@@ -122,7 +122,7 @@ namespace ClientSAPTRK
                 string message = this.url + this.transaction_reservation +
                     "&RSNUM=" + num +
                     "&RSPOS=" + pos +
-                    "STTN=101" +
+                    "&STTN=101" +
                     "&FLAG_R=" + mode +
                     "&OutputParameter=RSLT" +
                     "&XacuteLoginName=" + this.login +
@@ -235,7 +235,7 @@ namespace ClientSAPTRK
                     ////"&RSPOS=1" +
                     "&KUNNR=" + debitor +
                     "&MATNR=" + ozm +
-                    "STTN=101" +
+                    "&STTN=101" +
                     "&FLAG_R=" + mode +
                     "&OutputParameter=RSLT" +
                     "&XacuteLoginName=" + this.login +
@@ -296,7 +296,7 @@ namespace ClientSAPTRK
                     "&RSPOS=" +
                     "&KUNNR=" + debitor +
                     "&MATNR=" + ozm +
-                    "STTN=101" +
+                    "&STTN=101" +
                     "&FLAG_R=" + mode +
                     "&MENGE=" + mass.ToString("0.##")+
                     "&MENGE_L=" + valume.ToString("0.##") + 
@@ -356,7 +356,7 @@ namespace ClientSAPTRK
                     "&KUNNR=" +
                     "&MATNR=" +
                     "&OTFT=" + num +
-                    "STTN=101" +
+                    "&STTN=101" +
                     "&FLAG_R=" + mode +
                     "&MENGE=" + 
                     "&MENGE_L=" + 
