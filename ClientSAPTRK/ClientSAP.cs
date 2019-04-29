@@ -163,6 +163,57 @@ namespace ClientSAPTRK
                 return null;
             }
         }
+        public Reservation GetReservationMatrn(string num, string matrn, string mode)
+        {
+            try
+            {
+
+                string message = this.url + this.transaction_reservation +
+                    "&RSNUM=" + num +
+                    "&RSPOS="+
+                    "&STTN=101" +
+                    "&MATNR="+ matrn +
+                    "&FLAG_R=" + mode +
+                    "&OutputParameter=RSLT" +
+                    "&XacuteLoginName=" + this.login +
+                    "&XacuteLoginPassword=" + this.pass;
+
+                string response = Select(message, "GET", "text/xml");
+                String.Format("\r\n Выполнение метода GetReservation(num={0}, mode={1}) \r\nurl={2} \r\nxml={3}", num, mode, message, response).SaveDebug();
+
+                if (String.IsNullOrWhiteSpace(response)) return null;
+                //Console.WriteLine("Result text/xml = {0}", response);
+
+                XDocument doc = XDocument.Parse(response);
+
+                XElement element = doc.Element("Rowsets").Element("Rowset").Elements("Row").FirstOrDefault();
+
+                Reservation reserv = new Reservation()
+                {
+                    RSNUM = (string)element.Element("RSNUM"),
+                    RSPOS = (string)element.Element("RSPOS"),
+                    MATNR = (string)element.Element("MATNR"),
+                    WERKS = (string)element.Element("WERKS"),
+                    LGORT = (string)element.Element("LGORT"),
+                    UMLGO = (string)element.Element("UMLGO"),
+                    UMWRK = (string)element.Element("UMWRK"),
+                    BDMNG = (string)element.Element("BDMNG"),
+                    ENMNG = (string)element.Element("ENMNG"),
+                    LGOBE = (string)element.Element("LGOBE"),
+                    MEINS = (string)element.Element("MEINS"),
+                    BWART = (string)element.Element("BWART"),
+                };
+
+                return reserv;
+            }
+            catch (Exception e)
+            {
+                String.Format("GetReservation(num={0}, mode={1})", num, mode).SaveError(e);
+                Console.WriteLine("Ошибка выполнения метода GetReservation(num={0}, mode={1}, e {2}", num, mode, e);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Получить информацию по поставкам
         /// </summary>

@@ -860,6 +860,41 @@ var getReservation = function (num, pos, mode, callback) {
         },
     });
 };
+// Резервирование с уточнением ozm
+var getReservationMatrn = function (num, matrn, mode, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/sap/reservation_matrn/num/' + num + '/matrn/' + matrn + '/mode/' + mode,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test == 1) {
+                if (typeof callback === 'function') {
+                    callback(reservation_out);
+                }
+            } else {
+                if (pos == "" || pos == null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер позиции.");
+                }
+                if (num == "" || num == null) {
+                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер резервирования.");
+                }
+            }
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 // Резервирование по дебитору
 var getReservationOfDebitor = function (debitor, ozm, mode, callback) {
     $.ajax({
