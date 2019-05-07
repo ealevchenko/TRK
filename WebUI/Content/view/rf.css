@@ -98,6 +98,23 @@ div.fuel-receiving-hopper {
     float: left;
 }
 
+.tanks-alarm-high {
+    background-color:#ff0000;
+}
+.tanks-warning-high {
+    background-color:#ffd800;
+}
+.tanks-ok {
+    background-color: #b6ff00;
+}
+
+.button-reports {
+    margin: 3px;
+    height: 20px;
+    font-size: 11px;
+    background-color: #b6ff00;
+}
+
 /*setup-table*/
 .setup-table {
     margin-top: 10px;

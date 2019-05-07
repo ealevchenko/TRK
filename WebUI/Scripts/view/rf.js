@@ -1,4 +1,16 @@
-﻿var select_type_rf = null;
+﻿$(window).on("beforeunload", function () {
+    logInfo(catalog_user.name_log, 'Панель оператора "Прием ГСМ" - ЗАКРЫТА');
+});
+
+// Справочник
+var catalog_user = {
+    operator_name: null,
+    smena_num: null,
+    smena_datetime: null,
+    name_log: null,
+};
+
+var select_type_rf = null;
 var select_type_fuel = null;
 var select_capacity = null;
 var select_type_rw_capacity = null;
@@ -104,6 +116,18 @@ var open_rf = {
                 res, function (result) {
                     if (result && result.length > 0) {
                         for (ir = 0; ir < result.length; ir++) {
+                            if (result[ir].level !== null) {
+                                var level = Number(result[ir].level);
+                                if (level >= ntanks_alarm_high) {
+                                    $('div#tank-' + result[ir].num_tank).removeClass().addClass('fuel-receiving-hopper').addClass('tanks-alarm-high');
+                                } else {
+                                    if (level >= tanks_warning_high) {
+                                        $('div#tank-' + result[ir].num_tank).removeClass().addClass('fuel-receiving-hopper').addClass('tanks-warning-high');
+                                    } else {
+                                        $('div#tank-' + result[ir].num_tank).removeClass().addClass('fuel-receiving-hopper').addClass('tanks-ok');
+                                    }
+                                }
+                            }
                             $('td#tank-level-' + result[ir].num_tank).text(result[ir].level);
                             $('td#tank-volume-' + result[ir].num_tank).text(result[ir].volume);
                             $('td#tank-dens-' + result[ir].num_tank).text(result[ir].dens);
@@ -248,8 +272,8 @@ var confirm_acceptance = {
                             postAsyncReceivingFuel(
                                 receiving_fuel,
                                 function (id) {
-                                    if (log) { log.info('Запись строки receiving_fuel, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
-
+                                    //if (log) { log.info('Запись строки receiving_fuel, результат id=' + id); } // TODO:!!!ТЕСТ УБРАТЬ
+                                    logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Создание строки приема ГСМ [ReceivingFuel], результат = ' + id);
                                     // Данные в  сохранились?
                                     if (id > 0) {
                                         open_rf.id = id;
@@ -264,7 +288,8 @@ var confirm_acceptance = {
                                                             postAsyncReceivingFuelTanks(
                                                                 receiving_fuel_tanks,
                                                                 function (id_receiving_fuel_tanks) {
-                                                                    if (log) { log.info('Запись строки receiving_fuel_tanks, результат id=' + id_receiving_fuel_tanks); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                                    //if (log) { log.info('Запись строки receiving_fuel_tanks, результат id=' + id_receiving_fuel_tanks); } // TODO:!!!ТЕСТ УБРАТЬ
+                                                                    logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Создание строки состояния емкости [ReceivingFuelTanks], результат = ' + id_receiving_fuel_tanks);
                                                                     // Достигнут конец списка емкостей
                                                                     if (it >= result.length) {
                                                                         LockScreenOff();
@@ -289,6 +314,7 @@ var confirm_acceptance = {
                                     } else {
                                         // Ошибка, операция отменена (! нужно решить что делать далее).
                                         updateMessageTips("Ошибка создания строки для ReceivingFuel в локальной базе данных. Код ошибки=" + id + ". Операция отменена.");
+                                        
                                     }
                                 }
                             );
@@ -338,6 +364,8 @@ var show_rf = function () {
     // Время
     var d = new Date();
     $('#date-value').text(toISOStringTZ(d));
+    $('#date-user').text(user_name);
+    $('#date-host').text(host_name);
     open_rf.outTank();
 
 };
@@ -509,7 +537,7 @@ var addTanks = function (tank_num) {
         .append('<div id="tank-' + tank_num + '" class="fuel-receiving-hopper">' +
             '<fieldset>' +
             '<legend>Резурвуар № <label>' + tank_num + '</label></legend>' +
-            '<table class="table-striped table-fuel-receiving-hopper">' +
+            '<table class="table-fuel-receiving-hopper">' +
             '    <tr>' +
             '        <th>Уровень (мм) :</th>' +
             '        <td id="tank-level-' + tank_num + '"></td>' +
@@ -540,6 +568,7 @@ var addTanks = function (tank_num) {
             '</div >');
     $('button#button-close-tank-' + tank_num).on('click', function () {
         event.preventDefault();
+        logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Нажата кнопка [Закрыть прием в емкость ' + tank_num +']');
         var num_tank = $(this).attr('data-tank-num');
         closeTank(num_tank);
     });
@@ -568,6 +597,7 @@ var closeTank = function (num_tank) {
                         rft,
                         function (id) {
                             updateMessageTips("Запись ReceivingFuelTanks обновлена результат = " + id);
+                            logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Cтрока состояния емкости [ReceivingFuelTanks].[id] =' + rft.id + ' - обновлена, результат = ' + id);
                             if (id > 0) {
                                 // Удалим на экране
                                 var index = open_rf.list_tank.indexOf(num_tank);
@@ -607,9 +637,11 @@ $(function () {
     button_add_doc.hide();
     button_add_doc.on('click', function () {
         event.preventDefault();
+        logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Нажата кнопка [Перейти к выбору емкости]');
         var valid = validationAddDoc();
         if (valid === true) {
             open_rf.master = 1;
+            logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Перешли к выбору емкости');
             // Вывести на экран шаг
             outMasterStep();
         }
@@ -619,9 +651,10 @@ $(function () {
     button_start.hide();
     button_start.on('click', function () {
         event.preventDefault();
+        logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Нажата кнопка [Начать прием ГСМ]');
         var valid = validationStart();
         if (valid === true) {
-
+            logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Прием ГСМ запущен');
             confirm_acceptance.open();
         }
     });
@@ -630,6 +663,7 @@ $(function () {
     button_close.hide();
     button_close.on('click', function () {
         event.preventDefault();
+        logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Нажата кнопка [Закрыть прием ГСМ]');
         closeTanks(); // Закрыть все емкости
         $('div#add-tanks').empty();
         getAsyncReceivingFuel(
@@ -643,6 +677,7 @@ $(function () {
                     rf,
                     function (id) {
                         updateMessageTips("Запись ReceivingFuel обновлена результат = " + id);
+                        logInfo(catalog_user.name_log, 'Окно "Прием ГСМ" - Строка приема ГСМ [ReceivingFuel].[id] = '+ rf.id + ' - обновлена, результат = ' + id);
                         if (id > 0) {
                             open_rf.clear();
                             outMasterStep();
@@ -673,7 +708,7 @@ $(function () {
     // Загрузка библиотек
     loadReference = function (callback) {
         LockScreen('Инициализация данных');
-        var count = 1;
+        var count = 2;
         //Загрузка (common.js)
         getAsyncOpenReceivingFuel(function (result) {
             open_rf.list_open = result;
@@ -685,11 +720,29 @@ $(function () {
                 }
             }
         });
+        // Определим пользователя и смену
+        getAsyncCurrentUsersActions(
+            function (user) {
+                if (user !== null) {
+                    catalog_user.operator_name = user.UserName;
+                    catalog_user.smena_num = user.SessionID;
+                    catalog_user.smena_datetime = user.TimeStmp;
+                    catalog_user.name_log = user.UserName + ', подключен:' + client_number;
+                }
+                count -= 1;
+                if (count <= 0) {
+                    if (typeof callback === 'function') {
+                        LockScreenOff();
+                        callback();
+                    }
+                }
+            });
     };
 
     // Загрузка библиотек
     loadReference(function (result) {
 
+        logInfo(catalog_user.name_log, 'Панель оператора "Прием ГСМ" - ОТКРЫТА');
         confirm_acceptance.init(); // инициализируем форму подтверждения приема 
 
         tank_railway = $('div#tank-railway').hide(); // документы жд цистерна

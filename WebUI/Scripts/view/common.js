@@ -183,7 +183,7 @@ var bunks_out = [
     { "num_tank": "B2", "dens": 755.495805, "fill_percent": 17.640862872872312, "level": 653.14, "mass": 9488.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.3, "ullage": 58643, "unit": null, "volume": 1256.1, "water_level": 0.31, "water_volume": 0.0 },
     { "num_tank": "B3", "dens": 757.904171, "fill_percent": 35.737970982049163, "level": 1082.59, "mass": 19361.07, "status1": 64, "status2": 48, "status": 0, "temp": 1.1, "ullage": 45930, "unit": null, "volume": 2554.3, "water_level": 1.1, "water_volume": 0.2 }
 ];
-
+// TODO:!!!ТЕСТ УБРАТЬ
 var all_tags =
 {
     "rfids": [
@@ -291,6 +291,11 @@ var all_tags =
 
 
 //=========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================================================
+var ntanks_alarm_high = Number(tanks_alarm_high);       //Аварийная уставка высокий
+var ntanks_warning_high = Number(tanks_warning_high);   //Предварительная уставка высокий
+var ntanks_warning_low = Number(tanks_warning_low);     //Предварительная уставка низкий
+var ntanks_alarm_low = Number(tanks_alarm_low);         //Аварийная уставка низкий
+
 // список емкостей
 var ozm_bak = {
     list: [

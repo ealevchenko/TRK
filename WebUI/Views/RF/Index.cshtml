@@ -29,6 +29,11 @@
     var tanks_one = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_one"]';
         var ns_advance = '@System.Configuration.ConfigurationManager.AppSettings["NS_advance"]';
 
+        var tanks_alarm_high = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_alarm_high"]';
+        var tanks_warning_high = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_warning_high"]';
+        var tanks_warning_low = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_warning_low"]';
+        var tanks_alarm_low = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_alarm_low"]';
+
     </script>
 
     <script src="~/Scripts/view/common.js" type="text/javascript"></script>
@@ -37,8 +42,14 @@
 </head>
 <body>
     <div id="lockPanel" class="LockOff"></div>
+    <input id="username" type="hidden" value="@System.Environment.UserName" />
+    <input id="hostname" type="hidden" value="@System.Environment.MachineName" />
+    <input id="clientnumber" type="hidden" value='@Request.RequestContext.HttpContext.Session["session_id"]' />
     <div id="content">
-        <div>Текущее время :<label id="date-value"></label></div>
+        <div>
+            Текущее время :<label id="date-value"></label>
+            Пользователь :<label id="date-user"></label>  Host :<label id="date-host"></label> <button id="button-report" class="ui-button ui-widget ui-corner-all button-reports">Отчет по приему ГСМ</button>
+        </div>
         <div class="rf">
             <div class="setup-rf">
                 <button id="button-add-doc" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Перейти к выбору емкости</button>
@@ -86,13 +97,13 @@
                                     <td><select id="type-rw-capacity" class="ui-widget-content ui-corner-all"></select></td>
                                 </tr>
                                 @*<tr>
-                                    <th>Объем по накладной (л):</th>
-                                    <td><input id="tank-railway-nak-volume" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Плотность по накладной (кг/м3):</th>
-                                    <td><input id="tank-railway-nak-dens" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
-                                </tr>*@
+                                        <th>Объем по накладной (л):</th>
+                                        <td><input id="tank-railway-nak-volume" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Плотность по накладной (кг/м3):</th>
+                                        <td><input id="tank-railway-nak-dens" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
+                                    </tr>*@
                                 <tr class="end">
                                     <th>Масса по накладной (кг):</th>
                                     <td><input id="tank-railway-nak-mass" type="text" class="ui-widget-content ui-corner-all input-volume" /></td>
@@ -285,13 +296,13 @@
                 <td id="acceptance-tank-railway-type-capacity"></td>
             </tr>
             @*<tr id="railway">
-                <th>Объем по накладной:</th>
-                <td id="acceptance-tank-railway-nak-volume"></td>
-            </tr>
-            <tr id="railway">
-                <th>Плотность по накладной:</th>
-                <td id="acceptance-tank-railway-nak-dens"></td>
-            </tr>*@
+                    <th>Объем по накладной:</th>
+                    <td id="acceptance-tank-railway-nak-volume"></td>
+                </tr>
+                <tr id="railway">
+                    <th>Плотность по накладной:</th>
+                    <td id="acceptance-tank-railway-nak-dens"></td>
+                </tr>*@
             <tr id="railway">
                 <th>Масса по накладной:</th>
                 <td id="acceptance-tank-railway-nak-mass"></td>
@@ -322,5 +333,10 @@
 
 </html>
 
+<script>
+    var user_name = $('input#username').val();
+    var host_name = $('input#hostname').val();
+    var client_number = $('input#clientnumber').val();
+</script>
 
 

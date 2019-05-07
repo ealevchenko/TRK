@@ -3,7 +3,7 @@ $(window).on("beforeunload", function () {
     logInfo(catalog_user.name_log, 'Панель оператора "Выдача по ТРК" - ЗАКРЫТА. (Окно настройки выдачи - ' + (confirm_df.open_num !== null ? confirm_df.open_num : ' закрыто') + ', Окно закрытия выдачи - ' + (confirm_close_fuel.open_num !== null ? confirm_close_fuel.open_num : ' закрыто') + ')');
     if (confirm_df.obj !== null) confirm_df.obj.dialog("close");
     if (confirm_close_fuel.obj !== null) confirm_close_fuel.obj.dialog("close");
-})
+});
 
 // Контроль нажатия кнопки на клавиатуре (исключить сворачивание окон по нажатию "ENTER")
 $(document).keypress(

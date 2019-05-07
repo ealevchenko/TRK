@@ -1,4 +1,4 @@
-USE [KRR-PA-REP-SBF]
+USE [ASU_AZSoperations]
 GO
 
 /****** Object:  Table [dbo].[ReceivingFuel]    Script Date: 07.05.2019 16:00:24 ******/
