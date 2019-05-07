@@ -1,7 +1,7 @@
-USE [ASU_AZSoperations]
+USE [KRR-PA-REP-SBF]
 GO
 
-/****** Object:  Table [dbo].[ReceivingFuelTanks]    Script Date: 18.02.2019 17:18:41 ******/
+/****** Object:  Table [dbo].[ReceivingFuelTanks]    Script Date: 07.05.2019 16:01:08 ******/
 SET ANSI_NULLS ON
 GO
 

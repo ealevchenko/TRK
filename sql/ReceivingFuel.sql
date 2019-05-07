@@ -1,7 +1,7 @@
-USE [ASU_AZSoperations]
+USE [KRR-PA-REP-SBF]
 GO
 
-/****** Object:  Table [dbo].[ReceivingFuel]    Script Date: 18.02.2019 17:18:01 ******/
+/****** Object:  Table [dbo].[ReceivingFuel]    Script Date: 07.05.2019 16:00:24 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,19 +15,20 @@ CREATE TABLE [dbo].[ReceivingFuel](
 	[smena_datetime] [datetime] NOT NULL,
 	[type] [int] NOT NULL,
 	[fuel] [int] NOT NULL,
-	[truck_num_nak] [int] NOT NULL,
-	[truck_weight] [numeric](18, 2) NOT NULL,
-	[truck_provider] [nvarchar](200) NOT NULL,
-	[railway_num_nak] [int] NOT NULL,
-	[railway_num_tanker] [int] NOT NULL,
-	[railway_provider] [nvarchar](200) NOT NULL,
-	[railway_nak_volume] [numeric](10, 2) NOT NULL,
-	[railway_nak_dens] [numeric](9, 5) NOT NULL,
-	[railway_nak_mass] [numeric](10, 2) NOT NULL,
-	[railway_manual_level] [numeric](10, 2) NOT NULL,
-	[railway_manual_volume] [numeric](10, 2) NOT NULL,
-	[railway_manual_dens] [numeric](9, 5) NOT NULL,
-	[railway_manual_mass] [numeric](10, 2) NOT NULL,
+	[truck_num_nak] [int] NULL,
+	[truck_weight] [numeric](18, 2) NULL,
+	[truck_provider] [nvarchar](200) NULL,
+	[railway_num_nak] [int] NULL,
+	[railway_num_tanker] [int] NULL,
+	[railway_provider] [nvarchar](200) NULL,
+	[railway_type_capacity] [nvarchar](10) NULL,
+	[railway_nak_volume] [numeric](10, 2) NULL,
+	[railway_nak_dens] [numeric](9, 5) NULL,
+	[railway_nak_mass] [numeric](10, 2) NULL,
+	[railway_manual_level] [numeric](10, 2) NULL,
+	[railway_manual_volume] [numeric](10, 2) NULL,
+	[railway_manual_dens] [numeric](9, 5) NULL,
+	[railway_manual_mass] [numeric](10, 2) NULL,
 	[start_datetime] [datetime] NOT NULL,
 	[stop_datetime] [datetime] NULL,
 	[close] [datetime] NULL,
