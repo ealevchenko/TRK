@@ -44,6 +44,9 @@ namespace EFAZS.Entities
         [StringLength(200)]
         public string railway_provider { get; set; }
 
+        [StringLength(10)]
+        public string railway_type_capacity { get; set; }
+
         [Column(TypeName = "numeric")]
         public decimal? railway_nak_volume { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿var select_type_rf = null;
 var select_type_fuel = null;
 var select_capacity = null;
+var select_type_rw_capacity = null;
 
 var tank_railway = null;
 var tank_truck = null;
@@ -16,7 +17,7 @@ var input_reception_take_water_level;
 var button_add_doc;
 
 var allFields;
-
+// Структура класса мастера принятия ГСМ
 var open_rf = {
     id: 0,
     list_open: null,
@@ -35,8 +36,9 @@ var open_rf = {
     railway_num_nak: null,
     railway_num_tanker: null,
     railway_provider: null,
-    railway_nak_volume: null,
-    railway_nak_dens: null,
+    railway_type_rw_capacity: null,
+    //railway_nak_volume: null,
+    //railway_nak_dens: null,
     railway_nak_mass: null,
     railway_manual_level: null,
     railway_manual_volume: null,
@@ -72,8 +74,9 @@ var open_rf = {
                 this.railway_num_nak.val(open.railway_num_nak);
                 this.railway_num_tanker.val(open.railway_num_tanker);
                 this.railway_provider.text(open.railway_provider);
-                this.railway_nak_volume.val(open.railway_nak_volume);
-                this.railway_nak_dens.val(open.railway_nak_dens);
+                this.railway_type_rw_capacity = open.railway_type_capacity;
+                //this.railway_nak_volume.val(open.railway_nak_volume);
+                //this.railway_nak_dens.val(open.railway_nak_dens);
                 this.railway_nak_mass.val(open.railway_nak_mass);
                 this.railway_manual_level.val(open.railway_manual_level);
                 this.railway_manual_volume.val(open.railway_manual_volume);
@@ -136,8 +139,9 @@ var open_rf = {
         open_rf.railway_num_nak.val('');
         open_rf.railway_num_tanker.val('');
         open_rf.railway_provider.text('');
-        open_rf.railway_nak_volume.val('');
-        open_rf.railway_nak_dens.val('');
+        open_rf.railway_type_rw_capacity = null;
+        //open_rf.railway_nak_volume.val('');
+        //open_rf.railway_nak_dens.val('');
         open_rf.railway_nak_mass.val('');
         open_rf.railway_manual_level.val('');
         open_rf.railway_manual_volume.val('');
@@ -179,8 +183,9 @@ var open_rf = {
             railway_num_nak: type === 1 ? open_rf.railway_num_nak.val() : null,
             railway_num_tanker: type === 1 ? open_rf.railway_num_tanker.val() : null,
             railway_provider: type === 1 ? open_rf.railway_provider.text() : null,
-            railway_nak_volume: type === 1 ? open_rf.railway_nak_volume.val() : null,
-            railway_nak_dens: type === 1 ? open_rf.railway_nak_dens.val() : null,
+            railway_type_capacity: type === 1 ? open_rf.railway_type_rw_capacity : null,
+            //railway_nak_volume: type === 1 ? open_rf.railway_nak_volume.val() : null,
+            //railway_nak_dens: type === 1 ? open_rf.railway_nak_dens.val() : null,
             railway_nak_mass: type === 1 ? open_rf.railway_nak_mass.val() : null,
             railway_manual_level: type === 1 ? open_rf.railway_manual_level.val() : null,
             railway_manual_volume: type === 1 ? open_rf.railway_manual_volume.val() : null,
@@ -314,8 +319,9 @@ var confirm_acceptance = {
                 $('td#acceptance-tank-railway-num-nak').text(open_rf.railway_num_nak.val());
                 $('td#acceptance-tank-railway-num-tanker').text(open_rf.railway_num_tanker.val());
                 $('td#acceptance-tank-railway-provider').text(open_rf.railway_provider.text());
-                $('td#acceptance-tank-railway-nak-volume').text(open_rf.railway_nak_volume.val());
-                $('td#acceptance-tank-railway-nak-dens').text(open_rf.railway_nak_dens.val());
+                $('td#acceptance-tank-railway-type-capacity').text(open_rf.railway_type_rw_capacity);
+                //$('td#acceptance-tank-railway-nak-volume').text(open_rf.railway_nak_volume.val());
+                //$('td#acceptance-tank-railway-nak-dens').text(open_rf.railway_nak_dens.val());
                 $('td#acceptance-tank-railway-nak-mass').text(open_rf.railway_nak_mass.val());
                 $('td#acceptance-tank-railway-manual-level').text(open_rf.railway_manual_level.val());
                 $('td#acceptance-tank-railway-manual-volume').text(open_rf.railway_manual_volume.val());
@@ -373,8 +379,8 @@ var validationAddDoc = function () {
         valid = valid && checkIsNullOfMessage(open_rf.railway_num_nak, "Введите номер ж.д. накладной");
         valid = valid && checkIsNullOfMessage(open_rf.railway_num_tanker, "Введите номер ж.д. цистерны");
         valid = valid && checkIsNullOfMessage(open_rf.railway_provider, "Укажите поставщика");
-        valid = valid && checkIsNullOfMessage(open_rf.railway_nak_volume, "Введите объем указаный в накладной");
-        valid = valid && checkIsNullOfMessage(open_rf.railway_nak_dens, "Введите плотность указаную в накладной");
+        //valid = valid && checkIsNullOfMessage(open_rf.railway_nak_volume, "Введите объем указаный в накладной");
+        //valid = valid && checkIsNullOfMessage(open_rf.railway_nak_dens, "Введите плотность указаную в накладной");
         valid = valid && checkIsNullOfMessage(open_rf.railway_nak_mass, "Введите массу указаную в накладной");
         valid = valid && checkIsNullOfMessage(open_rf.railway_manual_level, "Введите уровень в цистерне по руч. измерениям");
         valid = valid && checkIsNullOfMessage(open_rf.railway_manual_volume, "Введите объем в цистерне по руч. измерениям");
@@ -434,8 +440,9 @@ var outMasterStep = function () {
             open_rf.railway_num_nak.attr("disabled", false);
             open_rf.railway_num_tanker.attr("disabled", false);
             open_rf.railway_provider.attr("disabled", false);
-            open_rf.railway_nak_volume.attr("disabled", false);
-            open_rf.railway_nak_dens.attr("disabled", false);
+            select_type_rw_capacity.selectmenu("enable");
+            //open_rf.railway_nak_volume.attr("disabled", false);
+            //open_rf.railway_nak_dens.attr("disabled", false);
             open_rf.railway_nak_mass.attr("disabled", false);
             open_rf.railway_manual_level.attr("disabled", false);
             open_rf.railway_manual_volume.attr("disabled", false);
@@ -467,8 +474,9 @@ var outMasterStep = function () {
             open_rf.railway_num_nak.attr("disabled", true);
             open_rf.railway_num_tanker.attr("disabled", true);
             open_rf.railway_provider.attr("disabled", true);
-            open_rf.railway_nak_volume.attr("disabled", true);
-            open_rf.railway_nak_dens.attr("disabled", true);
+            select_type_rw_capacity.selectmenu("disable");
+            //open_rf.railway_nak_volume.attr("disabled", true);
+            //open_rf.railway_nak_dens.attr("disabled", true);
             open_rf.railway_nak_mass.attr("disabled", true);
             open_rf.railway_manual_level.attr("disabled", true);
             open_rf.railway_manual_volume.attr("disabled", true);
@@ -593,8 +601,8 @@ var closeTanks = function () {
 
 $(function () {
 
-    if (log) { log.info('Старт [Прием топлива]'); } // TODO:!!!ТЕСТ УБРАТЬ
-
+    //if (log) { log.info('Старт [Прием топлива]'); } // TODO:!!!ТЕСТ УБРАТЬ
+    // Добавить документ
     button_add_doc = $('button#button-add-doc');
     button_add_doc.hide();
     button_add_doc.on('click', function () {
@@ -606,6 +614,7 @@ $(function () {
             outMasterStep();
         }
     });
+    // Кнопка старт
     button_start = $('button#button-start');
     button_start.hide();
     button_start.on('click', function () {
@@ -617,6 +626,7 @@ $(function () {
         }
     });
     button_close = $('button#button-close-all');
+    // Кнопка закрыть
     button_close.hide();
     button_close.on('click', function () {
         event.preventDefault();
@@ -640,7 +650,7 @@ $(function () {
                     });
             });
     });
-    // Инициализаия кнопки
+    // Инициализаия кнопки добавить бак
     $('button#button-add-tank').on('click', function () {
         event.preventDefault();
         var tank_num = select_capacity.val();
@@ -651,12 +661,11 @@ $(function () {
         }
         updateOptionSelect(select_capacity, ozm_bak.getTanks(select_type_fuel.val()), null, -1, open_rf.list_tank);
     });
-
+    // Инициализаия кнопки очитить баки
     $('button#button-clear').on('click', function () {
         event.preventDefault();
         $('div#add-tanks').empty();
         open_rf.list_tank = [];
-
         updateOptionSelect(select_capacity, ozm_bak.getTanks(select_type_fuel.val()), null, -1, open_rf.list_tank);
     });
 
@@ -765,6 +774,26 @@ $(function () {
                         }
                     );
                 }
+            },
+            null);
+        //
+        // Настроим тип жд.цистерны
+        select_type_rw_capacity = initSelect(
+            $('select#type-rw-capacity'),
+            { width: 300 },
+            [
+                { value: '15-871', text: '8-осная для нефтепродуктов, модель 15-871' },
+                { value: '15-880', text: '8-осная для нефти, модель 15-880' },
+                { value: '15-869', text: '4-осная  для бензина и светлых нефтепродуктов, модель 15-869' },
+                { value: '15-1427', text: '4-осная  для бензина с переходной площадкой, модель 15-1427' },
+                { value: '15-1566', text: '4-осная  для вязких нефтепродуктов, модель 15-1566' }
+            ],
+            null,
+            open_rf.railway_type_rw_capacity,
+            function (event, ui) {
+                event.preventDefault();
+                $(".messageTips").text('');
+                open_rf.railway_type_rw_capacity = ui.item.value; // Сохраним состояние
             },
             null);
         // Вывести на экран шаг
