@@ -40,8 +40,8 @@ var catalog_werks = {
 };
 // Справочник 
 var catalog_user = {
-    operator_name : null,
-    smena_num : null,
+    operator_name: null,
+    smena_num: null,
     smena_datetime: null,
     name_log: null,
 };
@@ -1900,40 +1900,116 @@ var confirm_df = {
 
             case 1:
                 confirm_df.obj.dialog("option", "title", 'Выдать топливо (разливочный стояк-' + num + ')');
-                if (num === "2") {
-                    // керосин
-                    // Обновим варианты выдачи
-                    updateOptionSelect(
-                        confirm_df.select_variant,
-                        [
-                            { value: 1, text: 'По резервированию (керосин)' },
-                            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                            { value: 3, text: 'По исходящей поставке' },
-                            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                            { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                        ],
-                        null,
-                        -1,
-                        null);
 
-                } else {
-                    // ДТ\92
-                    // Обновим варианты выдачи
-                    updateOptionSelect(
-                        confirm_df.select_variant,
-                        [
-                            { value: 1, text: 'По резервированию (керосин)', disabled: true },
-                            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                            { value: 3, text: 'По исходящей поставке', disabled: true },
-                            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                            { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                        ],
-                        null,
-                        -1,
-                        null);
+                switch (num) {
+                    case "1":
+                        // ДТ
+                        // Обновим варианты выдачи
+                        updateOptionSelect(
+                            confirm_df.select_variant,
+                            [
+                                { value: 1, text: 'По резервированию (керосин)', disabled: true },
+                                { value: 2, text: 'По резервированию (ГСМ)' },
+                                { value: 3, text: 'По исходящей поставке', disabled: true },
+                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                            ],
+                            null,
+                            -1,
+                            null);
+                        break;
+                    case "2":
+                        // керосин
+                        // Обновим варианты выдачи
+                        updateOptionSelect(
+                            confirm_df.select_variant,
+                            [
+                                { value: 1, text: 'По резервированию (керосин)' },
+                                { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                                { value: 3, text: 'По исходящей поставке' },
+                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                            ],
+                            null,
+                            -1,
+                            null);
+                        break;
+                    case "3":
+                        // 92
+                        // Обновим варианты выдачи
+                        updateOptionSelect(
+                            confirm_df.select_variant,
+                            [
+                                { value: 1, text: 'По резервированию (керосин)', disabled: true },
+                                { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                                { value: 3, text: 'По исходящей поставке', disabled: true },
+                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                            ],
+                            null,
+                            -1,
+                            null);
+                        break;
                 }
+
+                //if (num === "2") {
+                //    // керосин
+                //    // Обновим варианты выдачи
+                //    updateOptionSelect(
+                //        confirm_df.select_variant,
+                //        [
+                //            { value: 1, text: 'По резервированию (керосин)' },
+                //            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                //            { value: 3, text: 'По исходящей поставке' },
+                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                //        ],
+                //        null,
+                //        -1,
+                //        null);
+
+                //} else {
+
+                //    if (num === "1") {
+                //    // ДТ
+                //    // Обновим варианты выдачи
+                //    updateOptionSelect(
+                //        confirm_df.select_variant,
+                //        [
+                //            { value: 1, text: 'По резервированию (керосин)', disabled: true },
+                //            { value: 2, text: 'По резервированию (ГСМ)'},
+                //            { value: 3, text: 'По исходящей поставке', disabled: true },
+                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                //        ],
+                //        null,
+                //        -1,
+                //        null);
+                //    } else {
+                //    // 92
+                //    // Обновим варианты выдачи
+                //    updateOptionSelect(
+                //        confirm_df.select_variant,
+                //        [
+                //            { value: 1, text: 'По резервированию (керосин)', disabled: true },
+                //            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                //            { value: 3, text: 'По исходящей поставке', disabled: true },
+                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
+                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                //        ],
+                //        null,
+                //        -1,
+                //        null);
+                //    }
+
+
+                //}
 
                 var riser = risers.getRisers(num);
                 var DIOriser = risers.getDIORisers(num);
@@ -3266,7 +3342,7 @@ $(function () {
     ofs.init(null);
     // Загрузка библиотек
     loadReference(function (result) {
-        
+
         logInfo(catalog_user.name_log, 'Панель оператора "Выдача по ТРК" - ОТКРЫТА');
         // Инициализаия панели  "Выбранные емкости"
         confirm_tanks.init();
