@@ -1607,7 +1607,6 @@ var confirm_df = {
             confirm_df.input_sap_factory_recipient.val('');
             switch (i) {
                 case "1":
-                case "2":
                 case "5":
                 case "6":
                     // По резервированию
@@ -1695,6 +1694,58 @@ var confirm_df = {
                                     OnAJAXErrorOfMessage("Номер ИП №" + num + " - не найден в САП");
                                 }
 
+                            }
+                        }
+                    );
+                    break;
+                case "2":
+                    // По резервированию с передачей озм
+                    confirm_df.input_sap_num.val($.trim(confirm_df.input_sap_num.val())); // Уберем пробелы
+                    var num = confirm_df.input_sap_num.val();
+                    // Определим ОЗМ бака
+                    var matrn = null;
+                    if (confirm_df.gun !== null && confirm_df.gun.type_fuel !== null) {
+                        matrn = "000000000" + confirm_df.gun.type_fuel;
+                    }
+                    if (confirm_df.risers !== null && confirm_df.risers.type_fuel !== null) {
+                        matrn = "000000000" + confirm_df.risers.type_fuel;
+                    }
+
+                    getReservationMatrn(
+                        num,
+                        matrn,
+                        2,
+                        function (result) {
+                            if (result.RSNUM == "") {
+                                OnAJAXErrorOfMessage("Номер резервирования №" + num + ", по ОЗМ:" + matrn + " - не найдет в САП");
+                            } else {
+                                // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
+                                    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
+                                } else {
+                                    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
+                                        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
+                                    } else {
+                                        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
+                                        //$('input#sap-num').val();
+                                        confirm_df.input_sap_ozm.val(result.MATNR);
+                                        confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                                        confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                        confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
+                                        $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                                        if (result.RSNUM != "---") {
+                                            var depots = catalog_depots.get($.trim(result.UMLGO));
+                                            if (depots) {
+                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                            }
+                                        } else { // TODO:!!!ТЕСТ УБРАТЬ
+                                            confirm_df.input_sap_stock_recipient.val("---");
+                                        }
+
+                                    }
+                                }
                             }
                         }
                     );
