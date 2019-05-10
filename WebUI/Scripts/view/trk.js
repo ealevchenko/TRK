@@ -2203,7 +2203,7 @@ var confirm_df = {
                 $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
-                $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
+                $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
                 $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('*№ КПП :');
                 $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');

@@ -7,7 +7,7 @@ var catalog_user = {
     operator_name: null,
     smena_num: null,
     smena_datetime: null,
-    name_log: null,
+    name_log: null
 };
 
 var select_type_rf = null;
@@ -48,7 +48,7 @@ var open_rf = {
     railway_num_nak: null,
     railway_num_tanker: null,
     railway_provider: null,
-    railway_type_rw_capacity: null,
+    //railway_type_rw_capacity: null,
     //railway_nak_volume: null,
     //railway_nak_dens: null,
     railway_nak_mass: null,
@@ -163,7 +163,7 @@ var open_rf = {
         open_rf.railway_num_nak.val('');
         open_rf.railway_num_tanker.val('');
         open_rf.railway_provider.text('');
-        open_rf.railway_type_rw_capacity = null;
+        //open_rf.railway_type_rw_capacity = null;
         //open_rf.railway_nak_volume.val('');
         //open_rf.railway_nak_dens.val('');
         open_rf.railway_nak_mass.val('');
@@ -207,7 +207,7 @@ var open_rf = {
             railway_num_nak: type === 1 ? open_rf.railway_num_nak.val() : null,
             railway_num_tanker: type === 1 ? open_rf.railway_num_tanker.val() : null,
             railway_provider: type === 1 ? open_rf.railway_provider.text() : null,
-            railway_type_capacity: type === 1 ? open_rf.railway_type_rw_capacity : null,
+            //railway_type_capacity: type === 1 ? open_rf.railway_type_rw_capacity : null,
             //railway_nak_volume: type === 1 ? open_rf.railway_nak_volume.val() : null,
             //railway_nak_dens: type === 1 ? open_rf.railway_nak_dens.val() : null,
             railway_nak_mass: type === 1 ? open_rf.railway_nak_mass.val() : null,
@@ -345,7 +345,7 @@ var confirm_acceptance = {
                 $('td#acceptance-tank-railway-num-nak').text(open_rf.railway_num_nak.val());
                 $('td#acceptance-tank-railway-num-tanker').text(open_rf.railway_num_tanker.val());
                 $('td#acceptance-tank-railway-provider').text(open_rf.railway_provider.text());
-                $('td#acceptance-tank-railway-type-capacity').text(open_rf.railway_type_rw_capacity);
+                //$('td#acceptance-tank-railway-type-capacity').text(open_rf.railway_type_rw_capacity);
                 //$('td#acceptance-tank-railway-nak-volume').text(open_rf.railway_nak_volume.val());
                 //$('td#acceptance-tank-railway-nak-dens').text(open_rf.railway_nak_dens.val());
                 $('td#acceptance-tank-railway-nak-mass').text(open_rf.railway_nak_mass.val());
@@ -468,7 +468,7 @@ var outMasterStep = function () {
             open_rf.railway_num_nak.attr("disabled", false);
             open_rf.railway_num_tanker.attr("disabled", false);
             open_rf.railway_provider.attr("disabled", false);
-            select_type_rw_capacity.selectmenu("enable");
+            //select_type_rw_capacity.selectmenu("enable");
             //open_rf.railway_nak_volume.attr("disabled", false);
             //open_rf.railway_nak_dens.attr("disabled", false);
             open_rf.railway_nak_mass.attr("disabled", false);
@@ -502,7 +502,7 @@ var outMasterStep = function () {
             open_rf.railway_num_nak.attr("disabled", true);
             open_rf.railway_num_tanker.attr("disabled", true);
             open_rf.railway_provider.attr("disabled", true);
-            select_type_rw_capacity.selectmenu("disable");
+            //select_type_rw_capacity.selectmenu("disable");
             //open_rf.railway_nak_volume.attr("disabled", true);
             //open_rf.railway_nak_dens.attr("disabled", true);
             open_rf.railway_nak_mass.attr("disabled", true);
@@ -831,24 +831,24 @@ $(function () {
             null);
         //
         // Настроим тип жд.цистерны
-        select_type_rw_capacity = initSelect(
-            $('select#type-rw-capacity'),
-            { width: 300 },
-            [
-                { value: '15-871', text: '8-осная для нефтепродуктов, модель 15-871' },
-                { value: '15-880', text: '8-осная для нефти, модель 15-880' },
-                { value: '15-869', text: '4-осная  для бензина и светлых нефтепродуктов, модель 15-869' },
-                { value: '15-1427', text: '4-осная  для бензина с переходной площадкой, модель 15-1427' },
-                { value: '15-1566', text: '4-осная  для вязких нефтепродуктов, модель 15-1566' }
-            ],
-            null,
-            open_rf.railway_type_rw_capacity,
-            function (event, ui) {
-                event.preventDefault();
-                $(".messageTips").text('');
-                open_rf.railway_type_rw_capacity = ui.item.value; // Сохраним состояние
-            },
-            null);
+        //select_type_rw_capacity = initSelect(
+        //    $('select#type-rw-capacity'),
+        //    { width: 300 },
+        //    [
+        //        { value: '15-871', text: '8-осная для нефтепродуктов, модель 15-871' },
+        //        { value: '15-880', text: '8-осная для нефти, модель 15-880' },
+        //        { value: '15-869', text: '4-осная  для бензина и светлых нефтепродуктов, модель 15-869' },
+        //        { value: '15-1427', text: '4-осная  для бензина с переходной площадкой, модель 15-1427' },
+        //        { value: '15-1566', text: '4-осная  для вязких нефтепродуктов, модель 15-1566' }
+        //    ],
+        //    null,
+        //    open_rf.railway_type_rw_capacity,
+        //    function (event, ui) {
+        //        event.preventDefault();
+        //        $(".messageTips").text('');
+        //        open_rf.railway_type_rw_capacity = ui.item.value; // Сохраним состояние
+        //    },
+        //    null);
         // Вывести на экран шаг
         outMasterStep();
         // Определим все поля для проверки валидации
