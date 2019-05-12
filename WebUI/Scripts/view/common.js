@@ -1771,7 +1771,7 @@ var postAsyncTanks_kerosene = function (tanks_kerosene, callback) {
 var getAsyncOpenReceivingFuel = function (callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/azs/receiving_fuel/open',
+        url: '/api/rf/receiving_fuel/open',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1794,7 +1794,7 @@ var getAsyncOpenReceivingFuel = function (callback) {
 var getAsyncReceivingFuel = function (id, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/azs/receiving_fuel/id/' + id,
+        url: '/api/rf/receiving_fuel/id/' + id,
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1816,7 +1816,7 @@ var getAsyncReceivingFuel = function (id, callback) {
 //Добавить ReceivingFuel
 var postAsyncReceivingFuel = function (receiving_fuel, callback) {
     $.ajax({
-        url: '../../api/azs/receiving_fuel',
+        url: '../../api/rf/receiving_fuel',
         type: 'POST',
         data: JSON.stringify(receiving_fuel),
         contentType: "application/json;charset=utf-8",
@@ -1842,7 +1842,7 @@ var postAsyncReceivingFuel = function (receiving_fuel, callback) {
 var putAsyncReceivingFuel = function (receiving_fuel, callback) {
     $.ajax({
         type: 'PUT',
-        url: '/api/azs/receiving_fuel/' + receiving_fuel.id,
+        url: '/api/rf/receiving_fuel/' + receiving_fuel.id,
         data: JSON.stringify(receiving_fuel),
         contentType: "application/json;charset=utf-8",
         async: true,
@@ -1866,7 +1866,7 @@ var putAsyncReceivingFuel = function (receiving_fuel, callback) {
 var getAsyncReceivingFuelTanks = function (id, num, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/azs/receiving_fuel_tanks/id/' + id + '/num/' + num,
+        url: '/api/rf/receiving_fuel_tanks/id/' + id + '/num/' + num,
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1888,7 +1888,7 @@ var getAsyncReceivingFuelTanks = function (id, num, callback) {
 //Добавить ReceivingFuelTanks
 var postAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
     $.ajax({
-        url: '../../api/azs/receiving_fuel_tanks',
+        url: '../../api/rf/receiving_fuel_tanks',
         type: 'POST',
         data: JSON.stringify(receiving_fuel_tanks),
         contentType: "application/json;charset=utf-8",
@@ -1914,7 +1914,7 @@ var postAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
 var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
     $.ajax({
         type: 'PUT',
-        url: '/api/azs/receiving_fuel_tanks/' + receiving_fuel_tanks.id,
+        url: '/api/rf/receiving_fuel_tanks/' + receiving_fuel_tanks.id,
         data: JSON.stringify(receiving_fuel_tanks),
         contentType: "application/json;charset=utf-8",
         async: true,
