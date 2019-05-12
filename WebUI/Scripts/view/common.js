@@ -1,6 +1,6 @@
 ﻿// Бит вкл\откл. логирования для отладки
 var blog_view = $.parseJSON(log_view);
-var log = (blog_view == true ? log4javascript.getDefaultLogger() : null);
+var log = (blog_view === true ? log4javascript.getDefaultLogger() : null);
 //=========== ПЕРЕМЕННЫЕ ДЛЯ ТЕСТОВ ====================================================
 // TODO:!!!ТЕСТ УБРАТЬ
 var ntype_test = Number(type_test);
@@ -1934,6 +1934,31 @@ var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
         },
     });
 };
+
+// Веруть заправочную ведомость
+var getAsyncViewReportRFOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/rf/report/change_tank/' + toISOStringTZ(start).substring(0, 19) + '/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // ---- Запросы к БД [KRR-PA-CNT-Oil2] (карточки АЗС) -----------------
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {

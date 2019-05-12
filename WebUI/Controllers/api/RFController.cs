@@ -306,24 +306,32 @@ namespace WebUI.Controllers.api
         }
         #endregion
 
-        // GET: api/rf/report/change_tank/2018-11-26T19:00:00/2018-11-27T06:59:59
+        // GET: api/rf/report/change_tank/2019-04-15T00:00:00/2019-04-16T06:59:59
         [Route("report/change_tank/{start:datetime}/{stop:datetime}")]
         [ResponseType(typeof(RF_Change))]
         public IHttpActionResult GetReportChangeTank(DateTime start, DateTime stop)
         {
 
-            string sql = "SELECT rf.operator_name, rf.smena_num, rf.smena_datetime, rf.start_datetime AS start_rf, rf.stop_datetime AS stop_rf, rft.fuel, rft.num, " +
-                "rft.start_datetime as start_tank, rft.start_mass, rft.stop_datetime as stop_tank, rft.stop_mass, change_capacity = rft.stop_mass - rft.start_mass " +
-                "FROM dbo.ReceivingFuel as rf INNER JOIN dbo.ReceivingFuelTanks as rft ON rf.id = rft.id_receiving_fuel " +
-                "where rf.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and rf.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
-                "ORDER BY rft.fuel, start_rf, rft.num";
-
-            List<RF_Change> list = this.ef_rf.Database.SqlQuery<RF_Change>(sql).ToList();
-            if (list == null)
+            try
             {
+                string sql = "SELECT rf.operator_name, rf.smena_num, rf.smena_datetime, rf.start_datetime AS start_rf, rf.stop_datetime AS stop_rf, rft.fuel, rft.num, " +
+                    "rft.start_datetime as start_tank, rft.start_mass, rft.stop_datetime as stop_tank, rft.stop_mass, change_capacity = rft.stop_mass - rft.start_mass " +
+                    "FROM dbo.ReceivingFuel as rf INNER JOIN dbo.ReceivingFuelTanks as rft ON rf.id = rft.id_receiving_fuel " +
+                    "where rf.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and rf.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                    "ORDER BY rft.fuel, start_rf, rft.num";
+
+                List<RF_Change> list = this.ef_rf.Database.SqlQuery<RF_Change>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportChangeTank(start={0}, stop={1})", start, stop).SaveError(e);
                 return NotFound();
             }
-            return Ok(list);
         }
 
     }
