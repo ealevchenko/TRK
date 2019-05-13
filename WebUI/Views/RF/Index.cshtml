@@ -49,8 +49,10 @@
     <div id="content">
         <div>
             Текущее время :<label id="date-value"></label>
-            Пользователь :<label id="date-user"></label>  Host :<label id="date-host"></label> <button id="button-report" class="ui-button ui-widget ui-corner-all button-reports">Отчет по приему ГСМ</button>
-        </div>
+            Пользователь :<label id="date-user"></label>  Host :<label id="date-host"></label> 
+            @*<button id="button-report" class="ui-button ui-widget ui-corner-all button-reports">Отчет по приему ГСМ</button>*@
+            <a target="_blank" href='@Url.Action("ReceivingFuel", "Home", new { Area = "report" })'>Отчет по приему ГСМ</a>
+</div>
         <div class="rf">
             <div class="setup-rf">
                 <button id="button-add-doc" class="ui-button ui-widget ui-corner-all button-setup" style="display:none">Перейти к выбору емкости</button>

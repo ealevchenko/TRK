@@ -12,20 +12,60 @@ using System.Web.Http.Description;
 
 namespace WebUI.Controllers.api
 {
-    public partial class RF_Change
+    //public partial class RF_Change
+    //{
+    //    public string operator_name { get; set; }
+    //    public int smena_num { get; set; }
+    //    public DateTime smena_datetime { get; set; }
+    //    public DateTime start_rf { get; set; }
+    //    public DateTime? stop_rf { get; set; }
+    //    public int fuel { get; set; }
+    //    public string num { get; set; }
+    //    public DateTime start_tank { get; set; }
+    //    public decimal start_mass { get; set; }
+    //    public DateTime? stop_tank { get; set; }
+    //    public decimal? stop_mass { get; set; }
+    //    public decimal? change_capacity { get; set; }
+    //}
+
+    public class RF_Report
     {
+        public int id_rf { get; set; }
         public string operator_name { get; set; }
         public int smena_num { get; set; }
         public DateTime smena_datetime { get; set; }
-        public DateTime start_rf { get; set; }
-        public DateTime? stop_rf { get; set; }
-        public int fuel { get; set; }
+        public int? railway_num_nak { get; set; }
+        public int? railway_num_tanker { get; set; }
+        public string railway_provider { get; set; }
+        public string railway_type_capacity { get; set; }
+        public decimal? railway_nak_volume { get; set; }
+        public decimal? railway_nak_dens { get; set; }
+        public decimal? railway_nak_mass { get; set; }
+        public decimal? railway_manual_level { get; set; }
+        public decimal? railway_manual_volume { get; set; }
+        public decimal? railway_manual_dens { get; set; }
+        public decimal? railway_manual_mass { get; set; }
+        public DateTime start_datetime { get; set; }
+        public DateTime? stop_datetime { get; set; }
+        public DateTime? close_rf { get; set; }
+        public int id_rft { get; set; }
         public string num { get; set; }
+        public int fuel { get; set; }
         public DateTime start_tank { get; set; }
+        public decimal start_level { get; set; }
+        public decimal start_volume { get; set; }
+        public decimal start_density { get; set; }
         public decimal start_mass { get; set; }
+        public decimal start_temp { get; set; }
+        public decimal start_water_level { get; set; }
         public DateTime? stop_tank { get; set; }
+        public decimal? stop_level { get; set; }
+        public decimal? stop_volume { get; set; }
+        public decimal? stop_density { get; set; }
         public decimal? stop_mass { get; set; }
-        public decimal? change_capacity { get; set; }
+        public decimal? stop_temp { get; set; }
+        public decimal? stop_water_level { get; set; }
+        public DateTime? close_rft { get; set; }
     }
 
     [RoutePrefix("api/rf")]
@@ -306,21 +346,23 @@ namespace WebUI.Controllers.api
         }
         #endregion
 
-        // GET: api/rf/report/change_tank/2019-04-15T00:00:00/2019-04-16T06:59:59
-        [Route("report/change_tank/{start:datetime}/{stop:datetime}")]
-        [ResponseType(typeof(RF_Change))]
-        public IHttpActionResult GetReportChangeTank(DateTime start, DateTime stop)
+        // GET: api/rf/report/type/1/start/2019-04-15T00:00:00/stop/2019-04-16T06:59:59
+        [Route("report/type/{type:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(RF_Report))]
+        public IHttpActionResult GetReportRF(int type, DateTime start, DateTime stop)
         {
 
             try
             {
-                string sql = "SELECT rf.operator_name, rf.smena_num, rf.smena_datetime, rf.start_datetime AS start_rf, rf.stop_datetime AS stop_rf, rft.fuel, rft.num, " +
-                    "rft.start_datetime as start_tank, rft.start_mass, rft.stop_datetime as stop_tank, rft.stop_mass, change_capacity = rft.stop_mass - rft.start_mass " +
+                string sql = "SELECT rf.id as id_rf, rf.operator_name, rf.smena_num, rf.smena_datetime, rf.railway_num_nak, rf.railway_num_tanker, rf.railway_provider, rf.railway_type_capacity, " +
+                "rf.railway_nak_volume, rf.railway_nak_dens, rf.railway_nak_mass, rf.railway_manual_level, rf.railway_manual_volume, rf.railway_manual_dens, rf.railway_manual_mass, rf.start_datetime, " +
+                "rf.stop_datetime, rf.[close] as close_rf, rft.id AS id_rft, rft.num, rft.fuel, rft.start_datetime AS start_tank, rft.start_level, rft.start_volume, rft.start_density, rft.start_mass, " +
+                "rft.start_temp, rft.start_water_level, rft.stop_datetime AS stop_tank, rft.stop_level, rft.stop_volume, rft.stop_density, rft.stop_mass, rft.stop_temp, rft.stop_water_level, rft.[close] AS close_rft " +
                     "FROM dbo.ReceivingFuel as rf INNER JOIN dbo.ReceivingFuelTanks as rft ON rf.id = rft.id_receiving_fuel " +
-                    "where rf.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and rf.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
-                    "ORDER BY rft.fuel, start_rf, rft.num";
+                    "where rf.type = " + type.ToString() + " and rf.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and rf.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                    "ORDER BY rft.fuel, rf.start_datetime, rft.num";
 
-                List<RF_Change> list = this.ef_rf.Database.SqlQuery<RF_Change>(sql).ToList();
+                List<RF_Report> list = this.ef_rf.Database.SqlQuery<RF_Report>(sql).ToList();
                 if (list == null)
                 {
                     return NotFound();
@@ -329,7 +371,7 @@ namespace WebUI.Controllers.api
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода API:GetReportChangeTank(start={0}, stop={1})", start, stop).SaveError(e);
+                String.Format("Ошибка выполнения метода API:GetReportRF(type={0}, start={1}, stop={2})", type, start, stop).SaveError(e);
                 return NotFound();
             }
         }

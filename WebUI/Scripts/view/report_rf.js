@@ -75,8 +75,8 @@
             html_div: $("#tabs-reports"),
             active: 0,
             initObject: function () {
-                $('#link-tabs-report-1').text("Отчет");
-                $('#link-tabs-report-2').text("1");
+                $('#link-tabs-report-1').text("Ж.д. цистерны");
+                $('#link-tabs-report-2').text("Автоцистерны");
                 this.html_div.tabs({
                     collapsible: true,
                     activate: function (event, ui) {
@@ -179,6 +179,7 @@
             select: null,
             select_id: null,
             list: [],
+            groupColumn:0,
             // Инициализировать таблицу
             initObject: function () {
                 this.obj = this.html_table.DataTable({
@@ -190,19 +191,47 @@
                     "autoWidth": false,
                     //"filter": true,
                     //"scrollY": "600px",
-                    //"scrollX": true,
+                    "scrollX": true,
                     //language: language_table(langs),
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
                     columns: [
-
-                        { data: "tank", title: "Резервуар", width: "150px", orderable: true, searchable: false },
-                        { data: "start", title: "На начало " , width: "150px", orderable: true, searchable: true },
-                        { data: "end", title: "На конец", width: "150px", orderable: true, searchable: true },
-                        { data: "change", title: "Изменение", width: "50px", orderable: true, searchable: true },
-                    ]
+                        { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
+                        //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },
+                        //{ data: "railway_num_nak", title: "Ж.д. накладная", width: "50px", orderable: false, searchable: true },
+                        //{ data: "railway_num_tanker", title: "№ цистерны", width: "50px", orderable: false, searchable: true },
+                        //{ data: "railway_provider", title: "Поставщик", width: "150px", orderable: false, searchable: false },
+                        { data: "railway_nak_mass", title: "Масса по накл (кг.)", width: "50px", orderable: false, searchable: false },
+                        { data: "railway_manual_level", title: "Уровень р.з.", width: "50px", orderable: false, searchable: false },
+                        { data: "railway_manual_volume", title: "Объем р.з.", width: "50px", orderable: false, searchable: false },
+                        { data: "railway_manual_dens", title: "Плотность р.з.", width: "50px", orderable: false, searchable: false },
+                        { data: "railway_manual_mass", title: "Масса р.з.", width: "50px", orderable: false, searchable: false },
+                        { data: "num", title: "Резервуар", width: "50px", orderable: true, searchable: false },
+                        { data: "start_tank", title: "Начало", width: "150px", orderable: false, searchable: false },
+                        { data: "start_mass", title: "Масса в начале (кг.)", width: "50px", orderable: false, searchable: false },
+                        { data: "stop_tank", title: "Конец", width: "150px", orderable: false, searchable: false },
+                        { data: "stop_mass", title: "Масса в конце (кг.)", width: "50px", orderable: false, searchable: false },
+                        { data: "change_mass", title: "Приняли (кг.)", width: "50px", orderable: false, searchable: false },
+                    ],
+                    "columnDefs": [
+                        { "visible": false, "targets": table_report.groupColumn }
+                    ],
+                    "order": [[table_report.groupColumn, 'asc']],
+                    "drawCallback": function (settings) {
+                        var api = this.api();
+                        var rows = api.rows({ page: 'current' }).nodes();
+                        var last = null;
+                        api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
+                            if (last !== group) {
+                                $(rows).eq(i).before(
+                                    '<tr class="group"><td colspan="12">' + group + '</td></tr>'
+                                );
+                                last = group;
+                            }
+                        });
+                    }
                 });
             },
             // Показать таблицу с данными
@@ -211,7 +240,7 @@
                 if (this.list === null | data_refresh === true) {
                     // Обновим данные
                     getAsyncViewReportRFOfDateTime(
-                        date_start, date_stop,
+                        1, date_start, date_stop,
                         function (result) {
                             table_report.list = result;
                             table_report.loadDataTable(result);
@@ -228,14 +257,25 @@
                 this.list = data;
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
-
-                    //var cards = reference_cards != null ? reference_cards.getResult(data[i].CardId) : null;
-
                     this.obj.row.add({
-                        "tank": data[i].num,
-                        "start": data[i].start_mass,
-                        "end": data[i].stop_mass,
-                        "change": data[i].change_capacity
+                        "group": 'ГСМ - ' + outFuelType(data[i].fuel) + ', ж.д. накладная №' + data[i].railway_num_nak + ', цистерна №' + data[i].railway_num_tanker,
+                        "fuel": outFuelType(data[i].fuel),
+                        "railway_num_nak": data[i].railway_num_nak,
+                        "railway_num_tanker": data[i].railway_num_tanker,
+                        //"railway_provider": data[i].railway_provider,
+                        "railway_nak_mass": data[i].railway_nak_mass,
+                        "railway_manual_level": data[i].railway_manual_level,
+                        "railway_manual_volume": data[i].railway_manual_volume,
+                        "railway_manual_dens": data[i].railway_manual_dens,
+                        "railway_manual_mass": data[i].railway_manual_mass,
+                        "num": data[i].num,
+                        "start_tank": data[i].start_tank,
+                        "start_mass": data[i].start_mass.toFixed(2),
+                        "stop_tank": data[i].stop_tank,
+                        "stop_mass": data[i].stop_mass.toFixed(2),
+                        "change_mass": (data[i].stop_mass - data[i].start_mass).toFixed(2)
+
+                        //toISOStringTZ(start)
                         //"LokomotiveId": data[i].LokomotiveId,
                         //"Name": data[i].Name,
                         //"UsageVolume": data[i].UsageVolume,
@@ -290,7 +330,7 @@
     tab_type_reports.initObject();
     //// Загрузка библиотек
     //loadReference(function (result) {
-        table_report.initObject();
+    table_report.initObject();
     //});
 
 });

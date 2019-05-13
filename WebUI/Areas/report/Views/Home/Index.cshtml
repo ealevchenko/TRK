@@ -22,6 +22,26 @@
             </div>
         </a>
     </li>
+    <li>
+        @*<a href='@Url.Action("#", "Home", new { Area = "report" })'>*@
+            <a href='#'>
+                <span class="ca-icon">J</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">Заправочная ведомость</h2>
+                    <h3 class="ca-sub">Заправочная ведомость, выдача ГСМ на АЗС</h3>
+                </div>
+            </a>
+    </li>
+    <li>
+        @*<a href='@Url.Action("#", "Home", new { Area = "report" })'>*@
+            <a href='#'>
+                <span class="ca-icon">P</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">Сообщения</h2>
+                    <h3 class="ca-sub">Протокол действия персонала и сообщений АСУ АЗС</h3>
+                </div>
+            </a>
+    </li>
     @*<li>
         <a href='@Url.Action("TankStates", "Home")'>
             <span class="ca-icon">Z</span>
@@ -59,10 +79,11 @@
         </a>
     </li>*@
 </ul>
-@*<div class="more">
+<div class="more">
     <ul>
-        <li>@GlobalResource.home_more_link:</li>
-        <li><a href='@Url.Action("CardsAdmin", "Home")'>@GlobalResource.home_link_RFID_cards_adm</a></li>
+        <li>Панели оператора:</li>
+        <li><a href='@Url.Action("Index", "RF", new { Area = "" })'>Принять ГСМ</a></li>
+        <li><a href='@Url.Action("Index", "Home", new { Area = "" })'>Выдать ГСМ</a></li>
     </ul>
-</div>*@
+</div>
 

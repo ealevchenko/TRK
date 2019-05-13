@@ -1934,12 +1934,11 @@ var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
         },
     });
 };
-
-// Веруть заправочную ведомость
-var getAsyncViewReportRFOfDateTime = function (start, stop, callback) {
+// Веруть отчет по приему ГСМ в резервуары
+var getAsyncViewReportRFOfDateTime = function (type, start, stop, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/rf/report/change_tank/' + toISOStringTZ(start).substring(0, 19) + '/' + toISOStringTZ(stop).substring(0, 19),
+        url: '/api/rf/report/type/'+type+'/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
         async: true,
         dataType: 'json',
         beforeSend: function () {
