@@ -15,12 +15,19 @@ legend {
     display: block;
     width: 100%;
     padding: 0;
-    margin-bottom: 3px;
+    margin-bottom: 0px;
     font-size: 12px;
     line-height: inherit;
     color: #333333;
     border: 0;
     border-bottom: 1px solid #e5e5e5;
+}
+
+label {
+    /*display: inline-block;*/
+    margin-bottom: 0px;
+    font-weight: bold;
+    color:blue;
 }
 
 .ui-progressbar {
@@ -120,7 +127,7 @@ td.null_active {
 }
 
 .error {
-    background: #fddfdf
+    background: #fddfdf;
 }
 
 
