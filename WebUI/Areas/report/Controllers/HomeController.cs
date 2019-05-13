@@ -18,6 +18,12 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        // Протокол действия персонала и системы
+        public ActionResult Logs()
+        {
+            return View();
+        }
+
 
     }
 }

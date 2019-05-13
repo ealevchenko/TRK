@@ -549,6 +549,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Areas\report\Views\Home\Logs.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -675,6 +676,7 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\view\common.js" />
     <Content Include="Scripts\view\log.js" />
+    <Content Include="Scripts\view\report_logs.js" />
     <Content Include="Scripts\view\report_rf.js" />
     <Content Include="Scripts\view\rf.js" />
     <Content Include="Scripts\view\trk.js" />

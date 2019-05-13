@@ -65,5 +65,31 @@ namespace WebUI.Controllers.api
                 return -1;
             }
         }
+
+        // GET: api/logs/report/start/2019-04-02T00:00:00/stop/2019-04-02T23:59:59
+        [Route("report/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(TRKLogs))]
+        public IHttpActionResult GetTRKLogsOfDateTime(DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = "SELECT [ID] ,[DateTime] ,[UserName] ,[Level] ,[Log] FROM [dbo].[TRKLogs] " +
+                    "where [DateTime] >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and [DateTime] <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                    "ORDER BY [DateTime] desc";
+
+                List<TRKLogs> list = this.ef_logs.Database.SqlQuery<TRKLogs>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetTRKLogsOfDateTime(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
+
     }
 }

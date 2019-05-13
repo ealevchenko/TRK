@@ -449,6 +449,18 @@ var outFuelType = function (i) {
         default: return i;
     }
 };
+// Вернуть тип сообщения
+var outLevelLog = function (i) {
+    switch (i) {
+        case 0: return "INFO";
+        case 1: return "WARNING";
+        case 2: return "ERROR";
+        case 3: return "DEBUG";
+        case 4: return "SYSTEM";
+        default: return i;
+    }
+};
+
 // Инициализация компонента Select
 var initSelect = function (obj_select, property, data, callback_option, value_select, event_change, exceptions_value) {
     var options = [];
@@ -1934,30 +1946,6 @@ var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
         },
     });
 };
-// Веруть отчет по приему ГСМ в резервуары
-var getAsyncViewReportRFOfDateTime = function (type, start, stop, callback) {
-    $.ajax({
-        type: 'GET',
-        url: '/api/rf/report/type/'+type+'/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
-        async: true,
-        dataType: 'json',
-        beforeSend: function () {
-            AJAXBeforeSend();
-        },
-        success: function (data) {
-            if (typeof callback === 'function') {
-                callback(data);
-            }
-        },
-        error: function (x, y, z) {
-            OnAJAXError(x, y, z);
-        },
-        complete: function () {
-            AJAXComplete();
-        },
-    });
-}
-
 // ---- Запросы к БД [KRR-PA-CNT-Oil2] (карточки АЗС) -----------------
 // Веруть список azsCards карточек
 var getAsyncViewazsCards = function (callback) {
@@ -2327,6 +2315,53 @@ var getAsyncClient = function (callback) {
     $.ajax({
         type: 'GET',
         url: '/api/global/client',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+//-------ОТЧЕТЫ-----------------------------------------------
+// Веруть отчет по приему ГСМ в резервуары
+var getAsyncViewReportRFOfDateTime = function (type, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/rf/report/type/' + type + '/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Веруть лог
+var getAsyncViewReportLogsOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/logs/report/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
         async: true,
         dataType: 'json',
         beforeSend: function () {
