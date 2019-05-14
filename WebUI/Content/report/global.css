@@ -71,6 +71,9 @@ body{
 .img-header-rf {
     background-image: url(../../Images/Report/pattern.png), url(../../Images/Report/rf.jpg);
 }
+.img-header-fuel-list {
+    background-image: url(../../Images/Report/pattern.png), url(../../Images/Report/fuel_list.jpg);
+}
 
 /*.img-header-RFID-admin {
     background-image: url(../Images/pattern.png), url(../Images/RFID_admin.jpg);

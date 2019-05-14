@@ -1,11 +1,17 @@
 ﻿DIV#report {
     padding: 0;
     margin: 20px auto;
-    width: 1200px;
+
     color: #666;
     background: White;
 }
 
+div.report-wide {
+    width: 1600px;
+}
+div.report-narrow {
+    width: 1200px;
+}
 h1 {
     color: rgba(255, 230, 132, 1);
 }

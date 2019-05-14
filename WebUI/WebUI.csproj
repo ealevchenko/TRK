@@ -504,6 +504,7 @@
     <Content Include="Images\active.png" />
     <Content Include="Images\not_active.png" />
     <Content Include="Images\null_active.png" />
+    <Content Include="Images\Report\fuel_list.jpg" />
     <Content Include="Images\Report\global.jpg" />
     <Content Include="Images\Report\pattern.png" />
     <Content Include="Images\Report\rf.jpg" />
@@ -550,6 +551,7 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Areas\report\Views\Home\Logs.cshtml" />
+    <Content Include="Areas\report\Views\Home\FuelList.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -676,6 +678,7 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\view\common.js" />
     <Content Include="Scripts\view\log.js" />
+    <Content Include="Scripts\view\report_fuel_list.js" />
     <Content Include="Scripts\view\report_logs.js" />
     <Content Include="Scripts\view\report_rf.js" />
     <Content Include="Scripts\view\rf.js" />

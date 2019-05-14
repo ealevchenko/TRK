@@ -460,7 +460,20 @@ var outLevelLog = function (i) {
         default: return i;
     }
 };
-
+// Вернуть режим
+var outMode = function (i) {
+    if (i === null) return null;
+    switch (Number(i)) {
+        case 1: return "Резерв. (керосин)";
+        case 2: return "Резерв. (ГСМ)";
+        case 3: return "Исход. поставка";
+        case 4: return "Требование (самовывоз)";
+        case 5: return "Заправка (бак)";
+        case 6: return "Заправка (цистерна)";
+        case 7: return "Пролив";
+        default: return i;
+    }
+};
 // Инициализация компонента Select
 var initSelect = function (obj_select, property, data, callback_option, value_select, event_change, exceptions_value) {
     var options = [];
@@ -1951,7 +1964,7 @@ var putAsyncReceivingFuelTanks = function (receiving_fuel_tanks, callback) {
 var getAsyncViewazsCards = function (callback) {
     $.ajax({
         type: 'GET',
-        url: 'api/trk/cards',
+        url: '/api/trk/cards',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -1994,14 +2007,6 @@ var getReference_azsCards = function (callback) {
                 return result[0].Number;
             };
         }
-        //getOb: function (value) {
-        //    var result = getObjects(this.list, '  ', value)
-        //    var txt = '(' + value + ')';
-        //    if (result != null && result.length > 0) {
-        //        txt += ' ' + result[0].name;
-        //    };
-        //    return txt;
-        //},
     };
     ref.initObject();
 };
@@ -2362,6 +2367,29 @@ var getAsyncViewReportLogsOfDateTime = function (start, stop, callback) {
     $.ajax({
         type: 'GET',
         url: '/api/logs/report/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Веруть заправочную ведомость
+var getAsyncViewReportFuelListOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/fuel_list/report/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
         async: true,
         dataType: 'json',
         beforeSend: function () {

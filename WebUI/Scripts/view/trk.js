@@ -1979,7 +1979,7 @@ var confirm_df = {
                                 { value: 1, text: 'По резервированию (керосин)' },
                                 { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
                                 { value: 3, text: 'По исходящей поставке' },
-                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 4, text: 'По требованию (самовывоз)'},
                                 { value: 5, text: 'Заправка в баки ТС', disabled: true },
                                 { value: 6, text: 'Заправка в цистерну топливозаправщика' },
                             ],

@@ -176,11 +176,11 @@
             },
             // Выподающие списки
             initComplete: function () {
-                table_report.obj.columns([1, 2]).every(function () {
+                table_report.obj.columns([2]).every(function () {
                     var column = this;
-                    var name = $(column.header()).attr('title');
+                    //var name = $(column.header()).attr('title');
                     var select = $('<select><option value="">Все</option></select>')
-                        .appendTo($(column.header()).empty().append(name))
+                        .appendTo($(column.header()).empty().append('Уровень сообщения'))
                         .on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
@@ -208,6 +208,7 @@
     //// Загрузка библиотек
     //loadReference(function (result) {
     table_report.initObject();
+    panel_select_report.viewReport();
     //});
 
 });

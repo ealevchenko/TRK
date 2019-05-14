@@ -12,6 +12,62 @@ using System.Web.Http.Description;
 
 namespace WebUI.Controllers.api
 {
+    public class FL_Report
+    {
+        public int id_fs { get; set; }
+        public string operator_name { get; set; }
+        public int smena_num { get; set; }
+        public DateTime smena_datetime { get; set; }
+        public int trk_num { get; set; }
+        public bool side { get; set; }
+        public int num { get; set; }
+        public int fuel_type { get; set; }
+        public string tank_num { get; set; }
+        public int id_card { get; set; }
+        public decimal? dose { get; set; }
+        public string passage { get; set; }
+        public decimal? volume { get; set; }
+        public decimal? mass { get; set; }
+        public DateTime start_datetime { get; set; }
+        public decimal start_level { get; set; }
+        public decimal start_volume { get; set; }
+        public decimal start_density { get; set; }
+        public decimal start_mass { get; set; }
+        public decimal start_temp { get; set; }
+        public decimal start_water_level { get; set; }
+        public int start_counter { get; set; }
+        public DateTime? stop_datetime { get; set; }
+        public decimal? stop_level { get; set; }
+        public decimal? stop_volume { get; set; }
+        public decimal? stop_density { get; set; }
+        public decimal? stop_mass { get; set; }
+        public decimal? stop_temp { get; set; }
+        public decimal? stop_water_level { get; set; }
+        public int? stop_counter { get; set; }
+        public DateTime? close { get; set; }
+        public DateTime? sending { get; set; }
+        public int? id_sap { get; set; }
+        public DateTime? sap_date { get; set; }
+        public TimeSpan? sap_time { get; set; }
+        public string sap_login_r { get; set; }
+        public string sap_n_bak { get; set; }
+        public string sap_ozm_bak { get; set; }
+        public string sap_ozm_treb { get; set; }
+        public string sap_flag_r { get; set; }
+        public string sap_plotnost { get; set; }
+        public double? sap_valume { get; set; }
+        public double? sap_mass { get; set; }
+        public string sap_login_exp { get; set; }
+        public string sap_n_post { get; set; }
+        public string sap_transp_fakt { get; set; }
+        public string sap_n_deb { get; set; }
+        public string sap_n_treb { get; set; }
+        public string sap_n_pos { get; set; }
+        public string sap_lgort { get; set; }
+        public string sap_werks { get; set; }
+        public DateTime? sap_sending { get; set; }
+    }
+    
     [RoutePrefix("api/azs")]
     public class FuelSaleController : ApiController
     {
@@ -279,5 +335,36 @@ namespace WebUI.Controllers.api
         }
 
         #endregion
+
+        // GET: api/azs/fuel_list/report/start/2019-04-02T00:00:00/stop/2019-04-02T23:59:59
+        [Route("fuel_list/report/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(FL_Report))]
+        public IHttpActionResult GetFuelListOfDateTime(DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = "SELECT  fs.id as id_fs, fs.operator_name, fs.smena_num, fs.smena_datetime, fs.trk_num, fs.side, fs.num, fs.fuel_type, fs.tank_num, fs.id_card, fs.dose, fs.passage, fs.volume, " +
+                         "fs.mass, fs.start_datetime, fs.start_level, fs.start_volume, fs.start_density, fs.start_mass, fs.start_temp, fs.start_water_level, fs.start_counter, fs.stop_datetime, fs.stop_level, " + 
+                         "fs.stop_volume, fs.stop_density, fs.stop_mass, fs.stop_temp, fs.stop_water_level, fs.stop_counter, fs.[close], fs.sending, sap.id AS id_sap, sap.DATE as sap_date, sap.TIME as sap_time, " +  
+                         "sap.LOGIN_R as sap_login_r, sap.N_BAK as sap_n_bak, sap.OZM_BAK as sap_ozm_bak, sap.OZM_TREB as sap_ozm_treb, sap.FLAG_R as sap_flag_r, sap.PLOTNOST as sap_plotnost, " +  
+                         "sap.VOLUME AS sap_valume, sap.MASS AS sap_mass, sap.LOGIN_EXP as sap_login_exp, sap.N_POST as sap_n_post, sap.TRANSP_FAKT as sap_transp_fakt, " +  
+                         "sap.N_DEB as sap_n_deb, sap.N_TREB as sap_n_treb, sap.N_POS as sap_n_pos, sap.LGORT as sap_lgort, sap.WERKS as sap_werks, sap.sending AS sap_sending " +
+                         "FROM dbo.SAP_Buffer as sap RIGHT OUTER JOIN  dbo.FuelSale as fs ON sap.id = fs.id_sap " +
+                    "where fs.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and fs.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                    "ORDER BY fs.start_datetime";
+
+                List<FL_Report> list = this.ef_fs.Database.SqlQuery<FL_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetFuelListOfDateTime(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
     }
 }

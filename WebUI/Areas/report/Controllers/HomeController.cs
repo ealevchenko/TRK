@@ -23,7 +23,11 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
-
+        // Заправочная ведомость
+        public ActionResult FuelList()
+        {
+            return View();
+        }
 
     }
 }
