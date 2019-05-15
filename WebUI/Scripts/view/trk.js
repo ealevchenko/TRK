@@ -1283,7 +1283,7 @@ var confirm_df = {
             valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
 
             valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
-            if (variant !== "4" && variant !== "3") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
+            if (variant !== "4" && variant !== "3" & variant !== "2") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
             if (variant === "3") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
             //if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
@@ -1729,6 +1729,7 @@ var confirm_df = {
                                     } else {
                                         // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
                                         confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
+                                        confirm_df.input_sap_num_pos.val(result.RSPOS);
                                         //$('input#sap-num').val();
                                         confirm_df.input_sap_ozm.val(result.MATNR);
                                         confirm_df.input_sap_ozm_amount.val(result.BDMNG);

@@ -55,6 +55,7 @@
             bt_left: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-w"></span>text</button>'),
             bt_right: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-e"></span>text</button>'),
             bt_refresh: $('<button class="ui-button ui-widget ui-corner-all" ><span class="ui-icon ui-icon-refresh"></span>text</button>'),
+            bt_print: $('<button class="ui-button ui-widget ui-corner-all" ><span class="ui-icon ui-icon-refresh"></span>text</button>'),
             label: $('<label for="date" ></label>'),
             span: $('<span id="select-range"></span>'),
             input_date: $('<input id="date" name="date" size="20">'),
@@ -67,17 +68,18 @@
                     .append(this.label)
                     .append(this.span)
                     //.append(this.bt_right)
-                    .append(this.select_sm);
-                    //.append(this.bt_refresh);
+                    .append(this.select_sm)
+                    .append(this.bt_print);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
-                //this.bt_refresh.attr('title', "Обновить отчет");
-                //this.bt_refresh.text("Показать отчет");
+                this.bt_print.attr('title', "Печать");
+                this.bt_print.text("Предварительный просмотр и печать");
 
-                //this.bt_refresh.on('click', function () {
-
-                //});
+                this.bt_print.on('click', function () {
+                    //window.print();
+                    printPageArea('tabs-reports', 900, 600);
+                });
 
                 // Настроим выбор времени
                 initSelect(
@@ -256,7 +258,14 @@
                         { data: "tank_num", title: "Резервуар(ы)", width: "100px", orderable: false, searchable: true },
                         { data: "waybill", title: "Путевой лист", width: "100px", orderable: true, searchable: true },
                         { data: "operator_name", title: "Оператор", width: "100px", orderable: true, searchable: true },
-                    ]
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                        ]
                 });
             },
             // Показать таблицу с данными

@@ -508,6 +508,9 @@
     <Content Include="Images\Report\global.jpg" />
     <Content Include="Images\Report\pattern.png" />
     <Content Include="Images\Report\rf.jpg" />
+    <Content Include="Scripts\ajax\jszip.min.js" />
+    <Content Include="Scripts\ajax\pdfmake.min.js" />
+    <Content Include="Scripts\ajax\vfs_fonts.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -658,6 +661,7 @@
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.cookie-1.4.1.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.printPage.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\log4javascript.js" />

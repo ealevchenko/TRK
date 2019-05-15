@@ -562,6 +562,17 @@ var OnAJAXError = function (x, y, z) {
     }
     //LockScreenOff();
 }
+
+var OnFunctionAJAXError = function (name, x, y, z) {
+    logError('Client Script', 'Ошибка выполнения API функция[' + name + '] - ' + z);
+    //LockScreenOff();
+    //confirm_df.updateTips(x.statusText);
+    //if (x.status != 404) {
+    //    //confirm_df.updateTips(x.statusText);
+    //    //alert(x + '\n' + y + '\n' + z);
+    //}
+    //LockScreenOff();
+}
 // Обработка ошибок
 var OnAJAXErrorOfMessage = function (message) {
     confirm_df.updateTips(message);
@@ -2355,7 +2366,7 @@ var getAsyncViewReportRFOfDateTime = function (type, start, stop, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            OnFunctionAJAXError('getAsyncViewReportRFOfDateTime', x, y, z);
         },
         complete: function () {
             AJAXComplete();
@@ -2408,3 +2419,49 @@ var getAsyncViewReportFuelListOfDateTime = function (start, stop, callback) {
         },
     });
 };
+
+var printPageArea = function (areaID, width, height) {
+    var printContent = document.getElementById(areaID);
+    var WinPrint = window.open('', '', 'width=' + width + ',height=' + height);
+    //WinPrint.document.write('<table>');
+    WinPrint.document.write(printContent.innerHTML);
+    //WinPrint.document.write('</table>');
+    WinPrint.document.close();
+    WinPrint.focus();
+    //WinPrint.print();
+    //WinPrint.close();
+}
+
+// Экспорт отчетов в Excel
+function fnExcelReport(tab, name_file) {
+    var file_name = name_file + '.xls';
+    var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+    tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+    tab_text = tab_text + '<x:Name>Test Sheet</x:Name>';
+
+    tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+    tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+    tab_text = tab_text + "<table border='1px'>";
+    //var tab = $('#table-list-wagons-tracking').html();
+    tab_text = tab_text + tab
+    tab_text = tab_text + '</table></body></html>';
+
+    var data_type = 'data:application/vnd.ms-excel';
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        if (window.navigator.msSaveBlob) {
+            var blob = new Blob([tab_text], {
+                type: "application/csv;charset=utf-8;"
+            });
+            navigator.msSaveBlob(blob, file_name);
+        }
+    } else {
+        $('#test').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+        $('#test').attr('download', file_name);
+    }
+}

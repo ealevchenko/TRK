@@ -30,7 +30,11 @@ namespace WebUI
                 "~/Scripts/DataTables/dataTables.buttons.min.js",
                 "~/Scripts/DataTables/buttons.jqueryui.js",
                 "~/Scripts/DataTables/dataTables.select.min.js",
-                "~/Scripts/DataTables/dataTables.jqueryui.min.js"
+                "~/Scripts/DataTables/dataTables.jqueryui.min.js",
+                "~/Scripts/DataTables/buttons.html5.min.js",
+                "~/Scripts/ajax/jszip.min.js",
+                "~/Scripts/ajax/pdfmake.min.js",
+                "~/Scripts/ajax/vfs_fonts.js"
                 ));
             // Плагин таблицы
             bundles.Add(new StyleBundle("~/DataTables/css").Include(
