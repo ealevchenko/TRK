@@ -2430,7 +2430,7 @@ var printPageArea = function (areaID, width, height) {
     WinPrint.focus();
     //WinPrint.print();
     //WinPrint.close();
-}
+};
 
 // Экспорт отчетов в Excel
 function fnExcelReport(tab, name_file) {

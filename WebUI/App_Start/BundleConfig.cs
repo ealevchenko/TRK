@@ -20,6 +20,9 @@ namespace WebUI
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Ajax").Include(
+                    "~/Scripts/jquery.unobtrusive-ajax.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
@@ -28,13 +31,13 @@ namespace WebUI
             bundles.Add(new ScriptBundle("~/bundles/DataTables").Include(
                 "~/Scripts/DataTables/jquery.dataTables.min.js",
                 "~/Scripts/DataTables/dataTables.buttons.min.js",
-                "~/Scripts/DataTables/buttons.jqueryui.js",
                 "~/Scripts/DataTables/dataTables.select.min.js",
                 "~/Scripts/DataTables/dataTables.jqueryui.min.js",
+                "~/Scripts/DataTables/buttons.jqueryui.min.js",
                 "~/Scripts/DataTables/buttons.html5.min.js",
-                "~/Scripts/ajax/jszip.min.js",
-                "~/Scripts/ajax/pdfmake.min.js",
-                "~/Scripts/ajax/vfs_fonts.js"
+                "~/Scripts/jszip.min.js",
+                "~/Scripts/pdfmake/pdfmake.min.js",
+                "~/Scripts/pdfmake/vfs_fonts.js"
                 ));
             // Плагин таблицы
             bundles.Add(new StyleBundle("~/DataTables/css").Include(

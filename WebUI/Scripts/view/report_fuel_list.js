@@ -1,7 +1,6 @@
 ﻿$(function () {
 
-    var lang = $.cookie('lang'),
-        date_curent = new Date(),
+    var date_curent = new Date(),
         date_start = null,
         date_stop = null,
         tab_type_reports = {
@@ -191,12 +190,6 @@
                                     return intVal(a) + intVal(b.sap_valume);
                                 } else { return intVal(a); }
                             }, 0);
-                        //total_volume = api
-                        //    .column(6)
-                        //    .data()
-                        //    .reduce(function (a, b) {
-                        //        return intVal(a) + intVal(b);
-                        //    }, 0);
                         // Total mass
                         total_dt_mass = api
                             .data()
@@ -226,13 +219,6 @@
                                     return intVal(a) + intVal(b.sap_mass);
                                 } else { return intVal(a); }
                             }, 0);
-                        //total_mass = api
-                        //    .column(7)
-                        //    .data()
-                        //    .reduce(function (a, b) {
-                        //        return intVal(a) + intVal(b);
-                        //    }, 0);
-
 
                         $('td#a92-volume').text(total_a92_volume.toFixed(2) + ' (л)');
                         $('td#a95-volume').text(total_a95_volume.toFixed(2) + ' (л)');
@@ -263,7 +249,7 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'csvHtml5',
+                        //'csvHtml5',
                         'pdfHtml5'
                         ]
                 });
@@ -334,7 +320,7 @@
                                 .draw();
                         });
                     column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
+                        select.append('<option value="' + d + '">' + d + '</option>');
                     });
                 });
             }
@@ -349,7 +335,7 @@
     //-----------------------------------------------------------------------------------------
     panel_select_report.initObject();
     tab_type_reports.initObject();
-    //// Загрузка библиотек
+    // Загрузка библиотек
     loadReference(function (result) {
         table_report.initObject();
         panel_select_report.viewReport();
