@@ -77,7 +77,7 @@
 
                 this.bt_print.on('click', function () {
                     //window.print();
-                    printPageArea('tabs-reports', 900, 600);
+                    printTable(table_report.createTable(table_report.list),'Таблица', 900, 600);
                 });
 
                 // Настроим выбор времени
@@ -280,7 +280,7 @@
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
 
-                    var cards = reference_cards != null ? reference_cards.getResult(data[i].id_card) : null;
+                    var cards = reference_cards !== null ? reference_cards.getResult(data[i].id_card) : null;
 
                     this.obj.row.add({
                         "id_fs": data[i].id_fs,
@@ -295,9 +295,9 @@
                         "sap_flag_r": outMode(data[i].sap_flag_r),
                         "num": (data[i].trk_num < 10 ? 'П-' + data[i].num : 'НС-' + data[i].num),
                         "tank_num": data[i].tank_num,
-                        "waybill": cards != null ? '[КР]' + cards.Number : 'id=' + data[i].id_card,
+                        "waybill": cards ? '[КР]' + cards.Number : 'id=' + data[i].id_card,
                         "operator_name": data[i].operator_name,
-                        "sap_ozm_bak": data[i].sap_ozm_bak,
+                        "sap_ozm_bak": data[i].sap_ozm_bak
                     });
                 }
                 LockScreenOff();
@@ -323,6 +323,49 @@
                         select.append('<option value="' + d + '">' + d + '</option>');
                     });
                 });
+            },
+            //
+            createTable: function (data) {
+                var thead = '<thead>' +
+                    '<tr>' +
+                    '<th>Дата и время</th>' +
+                    '<th>Гос.Номер ТС</th>' +
+                    '<th>Вид ГСМ</th>' +
+                    '<th>Выдано фактически (л)</th>' +
+                    '<th>Выдано фактически (кг)</th>' +
+                    '<th>Плотность (кг/м3)</th>' +
+                    '<th>Синхронизация с SAP</th>' +
+                    '<th>Доза ГСМ (л)</th>' +
+                    '<th>Режим выдачи</th>' +
+                    '<th>№ пист\\НС</th>' +
+                    '<th>Резервуар(ы)</th>' +
+                    '<th>Путевой лист</th>' +
+                    '<th>Оператор</th>' +
+                    '</tr>' +
+                    '</thead>';
+                var tbody = '<tbody>';
+                if (data !== null) {
+                    for (i = 0; i < data.length; i++) {
+                        var cards = reference_cards !== null ? reference_cards.getResult(data[i].id_card) : null;
+                        tbody += '<tr>' +
+                            '<td class="1">' + data[i].start_datetime + '</td>' +
+                            '<td class="1">' + data[i].sap_transp_fakt + '</td>' +
+                            '<td class="1">' + outFuelType(data[i].fuel_type) + '</td>' +
+                            '<td class="1">' + (data[i].sap_valume !== null ? Number(data[i].sap_valume).toFixed(2) : null) + '</td>' +
+                            '<td class="1">' + (data[i].sap_mass !== null ? Number(data[i].sap_mass).toFixed(3) : null) + '</td>' +
+                            '<td class="1">' + (data[i].sap_plotnost !== null ? Number(data[i].sap_plotnost).toFixed(5) : null) + '</td>' +
+                            '<td class="1">' + data[i].sap_sending + '</td>' +
+                            '<td class="1">' + data[i].dose + '</td>' +
+                            '<td class="1">' + outMode(data[i].sap_flag_r) + '</td>' +
+                            '<td class="1">' + (data[i].trk_num < 10 ? 'П-' + data[i].num : 'НС-' + data[i].num) + '</td>' +
+                            '<td class="1">' + data[i].tank_num + '</td>' +
+                            '<td class="1">' + (cards ? '[КР]' + cards.Number : 'id=' + data[i].id_card) + '</td>' +
+                            '<td class="1">' + data[i].operator_name + '</td>' +
+                            '</tr>';
+                    }
+                }
+                tbody += '</tbody>';
+                return '<table class="cell-border">' + thead + tbody + '</table>';
             }
         };
 

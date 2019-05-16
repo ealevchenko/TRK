@@ -2432,6 +2432,15 @@ var printPageArea = function (areaID, width, height) {
     //WinPrint.close();
 };
 
+var printTable = function (table, title, width, height) {
+    var WinPrint = window.open('', '', 'width=' + width + ',height=' + height);
+    WinPrint.document.write(table);
+    WinPrint.document.close();
+    WinPrint.focus();
+    //WinPrint.print();
+    //WinPrint.close();
+};
+
 // Экспорт отчетов в Excel
 function fnExcelReport(tab, name_file) {
     var file_name = name_file + '.xls';
