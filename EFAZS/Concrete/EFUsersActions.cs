@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFAZS.Entities;
 using MessageLog;
+using System.Data.Entity;
 
 namespace EFAZS.Concrete
 {
@@ -43,6 +44,11 @@ namespace EFAZS.Concrete
                 String.Format("Ошибка выполнения метода GetCurrentUsersActions()").SaveError(e);
                 return null;
             }
+        }
+
+        public Database Database
+        {
+            get { return this.context.Database; }
         }
     }
 }

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\ITanksLog.cs" />
     <Compile Include="Abstract\ITRKLogs.cs" />
     <Compile Include="Abstract\IUsersActions.cs" />
     <Compile Include="Abstract\ICat_OZM_GSM.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFTDbContext.cs" />
     <Compile Include="Concrete\EFReceivingFuelTanks.cs" />
     <Compile Include="Concrete\EFReceivingFuel.cs" />
     <Compile Include="Concrete\EFTanks_kerosene.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Entities\Cat_OZM.cs" />
     <Compile Include="Entities\Cat_Depots.cs" />
     <Compile Include="Entities\Cat_Werks.cs" />
+    <Compile Include="Concrete\EFTanksLog.cs" />
     <Compile Include="Entities\OPC_RFID.cs" />
     <Compile Include="Entities\FuelSale.cs" />
     <Compile Include="Entities\SAP_Buffer.cs" />

@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace EFAZS.Abstract
 {
-    public interface IUsersActions
+    public interface ITanksLog
     {
         Database Database { get; }
-        IQueryable<UsersActions> UsersActions { get; }
-        IQueryable<UsersActions> GetUsersActions();
-        UsersActions GetCurrentUsersActions();
     }
 }
+

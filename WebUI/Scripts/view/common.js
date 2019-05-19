@@ -446,6 +446,7 @@ var outFuelType = function (i) {
         case 107000023: return "А95";
         case 107000024: return "ДТ";
         case 107000027: return "Керосин";
+        case 0: return "Конфискат";
         default: return i;
     }
 };
@@ -2401,6 +2402,52 @@ var getAsyncViewReportFuelListOfDateTime = function (start, stop, callback) {
     $.ajax({
         type: 'GET',
         url: '/api/azs/fuel_list/report/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+// Отчет по движению топлива в емкостях АЗС
+var getAsyncViewReportFTLOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/it/report/tanks_fuel_flow/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
+var getAsyncViewReportSRLOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/report/shift_report/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
         async: true,
         dataType: 'json',
         beforeSend: function () {

@@ -12,6 +12,14 @@ using System.Web.Http.Description;
 
 namespace WebUI.Controllers.api
 {
+    public class SR_Report
+    {
+        public int type { get; set; }
+        public string num { get; set; }
+        public int? start_valume { get; set; }
+        public int? stop_valume { get; set; }
+    }
+
     [RoutePrefix("api/azs")]
     public class AZSController : ApiController
     {
@@ -220,6 +228,28 @@ namespace WebUI.Controllers.api
             }
         }
         #endregion
+
+        // GET: api/azs/report/shift_report/start/2019-04-15T00:00:00/stop/2019-04-16T06:59:59
+        [Route("report/shift_report/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(SR_Report))]
+        public IHttpActionResult GetReportSR(DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = "EXEC [dbo].[GET_VALUE_GUNS_OF_PERIOD] N'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "', N'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+                List<SR_Report> list = this.ef_ua.Database.SqlQuery<SR_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportSR(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
 
     }
 }

@@ -243,6 +243,7 @@
     <Compile Include="Areas\report\Controllers\HomeController.cs" />
     <Compile Include="Areas\report\reportAreaRegistration.cs" />
     <Compile Include="Controllers\api\azsCardsController.cs" />
+    <Compile Include="Controllers\api\TLController.cs" />
     <Compile Include="Controllers\api\RFController.cs" />
     <Compile Include="Controllers\api\AZSController.cs" />
     <Compile Include="Controllers\api\CatalogController.cs" />
@@ -553,6 +554,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Areas\report\Views\Home\Logs.cshtml" />
     <Content Include="Areas\report\Views\Home\FuelList.cshtml" />
+    <Content Include="Areas\report\Views\Home\FuelFlowTanks.cshtml" />
+    <Content Include="Areas\report\Views\Home\ShiftReport.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -684,8 +687,10 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\view\common.js" />
     <Content Include="Scripts\view\log.js" />
+    <Content Include="Scripts\view\report_sr.js" />
     <Content Include="Scripts\view\report_fuel_list.js" />
     <Content Include="Scripts\view\report_logs.js" />
+    <Content Include="Scripts\view\report_fft.js" />
     <Content Include="Scripts\view\report_rf.js" />
     <Content Include="Scripts\view\rf.js" />
     <Content Include="Scripts\view\trk.js" />

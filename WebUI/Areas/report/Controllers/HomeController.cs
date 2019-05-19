@@ -28,6 +28,17 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        // Отчет по движению топлива в емкостях АЗС
+        public ActionResult FuelFlowTanks()
+        {
+            return View();
+        }
+        // Сменный отчет
+        public ActionResult ShiftReport()
+        {
+            return View();
+        }
+
 
     }
 }
