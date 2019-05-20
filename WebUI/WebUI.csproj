@@ -556,6 +556,7 @@
     <Content Include="Areas\report\Views\Home\FuelList.cshtml" />
     <Content Include="Areas\report\Views\Home\FuelFlowTanks.cshtml" />
     <Content Include="Areas\report\Views\Home\ShiftReport.cshtml" />
+    <Content Include="Areas\report\Views\Home\Remains.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -687,6 +688,7 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\view\common.js" />
     <Content Include="Scripts\view\log.js" />
+    <Content Include="Scripts\view\report_remains.js" />
     <Content Include="Scripts\view\report_sr.js" />
     <Content Include="Scripts\view\report_fuel_list.js" />
     <Content Include="Scripts\view\report_logs.js" />

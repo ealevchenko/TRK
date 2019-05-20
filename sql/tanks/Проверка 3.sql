@@ -1,0 +1,8 @@
+USE [ASU_AZSlogs]
+GO
+  
+
+EXEC [dbo].[GET_REMAINS_OF_Date] N'2019-05-17 00:00:00'
+
+ 
+GO

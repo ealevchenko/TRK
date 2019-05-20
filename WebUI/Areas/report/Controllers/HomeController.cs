@@ -38,7 +38,11 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
-
+        // Остатки
+        public ActionResult Remains()
+        {
+            return View();
+        }
 
     }
 }
