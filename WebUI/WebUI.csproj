@@ -433,6 +433,7 @@
     <Content Include="Content\Datatables\jquery.dataTables_themeroller.css" />
     <Content Include="Content\Datatables\swf\flashExport.swf" />
     <Content Include="Content\DateTime\daterangepicker.css" />
+    <Content Include="Content\DateTime\daterangepicker.min.css" />
     <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\sort_asc.png" />
     <Content Include="Content\images\sort_asc_disabled.png" />
@@ -635,6 +636,7 @@
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
     <Content Include="Scripts\DateTime\jquery.daterangepicker.js" />
+    <Content Include="Scripts\DateTime\jquery.daterangepicker.min.js" />
     <Content Include="Scripts\DateTime\moment.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />

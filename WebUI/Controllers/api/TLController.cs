@@ -23,6 +23,16 @@ namespace WebUI.Controllers.api
         public int? volume_stop { get; set; }
     }
 
+    public class TR_Report
+    {
+        public int type { get; set; }
+        public string tank { get; set; }
+        public int? level { get; set; }
+        public int? volume { get; set; }
+        public double? dens { get; set; }
+        public double? mass { get; set; }
+    }
+
     [RoutePrefix("api/it")]
     public class TLController : ApiController
     {
@@ -55,5 +65,26 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // GET: api/it/report/tanks_remains/date/2019-04-15T00:00:00
+        [Route("report/tanks_remains/date/{date:datetime}")]
+        [ResponseType(typeof(TR_Report))]
+        public IHttpActionResult GetReportTR(DateTime date)
+        {
+            try
+            {
+                string sql = "EXEC [dbo].[GET_REMAINS_OF_Date] N'" + date.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+                List<TR_Report> list = this.ef_it.Database.SqlQuery<TR_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportTR(date={0})", date).SaveError(e);
+                return NotFound();
+            }
+        }
     }
 }

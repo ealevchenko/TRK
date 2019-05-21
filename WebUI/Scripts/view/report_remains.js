@@ -86,13 +86,15 @@
                 // настроим компонент выбора времени
                 this.obj_date = this.input_date.dateRangePicker(
                     {
-                        startOfWeek: 'monday',
-                        //separator: lang == 'en' ? 'to' : 'по',
                         language: 'ru',
-                        format: 'DD.MM.YYYY',
-                        autoClose: true,
+                        format: 'DD.MM.YYYY HH:mm',
+                        autoClose: false,
                         singleDate: true,
-                        showShortcuts: false
+                        showShortcuts: false,
+                        singleMonth: true,
+                        time: {
+                            enabled: true
+                        }
                     }).
                     bind('datepicker-change', function (evt, obj) {
                         date_curent = obj.date1;
@@ -112,7 +114,7 @@
             select: null,
             select_id: null,
             list: [],
-            groupColumn:0,
+            groupColumn: 0,
             // Инициализировать таблицу
             initObject: function () {
                 this.obj = this.html_table.DataTable({
@@ -168,8 +170,8 @@
                 LockScreen('Мы обрабатываем ваш запрос...');
                 if (this.list === null | data_refresh === true) {
                     // Обновим данные
-                    getAsyncViewReportFTLOfDateTime(
-                        date_start, date_stop,
+                    getAsyncViewReportTROfDateTime(
+                        date_start,
                         function (result) {
                             table_report.list = result;
                             table_report.loadDataTable(result);
@@ -189,9 +191,9 @@
                     this.obj.row.add({
                         "type": outFuelType(data[i].type) + ' - ' + data[i].type,
                         "tank": data[i].tank,
-                        "mass_start": (data[i].mass_start!==null ? data[i].mass_start.toFixed(2) : null),
-                        "mass_stop": (data[i].mass_stop!==null ? data[i].mass_stop.toFixed(2) : null),
-                        "change_mass": (data[i].mass_start !== null || data[i].mass_stop!==null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null)
+                        "mass_start": (data[i].mass_start !== null ? data[i].mass_start.toFixed(2) : null),
+                        "mass_stop": (data[i].mass_stop !== null ? data[i].mass_stop.toFixed(2) : null),
+                        "change_mass": (data[i].mass_start !== null || data[i].mass_stop !== null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null)
                     });
                 }
                 LockScreenOff();

@@ -2443,7 +2443,7 @@ var getAsyncViewReportFTLOfDateTime = function (start, stop, callback) {
         },
     });
 };
-
+// Сменный рапорт
 var getAsyncViewReportSRLOfDateTime = function (start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -2466,6 +2466,30 @@ var getAsyncViewReportSRLOfDateTime = function (start, stop, callback) {
         },
     });
 };
+// остатки
+var getAsyncViewReportTROfDateTime = function (date, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/it/report/tanks_remains/date/' + toISOStringTZ(date).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
 
 var printPageArea = function (areaID, width, height) {
     var printContent = document.getElementById(areaID);
