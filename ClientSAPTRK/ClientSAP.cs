@@ -163,7 +163,8 @@ namespace ClientSAPTRK
                 return null;
             }
         }
-        public Reservation GetReservationMatrn(string num, string matrn, string mode)
+        // Вернуть 
+        public List<Reservation> GetReservationMatrn(string num, string matrn, string mode)
         {
             try
             {
@@ -186,25 +187,29 @@ namespace ClientSAPTRK
 
                 XDocument doc = XDocument.Parse(response);
 
-                XElement element = doc.Element("Rowsets").Element("Rowset").Elements("Row").FirstOrDefault();
+                List<Reservation> list_reserv = new List<Reservation>();
 
-                Reservation reserv = new Reservation()
+                foreach (XElement element in doc.Element("Rowsets").Element("Rowset").Elements("Row"))
                 {
-                    RSNUM = (string)element.Element("RSNUM"),
-                    RSPOS = (string)element.Element("RSPOS"),
-                    MATNR = (string)element.Element("MATNR"),
-                    WERKS = (string)element.Element("WERKS"),
-                    LGORT = (string)element.Element("LGORT"),
-                    UMLGO = (string)element.Element("UMLGO"),
-                    UMWRK = (string)element.Element("UMWRK"),
-                    BDMNG = (string)element.Element("BDMNG"),
-                    ENMNG = (string)element.Element("ENMNG"),
-                    LGOBE = (string)element.Element("LGOBE"),
-                    MEINS = (string)element.Element("MEINS"),
-                    BWART = (string)element.Element("BWART"),
-                };
+                    Reservation reserv = new Reservation()
+                    {
+                        RSNUM = (string)element.Element("RSNUM"),
+                        RSPOS = (string)element.Element("RSPOS"),
+                        MATNR = (string)element.Element("MATNR"),
+                        WERKS = (string)element.Element("WERKS"),
+                        LGORT = (string)element.Element("LGORT"),
+                        UMLGO = (string)element.Element("UMLGO"),
+                        UMWRK = (string)element.Element("UMWRK"),
+                        BDMNG = (string)element.Element("BDMNG"),
+                        ENMNG = (string)element.Element("ENMNG"),
+                        LGOBE = (string)element.Element("LGOBE"),
+                        MEINS = (string)element.Element("MEINS"),
+                        BWART = (string)element.Element("BWART"),
+                    };
+                    list_reserv.Add(reserv);
+                }
 
-                return reserv;
+                return list_reserv;
             }
             catch (Exception e)
             {

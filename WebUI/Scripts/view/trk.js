@@ -940,6 +940,7 @@ var confirm_df = {
     DIOrisers: null,    // текущие теги счетчика стояка
     card: null, // текущая карта
     supply: null, // текущая поставка возвращенная от САП
+    reserv: null, // текущий список резервирования возвращенный от САП
 
     // КОЛОНКА ********************************************************
     input_deliver_type_fuel: null,      // тип топлива
@@ -968,6 +969,7 @@ var confirm_df = {
     input_sap_num: null,                // Номер запроса в САП
     input_sap_num_pos: null,            // Номер позиции запроса в САП
     select_sap_num_pos: null,           // выбор номеров позиций по поставке
+    select_sap_num_pos_reserv: null,    // выбор номеров позиций по резервированию.
     input_sap_num_ts: null,             // Номер транспортного средства
     input_sap_num_kpp: null,            // Номер КПП
     input_sap_name_forwarder: null,     // ФИО экпедитора
@@ -1159,6 +1161,14 @@ var confirm_df = {
         };
         return null;
     },
+    // Вернуть позицию резервирования
+    getPosReserv: function (pos) {
+        var sup = getObjects(confirm_df.reserv, 'RSPOS', pos);
+        if (sup != null && sup.length > 0) {
+            return sup[0];
+        };
+        return null;
+    },
     //
     updateTips: function (t) {
         $(".validateTips")
@@ -1212,6 +1222,7 @@ var confirm_df = {
     },
     // Проверка на выбор valume >-1
     checkSelectValOfMessage: function (o, message) {
+        //var tst = o.val();
         if (Number(o.val()) < 0) {
             o.addClass("ui-state-error");
             confirm_df.updateTips(message);
@@ -1283,8 +1294,9 @@ var confirm_df = {
             valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
 
             valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
-            if (variant !== "4" && variant !== "3" & variant !== "2") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
+            if (variant !== "4" && variant !== "3" && variant !== "2") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
             if (variant === "3") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
+            if (variant === "2") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos_reserv, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
             //if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
             if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
@@ -1473,6 +1485,7 @@ var confirm_df = {
             if (i === "6") {
                 confirm_df.input_sap_ndopusk = null;
                 confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+                confirm_df.select_sap_num_pos_reserv.selectmenu("widget").hide();
                 confirm_df.input_sap_ozm.val('');
                 confirm_df.input_sap_ozm_amount.val('');
                 confirm_df.input_sap_stock_recipient.val('');
@@ -1527,6 +1540,7 @@ var confirm_df = {
             if (valid === true) {
                 // Покажем позиции
                 confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+                confirm_df.select_sap_num_pos_reserv.selectmenu("widget").hide();
                 confirm_df.input_sap_ozm.val('');
                 confirm_df.input_sap_ozm_amount.val('');
                 confirm_df.input_sap_stock_recipient.val('');
@@ -1601,12 +1615,14 @@ var confirm_df = {
 
             // Покажем позиции
             confirm_df.select_sap_num_pos.selectmenu("widget").hide();
+            confirm_df.select_sap_num_pos_reserv.selectmenu("widget").hide();
             confirm_df.input_sap_ozm.val('');
             confirm_df.input_sap_ozm_amount.val('');
             confirm_df.input_sap_stock_recipient.val('');
             confirm_df.input_sap_factory_recipient.val('');
             switch (i) {
                 case "1":
+                    //case "2":
                 case "5":
                 case "6":
                     // По резервированию
@@ -1716,38 +1732,54 @@ var confirm_df = {
                         matrn,
                         2,
                         function (result) {
-                            if (result.RSNUM == "") {
+                            if (result === null || result[0].RSNUM === "") {
                                 OnAJAXErrorOfMessage("Номер резервирования №" + num + ", по ОЗМ:" + matrn + " - не найдет в САП");
                             } else {
-                                // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
-                                    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
-                                } else {
-                                    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
-                                        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
-                                    } else {
-                                        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
-                                        confirm_df.input_sap_num_pos.val(result.RSPOS);
-                                        //$('input#sap-num').val();
-                                        confirm_df.input_sap_ozm.val(result.MATNR);
-                                        confirm_df.input_sap_ozm_amount.val(result.BDMNG);
-                                        confirm_df.input_sap_factory_recipient.val(result.WERKS);
-                                        confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
-                                        $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
-                                        if (result.RSNUM != "---") {
-                                            var depots = catalog_depots.get($.trim(result.UMLGO));
-                                            if (depots) {
-                                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
-                                            }
-                                        } else { // TODO:!!!ТЕСТ УБРАТЬ
-                                            confirm_df.input_sap_stock_recipient.val("---");
-                                        }
 
-                                    }
-                                }
-                            }
+                                //// Проверим на возврат значений
+                                //if (result.length > 0 && result[0].posnr != "") {
+                                confirm_df.reserv = result;
+                                var pos = [];
+                                for (i = 0, count_result_supply = result.length; i < count_result_supply; i++) {
+                                    pos.push({ value: result[i].RSPOS, text: result[i].RSPOS });
+                                };
+                                // Обновим перечень позиций
+                                updateOptionSelect(confirm_df.select_sap_num_pos_reserv, pos, null, -1, null);
+                                // Покажем позиции
+                                confirm_df.select_sap_num_pos_reserv.selectmenu("widget").show();
+                                //} else {
+                                //    OnAJAXErrorOfMessage("Номер ИП №" + num + " - не найден в САП");
+                                //}
+
+                                //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
+                                //    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
+                                //} else {
+                                //    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                //    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
+                                //        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
+                                //    } else {
+                                //        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
+                                //        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
+                                //        confirm_df.input_sap_num_pos.val(result.RSPOS);
+                                //        //$('input#sap-num').val();
+                                //        confirm_df.input_sap_ozm.val(result.MATNR);
+                                //        confirm_df.input_sap_ozm_amount.val(result.BDMNG);
+                                //        confirm_df.input_sap_factory_recipient.val(result.WERKS);
+                                //        confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
+                                //        $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
+                                //        if (result.RSNUM != "---") {
+                                //            var depots = catalog_depots.get($.trim(result.UMLGO));
+                                //            if (depots) {
+                                //                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                                //            }
+                                //        } else { // TODO:!!!ТЕСТ УБРАТЬ
+                                //            confirm_df.input_sap_stock_recipient.val("---");
+                                //        }
+
+                                //    }
+                                //}
+                            } // if result ==null
                         }
                     );
                     break;
@@ -1757,6 +1789,7 @@ var confirm_df = {
         confirm_df.input_sap_num = $('input#sap-num');
         // Номер позиции для запроса в сап
         confirm_df.input_sap_num_pos = $('input#sap-num-pos');
+        // Номер позиции для запроса в сап по поставкам
         confirm_df.select_sap_num_pos = initSelect(
             $('select[name ="sap-num-pos"]'),
             { width: 150 },
@@ -1779,6 +1812,41 @@ var confirm_df = {
                 };
             },
             null);
+        // Номер позиции для запроса в сап по резервированию
+        confirm_df.select_sap_num_pos_reserv = initSelect(
+            $('select[name ="sap-num-pos-reserv"]'),
+            { width: 150 },
+            null,
+            null,
+            -1,
+            function (event, ui) {
+                event.preventDefault();
+                confirm_df.input_sap_ozm.val('');
+                confirm_df.input_sap_ozm_amount.val('');
+                confirm_df.input_sap_factory_recipient.val('');
+                confirm_df.input_sap_stock_recipient.val('');
+                var reserv = confirm_df.getPosReserv(ui.item.value);
+                if (reserv !== null) {
+
+                    if (reserv.BWART !== "X01") {
+                        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2, BWART должен содержать X01)");
+                    } else {
+                        confirm_df.input_sap_ozm.val(reserv.MATNR);
+                        confirm_df.input_sap_ozm_amount.val(reserv.BDMNG);
+                        confirm_df.input_sap_factory_recipient.val(reserv.WERKS);
+                        confirm_df.sap_ozm_amount_multiplier = ($.trim(reserv.MEINS) === "TO" ? 1000 : 1);
+                        $('#label-sap-ozm-amount').text('Количество ' + reserv.MEINS + ':');
+                        var depots = catalog_depots.get($.trim(reserv.UMLGO));
+                        if (depots) {
+                            confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                        }
+                    }
+                } else {
+                    OnAJAXErrorOfMessage("По указанной позиции нет данных");
+                }
+            },
+            null);
+
         // номер транспортного средства
         confirm_df.input_sap_num_ts = $('input#sap-num-ts');
         // номер КПП
@@ -1836,6 +1904,7 @@ var confirm_df = {
             .add(confirm_df.input_sap_num)
             .add(confirm_df.input_sap_num_pos)
             .add(confirm_df.select_sap_num_pos)
+            .add(confirm_df.select_sap_num_pos_reserv)
             .add(confirm_df.input_sap_num_ts)
             .add(confirm_df.input_sap_num_kpp)
             .add(confirm_df.input_sap_name_forwarder)
@@ -1980,7 +2049,7 @@ var confirm_df = {
                                 { value: 1, text: 'По резервированию (керосин)' },
                                 { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
                                 { value: 3, text: 'По исходящей поставке' },
-                                { value: 4, text: 'По требованию (самовывоз)'},
+                                { value: 4, text: 'По требованию (самовывоз)' },
                                 { value: 5, text: 'Заправка в баки ТС', disabled: true },
                                 { value: 6, text: 'Заправка в цистерну топливозаправщика' },
                             ],
@@ -2006,63 +2075,6 @@ var confirm_df = {
                             null);
                         break;
                 }
-
-                //if (num === "2") {
-                //    // керосин
-                //    // Обновим варианты выдачи
-                //    updateOptionSelect(
-                //        confirm_df.select_variant,
-                //        [
-                //            { value: 1, text: 'По резервированию (керосин)' },
-                //            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                //            { value: 3, text: 'По исходящей поставке' },
-                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                //        ],
-                //        null,
-                //        -1,
-                //        null);
-
-                //} else {
-
-                //    if (num === "1") {
-                //    // ДТ
-                //    // Обновим варианты выдачи
-                //    updateOptionSelect(
-                //        confirm_df.select_variant,
-                //        [
-                //            { value: 1, text: 'По резервированию (керосин)', disabled: true },
-                //            { value: 2, text: 'По резервированию (ГСМ)'},
-                //            { value: 3, text: 'По исходящей поставке', disabled: true },
-                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                //        ],
-                //        null,
-                //        -1,
-                //        null);
-                //    } else {
-                //    // 92
-                //    // Обновим варианты выдачи
-                //    updateOptionSelect(
-                //        confirm_df.select_variant,
-                //        [
-                //            { value: 1, text: 'По резервированию (керосин)', disabled: true },
-                //            { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                //            { value: 3, text: 'По исходящей поставке', disabled: true },
-                //            { value: 4, text: 'По требованию (самовывоз)', disabled: true },
-                //            { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                //            { value: 6, text: 'Заправка в цистерну топливозаправщика' },
-                //        ],
-                //        null,
-                //        -1,
-                //        null);
-                //    }
-
-
-                //}
-
                 var riser = risers.getRisers(num);
                 var DIOriser = risers.getDIORisers(num);
                 if (riser != null && DIOriser != null) {
@@ -2136,7 +2148,7 @@ var confirm_df = {
         //confirm_df.checkbox_deliver_Passage.prop('checked', false);
         $('tr#button-sap').hide();
         $('tr#sap-num').hide(); confirm_df.input_sap_num.val('').addClass('input_edit');
-        $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.val('').hide().addClass('input_edit'); confirm_df.select_sap_num_pos.selectmenu("widget").hide().addClass('input_edit');;
+        $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.val('').hide().addClass('input_edit'); confirm_df.select_sap_num_pos.selectmenu("widget").hide().addClass('input_edit'); confirm_df.select_sap_num_pos_reserv.selectmenu("widget").hide().addClass('input_edit');
         $('tr#sap-num-ts').hide(); confirm_df.input_sap_num_ts.val('').addClass('input_edit'); $('tr#sap-num-kpp').hide(); confirm_df.input_sap_num_kpp.val('').addClass('input_edit'); $('tr#sap-name-forwarder').hide(); confirm_df.input_sap_name_forwarder.val('').addClass('input_edit');
         $('tr#sap-ozm').hide(); confirm_df.input_sap_ozm.val('').hide().addClass('input_view'); confirm_df.select_sap_ozm.selectmenu("widget").hide();
         $('tr#sap-ozm-bak').hide(); confirm_df.input_sap_ozm_bak.addClass('input_view');
@@ -2204,7 +2216,7 @@ var confirm_df = {
                 $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').hide();
                 $('tr#sap-num').show(); $('#label-sap-num').text('*Номер резервирования :');
-                $('tr#sap-num-pos').hide(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
+                $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.hide(); $('#label-sap-num-pos').text('Выберите № поз. :');
                 $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
                 $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('*№ КПП :');
                 $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
@@ -2550,7 +2562,7 @@ var confirm_df = {
             N_DEB: variant === "5" || variant === "6" ? confirm_df.card.Debitor : null,
             //N_TREB: variant !== "7" && variant !== "6" ? confirm_df.input_sap_num.val() : variant === "6" ? confirm_df.input_sap_ndopusk : null,
             N_TREB: variant !== "7" ? confirm_df.input_sap_num.val() : null,
-            N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null,
+            N_POS: variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null,
             LGORT: variant === "4" ? confirm_df.select_sap_stock_recipient.val() : null,
             WERKS: variant === "4" ? confirm_df.select_sap_factory_recipient.val() : null,
             sending: null

@@ -924,9 +924,6 @@ var getReservationMatrn = function (num, matrn, mode, callback) {
                     callback(reservation_out);
                 }
             } else {
-                if (pos == "" || pos == null) {
-                    OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер позиции.");
-                }
                 if (num == "" || num == null) {
                     OnAJAXErrorOfMessage("Ошибка получения данных из САП по резервированию. Укажите номер резервирования.");
                 }

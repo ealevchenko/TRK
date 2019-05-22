@@ -46,7 +46,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                Reservation reservation = sap.GetReservationMatrn(num, matrn, mode);
+                List<Reservation> reservation = sap.GetReservationMatrn(num, matrn, mode);
                 if (reservation == null)
                 {
                     return NotFound();
