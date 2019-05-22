@@ -67,18 +67,18 @@
                     .append(this.label)
                     .append(this.span)
                     //.append(this.bt_right)
-                    .append(this.select_sm)
-                    .append(this.bt_print);
+                    .append(this.select_sm);
+                //.append(this.bt_print);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
-                this.bt_print.attr('title', "Печать");
-                this.bt_print.text("Предварительный просмотр и печать");
+                //this.bt_print.attr('title', "Печать");
+                //this.bt_print.text("Предварительный просмотр и печать");
 
-                this.bt_print.on('click', function () {
-                    //window.print();
-                    printTable(table_report.createTable(table_report.list),'Таблица', 900, 600);
-                });
+                //this.bt_print.on('click', function () {
+                //    //window.print();
+                //    printTable(table_report.createTable(table_report.list),'Таблица', 900, 600);
+                //});
 
                 // Настроим выбор времени
                 initSelect(
@@ -96,8 +96,6 @@
                 // настроим компонент выбора времени
                 this.obj_date = this.input_date.dateRangePicker(
                     {
-                        //startOfWeek: 'monday',
-                        //separator: lang == 'en' ? 'to' : 'по',
                         language: 'ru',
                         format: 'DD.MM.YYYY',
                         autoClose: true,
@@ -152,6 +150,7 @@
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
+                        $('td', row).eq(10).addClass('list-tanks');
                     },
                     "footerCallback": function (row, data, start, end, display) {
                         var api = this.api(), data;
@@ -247,12 +246,22 @@
                         { data: "operator_name", title: "Оператор", width: "100px", orderable: true, searchable: true },
                     ],
                     dom: 'Bfrtip',
+                    //buttons: [
+                    //    'copyHtml5',
+                    //    'excelHtml5',
+                    //    //'csvHtml5',
+                    //    'pdfHtml5',
+
+                    //    ]
                     buttons: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        //'csvHtml5',
-                        'pdfHtml5'
-                        ]
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'Save current page',
+                                //pageSize: 'A4',
+                                pageOrientation: 'landscape',
+                                pageMargins: [10, 10, 10, 10],
+                        }
+                    ]
                 });
             },
             // Показать таблицу с данными
@@ -305,7 +314,7 @@
             },
             // Выподающие списки
             initComplete: function () {
-                table_report.obj.columns([2,8]).every(function () {
+                table_report.obj.columns([2, 8]).every(function () {
                     var column = this;
                     var num = column[0][0];
                     //var name = $(column.header()).attr('title');

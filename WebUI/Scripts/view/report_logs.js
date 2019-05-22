@@ -76,12 +76,11 @@
                 // настроим компонент выбора времени
                 this.obj_date = this.input_date.dateRangePicker(
                     {
-                        startOfWeek: 'monday',
-                        //separator: lang == 'en' ? 'to' : 'по',
                         language: 'ru',
                         format: 'DD.MM.YYYY',
                         autoClose: true,
                         singleDate: true,
+                        singleMonth: true,
                         showShortcuts: false
                     }).
                     bind('datepicker-change', function (evt, obj) {

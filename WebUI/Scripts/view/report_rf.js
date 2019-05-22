@@ -1,52 +1,5 @@
 ﻿$(function () {
 
-    //// Список общесистемных слов 
-    //$.Text_View =
-    //    {
-    //        'default':  //default language: ru
-    //        {
-    //            'text_link_tabs_report_1': 'Ведомость',
-    //            'text_link_tabs_report_2': '',
-    //            'field_FuelType': 'Тип топлива',
-    //            'field_DateTime': 'Дата и время',
-    //            'field_Waybill': 'RFID-Карта',
-    //            'field_AutoNumber': 'Номер транспортного средства',
-    //            'field_AutoModel': 'Модель трансп. средства',
-    //            'field_TankNo': '№ Емкости',
-    //            'field_UsageVolume': 'Объем (л)',
-    //            'field_UsageMass': 'Масса (кг)',
-    //            'field_Density': 'Плотность (кг/м3)',
-    //            'bt_left_title': 'Предыдущая дата',
-    //            'bt_right_title': 'Следующая дата',
-    //            'bt_refresh_title': 'Обновить отчет',
-    //            'bt_refresh_text': 'Показать ведомость',
-    //            'label_select_date': 'Выберите дату',
-    //            'select_text_sm1': 'Смена Д (07:00-18:59)',
-    //            'select_text_sm2': 'Смена Н (19:00-06:59)',
-    //        },
-    //        'en':  //default language: English
-    //        {
-    //            'text_link_tabs_report_1': 'Statement',
-    //            'text_link_tabs_report_2': '',
-    //            'field_FuelType': 'Fuel type',
-    //            'field_DateTime': 'Date and time',
-    //            'field_Waybill': 'RFID Card',
-    //            'field_AutoNumber': 'Vehicle Number',
-    //            'field_AutoModel': 'Model trans. facilities',
-    //            'field_TankNo': 'Capacity No.',
-    //            'field_UsageVolume': 'Volume (l)',
-    //            'field_UsageMass': 'Mass (kg)',
-    //            'field_Density': 'Density (kg/m3)',
-    //            'bt_left_title': 'Previous Date',
-    //            'bt_right_title': 'Next Date',
-    //            'bt_refresh_title': 'Refresh Report',
-    //            'bt_refresh_text': 'Show statement',
-    //            'label_select_date': 'Select a date',
-    //            'select_text_sm1': 'Shift Day (07:00-18:59)',
-    //            'select_text_sm2': 'Shift Night (19:00-06:59)',
-    //        }
-    //    };
-
     var lang = $.cookie('lang'),
         date_curent = new Date(),
         date_start = null,
@@ -153,12 +106,11 @@
                 // настроим компонент выбора времени
                 this.obj_date = this.input_date.dateRangePicker(
                     {
-                        startOfWeek: 'monday',
-                        //separator: lang == 'en' ? 'to' : 'по',
                         language: 'ru',
                         format: 'DD.MM.YYYY',
                         autoClose: true,
                         singleDate: true,
+                        singleMonth: true,
                         showShortcuts: false
                     }).
                     bind('datepicker-change', function (evt, obj) {

@@ -2,7 +2,7 @@
 
     var date_curent = new Date(),
         date_start = null,
-        date_stop = null,
+        //date_stop = null,
         //// Типы отчетов
         tab_type_reports = {
             html_div: $("#tabs-reports"),
@@ -50,37 +50,29 @@
                     .append(this.label)
                     .append(this.span)
                     //.append(this.bt_right)
-                    .append(this.select_sm)
-                    .append(this.bt_refresh);
+                    .append(this.select_sm);
+                    //.append(this.bt_refresh);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
-                this.bt_refresh.attr('title', "Обновить отчет");
-                this.bt_refresh.text("Показать отчет");
+                //this.bt_refresh.attr('title', "Обновить отчет");
+                //this.bt_refresh.text("Показать отчет");
 
-                this.bt_refresh.on('click', function () {
-                    if (panel_select_report.select_sm.val() === "2") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
-                    }
-                    if (panel_select_report.select_sm.val() === "1") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
-                    }
-
-                    tab_type_reports.activeTable(tab_type_reports.active, true);
-                });
+                //this.bt_refresh.on('click', function () {
+                //    panel_select_report.viewReport();
+                //});
 
                 // Настроим выбор времени
                 initSelect(
                     this.select_sm,
                     { width: 200 },
-                    [{ value: 1, text: "Смена Д (07:00-18:59)" }, { value: 2, text: "Смена Н (19:00-06:59)" }],
+                    [{ value: 1, text: "По стоянию на 07:00" }, { value: 2, text: "По состоянию на 19:00" }],
                     null,
                     1,
                     function (event, ui) {
                         event.preventDefault();
                         // Обработать выбор смены
+                        panel_select_report.viewReport();
                     },
                     null);
                 // настроим компонент выбора времени
@@ -100,11 +92,27 @@
                         date_curent = obj.date1;
                     })
                     .bind('datepicker-closed', function () {
-
+                        //panel_select_report.viewReport();
+                        date_start = date_curent;
+                        tab_type_reports.activeTable(tab_type_reports.active, true);
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
-                this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+                //this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+                this.obj_date.data('dateRangePicker').setDateRange(date_curent, date_curent, true);
+            },
+            viewReport: function () {
+                if (panel_select_report.select_sm.val() === "2") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
+                    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+                    
+                }
+                if (panel_select_report.select_sm.val() === "1") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
+                    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
+                }
+                this.obj_date.data('dateRangePicker').setDateRange(date_start, date_start, true);
+                tab_type_reports.activeTable(tab_type_reports.active, true);
             }
         },
         // Таблица
@@ -134,10 +142,11 @@
                     },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
-                        { data: "tank", title: "Резервуар", width: "100px", orderable: true, searchable: false },
-                        { data: "mass_start", title: "Масса в начале (кг.)", width: "100px", orderable: false, searchable: false },
-                        { data: "mass_stop", title: "Масса в конце (кг.)", width: "100px", orderable: false, searchable: false },
-                        { data: "change_mass", title: "Разница (кг.)", width: "100px", orderable: false, searchable: false },
+                        { data: "tank", title: "Резервуар", width: "50px", orderable: true, searchable: false },
+                        { data: "level", title: "Уровень (см)", width: "100px", orderable: false, searchable: false },
+                        { data: "volume", title: "Объем (л)", width: "100px", orderable: false, searchable: false },
+                        { data: "dens", title: "Плотность (кг/м3)", width: "100px", orderable: false, searchable: false },
+                        { data: "mass", title: "Масса (кг)", width: "100px", orderable: false, searchable: false },
                     ],
                     "columnDefs": [
                         { "visible": false, "targets": table_report.groupColumn }
@@ -150,7 +159,7 @@
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
                             if (last !== group) {
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+                                    '<tr class="group"><td colspan="6">' + group + '</td></tr>'
                                 );
                                 last = group;
                             }
@@ -191,9 +200,10 @@
                     this.obj.row.add({
                         "type": outFuelType(data[i].type) + ' - ' + data[i].type,
                         "tank": data[i].tank,
-                        "mass_start": (data[i].mass_start !== null ? data[i].mass_start.toFixed(2) : null),
-                        "mass_stop": (data[i].mass_stop !== null ? data[i].mass_stop.toFixed(2) : null),
-                        "change_mass": (data[i].mass_start !== null || data[i].mass_stop !== null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null)
+                        "level": (data[i].level !== null ? data[i].level : null),
+                        "volume": (data[i].volume !== null ? data[i].volume : null),
+                        "dens": (data[i].dens !== null ? data[i].dens.toFixed(5) : null),
+                        "mass": (data[i].mass !== null ? data[i].mass.toFixed(2) : null)
                     });
                 }
                 LockScreenOff();
@@ -224,6 +234,7 @@
     //// Загрузка библиотек
     //loadReference(function (result) {
     table_report.initObject();
+    panel_select_report.viewReport();
     //});
 
 });

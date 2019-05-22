@@ -2479,7 +2479,7 @@ var getAsyncViewReportTROfDateTime = function (date, callback) {
             }
         },
         error: function (x, y, z) {
-            OnAJAXError(x, y, z);
+            OnFunctionAJAXError('getAsyncViewReportTROfDateTime',x, y, z);
         },
         complete: function () {
             AJAXComplete();
