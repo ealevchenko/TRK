@@ -35,6 +35,8 @@ namespace WebUI
                 "~/Scripts/DataTables/dataTables.jqueryui.min.js",
                 "~/Scripts/DataTables/buttons.jqueryui.min.js",
                 "~/Scripts/DataTables/buttons.html5.min.js",
+                "~/Scripts/DataTables/buttons.print.min.js",
+                "~/Scripts/DataTables/buttons.colVis.min.js",
                 "~/Scripts/jszip.min.js",
                 "~/Scripts/pdfmake/pdfmake.min.js",
                 "~/Scripts/pdfmake/vfs_fonts.js"

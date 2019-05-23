@@ -58,7 +58,7 @@ body{
     -moz-background-size: auto, cover;
     -o-background-size: auto, cover;
     background-size: auto, cover;
-	color: #fff;
+	/*color: #fff;*/
 	/*font-family: 'Josefin Slab', Arial, sans-serif;*/
     font-family: 'Terminal Dosis', Arial, sans-serif;
 	font-size: 13px;
@@ -228,3 +228,4 @@ a.select-not-lang {
     font-family:Georgia, serif;
 	padding-top:5px;
 }
+

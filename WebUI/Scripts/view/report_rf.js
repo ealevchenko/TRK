@@ -131,7 +131,7 @@
             select: null,
             select_id: null,
             list: [],
-            groupColumn:0,
+            groupColumn: 0,
             // Инициализировать таблицу
             initObject: function () {
                 this.obj = this.html_table.DataTable({
@@ -183,7 +183,13 @@
                                 last = group;
                             }
                         });
-                    }
+                    },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'pdfHtml5'
+                    ]
                 });
             },
             // Показать таблицу с данными
@@ -222,10 +228,10 @@
                         "railway_manual_mass": data[i].railway_manual_mass,
                         "num": data[i].num,
                         "start_tank": data[i].start_tank,
-                        "start_mass": data[i].start_mass.toFixed(2),
+                        "start_mass": data[i].start_mass != null ? data[i].start_mass.toFixed(2) : null,
                         "stop_tank": data[i].stop_tank,
-                        "stop_mass": data[i].stop_mass.toFixed(2),
-                        "change_mass": (data[i].stop_mass - data[i].start_mass).toFixed(2)
+                        "stop_mass": data[i].stop_mass != null ? data[i].stop_mass.toFixed(2) : null,
+                        "change_mass": data[i].start_mass != null && data[i].stop_mass != null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ'
 
                         //toISOStringTZ(start)
                         //"LokomotiveId": data[i].LokomotiveId,

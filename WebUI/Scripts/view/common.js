@@ -2491,9 +2491,9 @@ var getAsyncViewReportTROfDateTime = function (date, callback) {
 var printPageArea = function (areaID, width, height) {
     var printContent = document.getElementById(areaID);
     var WinPrint = window.open('', '', 'width=' + width + ',height=' + height);
-    //WinPrint.document.write('<table>');
+    WinPrint.document.write('<table>');
     WinPrint.document.write(printContent.innerHTML);
-    //WinPrint.document.write('</table>');
+    WinPrint.document.write('</table>');
     WinPrint.document.close();
     WinPrint.focus();
     //WinPrint.print();
@@ -2502,6 +2502,7 @@ var printPageArea = function (areaID, width, height) {
 
 var printTable = function (table, title, width, height) {
     var WinPrint = window.open('', '', 'width=' + width + ',height=' + height);
+    WinPrint.document.write('<h1>'+title+'</h1>');
     WinPrint.document.write(table);
     WinPrint.document.close();
     WinPrint.focus();

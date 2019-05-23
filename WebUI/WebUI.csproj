@@ -504,6 +504,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\active.png" />
+    <Content Include="Images\amk_logo.png" />
     <Content Include="Images\not_active.png" />
     <Content Include="Images\null_active.png" />
     <Content Include="Images\Report\fuel_list.jpg" />
