@@ -188,7 +188,18 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'pdfHtml5'
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            pageSize: 'LEGAL',
+                            orientation: 'landscape',
+                            customize: function (doc) {
+                                doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                                //var tblBody = doc.content[1].table.body;
+                                //tblBody[0][2].text = 'Тип ГСМ';
+                                //tblBody[0][8].text = 'Тип Выдачи';
+                            }
+                        }
                     ]
                 });
             },

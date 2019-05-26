@@ -66,6 +66,49 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // GET: api/azs/sap_buffer/num_treb/0003900524
+        [Route("sap_buffer/num_treb/{num:int}")]
+        [ResponseType(typeof(SAP_Buffer))]
+        public IHttpActionResult GetSAP_BufferOfTreb(string num)
+        {
+            try
+            {
+                List<SAP_Buffer> sap = this.ef_sap.Get().Where(s => s.N_TREB == num & s.VOLUME==null).ToList()
+                    .Select(s => new SAP_Buffer
+                    {
+                        id = s.id,
+                        DATE = s.DATE,
+                        TIME = s.TIME,
+                        LOGIN_R = s.LOGIN_R,
+                        N_BAK = s.N_BAK,
+                        OZM_BAK = s.OZM_BAK,
+                        OZM_TREB = s.OZM_TREB,
+                        FLAG_R = s.FLAG_R,
+                        PLOTNOST = s.PLOTNOST,
+                        VOLUME = s.VOLUME,
+                        MASS = s.MASS,
+                        LOGIN_EXP = s.LOGIN_EXP,
+                        N_POST = s.N_POST,
+                        TRANSP_FAKT = s.TRANSP_FAKT,
+                        N_DEB = s.N_DEB,
+                        N_TREB = s.N_TREB,
+                        N_POS = s.N_POS,
+                        LGORT = s.LGORT,
+                        WERKS = s.WERKS,
+                        sending = s.sending,
+                    }).ToList();
+                if (sap == null)
+                {
+                    return NotFound();
+                }
+                return Ok(sap);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         // POST api/azs/sap_buffer
         [HttpPost]
         [Route("sap_buffer")]

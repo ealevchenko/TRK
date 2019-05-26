@@ -29,9 +29,12 @@ var catalog_depots = {
     list: null,
     get: function (id) {
         var depots = getObjects(catalog_depots.list, 'id', id);
-        if (depots != null && depots.length > 0) {
+        if (depots !== null && depots.length > 0) {
             return depots[0];
         }
+    },
+    getOfWerks: function (werks) {
+        return getObjects(catalog_depots.list, 'parent_id', werks);
     }
 };
 // Справочник 
@@ -1369,44 +1372,57 @@ var confirm_df = {
             buttons: {
                 'Начать выдачу': function () {
                     LockScreen('Подождите... идет проверка введенных данных');
-                    getAsyncOpenFuelSaleOfNum(confirm_df.open_num, function (id_open_num) {
-                        LockScreenOff();
-                        if (id_open_num === null || id_open_num === 0) {
-                            // Продолжим выполнение
-                            var variant = confirm_df.select_variant.val();
-                            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                            if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
-                                variant = 7;
-                            }
-                            // проверка правильности заполнения формы
-                            var valid = confirm_df.validationConfirm(variant);
-                            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = ' + valid + ', режим = ' + variant + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                            // Все заполненно?
-                            if (valid) {
-                                // Да форма заполнена
-                                if (variant >= 1 && variant <= 7) {
-                                    // получим данные для SAP
-                                    var sap_buffer = confirm_df.getNewSAP_Buffer();
-                                    //// TODO:!!!ТЕСТ УБРАТЬ
-                                    //if (log) {
-                                    //    log.info('Сформировали строку для САП SAP_BUFFER');
-                                    //    log.debug(sap_buffer);
-                                    //}
-                                    // Передадим управление форме подтверждения данных SAP
-                                    confirm_df.fsap.init();
-                                    confirm_df.fsap.open(sap_buffer);
-                                } else {
-                                    // Запись в базу локальную
-                                    confirm_df.save_fuelSale(null);
-                                }
+                    getAsyncOpenFuelSaleOfNum(confirm_df.open_num,
+                        function (id_open_num) {
+                            LockScreenOff();
+                            if (id_open_num === null || id_open_num === 0) {
+                                getAsyncOpenSAP_BufferOfNum(confirm_df.input_sap_num.val(),
+                                    function (sap_buffer_open) {
+                                        LockScreenOff();
+                                        if (sap_buffer_open === null || sap_buffer_open.length === 0) {
+                                            // Продолжим выполнение
+                                            var variant = confirm_df.select_variant.val();
+                                            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                                            if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                                                variant = 7;
+                                            }
+                                            // проверка правильности заполнения формы
+                                            var valid = confirm_df.validationConfirm(variant);
+                                            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = ' + valid + ', режим = ' + variant + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                                            // Все заполненно?
+                                            if (valid) {
+                                                // Да форма заполнена
+                                                if (variant >= 1 && variant <= 7) {
+                                                    // получим данные для SAP
+                                                    var sap_buffer = confirm_df.getNewSAP_Buffer();
+                                                    //// TODO:!!!ТЕСТ УБРАТЬ
+                                                    //if (log) {
+                                                    //    log.info('Сформировали строку для САП SAP_BUFFER');
+                                                    //    log.debug(sap_buffer);
+                                                    //}
+                                                    // Передадим управление форме подтверждения данных SAP
+                                                    confirm_df.fsap.init();
+                                                    confirm_df.fsap.open(sap_buffer);
+                                                } else {
+                                                    // Запись в базу локальную
+                                                    confirm_df.save_fuelSale(null);
+                                                }
+                                            } else {
+                                                // Нет форма не заполнена
+                                                // .....
+                                            }
+                                        } else {
+                                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу по требованию " + confirm_df.input_sap_num.val() + ".");
+                                        }
+                                    }
+                                );
+
+
                             } else {
-                                // Нет форма не заполнена
-                                // .....
+                                LockScreenOff();
+                                confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу=" + id_open_num + ". Проверьте в окне другого оператора");
                             }
-                        } else {
-                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу=" + id_open_num + ". Проверьте в окне другого оператора");
-                        }
-                    });
+                        });
                 },
                 'Отмена': function () {
                     $(this).dialog("close");
@@ -1622,7 +1638,7 @@ var confirm_df = {
             confirm_df.input_sap_factory_recipient.val('');
             switch (i) {
                 case "1":
-                    //case "2":
+                //case "2":
                 case "5":
                 case "6":
                     // По резервированию
@@ -1874,7 +1890,8 @@ var confirm_df = {
         confirm_df.select_sap_stock_recipient = initSelect(
             $('select[name ="sap-stock-recipient"]'),
             { width: 280 },
-            catalog_depots.list,
+            //catalog_depots.list,
+            [],
             function (row) {
                 return { value: row.id, text: row.name };
             },
@@ -1895,6 +1912,19 @@ var confirm_df = {
             -1,
             function (event, ui) {
                 event.preventDefault();
+                confirm_df.select_sap_stock_recipient.selectmenu("enable");
+                var kod = "000" + ui.item.value;
+                //kod.length - 4;
+                //var kd = kod.substring(kod.length - 4);
+                //var list = catalog_depots.getOfWerks(kod.substring(kod.length - 4));
+                updateOptionSelect(
+                    confirm_df.select_sap_stock_recipient,
+                    catalog_depots.getOfWerks(kod.substring(kod.length - 4)),
+                    function (row) {
+                        return { value: row.id, text: row.name };
+                    },
+                    -1,
+                    null);
             },
             null);
         confirm_df.input_sap_id_card = $('input#sap-id-card');
@@ -1968,7 +1998,7 @@ var confirm_df = {
                         { value: 3, text: 'По исходящей поставке' },
                         { value: 4, text: 'По требованию (самовывоз)' },
                         { value: 5, text: 'Заправка в баки ТС' },
-                        { value: 6, text: 'Заправка в цистерну топливозаправщика' }, //, disabled: true 
+                        { value: 6, text: 'Заправка в цистерну топливозаправщика' } //, disabled: true 
                     ],
                     null,
                     -1,
@@ -1977,7 +2007,7 @@ var confirm_df = {
                 var gun = guns.getGun(num);
                 if (gun) {
                     confirm_df.gun = gun;
-                    confirm_df.input_deliver_start_counter.val((confirm_df.gun.total_volume / 100).toFixed(2))
+                    confirm_df.input_deliver_start_counter.val((confirm_df.gun.total_volume / 100).toFixed(2));
                     confirm_df.input_deliver_type_fuel.val(outFuelType(gun.type_fuel)).addClass('input_view');
                     confirm_df.input_sap_ozm_bak.val('(' + gun.type_fuel + ') ' + outFuelType(gun.type_fuel));
                     $('th#label-taken').text('Пистолет снят:');
@@ -2031,10 +2061,10 @@ var confirm_df = {
                             [
                                 { value: 1, text: 'По резервированию (керосин)', disabled: true },
                                 { value: 2, text: 'По резервированию (ГСМ)' },
-                                { value: 3, text: 'По исходящей поставке', disabled: true },
-                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 3, text: 'По исходящей поставке'},
+                                { value: 4, text: 'По требованию (самовывоз)'},
                                 { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' }
                             ],
                             null,
                             -1,
@@ -2047,11 +2077,11 @@ var confirm_df = {
                             confirm_df.select_variant,
                             [
                                 { value: 1, text: 'По резервированию (керосин)' },
-                                { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
+                                { value: 2, text: 'По резервированию (ГСМ)'},
                                 { value: 3, text: 'По исходящей поставке' },
                                 { value: 4, text: 'По требованию (самовывоз)' },
                                 { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' }
                             ],
                             null,
                             -1,
@@ -2064,11 +2094,11 @@ var confirm_df = {
                             confirm_df.select_variant,
                             [
                                 { value: 1, text: 'По резервированию (керосин)', disabled: true },
-                                { value: 2, text: 'По резервированию (ГСМ)', disabled: true },
-                                { value: 3, text: 'По исходящей поставке', disabled: true },
-                                { value: 4, text: 'По требованию (самовывоз)', disabled: true },
+                                { value: 2, text: 'По резервированию (ГСМ)'},
+                                { value: 3, text: 'По исходящей поставке'},
+                                { value: 4, text: 'По требованию (самовывоз)'},
                                 { value: 5, text: 'Заправка в баки ТС', disabled: true },
-                                { value: 6, text: 'Заправка в цистерну топливозаправщика' },
+                                { value: 6, text: 'Заправка в цистерну топливозаправщика' }
                             ],
                             null,
                             -1,
@@ -2128,7 +2158,6 @@ var confirm_df = {
             confirm_df.select_variant.val(6).selectmenu("refresh").selectmenu("enable"); // Сбросили выбор вариантов
             confirm_df.viewVariant('6');
         }
-
         if (num) {
             confirm_df.obj.dialog("open");
         }
@@ -2264,6 +2293,7 @@ var confirm_df = {
                 $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
                 $('tr#sap-stock-recipient').show();
                 confirm_df.select_sap_stock_recipient.selectmenu("widget").show();
+                confirm_df.select_sap_stock_recipient.selectmenu("disable");
                 //confirm_df.select_sap_stock_recipient.val(-1).selectmenu("refresh");
                 $('#label-sap-stock-recipient').text('Склад получателя :');
                 $('tr#sap-factory-recipient').show();

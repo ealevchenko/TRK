@@ -61,7 +61,7 @@ var reservation_out =
 var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };
 var reservation_vd_debitor_out =
-    { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000023", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "27571.260000000002", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
+    { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "27571.260000000002", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
 var reservation_ndopusk =
     { "RSNUM": "0004074757", "RSPOS": "0002", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "162 ", "UMWRK": "", "BDMNG": "9.0", "ENMNG": null, "LGOBE": "", "MEINS": "", "BWART": "X01" }
 
@@ -518,18 +518,18 @@ var updateOptionSelect = function (obj_select, data, callback_option, value_sele
     var options = [];
     var lang = 'ru';
     // Проверка выбор неопределен
-    if (value_select == -1) {
+    if (value_select === -1) {
         options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
     }
-    if (data != null) {
+    if (data !== null) {
         for (i = 0, count_data_update = data.length; i < count_data_update; i++) {
             var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled };
             // Преобразовать формат
             if (typeof callback_option === 'function') {
                 option = callback_option(data[i]);
             }
-            if (option != null) {
-                if (exceptions_value != null) {
+            if (option !== null) {
+                if (exceptions_value !== null) {
                     if (exceptions_value.indexOf(option.value) == -1) {
                         options.push("<option value='" + option.value + "' " + (option.disabled ? "disabled='disabled'" : "") + ">" + option.text + "</option>");
                     }
@@ -1215,6 +1215,30 @@ var getAsyncSAP_Buffer = function (id, callback) {
         },
     });
 };
+//Получить открытый sap_buffer по num
+var getAsyncOpenSAP_BufferOfNum = function (num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/sap_buffer/num_treb/' + num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
+
 //Добавить sap_buffer
 var postAsyncSAP_Buffer = function (sap_buffer, callback) {
     $.ajax({
@@ -1358,7 +1382,6 @@ var getAsyncOpenFuelSaleOfNum = function (num, callback) {
         },
     });
 };
-
 // Получить строку из базы данных
 var getAsyncFuelSale = function (id, callback) {
     $.ajax({
