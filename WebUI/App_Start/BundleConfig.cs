@@ -64,8 +64,14 @@ namespace WebUI
                 "~/Content/themes/base/jquery-ui.structure.css",
                 "~/Content/themes/base/jquery-ui.theme.css"));
 
+            // Grafic
 
+            bundles.Add(new ScriptBundle("~/bundles/d3").Include(
+            "~/Scripts/d3/d3.min.js",
+            "~/Scripts/nvd3/nv.d3.js"));
 
+            bundles.Add(new StyleBundle("~/d3/css").Include(
+                "~/Content/nvd3/nv.d3.css"));
 
         }
     }

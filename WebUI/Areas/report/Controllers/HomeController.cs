@@ -43,6 +43,10 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        public ActionResult Grafik()
+        {
+            return View();
+        }
 
     }
 }

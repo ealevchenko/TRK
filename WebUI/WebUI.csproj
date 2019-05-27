@@ -449,6 +449,8 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\nvd3\nv.d3.css" />
+    <Content Include="Content\nvd3\nv.d3.min.css" />
     <Content Include="Content\report\global.css" />
     <Content Include="Content\report\homemenu.css" />
     <Content Include="Content\report\report.css" />
@@ -559,7 +561,11 @@
     <Content Include="Areas\report\Views\Home\FuelFlowTanks.cshtml" />
     <Content Include="Areas\report\Views\Home\ShiftReport.cshtml" />
     <Content Include="Areas\report\Views\Home\Remains.cshtml" />
+    <Content Include="Content\nvd3\nv.d3.min.css.map" />
+    <Content Include="Areas\report\Views\Home\Grafik.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -652,6 +658,7 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\d3\LICENSE" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -675,6 +682,8 @@
     <Content Include="Scripts\log4javascript_uncompressed.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\nvd3\nv.d3.js" />
+    <Content Include="Scripts\nvd3\nv.d3.min.js" />
     <Content Include="Scripts\pdfmake\pdfmake.min.js" />
     <Content Include="Scripts\pdfmake\vfs_fonts.js" />
     <Content Include="Scripts\popper-utils.js" />
@@ -691,6 +700,7 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\view\common.js" />
     <Content Include="Scripts\view\log.js" />
+    <Content Include="Scripts\view\grafik.js" />
     <Content Include="Scripts\view\report_remains.js" />
     <Content Include="Scripts\view\report_sr.js" />
     <Content Include="Scripts\view\report_fuel_list.js" />
@@ -711,6 +721,8 @@
     <Content Include="Scripts\popper.min.js.map" />
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\pdfmake\pdfmake.min.js.map" />
+    <Content Include="Scripts\nvd3\nv.d3.js.map" />
+    <Content Include="Scripts\nvd3\nv.d3.min.js.map" />
     <None Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
