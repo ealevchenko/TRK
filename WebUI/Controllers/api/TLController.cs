@@ -33,6 +33,18 @@ namespace WebUI.Controllers.api
         public double? mass { get; set; }
     }
 
+    public class TG_Report
+    {
+        public DateTime? dt { get; set; }
+        public int? level { get; set; }
+        public int? volume { get; set; }
+        public double? dens { get; set; }
+        public double? mass { get; set; }
+        public int? temp { get; set; }
+        public int? water_level { get; set; }
+
+    }
+
     [RoutePrefix("api/it")]
     public class TLController : ApiController
     {
@@ -83,6 +95,29 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:GetReportTR(date={0})", date).SaveError(e);
+                return NotFound();
+            }
+        }
+
+
+        // GET: api/it/report/tanks_grafic/table/BT2/tank/B2/start/2019-05-28T00:00:00/stop/2019-05-28T23:59:59
+        [Route("report/tanks_grafic/table/{table}/tank/{tank}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(TG_Report))]
+        public IHttpActionResult GetReportTG(string table, string tank, DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = "EXEC [dbo].[GET_TANK_OF_PERIOD] N'"+table+"', N'"+tank+"', N'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "', N'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+                List<TG_Report> list = this.ef_it.Database.SqlQuery<TG_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportTG(table={0}, tank={1}, start={2}, stop={3})",table, tank, start, stop).SaveError(e);
                 return NotFound();
             }
         }

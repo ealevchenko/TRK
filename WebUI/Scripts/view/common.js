@@ -2509,8 +2509,34 @@ var getAsyncViewReportTROfDateTime = function (date, callback) {
         },
     });
 };
-
-
+//-------ГРАФИКИ-----------------------------------------------
+// График по емкостям
+var getAsyncViewReportTGOfDateTime = function (tank, start, stop, callback) {
+    var table;
+    switch (tank) {
+        case 'B2': table = 'BT2';
+    }
+    $.ajax({
+        type: 'GET',
+        url: '/api/it/report/tanks_grafic/table/' + table + '/tank/' + tank + '/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+};
 var printPageArea = function (areaID, width, height) {
     var printContent = document.getElementById(areaID);
     var WinPrint = window.open('', '', 'width=' + width + ',height=' + height);
