@@ -2514,8 +2514,17 @@ var getAsyncViewReportTROfDateTime = function (date, callback) {
 var getAsyncViewReportTGOfDateTime = function (tank, start, stop, callback) {
     var table;
     switch (tank) {
-        case 'B2': table = 'BT2';
-    }
+        case 'B2': table = 'BT2'; break;
+        case 'B3': table = 'BT3'; break;
+        case 'B9': table = 'BT9'; break;
+        case 'B11': table = 'BT11'; break;
+        case 'B16': table = 'BT16'; break;
+        case 'B17': table = 'BT17'; break;
+        case 'B18': table = 'BT18'; break;
+        case 'B19': table = 'BT19'; break;
+        case 'B20': table = 'BT20'; break;
+        default : table = 'DT'+tank; break;
+    };
     $.ajax({
         type: 'GET',
         url: '/api/it/report/tanks_grafic/table/' + table + '/tank/' + tank + '/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),

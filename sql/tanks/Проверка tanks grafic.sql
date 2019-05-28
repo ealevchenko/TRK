@@ -1,4 +1,4 @@
-use [KRR-PA-REP-SBF]
+use [ASU_AZSlogs]
 GO
 
 DECLARE	@return_value int
