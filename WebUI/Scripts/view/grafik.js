@@ -149,12 +149,11 @@
 
 
 
-                    grafik.chart = nv.models.multiChart()//lineChart()//cumulativeLineChart()
-                        .margin({ top: 30, right: 60, bottom: 50, left: 70 })
+                    grafik.chart = nv.models.lineChart()//multiChart()//cumulativeLineChart()
+                        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
                         .useInteractiveGuideline(true)
                         .x(function (d) { return d[0] })
                         .y(function (d) { return d[1] })
-                        
                         .color(d3.scale.category10().range())
                         //.average(function (d) { return d.mean / 100; })
                         .duration(300);
@@ -168,9 +167,13 @@
                         return d3.time.format('%H:%M:%S')(new Date(d));
                     });
 
-                    //grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
-                    grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
-                    grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
+                    grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
+                    var nTicks = 6;
+                    grafik.chart.yAxis.ticks(nTicks);
+                    //grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
+                    //grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
+
+                    grafik.chart.yScale(d3.scale.log());
                     //d3.select('#chart1 svg')
                     //    .datum(cumulativeTestData())
                     //    .call(grafik.chart);
@@ -234,43 +237,43 @@
                                 {
                                     key: "Уровень (мм)",
                                     values: values_level,
-                                    yAxis: 1,
-                                    type: "line"
+                                    //yAxis: 1,
+                                    //type: "line"
                                     //mean: 250
                                 },
                                 {
                                     key: "Объем (л)",
                                     values: values_volume,
-                                    yAxis: 1,
-                                    type: "line"
+                                    //yAxis: 1,
+                                    //type: "line"
                                     //mean: 250
                                 },
                                 {
                                     key: "Плотность (кг\\л)",
                                     values: values_dens,
-                                    yAxis: 1,
-                                    type: "line"
+                                    //yAxis: 1,
+                                    //type: "line"
                                     //mean: 250
                                 },
                                 {
                                     key: "Масса (кг)",
                                     values: values_mass,
-                                    yAxis: 1,
-                                    type: "line"
+                                    //yAxis: 1,
+                                    //type: "line"
                                     //mean: 250
                                 },
                                 {
                                     key: "Температура",
                                     values: values_temp,
-                                    yAxis: 2,
-                                    type: "line"
+                                    //yAxis: 2,
+                                    //type: "line"
                                     //mean: 250
                                 },
                                 {
                                     key: "Уров. подтов. воды",
                                     values: values_water_level,
-                                    yAxis: 2,
-                                    type: "line"
+                                    //yAxis: 2,
+                                    //type: "line"
                                     //mean: 250
                                 }
 
