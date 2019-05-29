@@ -22,7 +22,7 @@
             activeTable: function (active, data_refresh) {
                 if (active === 0) {
                     //table_report.viewTable(data_refresh);
-                    grafik.viewData();
+                    grafik.viewData(Number($('select#type-grafik').val()));
                 }
                 if (active === 1) {
                     //table_report.viewTable(data_refresh);
@@ -45,7 +45,23 @@
             select_sm: $('<select class="ui-widget-content ui-corner-all"></select>'),
             select_type: $('<select id="type-fuel" class="ui-widget-content ui-corner-all"></select>'),
             select_tanks: $('<select id="tanks" class="ui-widget-content ui-corner-all"></select>'),
+            //select_type_grafik: $('<select id="type-grafik" class="ui-widget-content ui-corner-all"></select>'),
             initObject: function () {
+                $('div#tabs-report-1-select').empty().append($('<select id="type-grafik" class="ui-widget-content ui-corner-all"></select>'));
+                // Настроим выбор времени
+                initSelect(
+                    $('select#type-grafik'),
+                    { width: 200 },
+                        [{ value: 0, text: "lineChart" }, { value: 1, text: "multiChart" }],
+                    null,
+                    0,
+                    function (event, ui) {
+                        event.preventDefault();
+                        if (ui.item.value !== '-1') {
+                            //grafik.viewData(Number(ui.item.value));
+                        }
+                    },
+                    null);
                 this.span.append(this.input_date);
                 obj = this.html_div_panel;
                 obj
@@ -146,118 +162,142 @@
             chart: null,
             chart1: null,
             initObject: function () {
-                nv.addGraph(function () {
-                    grafik.chart = nv.models.lineChart()//multiChart()//cumulativeLineChart()
-                        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
-                        .useInteractiveGuideline(true)
-                        .x(function (d) { return d[0] })
-                        .y(function (d) { return d[1] })
-                        .color(d3.scale.category10().range())
-                        //.tooltip(true)
-                        //.tooltip(function (key, x, y, e, graph) {})
-                        //    return '<h3>' + key + '</h3>' +
-                        //           '<p>' + y + ' on ' + x + '</p>';
-                        //});
-                        //.average(function (d) { return d.mean / 100; })
-                        .duration(300);
+                //this.create(this.chart, false);
+                //this.create(this.chart1, true);
+                //nv.addGraph(function () {
+                //    grafik.chart = nv.models.lineChart()//multiChart()//cumulativeLineChart()
+                //        .margin({ top: 50, right: 60, bottom: 0, left: 70 })
+                //        .useInteractiveGuideline(true)
+                //        .x(function (d) { return d[0] })
+                //        .y(function (d) { return d[1] })
+                //        .color(d3.scale.category10().range())
+                //        .showXAxis(false)
+                //        //.tooltip(true)
+                //        //.tooltip(function (key, x, y, e, graph) {})
+                //        //    return '<h3>' + key + '</h3>' +
+                //        //           '<p>' + y + ' on ' + x + '</p>';
+                //        //});
+                //        //.average(function (d) { return d.mean / 100; })
+                //        .duration(300);
 
-                    grafik.chart1 = nv.models.lineChart()//multiChart()//cumulativeLineChart()
-                        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
-                        .useInteractiveGuideline(true)
-                        .x(function (d) { return d[0] })
-                        .y(function (d) { return d[1] })
-                        .color(d3.scale.category10().range())
-                        //.average(function (d) { return d.mean / 100; })
-                        .duration(300);
-
-
-                    grafik.chart.tooltip(function (key, x, y, e) {
-                        if (e.value >= 0) {
-                            return '<h3>' + key + '</h3>' +
-                              '<p>' + y + ' at ' + x + '</p>';
-                        } else {
-                            return '';
-                        }
-                    });
+                //    grafik.chart1 = nv.models.lineChart()//multiChart()//cumulativeLineChart()
+                //        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
+                //        .useInteractiveGuideline(true)
+                //        .x(function (d) { return d[0] })
+                //        .y(function (d) { return d[1] })
+                //        .color(d3.scale.category10().range())
+                //        //.average(function (d) { return d.mean / 100; })
+                //        .duration(300);
 
 
-                    //elementClick = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
-                    //elementMousemove = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
-                    //.clipVoronoi(false);
-                    //grafik.chart.dispatch.on('renderEnd', function () {
-                    //    console.log('render complete: cumulative line with guide line');
-                    //});
-
-                    //grafik.chart.lines.dispatch.on('elementMouseout', function (e) {
-                    //    // Need to trigger same event on the xAxis of a separate graph
-                    //});
-
-                    //grafik.chart.lines.dispatch.on('elementMouseover', function (e) {
-                    //    // Need to trigger same event on the xAxis of a separate graph
-                    //});
-                    grafik.chart.lines.dispatch.on('elementClick', function (e) {
-                        //grafik.chart1.lines.dispatch.customEvent;
-                        grafik.chart1.interactiveLayer.dispatch.elementClick({ mouseX: 400, mouseY: 500 });
-
-                    });
-                    //grafik.chart.lines.dispatch.on('renderEnd', function (e) {
-                    //    // Need to trigger same event on the xAxis of a separate graph
-                    //});
-
-                    //grafik.chart.state.dispatch.on('change', function (state) {
-                    //    //nv.log('state', JSON.stringify(state));
-                    //});
-
-                    //grafik.chart1.lines.dispatch.on('customEvent', function () {
-                    //    //console.log('render complete: cumulative line with guide line');
-                    //});
-
-                    //grafik.chart.lines.dispatch.on('customEvent', grafik.chart1.lines.dispatch.customEvent);
+                //    grafik.chart.tooltip(function (key, x, y, e) {
+                //        if (e.value >= 0) {
+                //            return '<h3>' + key + '</h3>' +
+                //              '<p>' + y + ' at ' + x + '</p>';
+                //        } else {
+                //            return '';
+                //        }
+                //    });
 
 
-                    grafik.chart.xAxis.tickFormat(function (d) {
-                        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
-                        return d3.time.format('%H:%M:%S')(new Date(d));
-                    });
-                    grafik.chart1.xAxis.tickFormat(function (d) {
-                        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
-                        return d3.time.format('%H:%M:%S')(new Date(d));
-                    });
+                //    //elementClick = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
+                //    //elementMousemove = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
+                //    //.clipVoronoi(false);
+                //    //grafik.chart.dispatch.on('renderEnd', function () {
+                //    //    console.log('render complete: cumulative line with guide line');
+                //    //});
 
-                    grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
-                    grafik.chart1.yAxis.tickFormat(d3.format(',.2f'));
-                    //var nTicks = 6;
-                    //grafik.chart.yAxis.ticks(nTicks);
-                    //grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
-                    //grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
+                //    //grafik.chart.lines.dispatch.on('elementMouseout', function (e) {
+                //    //    // Need to trigger same event on the xAxis of a separate graph
+                //    //});
 
-                    //grafik.chart.yScale(d3.scale.log());
-                    //d3.select('#chart1 svg')
-                    //    .datum(cumulativeTestData())
-                    //    .call(grafik.chart);
+                //    //grafik.chart.lines.dispatch.on('elementMouseover', function (e) {
+                //    //    // Need to trigger same event on the xAxis of a separate graph
+                //    //});
+                //    grafik.chart.lines.dispatch.on('elementClick', function (e) {
+                //        //grafik.chart1.lines.dispatch.customEvent;
+                //        grafik.chart1.interactiveLayer.dispatch.elementClick({ mouseX: 400, mouseY: 500 });
 
+                //    });
+                //    //grafik.chart.lines.dispatch.on('renderEnd', function (e) {
+                //    //    // Need to trigger same event on the xAxis of a separate graph
+                //    //});
 
-                    //grafik.chart.legendPosition('bottom');
-                    //grafik.chart.update();
+                //    //grafik.chart.state.dispatch.on('change', function (state) {
+                //    //    //nv.log('state', JSON.stringify(state));
+                //    //});
 
-                    //TODO: Figure out a good way to do this automatically
-                    nv.utils.windowResize(grafik.chart.update);
-                    nv.utils.windowResize(grafik.chart1.update);
-                    //chart.dispatch.on('stateChange', function (e) { nv.log('New State:', JSON.stringify(e)); });
-                    //chart.state.dispatch.on('change', function (state) {
-                    //    nv.log('state', JSON.stringify(state));
-                    //});
+                //    //grafik.chart1.lines.dispatch.on('customEvent', function () {
+                //    //    //console.log('render complete: cumulative line with guide line');
+                //    //});
 
-
-                    return grafik.chart;
-                });
+                //    //grafik.chart.lines.dispatch.on('customEvent', grafik.chart1.lines.dispatch.customEvent);
 
 
+                //    grafik.chart.xAxis.tickFormat(function (d) {
+                //        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
+                //        return d3.time.format('%H:%M:%S')(new Date(d));
+                //    });
+                //    grafik.chart1.xAxis.tickFormat(function (d) {
+                //        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
+                //        return d3.time.format('%H:%M:%S')(new Date(d));
+                //    });
+
+                //    grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
+                //    grafik.chart1.yAxis.tickFormat(d3.format(',.2f'));
+                //    //var nTicks = 6;
+                //    //grafik.chart.yAxis.ticks(nTicks);
+                //    //grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
+                //    //grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
+
+                //    //grafik.chart.yScale(d3.scale.log());
+                //    //d3.select('#chart1 svg')
+                //    //    .datum(cumulativeTestData())
+                //    //    .call(grafik.chart);
+
+
+                //    //grafik.chart.legendPosition('bottom');
+                //    //grafik.chart.update();
+
+                //    //TODO: Figure out a good way to do this automatically
+                //    nv.utils.windowResize(grafik.chart.update);
+                //    nv.utils.windowResize(grafik.chart1.update);
+                //    //chart.dispatch.on('stateChange', function (e) { nv.log('New State:', JSON.stringify(e)); });
+                //    //chart.state.dispatch.on('change', function (state) {
+                //    //    nv.log('state', JSON.stringify(state));
+                //    //});
+                //    return grafik.chart;
+                //});
             },
+
+            create: function (showXAxis) {
+                var chart;
+                nv.addGraph(function () {
+                    chart = nv.models.lineChart()
+                        .margin({ top: 50, right: 60, bottom: 0, left: 70 })
+                        .useInteractiveGuideline(true)
+                        .x(function (d) { return d[0] })
+                        .y(function (d) { return d[1] })
+                        .color(d3.scale.category10().range())
+                        .showXAxis(showXAxis)
+                        .duration(300);
+
+                    chart.xAxis.tickFormat(function (d) {
+                        return d3.time.format('%H:%M:%S')(new Date(d));
+                    });
+
+                    chart.yAxis.tickFormat(d3.format(',.2f'));
+
+                    nv.utils.windowResize(chart.update);
+
+                    return chart;
+                });
+            },
+
             clear: function () {
-                d3.select('#chart1 svg')
-                    .datum([])
-                    .call(grafik.chart);
+                //d3.select('#chart1 svg')
+                //    .datum([])
+                //    .call(grafik.chart);
             },
             //view: function () {
             //    d3.select('#chart1 svg')
@@ -266,7 +306,8 @@
             //        .call(grafik.chart);
             //},
             //
-            viewData: function () {
+            viewData: function (mode) {
+                $('div#tabs-report-1-grafik').empty();
                 if (panel_select_report.select_tanks.val() !== "-1") {
                     LockScreen('Мы формируем ваш график...');
                     var grafik_data = [];
@@ -295,100 +336,120 @@
                                 {
                                     key: "Уровень (мм)",
                                     values: values_level,
-                                    //yAxis: 1,
-                                    //type: "line"
-                                    //mean: 250
+                                    yAxis: 1,
+                                    type: "line",
+                                    mean: 250
                                 },
-                                //{
-                                //    key: "Объем (л)",
-                                //    values: values_volume,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Плотность (кг\\л)",
-                                //    values: values_dens,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Масса (кг)",
-                                //    values: values_mass,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Температура",
-                                //    values: values_temp,
-                                //    //yAxis: 2,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Уров. подтов. воды",
-                                //    values: values_water_level,
-                                //    //yAxis: 2,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //}
-
-                            ];
-
-                            grafik_data1 = [
-                                //{
-                                //    key: "Уровень (мм)",
-                                //    values: values_level,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Объем (л)",
-                                //    values: values_volume,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
+                                {
+                                    key: "Объем (л)",
+                                    values: values_volume,
+                                    yAxis: 1,
+                                    type: "line",
+                                    mean: 250
+                                },
                                 {
                                     key: "Плотность (кг\\л)",
                                     values: values_dens,
-                                    //yAxis: 1,
-                                    //type: "line"
-                                    //mean: 250
+                                    yAxis: 1,
+                                    type: "line",
+                                    mean: 250
                                 },
-                                //{
-                                //    key: "Масса (кг)",
-                                //    values: values_mass,
-                                //    //yAxis: 1,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Температура",
-                                //    values: values_temp,
-                                //    //yAxis: 2,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //},
-                                //{
-                                //    key: "Уров. подтов. воды",
-                                //    values: values_water_level,
-                                //    //yAxis: 2,
-                                //    //type: "line"
-                                //    //mean: 250
-                                //}
+                                {
+                                    key: "Масса (кг)",
+                                    values: values_mass,
+                                    yAxis: 1,
+                                    type: "line",
+                                    mean: 250
+                                },
+                                {
+                                    key: "Температура",
+                                    values: values_temp,
+                                    yAxis: 2,
+                                    type: "line",
+                                    mean: 250
+                                },
+                                {
+                                    key: "Уров. подтов. воды",
+                                    values: values_water_level,
+                                    yAxis: 2,
+                                    type: "line",
+                                    mean: 250
+                                }
 
                             ];
+                            
 
-                            d3.select('#chart1 svg')
-                                .datum(grafik_data)
-                                .call(grafik.chart);
-                            d3.select('#chart2 svg')
-                                .datum(grafik_data1)
-                                .call(grafik.chart1);
+                            switch (mode) {
+                                case 0:
+                                    nv.addGraph(function () {
+                                        for (ig = 0; ig < grafik_data.length; ig++) {
+                                            $('div#tabs-report-1-grafik').append($('<div id="chart' + ig + '"><svg></svg></div>'));
+                                            var chart;
+                                            chart = nv.models.lineChart()
+                                                .margin({ top: 50, right: 60, bottom: 0, left: 70 })
+                                                .useInteractiveGuideline(true)
+                                                .x(function (d) { return d[0] })
+                                                .y(function (d) { return d[1] })
+                                                .color(d3.scale.category10().range())
+                                                .showXAxis(false)
+                                                .duration(0);
+
+                                            chart.xAxis.tickFormat(function (d) {
+                                                return d3.time.format('%H:%M:%S')(new Date(d));
+                                            });
+
+                                            chart.yAxis.tickFormat(d3.format(',.2f'));
+
+                                            nv.utils.windowResize(chart.update);
+                                            var datag = [];
+                                            datag.push(grafik_data[ig]);
+
+                                            d3.select('#chart' + ig + ' svg')
+                                                .datum(datag)
+                                                .call(chart);
+
+                                        }
+                                    });
+                                    break;
+                                case 1:
+                                    $('div#tabs-report-1-grafik').append($('<div id="chart0"><svg></svg></div>').css('height','600px'));
+                                    var chart;
+                                    chart = nv.models.multiChart()
+                                        .margin({ top: 50, right: 60, bottom: 30, left: 70 })
+                                        .useInteractiveGuideline(true)
+                                        .x(function (d) { return d[0] })
+                                        .y(function (d) { return d[1] })
+                                        .color(d3.scale.category10().range())
+                                        //.height(600)
+                                        //.useVoronoi(true)
+                                        //.clipVoronoi(false)
+                                        .duration(300);
+
+                                    chart.xAxis.tickFormat(function (d) {
+                                        return d3.time.format('%H:%M:%S')(new Date(d));
+                                    });
+
+                                    chart.yAxis1.tickFormat(d3.format(',.2f'));
+                                    chart.yAxis2.tickFormat(d3.format(',.2f'));
+
+                                    nv.utils.windowResize(chart.update);
+
+                                    d3.select('#chart0 svg')
+                                        .datum(grafik_data)
+                                        .call(chart);
+                                    break;
+                            }
+
+
+
+
+
+                            //d3.select('#chart1 svg')
+                            //    .datum(grafik_data)
+                            //    .call(grafik.chart);
+                            //d3.select('#chart2 svg')
+                            //    .datum(grafik_data1)
+                            //    .call(grafik.chart1);
 
 
 
