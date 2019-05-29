@@ -144,12 +144,24 @@
         },
         grafik = {
             chart: null,
+            chart1: null,
             initObject: function () {
                 nv.addGraph(function () {
-
-
-
                     grafik.chart = nv.models.lineChart()//multiChart()//cumulativeLineChart()
+                        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
+                        .useInteractiveGuideline(true)
+                        .x(function (d) { return d[0] })
+                        .y(function (d) { return d[1] })
+                        .color(d3.scale.category10().range())
+                        //.tooltip(true)
+                        //.tooltip(function (key, x, y, e, graph) {})
+                        //    return '<h3>' + key + '</h3>' +
+                        //           '<p>' + y + ' on ' + x + '</p>';
+                        //});
+                        //.average(function (d) { return d.mean / 100; })
+                        .duration(300);
+
+                    grafik.chart1 = nv.models.lineChart()//multiChart()//cumulativeLineChart()
                         .margin({ top: 50, right: 60, bottom: 50, left: 70 })
                         .useInteractiveGuideline(true)
                         .x(function (d) { return d[0] })
@@ -157,23 +169,69 @@
                         .color(d3.scale.category10().range())
                         //.average(function (d) { return d.mean / 100; })
                         .duration(300);
+
+
+                    grafik.chart.tooltip(function (key, x, y, e) {
+                        if (e.value >= 0) {
+                            return '<h3>' + key + '</h3>' +
+                              '<p>' + y + ' at ' + x + '</p>';
+                        } else {
+                            return '';
+                        }
+                    });
+
+
+                    //elementClick = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
+                    //elementMousemove = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
                     //.clipVoronoi(false);
-                    //chart.dispatch.on('renderEnd', function () {
+                    //grafik.chart.dispatch.on('renderEnd', function () {
                     //    console.log('render complete: cumulative line with guide line');
                     //});
+
+                    //grafik.chart.lines.dispatch.on('elementMouseout', function (e) {
+                    //    // Need to trigger same event on the xAxis of a separate graph
+                    //});
+
+                    //grafik.chart.lines.dispatch.on('elementMouseover', function (e) {
+                    //    // Need to trigger same event on the xAxis of a separate graph
+                    //});
+                    grafik.chart.lines.dispatch.on('elementClick', function (e) {
+                        //grafik.chart1.lines.dispatch.customEvent;
+                        grafik.chart1.interactiveLayer.dispatch.elementClick({ mouseX: 400, mouseY: 500 });
+
+                    });
+                    //grafik.chart.lines.dispatch.on('renderEnd', function (e) {
+                    //    // Need to trigger same event on the xAxis of a separate graph
+                    //});
+
+                    //grafik.chart.state.dispatch.on('change', function (state) {
+                    //    //nv.log('state', JSON.stringify(state));
+                    //});
+
+                    //grafik.chart1.lines.dispatch.on('customEvent', function () {
+                    //    //console.log('render complete: cumulative line with guide line');
+                    //});
+
+                    //grafik.chart.lines.dispatch.on('customEvent', grafik.chart1.lines.dispatch.customEvent);
+
 
                     grafik.chart.xAxis.tickFormat(function (d) {
                         //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
                         return d3.time.format('%H:%M:%S')(new Date(d));
                     });
+                    grafik.chart1.xAxis.tickFormat(function (d) {
+                        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
+                        return d3.time.format('%H:%M:%S')(new Date(d));
+                    });
 
                     grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
-                    var nTicks = 6;
-                    grafik.chart.yAxis.ticks(nTicks);
+                    grafik.chart1.yAxis.tickFormat(d3.format(',.2f'));
+                    //var nTicks = 6;
+                    //grafik.chart.yAxis.ticks(nTicks);
                     //grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
                     //grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
 
-                    grafik.chart.yScale(d3.scale.log());
+                    //grafik.chart.yScale(d3.scale.log());
                     //d3.select('#chart1 svg')
                     //    .datum(cumulativeTestData())
                     //    .call(grafik.chart);
@@ -184,7 +242,7 @@
 
                     //TODO: Figure out a good way to do this automatically
                     nv.utils.windowResize(grafik.chart.update);
-
+                    nv.utils.windowResize(grafik.chart1.update);
                     //chart.dispatch.on('stateChange', function (e) { nv.log('New State:', JSON.stringify(e)); });
                     //chart.state.dispatch.on('change', function (state) {
                     //    nv.log('state', JSON.stringify(state));
@@ -241,13 +299,59 @@
                                     //type: "line"
                                     //mean: 250
                                 },
-                                {
-                                    key: "Объем (л)",
-                                    values: values_volume,
-                                    //yAxis: 1,
-                                    //type: "line"
-                                    //mean: 250
-                                },
+                                //{
+                                //    key: "Объем (л)",
+                                //    values: values_volume,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Плотность (кг\\л)",
+                                //    values: values_dens,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Масса (кг)",
+                                //    values: values_mass,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Температура",
+                                //    values: values_temp,
+                                //    //yAxis: 2,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Уров. подтов. воды",
+                                //    values: values_water_level,
+                                //    //yAxis: 2,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //}
+
+                            ];
+
+                            grafik_data1 = [
+                                //{
+                                //    key: "Уровень (мм)",
+                                //    values: values_level,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Объем (л)",
+                                //    values: values_volume,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
                                 {
                                     key: "Плотность (кг\\л)",
                                     values: values_dens,
@@ -255,33 +359,38 @@
                                     //type: "line"
                                     //mean: 250
                                 },
-                                {
-                                    key: "Масса (кг)",
-                                    values: values_mass,
-                                    //yAxis: 1,
-                                    //type: "line"
-                                    //mean: 250
-                                },
-                                {
-                                    key: "Температура",
-                                    values: values_temp,
-                                    //yAxis: 2,
-                                    //type: "line"
-                                    //mean: 250
-                                },
-                                {
-                                    key: "Уров. подтов. воды",
-                                    values: values_water_level,
-                                    //yAxis: 2,
-                                    //type: "line"
-                                    //mean: 250
-                                }
+                                //{
+                                //    key: "Масса (кг)",
+                                //    values: values_mass,
+                                //    //yAxis: 1,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Температура",
+                                //    values: values_temp,
+                                //    //yAxis: 2,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //},
+                                //{
+                                //    key: "Уров. подтов. воды",
+                                //    values: values_water_level,
+                                //    //yAxis: 2,
+                                //    //type: "line"
+                                //    //mean: 250
+                                //}
 
                             ];
 
                             d3.select('#chart1 svg')
                                 .datum(grafik_data)
                                 .call(grafik.chart);
+                            d3.select('#chart2 svg')
+                                .datum(grafik_data1)
+                                .call(grafik.chart1);
+
+
 
                             LockScreenOff();
                         });
