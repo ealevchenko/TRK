@@ -1216,10 +1216,10 @@ var getAsyncSAP_Buffer = function (id, callback) {
     });
 };
 //Получить открытый sap_buffer по num
-var getAsyncOpenSAP_BufferOfNum = function (num, callback) {
+var getAsyncOpenSAP_BufferOfNum = function (num, pos, callback) {
     $.ajax({
         type: 'GET',
-        url: '/api/azs/sap_buffer/num_treb/' + num,
+        url: '/api/azs/sap_buffer/num_treb/' + num+'/pos/'+pos,
         async: true,
         dataType: 'json',
         beforeSend: function () {

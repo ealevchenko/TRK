@@ -66,14 +66,14 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // GET: api/azs/sap_buffer/num_treb/0003900524
-        [Route("sap_buffer/num_treb/{num:int}")]
+        // GET: api/azs/sap_buffer/num_treb/0003900524/pos/0005
+        [Route("sap_buffer/num_treb/{num}/pos/{pos}")]
         [ResponseType(typeof(SAP_Buffer))]
-        public IHttpActionResult GetSAP_BufferOfTreb(string num)
+        public IHttpActionResult GetSAP_BufferOfTreb(string num, string pos)
         {
             try
             {
-                List<SAP_Buffer> sap = this.ef_sap.Get().Where(s => s.N_TREB == num & s.VOLUME==null).ToList()
+                List<SAP_Buffer> sap = this.ef_sap.Get().Where(s => s.N_TREB == num & s.N_POS == pos & s.VOLUME==null).ToList()
                     .Select(s => new SAP_Buffer
                     {
                         id = s.id,

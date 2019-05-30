@@ -11,11 +11,22 @@
     <link rel="stylesheet" type="text/css" href="~/Content/report/report.css">
 
     <style>
-        #chartdiv {
+        text {
+            font: 10px sans-serif;
+        }
+
+        svg {
+            display: block;
+        }
+
+        #chart0, #chart1, #chart2, #chart3, #chart4, #chart5, svg {
+            margin: 0px;
+            padding: 0px;
             width: 100%;
-            height: 500px;
+            height: 100%;
         }
     </style>
+
 }
 
 @section scripts {
@@ -23,7 +34,7 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/DataTables")
     @Scripts.Render("~/bundles/DateTime")
-    @Scripts.Render("~/bundles/amcharts4")
+    @Scripts.Render("~/bundles/d3")
 
     <script>
         var log_view = '@System.Configuration.ConfigurationManager.AppSettings["Log_view"]';
@@ -44,15 +55,9 @@
     </script>
 
     <script src="~/Scripts/view/common.js" type="text/javascript"></script>
-    <script src="~/Scripts/view/grafik.js" type="text/javascript"></script>
-
-    <!-- Chart code -->
-    <script>
-
-    </script>
+    <script src="~/Scripts/view/grafik_old.js" type="text/javascript"></script>
 
 }
-
 <div id="report" class="report-narrow">
     <div id="table-panel">
     </div>
@@ -63,12 +68,18 @@
             <li><a href="#tabs-report-2" id="link-tabs-report-2"></a></li>
         </ul>
         <div id="tabs-report-1">
-            <div id="chartdiv"></div>
+            <div id="tabs-report-1-select"></div>
+            <div id="tabs-report-1-grafik"></div>
+            @*<div id="chart1">
+                <svg></svg>
+            </div>
+            <div id="chart2">
+                <svg></svg>
+            </div>*@
         </div>
         <div id="tabs-report-2">
             <table class='display compact' id="table-report" style="width:100%" cellpadding="0"></table>
         </div>
     </div>
 </div>
-
 

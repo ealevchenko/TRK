@@ -3,13 +3,48 @@
     var date_curent = new Date(),
         date_start = null,
         date_stop = null,
-        // Типы отчетов
+        Tanks = {
+            list: null,
+            type_fuel: null,
+            num: null,
+            start: null,
+            stop: null,
+            getData: function (callback) {
+
+                if (Tanks.list === null || date_start !== Tanks.start || date_stop !== Tanks.stop || panel_select_report.select_tanks.val() !== num) {
+                    getAsyncViewReportTGOfDateTime(
+                        panel_select_report.select_tanks.val(),
+                        date_start,
+                        date_stop,
+                        function (data) {
+                            Tanks.list = [];
+                            for (i = 0; i < data.length; i++) {
+                                Tanks.list.push({
+                                    date: Date.parse(data[i].dt),
+                                    level: data[i].level,
+                                    volume: data[i].volume,
+                                    dens: data[i].dens,
+                                    mass: data[i].mass,
+                                    temp: data[i].temp / 10,
+                                    water_level: data[i].water_level
+                                });
+                            }
+                            start = date_start;
+                            stop = date_stop;
+                            num = panel_select_report.select_tanks.val();
+                            if (typeof callback === 'function') {
+                                callback(Tanks.list);
+                            }
+                        });
+                }
+            }
+        },
         tab_type_reports = {
             html_div: $("#tabs-reports"),
             active: 0,
             initObject: function () {
-                $('#link-tabs-report-1').text("График");
-                $('#link-tabs-report-2').text("Таблица");
+                $('#link-tabs-report-1').text("Тренды");
+                $('#link-tabs-report-2').text("Данные");
                 this.html_div.tabs({
                     collapsible: true,
                     activate: function (event, ui) {
@@ -21,13 +56,17 @@
             },
             activeTable: function (active, data_refresh) {
                 if (active === 0) {
+                    // Вызвать тренды
                     //table_report.viewTable(data_refresh);
-                    grafik.viewData(Number($('select#type-grafik').val()));
+                    trend_tank.view();
                 }
-                if (active === 1) {
+                if (active == 1) {
+                    // Вызвать данные
                     //table_report.viewTable(data_refresh);
                 }
+
             }
+
         },
         // Панель таблицы
         panel_select_report = {
@@ -37,7 +76,7 @@
             bt_left: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-w"></span>text</button>'),
             bt_right: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-e"></span>text</button>'),
             bt_refresh: $('<button class="ui-button ui-widget ui-corner-all" ><span class="ui-icon ui-icon-refresh"></span>text</button>'),
-            label: $('<label for="date" ></label>'),
+            label: $('<label for="date">Выберите дату:</label>'),
             label_type: $('<label>Тип ГСМ:</label>'),
             label_tanks: $('<label>Емкость:</label>'),
             span: $('<span id="select-range"></span>'),
@@ -45,23 +84,7 @@
             select_sm: $('<select class="ui-widget-content ui-corner-all"></select>'),
             select_type: $('<select id="type-fuel" class="ui-widget-content ui-corner-all"></select>'),
             select_tanks: $('<select id="tanks" class="ui-widget-content ui-corner-all"></select>'),
-            //select_type_grafik: $('<select id="type-grafik" class="ui-widget-content ui-corner-all"></select>'),
             initObject: function () {
-                $('div#tabs-report-1-select').empty().append($('<select id="type-grafik" class="ui-widget-content ui-corner-all"></select>'));
-                // Настроим выбор времени
-                initSelect(
-                    $('select#type-grafik'),
-                    { width: 200 },
-                        [{ value: 0, text: "lineChart" }, { value: 1, text: "multiChart" }],
-                    null,
-                    0,
-                    function (event, ui) {
-                        event.preventDefault();
-                        if (ui.item.value !== '-1') {
-                            //grafik.viewData(Number(ui.item.value));
-                        }
-                    },
-                    null);
                 this.span.append(this.input_date);
                 obj = this.html_div_panel;
                 obj
@@ -76,12 +99,12 @@
                     .append(this.select_tanks)
                     .append(this.bt_refresh);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
-                this.label.text("Выберите дату");
+                this.label;
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
-                this.bt_refresh.attr('title', "Обновить отчет");
-                this.bt_refresh.text("Показать отчет");
+                this.bt_refresh.attr('title', "Обновить...");
+                this.bt_refresh.text("Обновить...");
+
                 this.bt_refresh.on('click', function () {
-                    var s = panel_select_report.select_sm.val();
                     if (panel_select_report.select_sm.val() === "Н") {
                         date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
                         date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
@@ -90,21 +113,51 @@
                         date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
                         date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
                     }
+                    if (panel_select_report.select_sm.val() >= 0 && panel_select_report.select_sm.val() <= 19) {
+                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 0, 0);
+                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 59, 59);
+                    }
+
                     tab_type_reports.activeTable(tab_type_reports.active, true);
-                    //tab_type_reports.activeTable(tab_type_reports.active, true);
                 });
 
                 // Настроим выбор времени
                 initSelect(
                     this.select_sm,
                     { width: 200 },
-                    [{ value: "Д", text: "Смена Д (07:00-18:59)" }, { value: "Н", text: "Смена Н (19:00-06:59)" }],
+                    [
+                        { value: "Д", text: "Смена Д (07:00-18:59)" },
+                        { value: "Н", text: "Смена Н (19:00-06:59)" },
+                        { value: 0, text: "00:00 - 00:59" },
+                        { value: 1, text: "01:00 - 01:59" },
+                        { value: 2, text: "02:00 - 02:59" },
+                        { value: 3, text: "03:00 - 03:59" },
+                        { value: 4, text: "04:00 - 04:59" },
+                        { value: 5, text: "05:00 - 05:59" },
+                        { value: 6, text: "06:00 - 06:59" },
+                        { value: 7, text: "07:00 - 07:59" },
+                        { value: 8, text: "08:00 - 08:59" },
+                        { value: 9, text: "09:00 - 09:59" },
+                        { value: 10, text: "10:00 - 10:59" },
+                        { value: 11, text: "11:00 - 11:59" },
+                        { value: 12, text: "12:00 - 12:59" },
+                        { value: 13, text: "13:00 - 13:59" },
+                        { value: 14, text: "14:00 - 14:59" },
+                        { value: 15, text: "15:00 - 15:59" },
+                        { value: 16, text: "16:00 - 16:59" },
+                        { value: 17, text: "17:00 - 17:59" },
+                        { value: 18, text: "18:00 - 17:59" },
+                        { value: 19, text: "19:00 - 19:59" },
+                        { value: 20, text: "20:00 - 20:59" },
+                        { value: 21, text: "21:00 - 21:59" },
+                        { value: 22, text: "22:00 - 22:59" },
+                        { value: 23, text: "23:00 - 23:59" }
+                    ],
                     null,
                     "Д",
                     function (event, ui) {
                         event.preventDefault();
                         // Обработать выбор смены
-                        grafik.clear();
                     },
                     null);
                 // Настроим выбор типа ГСМ
@@ -116,7 +169,7 @@
                     -1,
                     function (event, ui) {
                         event.preventDefault();
-                        grafik.clear();
+
                         if (ui.item.value !== '-1') {
                             updateOptionSelect(panel_select_report.select_tanks, ozm_bak.getTanks(panel_select_report.select_type.val()), null, -1, null);
                         }
@@ -131,7 +184,7 @@
                     -1,
                     function (event, ui) {
                         event.preventDefault();
-                        grafik.clear();
+
                         if (ui.item.value !== '-1') {
                             //
                         }
@@ -151,458 +204,332 @@
                         date_curent = obj.date1;
                     })
                     .bind('datepicker-closed', function () {
-                        grafik.clear();
+
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
             }
         },
-        grafik = {
+        // График
+        trend_tank = {
             chart: null,
-            chart1: null,
-            initObject: function () {
-                //this.create(this.chart, false);
-                //this.create(this.chart1, true);
-                //nv.addGraph(function () {
-                //    grafik.chart = nv.models.lineChart()//multiChart()//cumulativeLineChart()
-                //        .margin({ top: 50, right: 60, bottom: 0, left: 70 })
-                //        .useInteractiveGuideline(true)
-                //        .x(function (d) { return d[0] })
-                //        .y(function (d) { return d[1] })
-                //        .color(d3.scale.category10().range())
-                //        .showXAxis(false)
-                //        //.tooltip(true)
-                //        //.tooltip(function (key, x, y, e, graph) {})
-                //        //    return '<h3>' + key + '</h3>' +
-                //        //           '<p>' + y + ' on ' + x + '</p>';
-                //        //});
-                //        //.average(function (d) { return d.mean / 100; })
-                //        .duration(300);
+            init: function () {
+                am4core.ready(function () {
 
-                //    grafik.chart1 = nv.models.lineChart()//multiChart()//cumulativeLineChart()
-                //        .margin({ top: 50, right: 60, bottom: 50, left: 70 })
-                //        .useInteractiveGuideline(true)
-                //        .x(function (d) { return d[0] })
-                //        .y(function (d) { return d[1] })
-                //        .color(d3.scale.category10().range())
-                //        //.average(function (d) { return d.mean / 100; })
-                //        .duration(300);
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    // Create chart instance
+                    trend_tank.chart = am4core.create("chartdiv", am4charts.XYChart);
+
+                    // Increase contrast by taking evey second color
+                    //trend_tank.chart.colors.step = 2;
+
+                    trend_tank.chart.colors.list = [
+                      am4core.color("#0026ff"),
+                      am4core.color("#ff6a00"),
+                      am4core.color("#ff0000"),
+                      am4core.color("#b200ff"),
+                      am4core.color("#000000"),
+                      am4core.color("#0c7a1a"),
+                    ];
 
 
-                //    grafik.chart.tooltip(function (key, x, y, e) {
-                //        if (e.value >= 0) {
-                //            return '<h3>' + key + '</h3>' +
-                //              '<p>' + y + ' at ' + x + '</p>';
-                //        } else {
-                //            return '';
-                //        }
-                //    });
+                    // Add data
+                    //this.chart.data = trend_tank.generateChartData();
+                    //this.chart.data = [];
+                    // Create axes
+                    var dateAxis = trend_tank.chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 50;
+
+                    // Create series
+                    function createAxisAndSeries(field, name, opposite, bullet) {
+                        var valueAxis = trend_tank.chart.yAxes.push(new am4charts.ValueAxis());
+                        if (field === "water_level" || field === "volume") valueAxis.min = 0;
+
+                        var series = trend_tank.chart.series.push(new am4charts.LineSeries());
+                        series.dataFields.valueY = field;
+                        series.dataFields.dateX = "date";
+                        series.strokeWidth = 1;
+                        series.yAxis = valueAxis;
+                        series.name = name;
+                        series.tooltipText = "{name}: [bold]{valueY}[/]";
+                        series.tensionX = 0.8;
+
+                        var interfaceColors = new am4core.InterfaceColorSet();
+
+                        //switch (bullet) {
+                        //    case "triangle":
+                        //        var bullet = series.bullets.push(new am4charts.Bullet());
+                        //        bullet.width = 5;
+                        //        bullet.height = 5;
+                        //        bullet.horizontalCenter = "middle";
+                        //        bullet.verticalCenter = "middle";
+
+                        //        var triangle = bullet.createChild(am4core.Triangle);
+                        //        triangle.stroke = interfaceColors.getFor("background");
+                        //        triangle.strokeWidth = 1;
+                        //        triangle.direction = "top";
+                        //        triangle.width = 5;
+                        //        triangle.height = 5;
+                        //        break;
+                        //    case "rectangle":
+                        //        var bullet = series.bullets.push(new am4charts.Bullet());
+                        //        bullet.width = 5;
+                        //        bullet.height = 5;
+                        //        bullet.horizontalCenter = "middle";
+                        //        bullet.verticalCenter = "middle";
+
+                        //        var rectangle = bullet.createChild(am4core.Rectangle);
+                        //        rectangle.stroke = interfaceColors.getFor("background");
+                        //        rectangle.strokeWidth = 1;
+                        //        rectangle.width = 5;
+                        //        rectangle.height = 5;
+                        //        break;
+                        //    default:
+                        //        var bullet = series.bullets.push(new am4charts.CircleBullet());
+                        //        bullet.circle.stroke = interfaceColors.getFor("background");
+                        //        bullet.circle.strokeWidth = 1;
+                        //        break;
+                        //}
+
+                        valueAxis.renderer.line.strokeOpacity = 1;
+                        valueAxis.renderer.line.strokeWidth = 1;
+                        valueAxis.renderer.line.stroke = series.stroke;
+                        valueAxis.renderer.labels.template.fill = series.stroke;
+                        valueAxis.renderer.opposite = opposite;
+                        valueAxis.renderer.grid.template.disabled = true;
+                    }
+
+                    createAxisAndSeries("level", "Уровень", false, "circle");
+                    createAxisAndSeries("volume", "Объем", false, "triangle");
+                    createAxisAndSeries("dens", "Плотность", false, "rectangle");
+                    createAxisAndSeries("mass", "Масса", false, "rectangle");
+                    createAxisAndSeries("temp", "Температура", false, "rectangle");
+                    createAxisAndSeries("water_level", "Подт. вод.", false, "rectangle");
+
+                    // Add legend
+                    trend_tank.chart.legend = new am4charts.Legend();
+
+                    // Add cursor
+                    trend_tank.chart.cursor = new am4charts.XYCursor();
+
+                    // generate some random data, quite different range
 
 
-                //    //elementClick = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
-                //    //elementMousemove = function t() { for (var t, r = e, i = -1, u = r.length; ++i < u;) (t = r[i].on) && t.apply(this, arguments); return n }
-                //    //.clipVoronoi(false);
-                //    //grafik.chart.dispatch.on('renderEnd', function () {
-                //    //    console.log('render complete: cumulative line with guide line');
-                //    //});
-
-                //    //grafik.chart.lines.dispatch.on('elementMouseout', function (e) {
-                //    //    // Need to trigger same event on the xAxis of a separate graph
-                //    //});
-
-                //    //grafik.chart.lines.dispatch.on('elementMouseover', function (e) {
-                //    //    // Need to trigger same event on the xAxis of a separate graph
-                //    //});
-                //    grafik.chart.lines.dispatch.on('elementClick', function (e) {
-                //        //grafik.chart1.lines.dispatch.customEvent;
-                //        grafik.chart1.interactiveLayer.dispatch.elementClick({ mouseX: 400, mouseY: 500 });
-
-                //    });
-                //    //grafik.chart.lines.dispatch.on('renderEnd', function (e) {
-                //    //    // Need to trigger same event on the xAxis of a separate graph
-                //    //});
-
-                //    //grafik.chart.state.dispatch.on('change', function (state) {
-                //    //    //nv.log('state', JSON.stringify(state));
-                //    //});
-
-                //    //grafik.chart1.lines.dispatch.on('customEvent', function () {
-                //    //    //console.log('render complete: cumulative line with guide line');
-                //    //});
-
-                //    //grafik.chart.lines.dispatch.on('customEvent', grafik.chart1.lines.dispatch.customEvent);
-
-
-                //    grafik.chart.xAxis.tickFormat(function (d) {
-                //        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
-                //        return d3.time.format('%H:%M:%S')(new Date(d));
-                //    });
-                //    grafik.chart1.xAxis.tickFormat(function (d) {
-                //        //return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d));
-                //        return d3.time.format('%H:%M:%S')(new Date(d));
-                //    });
-
-                //    grafik.chart.yAxis.tickFormat(d3.format(',.2f'));
-                //    grafik.chart1.yAxis.tickFormat(d3.format(',.2f'));
-                //    //var nTicks = 6;
-                //    //grafik.chart.yAxis.ticks(nTicks);
-                //    //grafik.chart.yAxis1.tickFormat(d3.format(',.2f'));
-                //    //grafik.chart.yAxis2.tickFormat(d3.format(',.2f'));
-
-                //    //grafik.chart.yScale(d3.scale.log());
-                //    //d3.select('#chart1 svg')
-                //    //    .datum(cumulativeTestData())
-                //    //    .call(grafik.chart);
-
-
-                //    //grafik.chart.legendPosition('bottom');
-                //    //grafik.chart.update();
-
-                //    //TODO: Figure out a good way to do this automatically
-                //    nv.utils.windowResize(grafik.chart.update);
-                //    nv.utils.windowResize(grafik.chart1.update);
-                //    //chart.dispatch.on('stateChange', function (e) { nv.log('New State:', JSON.stringify(e)); });
-                //    //chart.state.dispatch.on('change', function (state) {
-                //    //    nv.log('state', JSON.stringify(state));
-                //    //});
-                //    return grafik.chart;
-                //});
+                }); // end am4core.ready()
             },
-
-            create: function (showXAxis) {
-                var chart;
-                nv.addGraph(function () {
-                    chart = nv.models.lineChart()
-                        .margin({ top: 50, right: 60, bottom: 0, left: 70 })
-                        .useInteractiveGuideline(true)
-                        .x(function (d) { return d[0] })
-                        .y(function (d) { return d[1] })
-                        .color(d3.scale.category10().range())
-                        .showXAxis(showXAxis)
-                        .duration(300);
-
-                    chart.xAxis.tickFormat(function (d) {
-                        return d3.time.format('%H:%M:%S')(new Date(d));
+            view: function () {
+                //trend_tank.chart.data = trend_tank.generateChartData();
+                LockScreen('Мы формируем ваш график...');
+                Tanks.getData(
+                    function () {
+                        trend_tank.chart.data = Tanks.list;
+                        LockScreenOff();
                     });
 
-                    chart.yAxis.tickFormat(d3.format(',.2f'));
-
-                    nv.utils.windowResize(chart.update);
-
-                    return chart;
-                });
-            },
-
-            clear: function () {
-                //d3.select('#chart1 svg')
-                //    .datum([])
-                //    .call(grafik.chart);
-            },
-            //view: function () {
-            //    d3.select('#chart1 svg')
-            //        //.datum(grafik.cumulativeTestData())
-            //        .datum(grafik.getData())
-            //        .call(grafik.chart);
-            //},
-            //
-            viewData: function (mode) {
-                $('div#tabs-report-1-grafik').empty();
-                if (panel_select_report.select_tanks.val() !== "-1") {
-                    LockScreen('Мы формируем ваш график...');
-                    var grafik_data = [];
-                    getAsyncViewReportTGOfDateTime(
-                        panel_select_report.select_tanks.val(),
-                        date_start,
-                        date_stop,
-                        function (data) {
-                            var values_level = [];
-                            var values_volume = [];
-                            var values_dens = [];
-                            var values_mass = [];
-                            var values_temp = [];
-                            var values_water_level = [];
-
-                            for (i = 0; i < data.length; i++) {
-                                values_level.push([Date.parse(data[i].dt), data[i].level]);
-                                values_volume.push([Date.parse(data[i].dt), data[i].volume]);
-                                values_dens.push([Date.parse(data[i].dt), data[i].dens]);
-                                values_mass.push([Date.parse(data[i].dt), data[i].mass]);
-                                values_temp.push([Date.parse(data[i].dt), data[i].temp / 10]);
-                                values_water_level.push([Date.parse(data[i].dt), data[i].water_level]);
-                            }
-                            // data
-                            grafik_data = [
-                                {
-                                    key: "Уровень (мм)",
-                                    values: values_level,
-                                    yAxis: 1,
-                                    type: "line",
-                                    mean: 250
-                                },
-                                {
-                                    key: "Объем (л)",
-                                    values: values_volume,
-                                    yAxis: 1,
-                                    type: "line",
-                                    mean: 250
-                                },
-                                {
-                                    key: "Плотность (кг\\л)",
-                                    values: values_dens,
-                                    yAxis: 1,
-                                    type: "line",
-                                    mean: 250
-                                },
-                                {
-                                    key: "Масса (кг)",
-                                    values: values_mass,
-                                    yAxis: 1,
-                                    type: "line",
-                                    mean: 250
-                                },
-                                {
-                                    key: "Температура",
-                                    values: values_temp,
-                                    yAxis: 2,
-                                    type: "line",
-                                    mean: 250
-                                },
-                                {
-                                    key: "Уров. подтов. воды",
-                                    values: values_water_level,
-                                    yAxis: 2,
-                                    type: "line",
-                                    mean: 250
-                                }
-
-                            ];
-                            
-
-                            switch (mode) {
-                                case 0:
-                                    nv.addGraph(function () {
-                                        for (ig = 0; ig < grafik_data.length; ig++) {
-                                            $('div#tabs-report-1-grafik').append($('<div id="chart' + ig + '"><svg></svg></div>'));
-                                            var chart;
-                                            chart = nv.models.lineChart()
-                                                .margin({ top: 50, right: 60, bottom: 0, left: 70 })
-                                                .useInteractiveGuideline(true)
-                                                .x(function (d) { return d[0] })
-                                                .y(function (d) { return d[1] })
-                                                .color(d3.scale.category10().range())
-                                                .showXAxis(false)
-                                                .duration(0);
-
-                                            chart.xAxis.tickFormat(function (d) {
-                                                return d3.time.format('%H:%M:%S')(new Date(d));
-                                            });
-
-                                            chart.yAxis.tickFormat(d3.format(',.2f'));
-
-                                            nv.utils.windowResize(chart.update);
-                                            var datag = [];
-                                            datag.push(grafik_data[ig]);
-
-                                            d3.select('#chart' + ig + ' svg')
-                                                .datum(datag)
-                                                .call(chart);
-
-                                        }
-                                    });
-                                    break;
-                                case 1:
-                                    $('div#tabs-report-1-grafik').append($('<div id="chart0"><svg></svg></div>').css('height','600px'));
-                                    var chart;
-                                    chart = nv.models.multiChart()
-                                        .margin({ top: 50, right: 60, bottom: 30, left: 70 })
-                                        .useInteractiveGuideline(true)
-                                        .x(function (d) { return d[0] })
-                                        .y(function (d) { return d[1] })
-                                        .color(d3.scale.category10().range())
-                                        //.height(600)
-                                        //.useVoronoi(true)
-                                        //.clipVoronoi(false)
-                                        .duration(300);
-
-                                    chart.xAxis.tickFormat(function (d) {
-                                        return d3.time.format('%H:%M:%S')(new Date(d));
-                                    });
-
-                                    chart.yAxis1.tickFormat(d3.format(',.2f'));
-                                    chart.yAxis2.tickFormat(d3.format(',.2f'));
-
-                                    nv.utils.windowResize(chart.update);
-
-                                    d3.select('#chart0 svg')
-                                        .datum(grafik_data)
-                                        .call(chart);
-                                    break;
-                            }
-
-
-
-
-
-                            //d3.select('#chart1 svg')
-                            //    .datum(grafik_data)
-                            //    .call(grafik.chart);
-                            //d3.select('#chart2 svg')
-                            //    .datum(grafik_data1)
-                            //    .call(grafik.chart1);
-
-
-
-                            LockScreenOff();
-                        });
-                }
-
-            },
-            //cumulativeTestData: function () {
-            //    var test = [
-            //        {
-            //            key: "Long",
-            //            values: [[1083297600000, -2.974623048543], [1085976000000, -1.7740300785979], [1088568000000, 4.4681318138177], [1091246400000, 7.0242541001353], [1093924800000, 7.5709603667586], [1096516800000, 20.612245065736], [1099195200000, 21.698065237316], [1101790800000, 40.501189458018], [1104469200000, 50.464679413194], [1107147600000, 48.917421973355], [1109566800000, 63.750936549160], [1112245200000, 59.072499126460], [1114833600000, 43.373158880492], [1117512000000, 54.490918947556], [1120104000000, 56.661178852079], [1122782400000, 73.450103545496], [1125460800000, 71.714526354907], [1128052800000, 85.221664349607], [1130734800000, 77.769261392481], [1133326800000, 95.966528716500], [1136005200000, 107.59132116397], [1138683600000, 127.25740096723], [1141102800000, 122.13917498830], [1143781200000, 126.53657279774], [1146369600000, 132.39300992970], [1149048000000, 120.11238242904], [1151640000000, 118.41408917750], [1154318400000, 107.92918924621], [1156996800000, 110.28057249569], [1159588800000, 117.20485334692], [1162270800000, 141.33556756948], [1164862800000, 159.59452727893], [1167541200000, 167.09801853304], [1170219600000, 185.46849659215], [1172638800000, 184.82474099990], [1175313600000, 195.63155213887], [1177905600000, 207.40597044171], [1180584000000, 230.55966698196], [1183176000000, 239.55649035292], [1185854400000, 241.35915085208], [1188532800000, 239.89428956243], [1191124800000, 260.47781917715], [1193803200000, 276.39457482225], [1196398800000, 258.66530682672], [1199077200000, 250.98846121893], [1201755600000, 226.89902618127], [1204261200000, 227.29009273807], [1206936000000, 218.66476654350], [1209528000000, 232.46605902918], [1212206400000, 253.25667081117], [1214798400000, 235.82505363925], [1217476800000, 229.70112774254], [1220155200000, 225.18472705952], [1222747200000, 189.13661746552], [1225425600000, 149.46533007301], [1228021200000, 131.00340772114], [1230699600000, 135.18341728866], [1233378000000, 109.15296887173], [1235797200000, 84.614772549760], [1238472000000, 100.60810015326], [1241064000000, 141.50134895610], [1243742400000, 142.50405083675], [1246334400000, 139.81192372672], [1249012800000, 177.78205544583], [1251691200000, 194.73691933074], [1254283200000, 209.00838460225], [1256961600000, 198.19855877420], [1259557200000, 222.37102417812], [1262235600000, 234.24581081250], [1264914000000, 228.26087689346], [1267333200000, 248.81895126250], [1270008000000, 270.57301075186], [1272600000000, 292.64604322550], [1275278400000, 265.94088520518], [1277870400000, 237.82887467569], [1280548800000, 265.55973314204], [1283227200000, 248.30877330928], [1285819200000, 278.14870066912], [1288497600000, 292.69260960288], [1291093200000, 300.84263809599], [1293771600000, 326.17253914628], [1296450000000, 337.69335966505], [1298869200000, 339.73260965121], [1301544000000, 346.87865120765], [1304136000000, 347.92991526628], [1306814400000, 342.04627502669], [1309406400000, 333.45386231233], [1312084800000, 323.15034181243], [1314763200000, 295.66126882331], [1317355200000, 251.48014579253], [1320033600000, 295.15424257905], [1322629200000, 294.54766764397], [1325307600000, 295.72906119051], [1327986000000, 325.73351347613], [1330491600000, 340.16106061186], [1333166400000, 345.15514071490], [1335758400000, 337.10259395679], [1338436800000, 318.68216333837], [1341028800000, 317.03683945246], [1343707200000, 318.53549659997], [1346385600000, 332.85381464104], [1348977600000, 337.36534373477], [1351656000000, 350.27872156161], [1354251600000, 349.45128876100]]
-            //            ,
-            //            mean: 250
-            //        },
-            //        {
-            //            key: "Short",
-            //            values: [[1083297600000, -0.77078283705125], [1085976000000, -1.8356366650335], [1088568000000, -5.3121322073127], [1091246400000, -4.9320975829662], [1093924800000, -3.9835408823225], [1096516800000, -6.8694685316805], [1099195200000, -8.4854877428545], [1101790800000, -15.933627197384], [1104469200000, -15.920980069544], [1107147600000, -12.478685045651], [1109566800000, -17.297761889305], [1112245200000, -15.247129891020], [1114833600000, -11.336459046839], [1117512000000, -13.298990907415], [1120104000000, -16.360027000056], [1122782400000, -18.527929522030], [1125460800000, -22.176516738685], [1128052800000, -23.309665368330], [1130734800000, -21.629973409748], [1133326800000, -24.186429093486], [1136005200000, -29.116707312531], [1138683600000, -37.188037874864], [1141102800000, -34.689264821198], [1143781200000, -39.505932105359], [1146369600000, -45.339572492759], [1149048000000, -43.849353192764], [1151640000000, -45.418353922571], [1154318400000, -44.579281059919], [1156996800000, -44.027098363370], [1159588800000, -41.261306759439], [1162270800000, -47.446018534027], [1164862800000, -53.413782948909], [1167541200000, -50.700723647419], [1170219600000, -56.374090913296], [1172638800000, -61.754245220322], [1175313600000, -66.246241587629], [1177905600000, -75.351650899999], [1180584000000, -81.699058262032], [1183176000000, -82.487023368081], [1185854400000, -86.230055113277], [1188532800000, -84.746914818507], [1191124800000, -100.77134971977], [1193803200000, -109.95435565947], [1196398800000, -99.605672965057], [1199077200000, -99.607249394382], [1201755600000, -94.874614950188], [1204261200000, -105.35899063105], [1206936000000, -106.01931193802], [1209528000000, -110.28883571771], [1212206400000, -119.60256203030], [1214798400000, -115.62201315802], [1217476800000, -106.63824185202], [1220155200000, -99.848746318951], [1222747200000, -85.631219602987], [1225425600000, -63.547909262067], [1228021200000, -59.753275364457], [1230699600000, -63.874977883542], [1233378000000, -56.865697387488], [1235797200000, -54.285579501988], [1238472000000, -56.474659581885], [1241064000000, -63.847137745644], [1243742400000, -68.754247867325], [1246334400000, -69.474257009155], [1249012800000, -75.084828197067], [1251691200000, -77.101028237237], [1254283200000, -80.454866854387], [1256961600000, -78.984349952220], [1259557200000, -83.041230807854], [1262235600000, -84.529748348935], [1264914000000, -83.837470195508], [1267333200000, -87.174487671969], [1270008000000, -90.342293007487], [1272600000000, -93.550928464991], [1275278400000, -85.833102140765], [1277870400000, -79.326501831592], [1280548800000, -87.986196903537], [1283227200000, -85.397862121771], [1285819200000, -94.738167050020], [1288497600000, -98.661952897151], [1291093200000, -99.609665952708], [1293771600000, -103.57099836183], [1296450000000, -104.04353411322], [1298869200000, -108.21382792587], [1301544000000, -108.74006900920], [1304136000000, -112.07766650960], [1306814400000, -109.63328199118], [1309406400000, -106.53578966772], [1312084800000, -103.16480871469], [1314763200000, -95.945078001828], [1317355200000, -81.226687340874], [1320033600000, -90.782206596168], [1322629200000, -89.484445370113], [1325307600000, -88.514723135326], [1327986000000, -93.381292724320], [1330491600000, -97.529705609172], [1333166400000, -99.520481439189], [1335758400000, -99.430184898669], [1338436800000, -93.349934521973], [1341028800000, -95.858475286491], [1343707200000, -95.522755836605], [1346385600000, -98.503848862036], [1348977600000, -101.49415251896], [1351656000000, -101.50099325672], [1354251600000, -99.487094927489]]
-            //            ,
-            //            mean: -60
-            //        },
-            //        {
-            //            key: "Gross",
-            //            mean: 125,
-            //            values: [[1083297600000, -3.7454058855943], [1085976000000, -3.6096667436314], [1088568000000, -0.8440003934950], [1091246400000, 2.0921565171691], [1093924800000, 3.5874194844361], [1096516800000, 13.742776534056], [1099195200000, 13.212577494462], [1101790800000, 24.567562260634], [1104469200000, 34.543699343650], [1107147600000, 36.438736927704], [1109566800000, 46.453174659855], [1112245200000, 43.825369235440], [1114833600000, 32.036699833653], [1117512000000, 41.191928040141], [1120104000000, 40.301151852023], [1122782400000, 54.922174023466], [1125460800000, 49.538009616222], [1128052800000, 61.911998981277], [1130734800000, 56.139287982733], [1133326800000, 71.780099623014], [1136005200000, 78.474613851439], [1138683600000, 90.069363092366], [1141102800000, 87.449910167102], [1143781200000, 87.030640692381], [1146369600000, 87.053437436941], [1149048000000, 76.263029236276], [1151640000000, 72.995735254929], [1154318400000, 63.349908186291], [1156996800000, 66.253474132320], [1159588800000, 75.943546587481], [1162270800000, 93.889549035453], [1164862800000, 106.18074433002], [1167541200000, 116.39729488562], [1170219600000, 129.09440567885], [1172638800000, 123.07049577958], [1175313600000, 129.38531055124], [1177905600000, 132.05431954171], [1180584000000, 148.86060871993], [1183176000000, 157.06946698484], [1185854400000, 155.12909573880], [1188532800000, 155.14737474392], [1191124800000, 159.70646945738], [1193803200000, 166.44021916278], [1196398800000, 159.05963386166], [1199077200000, 151.38121182455], [1201755600000, 132.02441123108], [1204261200000, 121.93110210702], [1206936000000, 112.64545460548], [1209528000000, 122.17722331147], [1212206400000, 133.65410878087], [1214798400000, 120.20304048123], [1217476800000, 123.06288589052], [1220155200000, 125.33598074057], [1222747200000, 103.50539786253], [1225425600000, 85.917420810943], [1228021200000, 71.250132356683], [1230699600000, 71.308439405118], [1233378000000, 52.287271484242], [1235797200000, 30.329193047772], [1238472000000, 44.133440571375], [1241064000000, 77.654211210456], [1243742400000, 73.749802969425], [1246334400000, 70.337666717565], [1249012800000, 102.69722724876], [1251691200000, 117.63589109350], [1254283200000, 128.55351774786], [1256961600000, 119.21420882198], [1259557200000, 139.32979337027], [1262235600000, 149.71606246357], [1264914000000, 144.42340669795], [1267333200000, 161.64446359053], [1270008000000, 180.23071774437], [1272600000000, 199.09511476051], [1275278400000, 180.10778306442], [1277870400000, 158.50237284410], [1280548800000, 177.57353623850], [1283227200000, 162.91091118751], [1285819200000, 183.41053361910], [1288497600000, 194.03065670573], [1291093200000, 201.23297214328], [1293771600000, 222.60154078445], [1296450000000, 233.35556801977], [1298869200000, 231.22452435045], [1301544000000, 237.84432503045], [1304136000000, 235.55799131184], [1306814400000, 232.11873570751], [1309406400000, 226.62381538123], [1312084800000, 219.34811113539], [1314763200000, 198.69242285581], [1317355200000, 168.90235629066], [1320033600000, 202.64725756733], [1322629200000, 203.05389378105], [1325307600000, 204.85986680865], [1327986000000, 229.77085616585], [1330491600000, 239.65202435959], [1333166400000, 242.33012622734], [1335758400000, 234.11773262149], [1338436800000, 221.47846307887], [1341028800000, 216.98308827912], [1343707200000, 218.37781386755], [1346385600000, 229.39368622736], [1348977600000, 230.54656412916], [1351656000000, 243.06087025523], [1354251600000, 244.24733578385]]
-            //        },
-            //        {
-            //            key: "S&P 1500",
-            //            values: [[1083297600000, -1.7798428181819], [1085976000000, -0.36883324836999], [1088568000000, 1.7312581046040], [1091246400000, -1.8356125950460], [1093924800000, -1.5396564170877], [1096516800000, -0.16867791409247], [1099195200000, 1.3754263993413], [1101790800000, 5.8171640898041], [1104469200000, 9.4350145241608], [1107147600000, 6.7649081510160], [1109566800000, 9.1568499314776], [1112245200000, 7.2485090994419], [1114833600000, 4.8762222306595], [1117512000000, 8.5992339354652], [1120104000000, 9.0896517982086], [1122782400000, 13.394644048577], [1125460800000, 12.311842010760], [1128052800000, 13.221003650717], [1130734800000, 11.218481009206], [1133326800000, 15.565352598445], [1136005200000, 15.623703865926], [1138683600000, 19.275255326383], [1141102800000, 19.432433717836], [1143781200000, 21.232881244655], [1146369600000, 22.798299192958], [1149048000000, 19.006125095476], [1151640000000, 19.151889158536], [1154318400000, 19.340022855452], [1156996800000, 22.027934841859], [1159588800000, 24.903300681329], [1162270800000, 29.146492833877], [1164862800000, 31.781626082589], [1167541200000, 33.358770738428], [1170219600000, 35.622684613497], [1172638800000, 33.332821711366], [1175313600000, 34.878748635832], [1177905600000, 40.582332613844], [1180584000000, 45.719535502920], [1183176000000, 43.239344722386], [1185854400000, 38.550955100342], [1188532800000, 40.585368816283], [1191124800000, 45.601374057981], [1193803200000, 48.051404337892], [1196398800000, 41.582581696032], [1199077200000, 40.650580792748], [1201755600000, 32.252222066493], [1204261200000, 28.106390258553], [1206936000000, 27.532698196687], [1209528000000, 33.986390463852], [1212206400000, 36.302660526438], [1214798400000, 25.015574480172], [1217476800000, 23.989494069029], [1220155200000, 25.934351445531], [1222747200000, 14.627592011699], [1225425600000, -5.2249403809749], [1228021200000, -12.330933408050], [1230699600000, -11.000291508188], [1233378000000, -18.563864948088], [1235797200000, -27.213097001687], [1238472000000, -20.834133840523], [1241064000000, -12.717886701719], [1243742400000, -8.1644613083526], [1246334400000, -7.9108408918201], [1249012800000, -0.77002391591209], [1251691200000, 2.8243816569672], [1254283200000, 6.8761411421070], [1256961600000, 4.5060912230294], [1259557200000, 10.487179794349], [1262235600000, 13.251375597594], [1264914000000, 9.2207594803415], [1267333200000, 12.836276936538], [1270008000000, 19.816793904978], [1272600000000, 22.156787167211], [1275278400000, 12.518039090576], [1277870400000, 6.4253587440854], [1280548800000, 13.847372028409], [1283227200000, 8.5454736090364], [1285819200000, 18.542801953304], [1288497600000, 23.037064683183], [1291093200000, 23.517422401888], [1293771600000, 31.804723416068], [1296450000000, 34.778247386072], [1298869200000, 39.584883855230], [1301544000000, 40.080647664875], [1304136000000, 44.180050667889], [1306814400000, 42.533535927221], [1309406400000, 40.105374449011], [1312084800000, 37.014659267156], [1314763200000, 29.263745084262], [1317355200000, 19.637463417584], [1320033600000, 33.157645345770], [1322629200000, 32.895053150988], [1325307600000, 34.111544824647], [1327986000000, 40.453985817473], [1330491600000, 46.435700783313], [1333166400000, 51.062385488671], [1335758400000, 50.130448220658], [1338436800000, 41.035476682018], [1341028800000, 46.591932296457], [1343707200000, 48.349391180634], [1346385600000, 51.913011286919], [1348977600000, 55.747238313752], [1351656000000, 52.991824077209], [1354251600000, 49.556311883284]]
-            //        }
-            //    ];
-            //    return test;
-            //},
-            //
-            //getData: function () {
-            //    var grafik_data = null;
-            //    getAsyncViewReportTGOfDateTime(
-            //        'B2',
-            //        date_start,
-            //        date_stop,
-            //        function (data) {
-            //            var values_level = [];
-            //            for (i = 0; i < data.length; i++) {
-            //                values_level.push([data[i].dt, data[i].level])
-            //            }
-
-            //            grafik_data = [
-            //                {
-            //                    key: "level",
-            //                    values: values_level,
-            //                    mean: 250
-            //                }
-            //            ]
-
-            //        });
-            //    var test = [
-            //            {
-            //                key: "Long",
-            //                values: [[1083297600000, -2.974623048543], [1085976000000, -1.7740300785979], [1088568000000, 4.4681318138177], [1091246400000, 7.0242541001353], [1093924800000, 7.5709603667586], [1096516800000, 20.612245065736], [1099195200000, 21.698065237316], [1101790800000, 40.501189458018], [1104469200000, 50.464679413194], [1107147600000, 48.917421973355], [1109566800000, 63.750936549160], [1112245200000, 59.072499126460], [1114833600000, 43.373158880492], [1117512000000, 54.490918947556], [1120104000000, 56.661178852079], [1122782400000, 73.450103545496], [1125460800000, 71.714526354907], [1128052800000, 85.221664349607], [1130734800000, 77.769261392481], [1133326800000, 95.966528716500], [1136005200000, 107.59132116397], [1138683600000, 127.25740096723], [1141102800000, 122.13917498830], [1143781200000, 126.53657279774], [1146369600000, 132.39300992970], [1149048000000, 120.11238242904], [1151640000000, 118.41408917750], [1154318400000, 107.92918924621], [1156996800000, 110.28057249569], [1159588800000, 117.20485334692], [1162270800000, 141.33556756948], [1164862800000, 159.59452727893], [1167541200000, 167.09801853304], [1170219600000, 185.46849659215], [1172638800000, 184.82474099990], [1175313600000, 195.63155213887], [1177905600000, 207.40597044171], [1180584000000, 230.55966698196], [1183176000000, 239.55649035292], [1185854400000, 241.35915085208], [1188532800000, 239.89428956243], [1191124800000, 260.47781917715], [1193803200000, 276.39457482225], [1196398800000, 258.66530682672], [1199077200000, 250.98846121893], [1201755600000, 226.89902618127], [1204261200000, 227.29009273807], [1206936000000, 218.66476654350], [1209528000000, 232.46605902918], [1212206400000, 253.25667081117], [1214798400000, 235.82505363925], [1217476800000, 229.70112774254], [1220155200000, 225.18472705952], [1222747200000, 189.13661746552], [1225425600000, 149.46533007301], [1228021200000, 131.00340772114], [1230699600000, 135.18341728866], [1233378000000, 109.15296887173], [1235797200000, 84.614772549760], [1238472000000, 100.60810015326], [1241064000000, 141.50134895610], [1243742400000, 142.50405083675], [1246334400000, 139.81192372672], [1249012800000, 177.78205544583], [1251691200000, 194.73691933074], [1254283200000, 209.00838460225], [1256961600000, 198.19855877420], [1259557200000, 222.37102417812], [1262235600000, 234.24581081250], [1264914000000, 228.26087689346], [1267333200000, 248.81895126250], [1270008000000, 270.57301075186], [1272600000000, 292.64604322550], [1275278400000, 265.94088520518], [1277870400000, 237.82887467569], [1280548800000, 265.55973314204], [1283227200000, 248.30877330928], [1285819200000, 278.14870066912], [1288497600000, 292.69260960288], [1291093200000, 300.84263809599], [1293771600000, 326.17253914628], [1296450000000, 337.69335966505], [1298869200000, 339.73260965121], [1301544000000, 346.87865120765], [1304136000000, 347.92991526628], [1306814400000, 342.04627502669], [1309406400000, 333.45386231233], [1312084800000, 323.15034181243], [1314763200000, 295.66126882331], [1317355200000, 251.48014579253], [1320033600000, 295.15424257905], [1322629200000, 294.54766764397], [1325307600000, 295.72906119051], [1327986000000, 325.73351347613], [1330491600000, 340.16106061186], [1333166400000, 345.15514071490], [1335758400000, 337.10259395679], [1338436800000, 318.68216333837], [1341028800000, 317.03683945246], [1343707200000, 318.53549659997], [1346385600000, 332.85381464104], [1348977600000, 337.36534373477], [1351656000000, 350.27872156161], [1354251600000, 349.45128876100]]
-            //                ,
-            //                mean: 250
-            //            },
-            //                {
-            //                    key: "Short",
-            //                    values: [[1083297600000, -0.77078283705125], [1085976000000, -1.8356366650335], [1088568000000, -5.3121322073127], [1091246400000, -4.9320975829662], [1093924800000, -3.9835408823225], [1096516800000, -6.8694685316805], [1099195200000, -8.4854877428545], [1101790800000, -15.933627197384], [1104469200000, -15.920980069544], [1107147600000, -12.478685045651], [1109566800000, -17.297761889305], [1112245200000, -15.247129891020], [1114833600000, -11.336459046839], [1117512000000, -13.298990907415], [1120104000000, -16.360027000056], [1122782400000, -18.527929522030], [1125460800000, -22.176516738685], [1128052800000, -23.309665368330], [1130734800000, -21.629973409748], [1133326800000, -24.186429093486], [1136005200000, -29.116707312531], [1138683600000, -37.188037874864], [1141102800000, -34.689264821198], [1143781200000, -39.505932105359], [1146369600000, -45.339572492759], [1149048000000, -43.849353192764], [1151640000000, -45.418353922571], [1154318400000, -44.579281059919], [1156996800000, -44.027098363370], [1159588800000, -41.261306759439], [1162270800000, -47.446018534027], [1164862800000, -53.413782948909], [1167541200000, -50.700723647419], [1170219600000, -56.374090913296], [1172638800000, -61.754245220322], [1175313600000, -66.246241587629], [1177905600000, -75.351650899999], [1180584000000, -81.699058262032], [1183176000000, -82.487023368081], [1185854400000, -86.230055113277], [1188532800000, -84.746914818507], [1191124800000, -100.77134971977], [1193803200000, -109.95435565947], [1196398800000, -99.605672965057], [1199077200000, -99.607249394382], [1201755600000, -94.874614950188], [1204261200000, -105.35899063105], [1206936000000, -106.01931193802], [1209528000000, -110.28883571771], [1212206400000, -119.60256203030], [1214798400000, -115.62201315802], [1217476800000, -106.63824185202], [1220155200000, -99.848746318951], [1222747200000, -85.631219602987], [1225425600000, -63.547909262067], [1228021200000, -59.753275364457], [1230699600000, -63.874977883542], [1233378000000, -56.865697387488], [1235797200000, -54.285579501988], [1238472000000, -56.474659581885], [1241064000000, -63.847137745644], [1243742400000, -68.754247867325], [1246334400000, -69.474257009155], [1249012800000, -75.084828197067], [1251691200000, -77.101028237237], [1254283200000, -80.454866854387], [1256961600000, -78.984349952220], [1259557200000, -83.041230807854], [1262235600000, -84.529748348935], [1264914000000, -83.837470195508], [1267333200000, -87.174487671969], [1270008000000, -90.342293007487], [1272600000000, -93.550928464991], [1275278400000, -85.833102140765], [1277870400000, -79.326501831592], [1280548800000, -87.986196903537], [1283227200000, -85.397862121771], [1285819200000, -94.738167050020], [1288497600000, -98.661952897151], [1291093200000, -99.609665952708], [1293771600000, -103.57099836183], [1296450000000, -104.04353411322], [1298869200000, -108.21382792587], [1301544000000, -108.74006900920], [1304136000000, -112.07766650960], [1306814400000, -109.63328199118], [1309406400000, -106.53578966772], [1312084800000, -103.16480871469], [1314763200000, -95.945078001828], [1317355200000, -81.226687340874], [1320033600000, -90.782206596168], [1322629200000, -89.484445370113], [1325307600000, -88.514723135326], [1327986000000, -93.381292724320], [1330491600000, -97.529705609172], [1333166400000, -99.520481439189], [1335758400000, -99.430184898669], [1338436800000, -93.349934521973], [1341028800000, -95.858475286491], [1343707200000, -95.522755836605], [1346385600000, -98.503848862036], [1348977600000, -101.49415251896], [1351656000000, -101.50099325672], [1354251600000, -99.487094927489]]
-            //                    ,
-            //                    mean: -60
-            //                },
-            //                {
-            //                    key: "Gross",
-            //                    mean: 125,
-            //                    values: [[1083297600000, -3.7454058855943], [1085976000000, -3.6096667436314], [1088568000000, -0.8440003934950], [1091246400000, 2.0921565171691], [1093924800000, 3.5874194844361], [1096516800000, 13.742776534056], [1099195200000, 13.212577494462], [1101790800000, 24.567562260634], [1104469200000, 34.543699343650], [1107147600000, 36.438736927704], [1109566800000, 46.453174659855], [1112245200000, 43.825369235440], [1114833600000, 32.036699833653], [1117512000000, 41.191928040141], [1120104000000, 40.301151852023], [1122782400000, 54.922174023466], [1125460800000, 49.538009616222], [1128052800000, 61.911998981277], [1130734800000, 56.139287982733], [1133326800000, 71.780099623014], [1136005200000, 78.474613851439], [1138683600000, 90.069363092366], [1141102800000, 87.449910167102], [1143781200000, 87.030640692381], [1146369600000, 87.053437436941], [1149048000000, 76.263029236276], [1151640000000, 72.995735254929], [1154318400000, 63.349908186291], [1156996800000, 66.253474132320], [1159588800000, 75.943546587481], [1162270800000, 93.889549035453], [1164862800000, 106.18074433002], [1167541200000, 116.39729488562], [1170219600000, 129.09440567885], [1172638800000, 123.07049577958], [1175313600000, 129.38531055124], [1177905600000, 132.05431954171], [1180584000000, 148.86060871993], [1183176000000, 157.06946698484], [1185854400000, 155.12909573880], [1188532800000, 155.14737474392], [1191124800000, 159.70646945738], [1193803200000, 166.44021916278], [1196398800000, 159.05963386166], [1199077200000, 151.38121182455], [1201755600000, 132.02441123108], [1204261200000, 121.93110210702], [1206936000000, 112.64545460548], [1209528000000, 122.17722331147], [1212206400000, 133.65410878087], [1214798400000, 120.20304048123], [1217476800000, 123.06288589052], [1220155200000, 125.33598074057], [1222747200000, 103.50539786253], [1225425600000, 85.917420810943], [1228021200000, 71.250132356683], [1230699600000, 71.308439405118], [1233378000000, 52.287271484242], [1235797200000, 30.329193047772], [1238472000000, 44.133440571375], [1241064000000, 77.654211210456], [1243742400000, 73.749802969425], [1246334400000, 70.337666717565], [1249012800000, 102.69722724876], [1251691200000, 117.63589109350], [1254283200000, 128.55351774786], [1256961600000, 119.21420882198], [1259557200000, 139.32979337027], [1262235600000, 149.71606246357], [1264914000000, 144.42340669795], [1267333200000, 161.64446359053], [1270008000000, 180.23071774437], [1272600000000, 199.09511476051], [1275278400000, 180.10778306442], [1277870400000, 158.50237284410], [1280548800000, 177.57353623850], [1283227200000, 162.91091118751], [1285819200000, 183.41053361910], [1288497600000, 194.03065670573], [1291093200000, 201.23297214328], [1293771600000, 222.60154078445], [1296450000000, 233.35556801977], [1298869200000, 231.22452435045], [1301544000000, 237.84432503045], [1304136000000, 235.55799131184], [1306814400000, 232.11873570751], [1309406400000, 226.62381538123], [1312084800000, 219.34811113539], [1314763200000, 198.69242285581], [1317355200000, 168.90235629066], [1320033600000, 202.64725756733], [1322629200000, 203.05389378105], [1325307600000, 204.85986680865], [1327986000000, 229.77085616585], [1330491600000, 239.65202435959], [1333166400000, 242.33012622734], [1335758400000, 234.11773262149], [1338436800000, 221.47846307887], [1341028800000, 216.98308827912], [1343707200000, 218.37781386755], [1346385600000, 229.39368622736], [1348977600000, 230.54656412916], [1351656000000, 243.06087025523], [1354251600000, 244.24733578385]]
-            //                },
-            //                {
-            //                    key: "S&P 1500",
-            //                    values: [[1083297600000, -1.7798428181819], [1085976000000, -0.36883324836999], [1088568000000, 1.7312581046040], [1091246400000, -1.8356125950460], [1093924800000, -1.5396564170877], [1096516800000, -0.16867791409247], [1099195200000, 1.3754263993413], [1101790800000, 5.8171640898041], [1104469200000, 9.4350145241608], [1107147600000, 6.7649081510160], [1109566800000, 9.1568499314776], [1112245200000, 7.2485090994419], [1114833600000, 4.8762222306595], [1117512000000, 8.5992339354652], [1120104000000, 9.0896517982086], [1122782400000, 13.394644048577], [1125460800000, 12.311842010760], [1128052800000, 13.221003650717], [1130734800000, 11.218481009206], [1133326800000, 15.565352598445], [1136005200000, 15.623703865926], [1138683600000, 19.275255326383], [1141102800000, 19.432433717836], [1143781200000, 21.232881244655], [1146369600000, 22.798299192958], [1149048000000, 19.006125095476], [1151640000000, 19.151889158536], [1154318400000, 19.340022855452], [1156996800000, 22.027934841859], [1159588800000, 24.903300681329], [1162270800000, 29.146492833877], [1164862800000, 31.781626082589], [1167541200000, 33.358770738428], [1170219600000, 35.622684613497], [1172638800000, 33.332821711366], [1175313600000, 34.878748635832], [1177905600000, 40.582332613844], [1180584000000, 45.719535502920], [1183176000000, 43.239344722386], [1185854400000, 38.550955100342], [1188532800000, 40.585368816283], [1191124800000, 45.601374057981], [1193803200000, 48.051404337892], [1196398800000, 41.582581696032], [1199077200000, 40.650580792748], [1201755600000, 32.252222066493], [1204261200000, 28.106390258553], [1206936000000, 27.532698196687], [1209528000000, 33.986390463852], [1212206400000, 36.302660526438], [1214798400000, 25.015574480172], [1217476800000, 23.989494069029], [1220155200000, 25.934351445531], [1222747200000, 14.627592011699], [1225425600000, -5.2249403809749], [1228021200000, -12.330933408050], [1230699600000, -11.000291508188], [1233378000000, -18.563864948088], [1235797200000, -27.213097001687], [1238472000000, -20.834133840523], [1241064000000, -12.717886701719], [1243742400000, -8.1644613083526], [1246334400000, -7.9108408918201], [1249012800000, -0.77002391591209], [1251691200000, 2.8243816569672], [1254283200000, 6.8761411421070], [1256961600000, 4.5060912230294], [1259557200000, 10.487179794349], [1262235600000, 13.251375597594], [1264914000000, 9.2207594803415], [1267333200000, 12.836276936538], [1270008000000, 19.816793904978], [1272600000000, 22.156787167211], [1275278400000, 12.518039090576], [1277870400000, 6.4253587440854], [1280548800000, 13.847372028409], [1283227200000, 8.5454736090364], [1285819200000, 18.542801953304], [1288497600000, 23.037064683183], [1291093200000, 23.517422401888], [1293771600000, 31.804723416068], [1296450000000, 34.778247386072], [1298869200000, 39.584883855230], [1301544000000, 40.080647664875], [1304136000000, 44.180050667889], [1306814400000, 42.533535927221], [1309406400000, 40.105374449011], [1312084800000, 37.014659267156], [1314763200000, 29.263745084262], [1317355200000, 19.637463417584], [1320033600000, 33.157645345770], [1322629200000, 32.895053150988], [1325307600000, 34.111544824647], [1327986000000, 40.453985817473], [1330491600000, 46.435700783313], [1333166400000, 51.062385488671], [1335758400000, 50.130448220658], [1338436800000, 41.035476682018], [1341028800000, 46.591932296457], [1343707200000, 48.349391180634], [1346385600000, 51.913011286919], [1348977600000, 55.747238313752], [1351656000000, 52.991824077209], [1354251600000, 49.556311883284]]
-            //                }
-            //    ];
-            //    return test;
-            //},
-
-
+                //getAsyncViewReportTGOfDateTime(
+                //    panel_select_report.select_tanks.val(),
+                //    date_start,
+                //    date_stop,
+                //    function (data) {
+                //        var chartData = [];
+                //        for (i = 0; i < data.length; i++) {
+                //            chartData.push({
+                //                date: Date.parse(data[i].dt),
+                //                level: data[i].level,
+                //                volume: data[i].volume,
+                //                dens: data[i].dens,
+                //                mass: data[i].mass,
+                //                temp: data[i].temp / 10,
+                //                water_level: data[i].water_level
+                //            });
+                //        }
+                //        trend_tank.chart.data = chartData;
+                //        LockScreenOff();
+                //    });
+            }
         }
-    ////-----------------------------------------------------------------------------------------
-    //// Функции
-    ////-----------------------------------------------------------------------------------------
+    // Таблица 
+    table_report = {
+        html_table: $('#table-report'),
+        obj_table: null,
+        select: null,
+        select_id: null,
+        list: [],
+        groupColumn: 0,
+        // Инициализировать таблицу
+        initObject: function () {
+            this.obj = this.html_table.DataTable({
+                //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "select": false,
+                "autoWidth": false,
+                //"filter": true,
+                //"scrollY": "600px",
+                "scrollX": true,
+                //language: language_table(langs),
+                jQueryUI: true,
+                "createdRow": function (row, data, index) {
+                    //$(row).attr('id', data.id);
+                },
+                columns: [
+                    { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
+                    //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },
+                    //{ data: "railway_num_nak", title: "Ж.д. накладная", width: "50px", orderable: false, searchable: true },
+                    //{ data: "railway_num_tanker", title: "№ цистерны", width: "50px", orderable: false, searchable: true },
+                    //{ data: "railway_provider", title: "Поставщик", width: "150px", orderable: false, searchable: false },
+                    { data: "railway_nak_mass", title: "Масса по накл (кг.)", width: "50px", orderable: false, searchable: false },
+                    { data: "railway_manual_level", title: "Уровень р.з.", width: "50px", orderable: false, searchable: false },
+                    { data: "railway_manual_volume", title: "Объем р.з.", width: "50px", orderable: false, searchable: false },
+                    { data: "railway_manual_dens", title: "Плотность р.з.", width: "50px", orderable: false, searchable: false },
+                    { data: "railway_manual_mass", title: "Масса р.з.", width: "50px", orderable: false, searchable: false },
+                    { data: "num", title: "Резервуар", width: "50px", orderable: true, searchable: false },
+                    { data: "start_tank", title: "Начало", width: "150px", orderable: false, searchable: false },
+                    { data: "start_mass", title: "Масса в начале (кг.)", width: "50px", orderable: false, searchable: false },
+                    { data: "stop_tank", title: "Конец", width: "150px", orderable: false, searchable: false },
+                    { data: "stop_mass", title: "Масса в конце (кг.)", width: "50px", orderable: false, searchable: false },
+                    { data: "change_mass", title: "Приняли (кг.)", width: "50px", orderable: false, searchable: false },
+                ],
+                "columnDefs": [
+                    { "visible": false, "targets": table_report.groupColumn }
+                ],
+                "order": [[table_report.groupColumn, 'asc']],
+                "drawCallback": function (settings) {
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes();
+                    var last = null;
+                    api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                '<tr class="group"><td colspan="12">' + group + '</td></tr>'
+                            );
+                            last = group;
+                        }
+                    });
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        pageSize: 'LEGAL',
+                        orientation: 'landscape',
+                        customize: function (doc) {
+                            doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                            //var tblBody = doc.content[1].table.body;
+                            //tblBody[0][2].text = 'Тип ГСМ';
+                            //tblBody[0][8].text = 'Тип Выдачи';
+                        }
+                    }
+                ]
+            });
+        },
+        // Показать таблицу с данными
+        viewTable: function (data_refresh) {
+            LockScreen('Мы обрабатываем ваш запрос...');
+            if (this.list === null | data_refresh === true) {
+                // Обновим данные
+                getAsyncViewReportRFOfDateTime(
+                    1, date_start, date_stop,
+                    function (result) {
+                        table_report.list = result;
+                        table_report.loadDataTable(result);
+                        table_report.obj.draw();
+                    }
+                );
+            } else {
+                table_report.loadDataTable(this.list);
+                table_report.obj.draw();
+            };
+        },
+        // Загрузить данные
+        loadDataTable: function (data) {
+            this.list = data;
+            this.obj.clear();
+            for (i = 0; i < data.length; i++) {
+                this.obj.row.add({
+                    "group": 'ГСМ - ' + outFuelType(data[i].fuel) + ', ж.д. накладная №' + data[i].railway_num_nak + ', цистерна №' + data[i].railway_num_tanker,
+                    "fuel": outFuelType(data[i].fuel),
+                    "railway_num_nak": data[i].railway_num_nak,
+                    "railway_num_tanker": data[i].railway_num_tanker,
+                    //"railway_provider": data[i].railway_provider,
+                    "railway_nak_mass": data[i].railway_nak_mass,
+                    "railway_manual_level": data[i].railway_manual_level,
+                    "railway_manual_volume": data[i].railway_manual_volume,
+                    "railway_manual_dens": data[i].railway_manual_dens,
+                    "railway_manual_mass": data[i].railway_manual_mass,
+                    "num": data[i].num,
+                    "start_tank": data[i].start_tank,
+                    "start_mass": data[i].start_mass != null ? data[i].start_mass.toFixed(2) : null,
+                    "stop_tank": data[i].stop_tank,
+                    "stop_mass": data[i].stop_mass != null ? data[i].stop_mass.toFixed(2) : null,
+                    "change_mass": data[i].start_mass != null && data[i].stop_mass != null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ'
 
-    ////-----------------------------------------------------------------------------------------
-    //// Инициализация объектов
-    ////-----------------------------------------------------------------------------------------
+                    //toISOStringTZ(start)
+                    //"LokomotiveId": data[i].LokomotiveId,
+                    //"Name": data[i].Name,
+                    //"UsageVolume": data[i].UsageVolume,
+                    //"UsageMass": data[i].UsageMass,
+                    //"UsageDensity": data[i].UsageDensity,
+                    //"TankNo": data[i].TankNo,
+                    //"FuelLevel": data[i].FuelLevel,
+                    //"FuelVolume": data[i].FuelVolume,
+                    //"Density": data[i].Density,
+                    //"Mass": data[i].Mass,
+                    //"Temperature": data[i].Temperature,
+                    //"WaterLevel": data[i].WaterLevel,
+                    //"TechnicalSale": data[i].TechnicalSale,
+                    //"OperatorName": data[i].OperatorName,
+                    //"DateStartWork": data[i].DateStartWork,
+                    //"TimeStartWork": data[i].TimeStartWork,
+                    //"DateStart": data[i].DateStart,
+                    //"TimeStart": data[i].TimeStart,
+                    //"DateStop": data[i].DateStop,
+                    //"TimeStop": data[i].TimeStop,
+                    //"CardId": data[i].CardId,
+                    //"StartLevel": data[i].StartLevel,
+                    //"StartVolume": data[i].StartVolume,
+                    //"StartDensity": data[i].StartDensity,
+                    //"StartMass": data[i].StartMass,
+                    //"StartTemperature": data[i].StartTemperature,
+                    //"StartWaterLevel": data[i].StartWaterLevel,
+                    //"StopLevel": data[i].StopLevel,
+                    //"StopVolume": data[i].StopVolume,
+                    //"StopDensity": data[i].StopDensity,
+                    //"StopMass": data[i].StopMass,
+                    //"StopTemperature": data[i].StopTemperature,
+                    //"StopWaterLevel": data[i].StopWaterLevel,
+                    //"DateTime": data[i].DateStart.substring(0, 10) + ' ' + data[i].TimeStart.substring(0, 12),
+                    //"Waybill": cards != null ? cards.Number : data[i].CardId,
+                    //"AutoNumber": cards != null ? cards.AutoNumber : data[i].CardId,
+                    //"AutoModel": cards != null ? cards.AutoModel : data[i].CardId,
+                });
+            }
+            LockScreenOff();
+        }
+    };
+
+    //-----------------------------------------------------------------------------------------
+    // Функции
+    //-----------------------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------
+    // Инициализация объектов
+    //-----------------------------------------------------------------------------------------
     panel_select_report.initObject();
     tab_type_reports.initObject();
-    grafik.initObject();
-
-    //nv.addGraph(function () {
-    //    var chart = nv.models.lineChart()//cumulativeLineChart()
-    //        .useInteractiveGuideline(true)
-    //        .x(function (d) { return d[0] })
-    //        .y(function (d) { return d[1] })
-    //        //.color(d3.scale.category10().range())
-    //        //.average(function (d) { return d.mean / 100; })
-    //        .duration(300);
-    //        //.clipVoronoi(false);
-    //    //chart.dispatch.on('renderEnd', function () {
-    //    //    console.log('render complete: cumulative line with guide line');
-    //    //});
-
-    //    chart.xAxis.tickFormat(function (d) {
-    //        return d3.time.format('%d-%m-%Y %H:%M:%S')(new Date(d))
-    //    });
-
-    //    chart.yAxis.tickFormat(d3.format(',.2f'));
-
-    //    d3.select('#chart1 svg')
-    //        .datum(cumulativeTestData())
-    //        .call(chart);
-
-    //    //TODO: Figure out a good way to do this automatically
-    //    nv.utils.windowResize(chart.update);
-
-    //    //chart.dispatch.on('stateChange', function (e) { nv.log('New State:', JSON.stringify(e)); });
-    //    //chart.state.dispatch.on('change', function (state) {
-    //    //    nv.log('state', JSON.stringify(state));
-    //    //});
-
-    //    return chart;
+    //// Загрузка библиотек
+    //loadReference(function (result) {
+    //table_report.initObject();
     //});
 
-    //function cumulativeTestData() {
-    //    return [
-    //        {
-    //            key: "Long",
-    //            values: [[1083297600000, -2.974623048543], [1085976000000, -1.7740300785979], [1088568000000, 4.4681318138177], [1091246400000, 7.0242541001353], [1093924800000, 7.5709603667586], [1096516800000, 20.612245065736], [1099195200000, 21.698065237316], [1101790800000, 40.501189458018], [1104469200000, 50.464679413194], [1107147600000, 48.917421973355], [1109566800000, 63.750936549160], [1112245200000, 59.072499126460], [1114833600000, 43.373158880492], [1117512000000, 54.490918947556], [1120104000000, 56.661178852079], [1122782400000, 73.450103545496], [1125460800000, 71.714526354907], [1128052800000, 85.221664349607], [1130734800000, 77.769261392481], [1133326800000, 95.966528716500], [1136005200000, 107.59132116397], [1138683600000, 127.25740096723], [1141102800000, 122.13917498830], [1143781200000, 126.53657279774], [1146369600000, 132.39300992970], [1149048000000, 120.11238242904], [1151640000000, 118.41408917750], [1154318400000, 107.92918924621], [1156996800000, 110.28057249569], [1159588800000, 117.20485334692], [1162270800000, 141.33556756948], [1164862800000, 159.59452727893], [1167541200000, 167.09801853304], [1170219600000, 185.46849659215], [1172638800000, 184.82474099990], [1175313600000, 195.63155213887], [1177905600000, 207.40597044171], [1180584000000, 230.55966698196], [1183176000000, 239.55649035292], [1185854400000, 241.35915085208], [1188532800000, 239.89428956243], [1191124800000, 260.47781917715], [1193803200000, 276.39457482225], [1196398800000, 258.66530682672], [1199077200000, 250.98846121893], [1201755600000, 226.89902618127], [1204261200000, 227.29009273807], [1206936000000, 218.66476654350], [1209528000000, 232.46605902918], [1212206400000, 253.25667081117], [1214798400000, 235.82505363925], [1217476800000, 229.70112774254], [1220155200000, 225.18472705952], [1222747200000, 189.13661746552], [1225425600000, 149.46533007301], [1228021200000, 131.00340772114], [1230699600000, 135.18341728866], [1233378000000, 109.15296887173], [1235797200000, 84.614772549760], [1238472000000, 100.60810015326], [1241064000000, 141.50134895610], [1243742400000, 142.50405083675], [1246334400000, 139.81192372672], [1249012800000, 177.78205544583], [1251691200000, 194.73691933074], [1254283200000, 209.00838460225], [1256961600000, 198.19855877420], [1259557200000, 222.37102417812], [1262235600000, 234.24581081250], [1264914000000, 228.26087689346], [1267333200000, 248.81895126250], [1270008000000, 270.57301075186], [1272600000000, 292.64604322550], [1275278400000, 265.94088520518], [1277870400000, 237.82887467569], [1280548800000, 265.55973314204], [1283227200000, 248.30877330928], [1285819200000, 278.14870066912], [1288497600000, 292.69260960288], [1291093200000, 300.84263809599], [1293771600000, 326.17253914628], [1296450000000, 337.69335966505], [1298869200000, 339.73260965121], [1301544000000, 346.87865120765], [1304136000000, 347.92991526628], [1306814400000, 342.04627502669], [1309406400000, 333.45386231233], [1312084800000, 323.15034181243], [1314763200000, 295.66126882331], [1317355200000, 251.48014579253], [1320033600000, 295.15424257905], [1322629200000, 294.54766764397], [1325307600000, 295.72906119051], [1327986000000, 325.73351347613], [1330491600000, 340.16106061186], [1333166400000, 345.15514071490], [1335758400000, 337.10259395679], [1338436800000, 318.68216333837], [1341028800000, 317.03683945246], [1343707200000, 318.53549659997], [1346385600000, 332.85381464104], [1348977600000, 337.36534373477], [1351656000000, 350.27872156161], [1354251600000, 349.45128876100]]
-    //            ,
-    //            mean: 250
-    //        },
-    //        {
-    //            key: "Short",
-    //            values: [[1083297600000, -0.77078283705125], [1085976000000, -1.8356366650335], [1088568000000, -5.3121322073127], [1091246400000, -4.9320975829662], [1093924800000, -3.9835408823225], [1096516800000, -6.8694685316805], [1099195200000, -8.4854877428545], [1101790800000, -15.933627197384], [1104469200000, -15.920980069544], [1107147600000, -12.478685045651], [1109566800000, -17.297761889305], [1112245200000, -15.247129891020], [1114833600000, -11.336459046839], [1117512000000, -13.298990907415], [1120104000000, -16.360027000056], [1122782400000, -18.527929522030], [1125460800000, -22.176516738685], [1128052800000, -23.309665368330], [1130734800000, -21.629973409748], [1133326800000, -24.186429093486], [1136005200000, -29.116707312531], [1138683600000, -37.188037874864], [1141102800000, -34.689264821198], [1143781200000, -39.505932105359], [1146369600000, -45.339572492759], [1149048000000, -43.849353192764], [1151640000000, -45.418353922571], [1154318400000, -44.579281059919], [1156996800000, -44.027098363370], [1159588800000, -41.261306759439], [1162270800000, -47.446018534027], [1164862800000, -53.413782948909], [1167541200000, -50.700723647419], [1170219600000, -56.374090913296], [1172638800000, -61.754245220322], [1175313600000, -66.246241587629], [1177905600000, -75.351650899999], [1180584000000, -81.699058262032], [1183176000000, -82.487023368081], [1185854400000, -86.230055113277], [1188532800000, -84.746914818507], [1191124800000, -100.77134971977], [1193803200000, -109.95435565947], [1196398800000, -99.605672965057], [1199077200000, -99.607249394382], [1201755600000, -94.874614950188], [1204261200000, -105.35899063105], [1206936000000, -106.01931193802], [1209528000000, -110.28883571771], [1212206400000, -119.60256203030], [1214798400000, -115.62201315802], [1217476800000, -106.63824185202], [1220155200000, -99.848746318951], [1222747200000, -85.631219602987], [1225425600000, -63.547909262067], [1228021200000, -59.753275364457], [1230699600000, -63.874977883542], [1233378000000, -56.865697387488], [1235797200000, -54.285579501988], [1238472000000, -56.474659581885], [1241064000000, -63.847137745644], [1243742400000, -68.754247867325], [1246334400000, -69.474257009155], [1249012800000, -75.084828197067], [1251691200000, -77.101028237237], [1254283200000, -80.454866854387], [1256961600000, -78.984349952220], [1259557200000, -83.041230807854], [1262235600000, -84.529748348935], [1264914000000, -83.837470195508], [1267333200000, -87.174487671969], [1270008000000, -90.342293007487], [1272600000000, -93.550928464991], [1275278400000, -85.833102140765], [1277870400000, -79.326501831592], [1280548800000, -87.986196903537], [1283227200000, -85.397862121771], [1285819200000, -94.738167050020], [1288497600000, -98.661952897151], [1291093200000, -99.609665952708], [1293771600000, -103.57099836183], [1296450000000, -104.04353411322], [1298869200000, -108.21382792587], [1301544000000, -108.74006900920], [1304136000000, -112.07766650960], [1306814400000, -109.63328199118], [1309406400000, -106.53578966772], [1312084800000, -103.16480871469], [1314763200000, -95.945078001828], [1317355200000, -81.226687340874], [1320033600000, -90.782206596168], [1322629200000, -89.484445370113], [1325307600000, -88.514723135326], [1327986000000, -93.381292724320], [1330491600000, -97.529705609172], [1333166400000, -99.520481439189], [1335758400000, -99.430184898669], [1338436800000, -93.349934521973], [1341028800000, -95.858475286491], [1343707200000, -95.522755836605], [1346385600000, -98.503848862036], [1348977600000, -101.49415251896], [1351656000000, -101.50099325672], [1354251600000, -99.487094927489]]
-    //            ,
-    //            mean: -60
-    //        },
-    //        {
-    //            key: "Gross",
-    //            mean: 125,
-    //            values: [[1083297600000, -3.7454058855943], [1085976000000, -3.6096667436314], [1088568000000, -0.8440003934950], [1091246400000, 2.0921565171691], [1093924800000, 3.5874194844361], [1096516800000, 13.742776534056], [1099195200000, 13.212577494462], [1101790800000, 24.567562260634], [1104469200000, 34.543699343650], [1107147600000, 36.438736927704], [1109566800000, 46.453174659855], [1112245200000, 43.825369235440], [1114833600000, 32.036699833653], [1117512000000, 41.191928040141], [1120104000000, 40.301151852023], [1122782400000, 54.922174023466], [1125460800000, 49.538009616222], [1128052800000, 61.911998981277], [1130734800000, 56.139287982733], [1133326800000, 71.780099623014], [1136005200000, 78.474613851439], [1138683600000, 90.069363092366], [1141102800000, 87.449910167102], [1143781200000, 87.030640692381], [1146369600000, 87.053437436941], [1149048000000, 76.263029236276], [1151640000000, 72.995735254929], [1154318400000, 63.349908186291], [1156996800000, 66.253474132320], [1159588800000, 75.943546587481], [1162270800000, 93.889549035453], [1164862800000, 106.18074433002], [1167541200000, 116.39729488562], [1170219600000, 129.09440567885], [1172638800000, 123.07049577958], [1175313600000, 129.38531055124], [1177905600000, 132.05431954171], [1180584000000, 148.86060871993], [1183176000000, 157.06946698484], [1185854400000, 155.12909573880], [1188532800000, 155.14737474392], [1191124800000, 159.70646945738], [1193803200000, 166.44021916278], [1196398800000, 159.05963386166], [1199077200000, 151.38121182455], [1201755600000, 132.02441123108], [1204261200000, 121.93110210702], [1206936000000, 112.64545460548], [1209528000000, 122.17722331147], [1212206400000, 133.65410878087], [1214798400000, 120.20304048123], [1217476800000, 123.06288589052], [1220155200000, 125.33598074057], [1222747200000, 103.50539786253], [1225425600000, 85.917420810943], [1228021200000, 71.250132356683], [1230699600000, 71.308439405118], [1233378000000, 52.287271484242], [1235797200000, 30.329193047772], [1238472000000, 44.133440571375], [1241064000000, 77.654211210456], [1243742400000, 73.749802969425], [1246334400000, 70.337666717565], [1249012800000, 102.69722724876], [1251691200000, 117.63589109350], [1254283200000, 128.55351774786], [1256961600000, 119.21420882198], [1259557200000, 139.32979337027], [1262235600000, 149.71606246357], [1264914000000, 144.42340669795], [1267333200000, 161.64446359053], [1270008000000, 180.23071774437], [1272600000000, 199.09511476051], [1275278400000, 180.10778306442], [1277870400000, 158.50237284410], [1280548800000, 177.57353623850], [1283227200000, 162.91091118751], [1285819200000, 183.41053361910], [1288497600000, 194.03065670573], [1291093200000, 201.23297214328], [1293771600000, 222.60154078445], [1296450000000, 233.35556801977], [1298869200000, 231.22452435045], [1301544000000, 237.84432503045], [1304136000000, 235.55799131184], [1306814400000, 232.11873570751], [1309406400000, 226.62381538123], [1312084800000, 219.34811113539], [1314763200000, 198.69242285581], [1317355200000, 168.90235629066], [1320033600000, 202.64725756733], [1322629200000, 203.05389378105], [1325307600000, 204.85986680865], [1327986000000, 229.77085616585], [1330491600000, 239.65202435959], [1333166400000, 242.33012622734], [1335758400000, 234.11773262149], [1338436800000, 221.47846307887], [1341028800000, 216.98308827912], [1343707200000, 218.37781386755], [1346385600000, 229.39368622736], [1348977600000, 230.54656412916], [1351656000000, 243.06087025523], [1354251600000, 244.24733578385]]
-    //        },
-    //        {
-    //            key: "S&P 1500",
-    //            values: [[1083297600000, -1.7798428181819], [1085976000000, -0.36883324836999], [1088568000000, 1.7312581046040], [1091246400000, -1.8356125950460], [1093924800000, -1.5396564170877], [1096516800000, -0.16867791409247], [1099195200000, 1.3754263993413], [1101790800000, 5.8171640898041], [1104469200000, 9.4350145241608], [1107147600000, 6.7649081510160], [1109566800000, 9.1568499314776], [1112245200000, 7.2485090994419], [1114833600000, 4.8762222306595], [1117512000000, 8.5992339354652], [1120104000000, 9.0896517982086], [1122782400000, 13.394644048577], [1125460800000, 12.311842010760], [1128052800000, 13.221003650717], [1130734800000, 11.218481009206], [1133326800000, 15.565352598445], [1136005200000, 15.623703865926], [1138683600000, 19.275255326383], [1141102800000, 19.432433717836], [1143781200000, 21.232881244655], [1146369600000, 22.798299192958], [1149048000000, 19.006125095476], [1151640000000, 19.151889158536], [1154318400000, 19.340022855452], [1156996800000, 22.027934841859], [1159588800000, 24.903300681329], [1162270800000, 29.146492833877], [1164862800000, 31.781626082589], [1167541200000, 33.358770738428], [1170219600000, 35.622684613497], [1172638800000, 33.332821711366], [1175313600000, 34.878748635832], [1177905600000, 40.582332613844], [1180584000000, 45.719535502920], [1183176000000, 43.239344722386], [1185854400000, 38.550955100342], [1188532800000, 40.585368816283], [1191124800000, 45.601374057981], [1193803200000, 48.051404337892], [1196398800000, 41.582581696032], [1199077200000, 40.650580792748], [1201755600000, 32.252222066493], [1204261200000, 28.106390258553], [1206936000000, 27.532698196687], [1209528000000, 33.986390463852], [1212206400000, 36.302660526438], [1214798400000, 25.015574480172], [1217476800000, 23.989494069029], [1220155200000, 25.934351445531], [1222747200000, 14.627592011699], [1225425600000, -5.2249403809749], [1228021200000, -12.330933408050], [1230699600000, -11.000291508188], [1233378000000, -18.563864948088], [1235797200000, -27.213097001687], [1238472000000, -20.834133840523], [1241064000000, -12.717886701719], [1243742400000, -8.1644613083526], [1246334400000, -7.9108408918201], [1249012800000, -0.77002391591209], [1251691200000, 2.8243816569672], [1254283200000, 6.8761411421070], [1256961600000, 4.5060912230294], [1259557200000, 10.487179794349], [1262235600000, 13.251375597594], [1264914000000, 9.2207594803415], [1267333200000, 12.836276936538], [1270008000000, 19.816793904978], [1272600000000, 22.156787167211], [1275278400000, 12.518039090576], [1277870400000, 6.4253587440854], [1280548800000, 13.847372028409], [1283227200000, 8.5454736090364], [1285819200000, 18.542801953304], [1288497600000, 23.037064683183], [1291093200000, 23.517422401888], [1293771600000, 31.804723416068], [1296450000000, 34.778247386072], [1298869200000, 39.584883855230], [1301544000000, 40.080647664875], [1304136000000, 44.180050667889], [1306814400000, 42.533535927221], [1309406400000, 40.105374449011], [1312084800000, 37.014659267156], [1314763200000, 29.263745084262], [1317355200000, 19.637463417584], [1320033600000, 33.157645345770], [1322629200000, 32.895053150988], [1325307600000, 34.111544824647], [1327986000000, 40.453985817473], [1330491600000, 46.435700783313], [1333166400000, 51.062385488671], [1335758400000, 50.130448220658], [1338436800000, 41.035476682018], [1341028800000, 46.591932296457], [1343707200000, 48.349391180634], [1346385600000, 51.913011286919], [1348977600000, 55.747238313752], [1351656000000, 52.991824077209], [1354251600000, 49.556311883284]]
-    //        }
-    //    ];
-    //}
+    trend_tank.init();
 
 });

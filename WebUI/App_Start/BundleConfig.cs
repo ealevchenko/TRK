@@ -73,6 +73,10 @@ namespace WebUI
             bundles.Add(new StyleBundle("~/d3/css").Include(
                 "~/Content/nvd3/nv.d3.css"));
 
+            bundles.Add(new ScriptBundle("~/bundles/amcharts4").Include(
+                "~/Scripts/amcharts4/core.js",
+                "~/Scripts/amcharts4/charts.js",
+                "~/Scripts/amcharts4/themes/animated.js"));
         }
     }
 }

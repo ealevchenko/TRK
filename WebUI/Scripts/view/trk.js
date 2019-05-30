@@ -1376,10 +1376,14 @@ var confirm_df = {
                         function (id_open_num) {
                             LockScreenOff();
                             if (id_open_num === null || id_open_num === 0) {
+
+                                var variant = confirm_df.select_variant.val();
+                                var pos = variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null;
                                 getAsyncOpenSAP_BufferOfNum(confirm_df.input_sap_num.val(),
+                                    pos,
                                     function (sap_buffer_open) {
                                         LockScreenOff();
-                                        //if (sap_buffer_open === null || sap_buffer_open.length === 0) {
+                                        if (sap_buffer_open === null || sap_buffer_open.length === 0) {
                                             // Продолжим выполнение
                                             var variant = confirm_df.select_variant.val();
                                             logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
@@ -1411,9 +1415,9 @@ var confirm_df = {
                                                 // Нет форма не заполнена
                                                 // .....
                                             }
-                                        //} else {
-                                        //    confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу по требованию " + confirm_df.input_sap_num.val() + ".");
-                                        //}
+                                        } else {
+                                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу по требованию №" + confirm_df.input_sap_num.val() + " и номеру позиции №" + pos);
+                                        }
                                     }
                                 );
 
