@@ -7,7 +7,7 @@
     @Styles.Render("~/jquery-ui/css")
     @Styles.Render("~/DataTables/css")
     @Styles.Render("~/DateTime/css")
-    @Styles.Render("~/d3/css")
+
     <link rel="stylesheet" type="text/css" href="~/Content/report/report.css">
 
     <style>
@@ -39,8 +39,8 @@
         var tanks_alarm_low = '@System.Configuration.ConfigurationManager.AppSettings["Tanks_alarm_low"]';
 
         $('body').addClass('img-header-global');
-        $('body').addClass('with-3d-shadow');
-        $('body').addClass('with-transitions');
+        //$('body').addClass('with-3d-shadow');
+        //$('body').addClass('with-transitions');
     </script>
 
     <script src="~/Scripts/view/common.js" type="text/javascript"></script>

@@ -2539,11 +2539,12 @@ var getAsyncViewReportTGOfDateTime = function (tank, start, stop, callback) {
             }
         },
         error: function (x, y, z) {
+            LockScreenOff();
             OnAJAXError(x, y, z);
         },
         complete: function () {
             AJAXComplete();
-        },
+        }
     });
 };
 var printPageArea = function (areaID, width, height) {
