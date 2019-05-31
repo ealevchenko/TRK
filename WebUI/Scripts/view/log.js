@@ -23,7 +23,7 @@
                     { data: "DateTime", title: 'Дата и время', width: "150px", orderable: false, searchable: false },
                     { data: "UserName", title: 'Пользователь', width: "150px", orderable: false, searchable: true },
                     { data: "Log", title: 'Сообщение', width: "500px", orderable: false, searchable: true },
-                ],
+                ]
             });
         },
         // Показать таблицу с данными

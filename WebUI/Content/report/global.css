@@ -75,33 +75,6 @@ body{
     background-image: url(../../Images/Report/pattern.png), url(../../Images/Report/fuel_list.png);
 }
 
-/*.img-header-RFID-admin {
-    background-image: url(../Images/pattern.png), url(../Images/RFID_admin.jpg);
-}
-.img-header-tankstates {
-    background-image: url(../Images/pattern.png), url(../Images/tankstates.jpg);
-}
-
-.img-header-fuelsales {
-    background-image: url(../Images/pattern.png), url(../Images/fuelsales.jpg);
-}
-
-.img-header-rwfuelsales {
-    background-image: url(../Images/pattern.png), url(../Images/rwfuelsales.jpg);
-}
-
-.img-header-error404 {
-    background-image: url(../Images/Error_404.jpg);
-}
-
-.img-header-access-denied {
-    background-image: url(../Images/access-denied.png);
-}
-
-.img-header-error {
-    background-image: url(../Images/error.jpg);
-}*/
-
 .container{
 	position:relative;
 }

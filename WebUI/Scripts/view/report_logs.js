@@ -135,6 +135,11 @@
                         { data: "UserName", title: "Пользователь", width: "100px", orderable: true, searchable: true },
                         { data: "Level", title: "Уровень сообщения", width: "100px", orderable: true, searchable: true },
                         { data: "Log", title: "Сообщение", width: "500px", orderable: false, searchable: true }
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
                     ]
                 });
             },

@@ -219,6 +219,31 @@
                     // Create series
                     function createAxisAndSeries(field, name, opposite, bullet) {
                         var valueAxis = trend_tank.chart.yAxes.push(new am4charts.ValueAxis());
+                        switch(field){
+                            case "level":
+                                valueAxis.min = 0;
+                                valueAxis.max = 3000;
+                                break;
+                            case "volume":
+                                valueAxis.min = 0;
+                                valueAxis.max = 80000;
+                                break;
+                            case "dens":
+                                valueAxis.min = 700;
+                                valueAxis.max = 900;
+                                break;
+                            case "mass":
+                                valueAxis.min = 0;
+                                valueAxis.max = 70000;
+                                break;
+                            case "temp":
+                                valueAxis.min = -20;
+                                valueAxis.max = 50;
+                                break;
+                            case "water_level":
+                                valueAxis.min = 0;
+                                break;
+                        }
                         if (field === "water_level" || field === "volume") valueAxis.min = 0;
 
                         var series = trend_tank.chart.series.push(new am4charts.LineSeries());
@@ -229,6 +254,8 @@
                         series.name = name;
                         series.tooltipText = "{name}: [bold]{valueY}[/]";
                         series.tensionX = 0.8;
+                        //series.legendSettings.valueText = "{valueY.close}";
+                        series.legendSettings.itemValueText = "[bold]{valueY}[/bold]";
 
                         var interfaceColors = new am4core.InterfaceColorSet();
 
@@ -275,15 +302,23 @@
                         valueAxis.renderer.grid.template.disabled = true;
                     }
 
-                    createAxisAndSeries("level", "Уровень", false, "circle");
-                    createAxisAndSeries("volume", "Объем", false, "triangle");
-                    createAxisAndSeries("dens", "Плотность", false, "rectangle");
-                    createAxisAndSeries("mass", "Масса", false, "rectangle");
-                    createAxisAndSeries("temp", "Температура", false, "rectangle");
-                    createAxisAndSeries("water_level", "Подт. вод.", false, "rectangle");
+                    createAxisAndSeries("level", "Уровень (мм)", false, "circle");
+                    createAxisAndSeries("volume", "Объем (л)", false, "triangle");
+                    createAxisAndSeries("dens", "Плотность (кг/м3)", true, "rectangle");
+                    createAxisAndSeries("mass", "Масса (кг)", false, "rectangle");
+                    createAxisAndSeries("temp", "Температура (град. С)", true, "rectangle");
+                    createAxisAndSeries("water_level", "Уровень подт. вод. (мм)", true, "rectangle");
 
                     // Add legend
+                    //trend_tank.chart.legend = new am4charts.Legend();
+
                     trend_tank.chart.legend = new am4charts.Legend();
+                    trend_tank.chart.legend.useDefaultMarker = true;
+                    var marker = trend_tank.chart.legend.markers.template.children.getIndex(0);
+                    marker.cornerRadius(12, 12, 12, 12);
+                    marker.strokeWidth = 2;
+                    marker.strokeOpacity = 1;
+                    marker.stroke = am4core.color("#ccc");
 
                     // Add cursor
                     trend_tank.chart.cursor = new am4charts.XYCursor();
@@ -314,7 +349,7 @@
                         { data: "dt", title: "Дата и время", width: "150px", orderable: true, searchable: false },
                         { data: "level", title: "Уровень (мм)", width: "50px", orderable: true, searchable: false },
                         { data: "volume", title: "Объем (л)", width: "50px", orderable: true, searchable: false },
-                        { data: "dens", title: "Плотность (кг\л)", width: "50px", orderable: true, searchable: false },
+                        { data: "dens", title: "Плотность (кг\\м3)", width: "50px", orderable: true, searchable: false },
                         { data: "mass", title: "Масса (кг)", width: "50px", orderable: true, searchable: false },
                         { data: "temp", title: "Температура (град. С)", width: "50px", orderable: true, searchable: false },
                         { data: "water_level", title: "Уровень подт. вод (мм)", width: "50px", orderable: true, searchable: false }
@@ -323,18 +358,18 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            pageSize: 'LEGAL',
-                            orientation: 'landscape',
-                            customize: function (doc) {
-                                //doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                                //var tblBody = doc.content[1].table.body;
-                                //tblBody[0][2].text = 'Тип ГСМ';
-                                //tblBody[0][8].text = 'Тип Выдачи';
-                            }
-                        }
+                        //{
+                        //    extend: 'pdfHtml5',
+                        //    text: 'PDF',
+                        //    pageSize: 'LEGAL',
+                        //    //orientation: 'landscape',
+                        //    customize: function (doc) {
+                        //        //doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                        //        //var tblBody = doc.content[1].table.body;
+                        //        //tblBody[0][2].text = 'Тип ГСМ';
+                        //        //tblBody[0][8].text = 'Тип Выдачи';
+                        //    }
+                        //}
                     ]
                 });
 
@@ -361,7 +396,7 @@
                             for (i = 0; i < data.length; i++) {
                                 trend_tank.list.push({
                                     date: Date.parse(data[i].dt),
-                                    level: data[i].level,
+                                    level: data[i].level / 100,
                                     volume: data[i].volume,
                                     dens: data[i].dens,
                                     mass: data[i].mass,
@@ -372,7 +407,6 @@
                             trend_tank.start = date_start;
                             trend_tank.stop = date_stop;
                             trend_tank.num = num;
-                            //trend_tank.viewTrend();
                             // Обновим график
                             trend_tank.chart.data = trend_tank.list;
 
@@ -401,169 +435,6 @@
                 }
             }
         };
-    //// Таблица 
-    //table_report = {
-    //    html_table: $('#table-report'),
-    //    obj_table: null,
-    //    select: null,
-    //    select_id: null,
-    //    list: [],
-    //    groupColumn: 0,
-    //    // Инициализировать таблицу
-    //    initObject: function () {
-    //        this.obj = this.html_table.DataTable({
-    //            //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    //            "paging": false,
-    //            "ordering": true,
-    //            "info": false,
-    //            "select": false,
-    //            "autoWidth": false,
-    //            //"filter": true,
-    //            //"scrollY": "600px",
-    //            "scrollX": true,
-    //            //language: language_table(langs),
-    //            jQueryUI: true,
-    //            "createdRow": function (row, data, index) {
-    //                //$(row).attr('id', data.id);
-    //            },
-    //            columns: [
-    //                { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
-    //                //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },
-    //                //{ data: "railway_num_nak", title: "Ж.д. накладная", width: "50px", orderable: false, searchable: true },
-    //                //{ data: "railway_num_tanker", title: "№ цистерны", width: "50px", orderable: false, searchable: true },
-    //                //{ data: "railway_provider", title: "Поставщик", width: "150px", orderable: false, searchable: false },
-    //                { data: "railway_nak_mass", title: "Масса по накл (кг.)", width: "50px", orderable: false, searchable: false },
-    //                { data: "railway_manual_level", title: "Уровень р.з.", width: "50px", orderable: false, searchable: false },
-    //                { data: "railway_manual_volume", title: "Объем р.з.", width: "50px", orderable: false, searchable: false },
-    //                { data: "railway_manual_dens", title: "Плотность р.з.", width: "50px", orderable: false, searchable: false },
-    //                { data: "railway_manual_mass", title: "Масса р.з.", width: "50px", orderable: false, searchable: false },
-    //                { data: "num", title: "Резервуар", width: "50px", orderable: true, searchable: false },
-    //                { data: "start_tank", title: "Начало", width: "150px", orderable: false, searchable: false },
-    //                { data: "start_mass", title: "Масса в начале (кг.)", width: "50px", orderable: false, searchable: false },
-    //                { data: "stop_tank", title: "Конец", width: "150px", orderable: false, searchable: false },
-    //                { data: "stop_mass", title: "Масса в конце (кг.)", width: "50px", orderable: false, searchable: false },
-    //                { data: "change_mass", title: "Приняли (кг.)", width: "50px", orderable: false, searchable: false },
-    //            ],
-    //            "columnDefs": [
-    //                { "visible": false, "targets": table_report.groupColumn }
-    //            ],
-    //            "order": [[table_report.groupColumn, 'asc']],
-    //            "drawCallback": function (settings) {
-    //                var api = this.api();
-    //                var rows = api.rows({ page: 'current' }).nodes();
-    //                var last = null;
-    //                api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
-    //                    if (last !== group) {
-    //                        $(rows).eq(i).before(
-    //                            '<tr class="group"><td colspan="12">' + group + '</td></tr>'
-    //                        );
-    //                        last = group;
-    //                    }
-    //                });
-    //            },
-    //            dom: 'Bfrtip',
-    //            buttons: [
-    //                'copyHtml5',
-    //                'excelHtml5',
-    //                {
-    //                    extend: 'pdfHtml5',
-    //                    text: 'PDF',
-    //                    pageSize: 'LEGAL',
-    //                    orientation: 'landscape',
-    //                    customize: function (doc) {
-    //                        doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-    //                        //var tblBody = doc.content[1].table.body;
-    //                        //tblBody[0][2].text = 'Тип ГСМ';
-    //                        //tblBody[0][8].text = 'Тип Выдачи';
-    //                    }
-    //                }
-    //            ]
-    //        });
-    //    },
-    //    // Показать таблицу с данными
-    //    viewTable: function (data_refresh) {
-    //        LockScreen('Мы обрабатываем ваш запрос...');
-    //        if (this.list === null | data_refresh === true) {
-    //            // Обновим данные
-    //            getAsyncViewReportRFOfDateTime(
-    //                1, date_start, date_stop,
-    //                function (result) {
-    //                    table_report.list = result;
-    //                    table_report.loadDataTable(result);
-    //                    table_report.obj.draw();
-    //                }
-    //            );
-    //        } else {
-    //            table_report.loadDataTable(this.list);
-    //            table_report.obj.draw();
-    //        };
-    //    },
-    //    // Загрузить данные
-    //    loadDataTable: function (data) {
-    //        this.list = data;
-    //        this.obj.clear();
-    //        for (i = 0; i < data.length; i++) {
-    //            this.obj.row.add({
-    //                "group": 'ГСМ - ' + outFuelType(data[i].fuel) + ', ж.д. накладная №' + data[i].railway_num_nak + ', цистерна №' + data[i].railway_num_tanker,
-    //                "fuel": outFuelType(data[i].fuel),
-    //                "railway_num_nak": data[i].railway_num_nak,
-    //                "railway_num_tanker": data[i].railway_num_tanker,
-    //                //"railway_provider": data[i].railway_provider,
-    //                "railway_nak_mass": data[i].railway_nak_mass,
-    //                "railway_manual_level": data[i].railway_manual_level,
-    //                "railway_manual_volume": data[i].railway_manual_volume,
-    //                "railway_manual_dens": data[i].railway_manual_dens,
-    //                "railway_manual_mass": data[i].railway_manual_mass,
-    //                "num": data[i].num,
-    //                "start_tank": data[i].start_tank,
-    //                "start_mass": data[i].start_mass != null ? data[i].start_mass.toFixed(2) : null,
-    //                "stop_tank": data[i].stop_tank,
-    //                "stop_mass": data[i].stop_mass != null ? data[i].stop_mass.toFixed(2) : null,
-    //                "change_mass": data[i].start_mass != null && data[i].stop_mass != null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ'
-
-    //                //toISOStringTZ(start)
-    //                //"LokomotiveId": data[i].LokomotiveId,
-    //                //"Name": data[i].Name,
-    //                //"UsageVolume": data[i].UsageVolume,
-    //                //"UsageMass": data[i].UsageMass,
-    //                //"UsageDensity": data[i].UsageDensity,
-    //                //"TankNo": data[i].TankNo,
-    //                //"FuelLevel": data[i].FuelLevel,
-    //                //"FuelVolume": data[i].FuelVolume,
-    //                //"Density": data[i].Density,
-    //                //"Mass": data[i].Mass,
-    //                //"Temperature": data[i].Temperature,
-    //                //"WaterLevel": data[i].WaterLevel,
-    //                //"TechnicalSale": data[i].TechnicalSale,
-    //                //"OperatorName": data[i].OperatorName,
-    //                //"DateStartWork": data[i].DateStartWork,
-    //                //"TimeStartWork": data[i].TimeStartWork,
-    //                //"DateStart": data[i].DateStart,
-    //                //"TimeStart": data[i].TimeStart,
-    //                //"DateStop": data[i].DateStop,
-    //                //"TimeStop": data[i].TimeStop,
-    //                //"CardId": data[i].CardId,
-    //                //"StartLevel": data[i].StartLevel,
-    //                //"StartVolume": data[i].StartVolume,
-    //                //"StartDensity": data[i].StartDensity,
-    //                //"StartMass": data[i].StartMass,
-    //                //"StartTemperature": data[i].StartTemperature,
-    //                //"StartWaterLevel": data[i].StartWaterLevel,
-    //                //"StopLevel": data[i].StopLevel,
-    //                //"StopVolume": data[i].StopVolume,
-    //                //"StopDensity": data[i].StopDensity,
-    //                //"StopMass": data[i].StopMass,
-    //                //"StopTemperature": data[i].StopTemperature,
-    //                //"StopWaterLevel": data[i].StopWaterLevel,
-    //                //"DateTime": data[i].DateStart.substring(0, 10) + ' ' + data[i].TimeStart.substring(0, 12),
-    //                //"Waybill": cards != null ? cards.Number : data[i].CardId,
-    //                //"AutoNumber": cards != null ? cards.AutoNumber : data[i].CardId,
-    //                //"AutoModel": cards != null ? cards.AutoModel : data[i].CardId,
-    //            });
-    //        }
-    //        LockScreenOff();
-    //    }
-    //};
 
     //-----------------------------------------------------------------------------------------
     // Функции
