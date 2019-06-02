@@ -61,7 +61,7 @@ var reservation_out =
 var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };
 var reservation_vd_debitor_out =
-    { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "27571.260000000002", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
+    { "RSNUM": "0004231005", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "500.00", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" }
 var reservation_ndopusk =
     { "RSNUM": "0004074757", "RSPOS": "0002", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "162 ", "UMWRK": "", "BDMNG": "9.0", "ENMNG": null, "LGOBE": "", "MEINS": "", "BWART": "X01" }
 
@@ -447,6 +447,7 @@ var outFuelType = function (i) {
         case 107000024: return "ДТ";
         case 107000027: return "Керосин";
         case 0: return "Конфискат";
+        case 1: return "Авто-стояки";
         default: return i;
     }
 };
@@ -465,12 +466,12 @@ var outLevelLog = function (i) {
 var outMode = function (i) {
     if (i === null) return null;
     switch (Number(i)) {
-        case 1: return "Резерв. (керосин)";
-        case 2: return "Резерв. (ГСМ)";
-        case 3: return "Исход. поставка";
-        case 4: return "Требование (самовывоз)";
-        case 5: return "Заправка (бак)";
-        case 6: return "Заправка (цистерна)";
+        case 1: return "Резер. кер.";
+        case 2: return "Резер.";
+        case 3: return "Исх. пост.";
+        case 4: return "Самовывоз";
+        case 5: return "Бак";
+        case 6: return "Цистерна";
         case 7: return "Пролив";
         default: return i;
     }

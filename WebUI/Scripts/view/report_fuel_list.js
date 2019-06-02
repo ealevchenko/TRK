@@ -141,11 +141,11 @@
                     "paging": false,
                     "ordering": true,
                     "info": false,
-                    "select": false,
+                    "select": true,
                     "autoWidth": false,
                     //"filter": true,
                     //"scrollY": "600px",
-                    "scrollX": true,
+                    //"scrollX": true,
                     //language: language_table(langs),
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
@@ -231,18 +231,26 @@
                         $('td#kerosin-mass').text(total_kerosin_mass.toFixed(3) + ' (кг)');
                     },
                     columns: [
-                        { data: "start_datetime", title: "Дата и время", width: "150px", orderable: true, searchable: false },
+                        {
+                            data: "num_pos", title: "№", width: "50px", orderable: true, searchable: false
+                        },
+                        {
+                            data: "start_date", title: "Дата", width: "50px", orderable: true, searchable: false
+                        },
+                        {
+                            data: "start_time", title: "Время", width: "50px", orderable: true, searchable: false
+                        },
                         { data: "sap_transp_fakt", title: "Гос.Номер ТС", width: "50px", orderable: false, searchable: true },
                         { data: "fuel_type", title: "Вид ГСМ", width: "50px", orderable: true, searchable: true },
                         { data: "sap_valume", title: "Выдано фактически (л)", width: "50px", orderable: false, searchable: false },
                         { data: "sap_mass", title: "Выдано фактически (кг)", width: "50px", orderable: false, searchable: false },
                         { data: "sap_plotnost", title: "Плотность (кг/м3)", width: "50px", orderable: false, searchable: false },
-                        { data: "sap_sending", title: "Синхронизация с SAP", width: "150px", orderable: false, searchable: false },
+                        { data: "sap_sending", title: "Синхр. с SAP", width: "150px", orderable: false, searchable: false },
                         { data: "dose", title: "Доза ГСМ (л)", width: "50px", orderable: false, searchable: false },
                         { data: "sap_flag_r", title: "Режим выдачи", width: "100px", orderable: true, searchable: true },
                         { data: "num", title: "№ пист\\НС", width: "50px", orderable: true, searchable: true },
                         { data: "tank_num", title: "Резервуар(ы)", width: "100px", orderable: false, searchable: true },
-                        { data: "waybill", title: "Путевой лист", width: "100px", orderable: true, searchable: true },
+                        { data: "waybill", title: "ID карты", width: "100px", orderable: true, searchable: true },
                         { data: "operator_name", title: "Оператор", width: "100px", orderable: true, searchable: true },
                     ],
 
@@ -258,8 +266,8 @@
                             customize: function (doc) {
                                 doc.content[0].text = 'Заправочная ведомость (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
                                 var tblBody = doc.content[1].table.body;
-                                tblBody[0][2].text = 'Тип ГСМ';
-                                tblBody[0][8].text = 'Тип Выдачи';
+                                tblBody[0][4].text = 'Тип ГСМ';
+                                tblBody[0][10].text = 'Тип Выдачи';
                             }
                         }
                     ]
@@ -383,14 +391,16 @@
                     var cards = reference_cards !== null ? reference_cards.getResult(data[i].id_card) : null;
 
                     this.obj.row.add({
+                        "num_pos": i+1,
                         "id_fs": data[i].id_fs,
-                        "start_datetime": data[i].start_datetime,
+                        "start_date": data[i].start_datetime.substring(0, 10),
+                        "start_time": data[i].start_datetime.substring(11, 23),
                         "sap_transp_fakt": data[i].sap_transp_fakt,
                         "fuel_type": outFuelType(data[i].fuel_type),
                         "sap_valume": data[i].sap_valume !== null ? Number(data[i].sap_valume).toFixed(2) : null,
                         "sap_mass": data[i].sap_mass !== null ? Number(data[i].sap_mass).toFixed(3) : null,
                         "sap_plotnost": data[i].sap_plotnost !== null ? Number(data[i].sap_plotnost).toFixed(5) : null,
-                        "sap_sending": data[i].sap_sending,
+                        "sap_sending": data[i].sap_sending !== null ? "Да" : "Нет",
                         "dose": data[i].dose,
                         "sap_flag_r": outMode(data[i].sap_flag_r),
                         "num": (data[i].trk_num < 10 ? 'П-' + data[i].num : 'НС-' + data[i].num),
@@ -404,11 +414,11 @@
             },
             // Выподающие списки
             initComplete: function () {
-                table_report.obj.columns([2, 8]).every(function () {
+                table_report.obj.columns([4, 10]).every(function () {
                     var column = this;
                     var num = column[0][0];
                     //var name = $(column.header()).attr('title');
-                    var name = num === 2 ? 'Вид ГСМ' : 'Режим выдачи';
+                    var name = num === 4 ? 'Вид ГСМ' : 'Режим выдачи';
                     var select = $('<select><option value="">Все</option></select>')
                         .appendTo($(column.header()).empty().append(name))
                         .on('change', function () {

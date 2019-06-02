@@ -131,6 +131,84 @@
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
+                    "footerCallback": function (row, data, start, end, display) {
+                        var api = this.api(), data;
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                    i : 0;
+                        };
+                        // Total volume "Авто-стояки - 1"
+                        total_dt_start_valume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.start_valume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_a92_start_valume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.start_valume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_a95_start_valume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.start_valume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_ns_start_valume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Авто-стояки - 1") {
+                                    return intVal(a) + intVal(b.start_valume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        // Total mass
+                        total_dt_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.sap_ozm_bak == 107000024) {
+                                    return intVal(a) + intVal(b.sap_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_a92_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.sap_ozm_bak == 107000022) {
+                                    return intVal(a) + intVal(b.sap_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_a95_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.sap_ozm_bak == 107000023) {
+                                    return intVal(a) + intVal(b.sap_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_kerosin_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.sap_ozm_bak == 107000027) {
+                                    return intVal(a) + intVal(b.sap_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+
+                        //$('td#a92-volume').text(total_a92_volume.toFixed(2) + ' (л)');
+                        //$('td#a95-volume').text(total_a95_volume.toFixed(2) + ' (л)');
+                        //$('td#dt-volume').text(total_dt_volume.toFixed(2) + ' (л)');
+                        //$('td#kerosin-volume').text(total_kerosin_volume.toFixed(2) + ' (л)');
+                        //// Update footer mass
+                        //$('td#a92-mass').text(total_a92_mass.toFixed(3) + ' (кг)');
+                        //$('td#a95-mass').text(total_a95_mass.toFixed(3) + ' (кг)');
+                        //$('td#dt-mass').text(total_dt_mass.toFixed(3) + ' (кг)');
+                        //$('td#kerosin-mass').text(total_kerosin_mass.toFixed(3) + ' (кг)');
+                    },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
                         { data: "num", title: "ТРК-пистолет(АС)", width: "100px", orderable: true, searchable: false },

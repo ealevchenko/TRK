@@ -88,18 +88,7 @@ var ofs = {
                 } else {
                     putAsyncClearOFS(iofs + 29, null);
                 }
-            };
-            //deleteAsyncOFS(function (result_delete) {
-            //    if (result_delete > 0) {
-            //        for (iofs = 0, count_iofs = result.length; iofs < count_iofs; iofs++) {
-            //            putAsyncOFS(
-            //                { num: (result[iofs].trk_num < 10 ? result[iofs].num : result[iofs].num + 29), id: result[iofs].id, dose: result[iofs].dose, counter: result[iofs].start_counter },
-            //                function (result_set_put) {
-
-            //                });
-            //        }
-            //    }
-            //});
+            }
         });
     },
     set: function (data) {
@@ -1376,14 +1365,15 @@ var confirm_df = {
                         function (id_open_num) {
                             LockScreenOff();
                             if (id_open_num === null || id_open_num === 0) {
-
+                                var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
+                                var mass_treb = confirm_df.input_sap_ozm_amount.val()!==null && confirm_df.input_sap_ozm_amount.val()!=="" ? Number((Number(confirm_df.input_sap_ozm_amount.val())*confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
                                 var variant = confirm_df.select_variant.val();
                                 var pos = variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null;
                                 getAsyncOpenSAP_BufferOfNum(confirm_df.input_sap_num.val(),
                                     pos,
                                     function (sap_buffer_open) {
                                         LockScreenOff();
-                                        if (sap_buffer_open === null || sap_buffer_open.length === 0) {
+                                        if (sap_buffer_open === null || sap_buffer_open.length === 0 || (mass_treb > 500 && sap_buffer_open.length > 0)) {
                                             // Продолжим выполнение
                                             var variant = confirm_df.select_variant.val();
                                             logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
@@ -1416,7 +1406,8 @@ var confirm_df = {
                                                 // .....
                                             }
                                         } else {
-                                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу по требованию №" + confirm_df.input_sap_num.val() + " и номеру позиции №" + pos);
+                                            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Найдена не закрытая выдача требование №" + confirm_df.input_sap_num.val() + ", позиция № " + pos + ", текущий остаток ГСМ (" + mass_treb + ") <= 500 кг. Произведите выдачу по другой ведомости, позиции или дождитесь закрытия текущей.");
+                                            
                                         }
                                     }
                                 );
@@ -1642,7 +1633,6 @@ var confirm_df = {
             confirm_df.input_sap_factory_recipient.val('');
             switch (i) {
                 case "1":
-                //case "2":
                 case "5":
                 case "6":
                     // По резервированию
@@ -1767,39 +1757,7 @@ var confirm_df = {
                                 updateOptionSelect(confirm_df.select_sap_num_pos_reserv, pos, null, -1, null);
                                 // Покажем позиции
                                 confirm_df.select_sap_num_pos_reserv.selectmenu("widget").show();
-                                //} else {
-                                //    OnAJAXErrorOfMessage("Номер ИП №" + num + " - не найден в САП");
-                                //}
-
-                                //// TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                //if (i == 1 && result.RSNUM != "---" && (result.BWART != "311" && result.BWART != "301")) {
-                                //    OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 1, BWART должен содержать 301 или 311)");
-                                //} else {
-                                //    // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                //    if ((i == 2 || i == 5) && result.RSNUM != "---" && result.BWART != "X01") {
-                                //        OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2 или 5, BWART должен содержать X01)");
-                                //    } else {
-                                //        // TODO:!!!ТЕСТ УБРАТЬ && result.RSNUM != "---"
-                                //        confirm_df.input_sap_num.val(result.RSNUM != "---" ? result.RSNUM : 999);
-                                //        confirm_df.input_sap_num_pos.val(result.RSPOS);
-                                //        //$('input#sap-num').val();
-                                //        confirm_df.input_sap_ozm.val(result.MATNR);
-                                //        confirm_df.input_sap_ozm_amount.val(result.BDMNG);
-                                //        confirm_df.input_sap_factory_recipient.val(result.WERKS);
-                                //        confirm_df.sap_ozm_amount_multiplier = ($.trim(result.MEINS) === "TO" ? 1000 : 1);
-                                //        $('#label-sap-ozm-amount').text('Количество ' + result.MEINS + ':');
-                                //        if (result.RSNUM != "---") {
-                                //            var depots = catalog_depots.get($.trim(result.UMLGO));
-                                //            if (depots) {
-                                //                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
-                                //            }
-                                //        } else { // TODO:!!!ТЕСТ УБРАТЬ
-                                //            confirm_df.input_sap_stock_recipient.val("---");
-                                //        }
-
-                                //    }
-                                //}
-                            } // if result ==null
+                            } 
                         }
                     );
                     break;
