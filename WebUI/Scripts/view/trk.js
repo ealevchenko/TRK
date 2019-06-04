@@ -1365,21 +1365,34 @@ var confirm_df = {
                         function (id_open_num) {
                             LockScreenOff();
                             if (id_open_num === null || id_open_num === 0) {
-                                var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
-                                var mass_treb = confirm_df.input_sap_ozm_amount.val()!==null && confirm_df.input_sap_ozm_amount.val()!=="" ? Number((Number(confirm_df.input_sap_ozm_amount.val())*confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
+
                                 var variant = confirm_df.select_variant.val();
-                                var pos = variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null;
-                                getAsyncOpenSAP_BufferOfNum(confirm_df.input_sap_num.val(),
+                                logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                                if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                                    variant = 7;
+                                    var pos = 0;
+                                    var num_treb = 0;
+
+                                } else {
+                                    var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
+                                    var mass_treb = confirm_df.input_sap_ozm_amount.val() !== null && confirm_df.input_sap_ozm_amount.val() !== "" ? Number((Number(confirm_df.input_sap_ozm_amount.val()) * confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
+                                    var variant = confirm_df.select_variant.val();
+                                    var pos = variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null;
+                                    var num_treb = confirm_df.input_sap_num.val();
+                                }
+                                //
+                                getAsyncOpenSAP_BufferOfNum(
+                                    num_treb,
                                     pos,
                                     function (sap_buffer_open) {
                                         LockScreenOff();
                                         if (sap_buffer_open === null || sap_buffer_open.length === 0 || (mass_treb > 500 && sap_buffer_open.length > 0)) {
                                             // Продолжим выполнение
-                                            var variant = confirm_df.select_variant.val();
-                                            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                                            if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
-                                                variant = 7;
-                                            }
+                                            //var variant = confirm_df.select_variant.val();
+                                            //logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                                            //if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                                            //    variant = 7;
+                                            //}
                                             // проверка правильности заполнения формы
                                             var valid = confirm_df.validationConfirm(variant);
                                             logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Проверка правильности заполнения valid = ' + valid + ', режим = ' + variant + '. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');

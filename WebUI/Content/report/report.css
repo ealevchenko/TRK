@@ -92,3 +92,21 @@ tr.group, tr.group:hover {
     font-size:12px;
     /*color: #0c7a1a*/
 }
+
+.group {
+    color:#0b23a7;
+    font-weight: bold;
+}
+
+/*table-shift-report*/
+.table-shift-report td {
+    text-align:right;
+}
+.table-shift-report td:first-child, .table-shift-report th.title-foot {
+    text-align:left;
+}
+
+.table-shift-report th.title-foot, .table-shift-report td.total-foot {
+    color:#0b23a7;
+    font-weight: bold;
+}

@@ -149,6 +149,27 @@
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
+                    //"footerCallback": function (row, data, start, end, display) {
+                    //    var api = this.api(), data;
+                    //    // Remove the formatting to get integer data for summation
+                    //    var intVal = function (i) {
+                    //        return typeof i === 'string' ?
+                    //            i.replace(/[\$,]/g, '') * 1 :
+                    //            typeof i === 'number' ?
+                    //            i : 0;
+                    //    };
+                    //    var total = [];
+
+                    //    // Total volume start
+                    //    total[b.change_mass] = api
+                    //        .data()
+                    //        .reduce(function (a, b) {
+                    //            if (b.change_mass === "ДТ - 107000024") {
+                    //                return intVal(a) + intVal(b.start_valume);
+                    //            } else { return intVal(a); }
+                    //        }, 0);
+
+                    //},
                     columns: [
                         { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
                         //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },

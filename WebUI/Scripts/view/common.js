@@ -447,7 +447,7 @@ var outFuelType = function (i) {
         case 107000024: return "ДТ";
         case 107000027: return "Керосин";
         case 0: return "Конфискат";
-        case 1: return "Авто-стояки";
+        case 1: return "Наливные стояки";
         default: return i;
     }
 };

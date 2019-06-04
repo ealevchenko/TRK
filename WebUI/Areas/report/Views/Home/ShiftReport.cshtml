@@ -46,18 +46,32 @@
             <li><a href="#tabs-report-2" id="link-tabs-report-2"></a></li>
         </ul>
         <div id="tabs-report-1">
-            <table class='display compact' id="table-report" style="width:100%" cellpadding="0">
-                @*<tfoot>
-                        <tr><th colspan="6" class="title-foot">ИТОГО A92: </th><td class="total-foot"><label id="a92-volume"></label></td><td class="total-foot"><label id="a92-mass"></label></td><td></td></tr>
-                        <tr><th colspan="6" class="title-foot">ИТОГО A95: </th><td class="total-foot"><label id="a95-volume"></label></td><td class="total-foot"><label id="a95-mass"></label></td><td></td></tr>
-                        <tr><th colspan="6" class="title-foot">ИТОГО ДТ: </th><td class="total-foot"><label id="dt-volume"></label></td><td class="total-foot"><label id="dt-mass"></label></td><td></td></tr>
-                        <tr><th colspan="6" class="title-foot">ИТОГО Керосин: </th><td class="total-foot"><label id="kerosin-volume"></label></td><td class="total-foot"><label id="kerosin-mass"></label></td><td></td></tr>
-                    </tfoot>*@
+            <table class='display compact table-shift-report' id="table-report" style="width:100%" cellpadding="0">
+                <tfoot>
+                    <tr>
+                        <th colspan="2" class="title-foot">ИТОГО : </th>
+                        <td id="start-valum" class="total-foot"></td>
+                        <td id="stop-valume" class="total-foot"></td>
+                        <td id="change-valume" class="total-foot"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div id="tabs-report-2">
-                <table class='display compact' id="table-report-fft" style="width:100%" cellpadding="0"></table>
-            </div>
+            <table class=' display compact table-shift-report' id="table-report-fft" style="width:100%" cellpadding="0">
+                <tfoot>
+                    <tr>
+                        <th colspan="2" class="title-foot">ИТОГО : </th>
+                        <td id="start-mass-tank" class="total-foot"></td>
+                        <td id="start-volume-tank" class="total-foot"></td>
+                        <td id="stop-mass-tank" class="total-foot"></td>
+                        <td id="stop-volume-tank" class="total-foot"></td>
+                        <td id="change-mass-tank" class="total-foot"></td>
+                        <td id="change-volume-tank" class="total-foot"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 
 </div>

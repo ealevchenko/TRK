@@ -150,7 +150,7 @@
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
-                        $('td', row).eq(10).addClass('list-tanks');
+                        $('td', row).eq(12).addClass('list-tanks');
                     },
                     "footerCallback": function (row, data, start, end, display) {
                         var api = this.api(), data;
