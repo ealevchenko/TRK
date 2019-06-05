@@ -109,6 +109,30 @@ namespace WebUI.Controllers.api
             }
         }
 
+
+        // GET: api/azs/current_issue_fuel/num/0004329468/pos/0007
+        [Route("current_issue_fuel/num/{num}/pos/{pos}")]
+        [ResponseType(typeof(decimal))]
+        public decimal? GetRemainsFuel(string num, string pos)
+        {
+            try
+            {
+                string sql = "SELECT sum (fs.dose * sap.PLOTNOST /1000) as mas_all FROM dbo.SAP_Buffer as sap INNER JOIN dbo.FuelSale as fs ON sap.id = fs.id_sap WHERE fs.[close] IS NULL  AND  sap.N_TREB = N'" + num + "' AND sap.N_POS = N'"+pos+"' group by sap.N_TREB, sap.N_POS";
+                decimal? remains = this.ef_sap.Database.SqlQuery<decimal?>(sql).FirstOrDefault();
+                if (remains == null)
+                {
+                    return null;
+                }
+                return remains;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetRemainsFuel(num={0}, pos={1})", num, pos).SaveError(e);
+                return null;
+            }
+        }
+
+
         // POST api/azs/sap_buffer
         [HttpPost]
         [Route("sap_buffer")]
