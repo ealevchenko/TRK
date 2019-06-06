@@ -2212,7 +2212,7 @@ var confirm_df = {
                         ', [Number]=' + confirm_df.card.Number +
                         ', ЛИМИТ ГСМ ([VolumePlan] = ' + (result_plan.length > 0 ? result_plan[0].VolumePlan : null) + ', [VolumeFact]=' + (result_plan.length > 0 ? result_plan[0].VolumeFact : null) + ', [id]=' + (result_plan.length > 0 ? result_plan[0].id : null) + ')');
                     confirm_df.plan = result_plan;
-                    $('th#label-dose').text("Доза (л), лимит <=[" + result_plan[0].VolumePlan + "] :");
+                    $('th#label-dose').text(result_plan.length > 0 ? "Доза (л), лимит <=[" + result_plan[0].VolumePlan + "] :" : "Доза (л) :");
                 });
         }
         // Вывести информацию по карте

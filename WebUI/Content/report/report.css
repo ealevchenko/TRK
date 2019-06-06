@@ -98,9 +98,29 @@ tr.group, tr.group:hover {
     font-weight: bold;
 }
 
+element.style {
+}
+
+table.dataTable tbody tr.nakladnaya {
+    background-color: darkcyan;
+    color: #ddd;
+    font-weight: bold;
+    border-bottom: 1px solid #0b23a7;
+}
+
+.razniza {
+    color:crimson;
+    font-weight: bold;
+}
+.razniza-txt {
+    text-align:right;
+    color:crimson;
+    font-style:italic;
+}
+
 /*table-shift-report*/
 .table-shift-report td {
-    text-align:right;
+    text-align: right;
 }
 .table-shift-report td:first-child, .table-shift-report th.title-foot {
     text-align:left;
@@ -110,3 +130,5 @@ tr.group, tr.group:hover {
     color:#0b23a7;
     font-weight: bold;
 }
+
+

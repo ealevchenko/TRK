@@ -1,7 +1,6 @@
 ﻿$(function () {
 
-    var lang = $.cookie('lang'),
-        date_curent = new Date(),
+    var date_curent = new Date(),
         date_start = null,
         date_stop = null,
         naks = [],
@@ -200,16 +199,16 @@
                     },
                     columns: [
                         { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
-                        //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },
-                        //{ data: "railway_num_nak", title: "Ж.д. накладная", width: "50px", orderable: false, searchable: true },
-                        //{ data: "railway_num_tanker", title: "№ цистерны", width: "50px", orderable: false, searchable: true },
-                        //{ data: "railway_provider", title: "Поставщик", width: "150px", orderable: false, searchable: false },
+                        { data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false, visible: false },
+                        { data: "railway_num_nak", title: "Ж.д. накладная", width: "50px", orderable: false, searchable: true, visible: false },
+                        { data: "railway_num_tanker", title: "№ цистерны", width: "50px", orderable: false, searchable: true, visible: false },
+                        //{ data: "railway_provider", title: "Поставщик", width: "150px", orderable: false, searchable: false, visible:false  },
                         { data: "railway_nak_mass", title: "Масса по накл (кг.)", width: "50px", orderable: false, searchable: false },
                         { data: "railway_manual_level", title: "Уровень р.з.", width: "50px", orderable: false, searchable: false },
                         { data: "railway_manual_volume", title: "Объем р.з.", width: "50px", orderable: false, searchable: false },
                         { data: "railway_manual_dens", title: "Плотность р.з.", width: "50px", orderable: false, searchable: false },
                         { data: "railway_manual_mass", title: "Масса р.з.", width: "50px", orderable: false, searchable: false },
-                        { data: "num", title: "Резервуар", width: "50px", orderable: true, searchable: false },
+                        { data: "num", title: "Резервуар", width: "50px", orderable: false, searchable: false },
                         { data: "start_tank", title: "Начало", width: "150px", orderable: false, searchable: false },
                         { data: "start_mass", title: "Масса в начале (кг.)", width: "50px", orderable: false, searchable: false },
                         { data: "stop_tank", title: "Конец", width: "150px", orderable: false, searchable: false },
@@ -225,24 +224,47 @@
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
                         var last_nak = null;
-                        api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
-                        //api.columns().data().each(function (group, i) {
-                            var row = rows.data()[i];
-                            if (last_nak !== row.railway_num_nak) {
-                                var nak = getObjects(naks, 'num', row.railway_num_nak);
+                        api.column([table_report.groupColumn], { page: 'current' }).data().each(function (group, i) {
+                            var type_fuel = api.column(1).data()[i];
+                            var num_nak = api.column(2).data()[i];
+                            var nak_mass = api.column(4).data()[i];
+                            var manual_level = api.column(5).data()[i];
+                            var manual_volume = api.column(6).data()[i];
+                            var manual_dens = api.column(7).data()[i];
+                            var manual_mass = api.column(8).data()[i];
+
+                            var num = api.column(9).data()[i];
+                            var start_tank = api.column(10).data()[i];
+                            var start_mass = api.column(11).data()[i];
+                            var stop_tank = api.column(12).data()[i];
+                            var stop_mass = api.column(13).data()[i];
+                            var change_mass = api.column(14).data()[i];
+
+                            if (last_nak !== num_nak) {
+                                var nak = getObjects(naks, 'num', num_nak);
                                 $(rows).eq(i).before(
-                                '<tr class="nak"><td colspan="10">' + row.railway_num_nak + '</td><td>' + nak[0].sum + '</td></tr>'
+                                    '<tr class="nakladnaya"><td colspan="10">Тип ГСМ - ' + type_fuel + ' Накладная №' + num_nak + '</td><td>' + nak[0].sum + '</td></tr>'
                                 );
-                                last_nak = row.railway_num_nak;
+                                last_nak = num_nak;
                             }
 
                             if (last !== group) {
-                                var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
+                                var num_tanker = api.column(3).data()[i];
+                                var tanker = getObjects(tankers, 'num', num_tanker);
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="10">' + group + '</td><td>' + tanker[0].sum + '</td></tr>'
+                                    '<tr class="group"><td colspan="10"> Цистерна №' + num_tanker + '</td><td>' + tanker[0].sum + '</td></tr>'
+                                );
+                                var raz_treb = Number(tanker[0].sum - Number(nak_mass));
+                                var raz_manual = Number(tanker[0].sum - Number(manual_mass));
+                                $(rows).eq(i).before(
+                                    '<tr class=""><td>' + nak_mass + '</td><td>' + manual_level + '</td><td>' + manual_volume + '</td><td>' + manual_dens + '</td><td>' + manual_mass + '</td><td colspan="5" class="razniza-txt">Расхождения накладная (ручные замеры) :</td><td class="razniza">' + raz_treb + '(' + raz_manual+')' +'</td></tr>'
                                 );
                                 last = group;
                             }
+                            $(rows).eq(i).before(
+                                '<tr class=""><td colspan="5"></td><td>' + num + '</td><td>' + start_tank + '</td><td>' + start_mass + '</td><td>' + stop_tank + '</td><td>' + stop_mass + '</td><td>' + change_mass + '</td></tr>'
+                            );
+                            $(rows).eq(i).detach();
                         });
                     },
                     dom: 'Bfrtip',
