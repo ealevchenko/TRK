@@ -242,6 +242,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\report\Controllers\HomeController.cs" />
     <Compile Include="Areas\report\reportAreaRegistration.cs" />
+    <Compile Include="Controllers\api\AzsPlanController.cs" />
     <Compile Include="Controllers\api\azsCardsController.cs" />
     <Compile Include="Controllers\api\TLController.cs" />
     <Compile Include="Controllers\api\RFController.cs" />

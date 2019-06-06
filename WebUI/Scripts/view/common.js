@@ -2065,6 +2065,29 @@ var getReference_azsCards = function (callback) {
     };
     ref.initObject();
 };
+
+var getAsyncCurrentPlanOfIDCard = function (id_card, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/trk/plan/cerrent/id_card/'+id_card,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
 //----ЛОГИРОВАНИЕ-----------------------------------------------
 // Вывести последние lines записи
 var getAsyncTRKLogsLastLines= function (lines, callback) {

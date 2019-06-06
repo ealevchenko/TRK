@@ -933,6 +933,7 @@ var confirm_df = {
     card: null, // текущая карта
     supply: null, // текущая поставка возвращенная от САП
     reserv: null, // текущий список резервирования возвращенный от САП
+    plan: null, // текущий план на транспортное средство (на текушее время и дату)
 
     // КОЛОНКА ********************************************************
     input_deliver_type_fuel: null,      // тип топлива
@@ -950,6 +951,7 @@ var confirm_df = {
     input_deliver_start_counter: null,      // нач значение счетчика
     input_deliver_dose_fuel: null,      // доза топлива
     input_deliver_mase_fuel: null,      // расчетная масса топлива
+
 
     checkbox_deliver_Passage: null,     // Режим пролив
     // SAP ********************************************************
@@ -1972,6 +1974,8 @@ var confirm_df = {
         confirm_df.risers = null;  // Обнулим теги РС
         confirm_df.DIOrisers = null;  // Обнулим теги РС
         confirm_df.kerosenes = null;  // Обнулим теги РС
+        confirm_df.plan = null;  // Обнулим план ГСМ
+        $('th#label-dose').text("Доза (л) :");
         // Обновим информацию по баку
         confirm_df.input_deliver_take_level.val('').addClass('input_view');
         confirm_df.input_deliver_take_mass.val('').addClass('input_view');
@@ -2042,9 +2046,7 @@ var confirm_df = {
 
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(gun.type_fuel), null, -1, null);
                     // Получить информацию по карте
-                    confirm_df.card = cards.getCardOfNumSide(gun.num_trk, gun.side);
-                    // Вывести информацию по карте
-                    confirm_df.viewCard();
+                    confirm_df.getCard_Plan_ofView(gun.num_trk, gun.side, num, type)
                 }
                 break;
 
@@ -2142,9 +2144,7 @@ var confirm_df = {
                     }
                     updateOptionSelect(confirm_df.select_capacity, ozm_bak.getTanks(riser.type_fuel), null, -1, null);
                     // Получить информацию по карте
-                    confirm_df.card = cards.getCardOfNumSide((Number(num) + 9), 0);
-                    // Вывести информацию по карте
-                    confirm_df.viewCard();
+                    confirm_df.getCard_Plan_ofView((Number(num) + 9), 0, num, type)
                 }
                 break;
         }
@@ -2196,6 +2196,27 @@ var confirm_df = {
             confirm_df.input_deliver_mase_fuel.val('Выберите емкость');
             confirm_df.input_deliver_dose_fuel.val('');
         }
+    },
+    // Определить карту и лимит вывести карту 
+    getCard_Plan_ofView: function (trk, side, num, type) {
+        // Получить информацию по карте
+        confirm_df.card = cards.getCardOfNumSide(trk, side);
+        if (confirm_df.card !== null) {
+            logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ». num = ' + num + ', type = ' + type + ', № пистолета(НС) = ' + confirm_df.open_num + '. Определена RFID-Карта [Id]=' + confirm_df.card.Id + ', [Number]=' + confirm_df.card.Number);
+            getAsyncCurrentPlanOfIDCard(confirm_df.card.Id,
+                function (result_plan) {
+                    logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ». num = ' + num +
+                        ', type = ' + type +
+                        ', № пистолета(НС) = ' + confirm_df.open_num +
+                        ', RFID-Карта [Id]=' + confirm_df.card.Id +
+                        ', [Number]=' + confirm_df.card.Number +
+                        ', ЛИМИТ ГСМ ([VolumePlan] = ' + (result_plan.length > 0 ? result_plan[0].VolumePlan : null) + ', [VolumeFact]=' + (result_plan.length > 0 ? result_plan[0].VolumeFact : null) + ', [id]=' + (result_plan.length > 0 ? result_plan[0].id : null) + ')');
+                    confirm_df.plan = result_plan;
+                    $('th#label-dose').text("Доза (л), лимит <=[" + result_plan[0].VolumePlan + "] :");
+                });
+        }
+        // Вывести информацию по карте
+        confirm_df.viewCard();
     },
     // Вывести информацию по карте
     viewCard: function () {
@@ -2660,7 +2681,6 @@ var confirm_df = {
             sending: null
         };
     }
-
 };
 //--------------------------------------------------------------------------------
 // Панель "Состояние тегов TRK"

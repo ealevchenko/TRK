@@ -72,6 +72,7 @@ namespace WebUI.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<EFFC.Abstract.IRepository<azsCards>>().To<EFazsCards>();
+            kernel.Bind<EFFC.Abstract.IRepository<AzsPlan>>().To<EFAzsPlan>();
             kernel.Bind<ICat_OZM>().To<EFCat_OZM>();
             kernel.Bind<ICat_OZM_GSM>().To<EFCat_OZM_GSM>();
             kernel.Bind<ICat_Depots>().To<EFCat_Depots>();

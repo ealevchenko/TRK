@@ -41,7 +41,7 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // GET: api/azs/cards/901
+        // GET: api/trk/cards/901
         [Route("cards/{id:int}")]
         [ResponseType(typeof(azsCards))]
         public IHttpActionResult GetCards(int id)
@@ -61,7 +61,7 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // POST api/azs/cards
+        // POST api/trk/cards
         [HttpPost]
         [Route("cards")]
         public int PostCards([FromBody]azsCards value)
@@ -78,7 +78,7 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // PUT api/azs/cards/5
+        // PUT api/trk/cards/5
         [HttpPut]
         [Route("cards/{id:int}")]
         public int PutCards(int id, [FromBody]azsCards value)
@@ -94,7 +94,7 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // PUT api/azs/cards/5
+        // PUT api/trk/cards/5
         [HttpDelete]
         [Route("cards/{id:int}")]
         public int DeleteCards(int id)
