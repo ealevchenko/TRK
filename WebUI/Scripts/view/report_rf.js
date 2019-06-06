@@ -4,6 +4,8 @@
         date_curent = new Date(),
         date_start = null,
         date_stop = null,
+        naks = [],
+        tankers = [],
         //langs = $.extend(true, $.extend(true, getLanguages($.Text_View, lang), getLanguages($.Text_Common, lang)), getLanguages($.Text_Table, lang)),
         // Загрузка библиотек
         //loadReference = function (callback) {
@@ -127,7 +129,7 @@
         // Таблица 
         table_report = {
             html_table: $('#table-report'),
-            obj_table: null,
+            obj: null,
             select: null,
             select_id: null,
             list: [],
@@ -149,27 +151,53 @@
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
-                    //"footerCallback": function (row, data, start, end, display) {
-                    //    var api = this.api(), data;
-                    //    // Remove the formatting to get integer data for summation
-                    //    var intVal = function (i) {
-                    //        return typeof i === 'string' ?
-                    //            i.replace(/[\$,]/g, '') * 1 :
-                    //            typeof i === 'number' ?
-                    //            i : 0;
-                    //    };
-                    //    var total = [];
+                    "footerCallback": function (row, data, start, end, display) {
+                        naks = [];
+                        tankers = [];
+                        data.forEach(function (row, i) {
+                            // Сумма по наклодным
+                            var nak = getObjects(naks, 'num', row.railway_num_nak);
+                            if (nak === null || nak.length === 0) {
+                                naks.push({ 'num': row.railway_num_nak, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0 });
+                            } else {
+                                naks.forEach(function (row_nak, i) {
+                                    if (row_nak.num === row.railway_num_nak) {
+                                        naks[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0
+                                    }
+                                });
+                            }
+                            // Сумма по цистернам
+                            var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
+                            if (tanker === null || tanker.length === 0) {
+                                tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0 });
+                            } else {
+                                tankers.forEach(function (row_tank, i) {
+                                    if (row_tank.num === row.railway_num_tanker) {
+                                        tankers[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0
+                                    }
+                                });
+                            }
+                        });
+                        //    var api = this.api(), data;
+                        //    // Remove the formatting to get integer data for summation
+                        //    var intVal = function (i) {
+                        //        return typeof i === 'string' ?
+                        //            i.replace(/[\$,]/g, '') * 1 :
+                        //            typeof i === 'number' ?
+                        //            i : 0;
+                        //    };
+                        //    var total = [];
 
-                    //    // Total volume start
-                    //    total[b.change_mass] = api
-                    //        .data()
-                    //        .reduce(function (a, b) {
-                    //            if (b.change_mass === "ДТ - 107000024") {
-                    //                return intVal(a) + intVal(b.start_valume);
-                    //            } else { return intVal(a); }
-                    //        }, 0);
+                        //    // Total volume start
+                        //    total[b.change_mass] = api
+                        //        .data()
+                        //        .reduce(function (a, b) {
+                        //            if (b.change_mass === "ДТ - 107000024") {
+                        //                return intVal(a) + intVal(b.start_valume);
+                        //            } else { return intVal(a); }
+                        //        }, 0);
 
-                    //},
+                    },
                     columns: [
                         { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
                         //{ data: "fuel", title: "ГСМ", width: "50px", orderable: true, searchable: false },
@@ -196,10 +224,22 @@
                         var api = this.api();
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
+                        var last_nak = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
-                            if (last !== group) {
+                        //api.columns().data().each(function (group, i) {
+                            var row = rows.data()[i];
+                            if (last_nak !== row.railway_num_nak) {
+                                var nak = getObjects(naks, 'num', row.railway_num_nak);
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="12">' + group + '</td></tr>'
+                                '<tr class="nak"><td colspan="10">' + row.railway_num_nak + '</td><td>' + nak[0].sum + '</td></tr>'
+                                );
+                                last_nak = row.railway_num_nak;
+                            }
+
+                            if (last !== group) {
+                                var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
+                                $(rows).eq(i).before(
+                                    '<tr class="group"><td colspan="10">' + group + '</td><td>' + tanker[0].sum + '</td></tr>'
                                 );
                                 last = group;
                             }
@@ -264,45 +304,6 @@
                         "stop_tank": data[i].stop_tank,
                         "stop_mass": data[i].stop_mass != null ? data[i].stop_mass.toFixed(2) : null,
                         "change_mass": data[i].start_mass != null && data[i].stop_mass != null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ'
-
-                        //toISOStringTZ(start)
-                        //"LokomotiveId": data[i].LokomotiveId,
-                        //"Name": data[i].Name,
-                        //"UsageVolume": data[i].UsageVolume,
-                        //"UsageMass": data[i].UsageMass,
-                        //"UsageDensity": data[i].UsageDensity,
-                        //"TankNo": data[i].TankNo,
-                        //"FuelLevel": data[i].FuelLevel,
-                        //"FuelVolume": data[i].FuelVolume,
-                        //"Density": data[i].Density,
-                        //"Mass": data[i].Mass,
-                        //"Temperature": data[i].Temperature,
-                        //"WaterLevel": data[i].WaterLevel,
-                        //"TechnicalSale": data[i].TechnicalSale,
-                        //"OperatorName": data[i].OperatorName,
-                        //"DateStartWork": data[i].DateStartWork,
-                        //"TimeStartWork": data[i].TimeStartWork,
-                        //"DateStart": data[i].DateStart,
-                        //"TimeStart": data[i].TimeStart,
-                        //"DateStop": data[i].DateStop,
-                        //"TimeStop": data[i].TimeStop,
-                        //"CardId": data[i].CardId,
-                        //"StartLevel": data[i].StartLevel,
-                        //"StartVolume": data[i].StartVolume,
-                        //"StartDensity": data[i].StartDensity,
-                        //"StartMass": data[i].StartMass,
-                        //"StartTemperature": data[i].StartTemperature,
-                        //"StartWaterLevel": data[i].StartWaterLevel,
-                        //"StopLevel": data[i].StopLevel,
-                        //"StopVolume": data[i].StopVolume,
-                        //"StopDensity": data[i].StopDensity,
-                        //"StopMass": data[i].StopMass,
-                        //"StopTemperature": data[i].StopTemperature,
-                        //"StopWaterLevel": data[i].StopWaterLevel,
-                        //"DateTime": data[i].DateStart.substring(0, 10) + ' ' + data[i].TimeStart.substring(0, 12),
-                        //"Waybill": cards != null ? cards.Number : data[i].CardId,
-                        //"AutoNumber": cards != null ? cards.AutoNumber : data[i].CardId,
-                        //"AutoModel": cards != null ? cards.AutoModel : data[i].CardId,
                     });
                 }
                 LockScreenOff();
