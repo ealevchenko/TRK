@@ -510,6 +510,7 @@
     <Content Include="Images\amk_logo.png" />
     <Content Include="Images\not_active.png" />
     <Content Include="Images\null_active.png" />
+    <Content Include="Images\Report\report.jpg" />
     <Content Include="Images\Report\fuel_list.jpg" />
     <Content Include="Images\Report\fuel_list.png" />
     <Content Include="Images\Report\global.jpg" />

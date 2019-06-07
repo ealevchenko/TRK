@@ -3,6 +3,24 @@
     var date_curent = new Date(),
         date_start = null,
         date_stop = null,
+        total_tank_dt_start_mass = 0,
+        total_tank_a92_start_mass = 0,
+        total_tank_a95_start_mass = 0,
+        total_tank_kerosin_start_mass = 0,
+        total_tank_konfiskat_start_mass = 0,
+        //
+        total_tank_dt_stop_mass = 0,
+        total_tank_a92_stop_mass = 0,
+        total_tank_a95_stop_mass = 0,
+        total_tank_kerosin_stop_mass = 0,
+        total_tank_konfiskat_stop_mass = 0,
+        //
+        total_tank_dt_change_mass = 0,
+        total_tank_a92_change_mass = 0,
+        total_tank_a95_change_mass = 0,
+        total_tank_kerosin_change_mass = 0,
+        total_tank_konfiskat_change_mass = 0,
+
         //// Типы отчетов
         tab_type_reports = {
             html_div: $("#tabs-reports"),
@@ -59,16 +77,7 @@
                 this.bt_refresh.text("Показать отчет");
 
                 this.bt_refresh.on('click', function () {
-                    if (panel_select_report.select_sm.val() === "2") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
-                    }
-                    if (panel_select_report.select_sm.val() === "1") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
-                    }
-
-                    tab_type_reports.activeTable(tab_type_reports.active, true);
+                    panel_select_report.viewReport();
                 });
 
                 // Настроим выбор времени
@@ -81,6 +90,7 @@
                     function (event, ui) {
                         event.preventDefault();
                         // Обработать выбор смены
+                        panel_select_report.viewReport();
                     },
                     null);
                 // настроим компонент выбора времени
@@ -97,11 +107,23 @@
                         date_curent = obj.date1;
                     })
                     .bind('datepicker-closed', function () {
-
+                        panel_select_report.viewReport();
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+            },
+            viewReport: function () {
+                if (panel_select_report.select_sm.val() === "2") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+                }
+                if (panel_select_report.select_sm.val() === "1") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
+                }
+
+                tab_type_reports.activeTable(tab_type_reports.active, true);
             }
         },
         // Таблица
@@ -111,7 +133,7 @@
             select: null,
             select_id: null,
             list: [],
-            groupColumn:0,
+            groupColumn: 0,
             // Инициализировать таблицу
             initObject: function () {
                 this.obj = this.html_table.DataTable({
@@ -129,9 +151,132 @@
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
+                    "footerCallback": function (row, data, start, end, display) {
+                        var api = this.api(), data;
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+
+                        // Total mass start
+                        total_tank_dt_start_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.mass_start);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a92_start_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.mass_start);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a95_start_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.mass_start);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_kerosin_start_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Керосин - 107000027") {
+                                    return intVal(a) + intVal(b.mass_start);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_konfiskat_start_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Конфискат") {
+                                    return intVal(a) + intVal(b.mass_start);
+                                } else { return intVal(a); }
+                            }, 0);
+                        // Total mass stop
+                        total_tank_dt_stop_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.mass_stop);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a92_stop_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.mass_stop);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a95_stop_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.mass_stop);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_kerosin_stop_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Керосин - 107000027") {
+                                    return intVal(a) + intVal(b.mass_stop);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_konfiskat_stop_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Конфискат") {
+                                    return intVal(a) + intVal(b.mass_stop);
+                                } else { return intVal(a); }
+                            }, 0);
+                        // Total mass change
+                        total_tank_dt_change_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.change_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a92_change_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.change_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a95_change_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.change_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_kerosin_change_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Керосин - 107000027") {
+                                    return intVal(a) + intVal(b.change_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_konfiskat_change_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Конфискат") {
+                                    return intVal(a) + intVal(b.change_mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        $('td#total-mass-start').text((total_tank_dt_start_mass + total_tank_a92_start_mass + total_tank_a95_start_mass + total_tank_kerosin_start_mass + total_tank_konfiskat_start_mass).toFixed(2));
+                        $('td#total-mass-stop').text((total_tank_dt_stop_mass + total_tank_a92_stop_mass + total_tank_a95_stop_mass + total_tank_kerosin_stop_mass + total_tank_konfiskat_stop_mass).toFixed(2));
+                        $('td#total-mass-change').text((total_tank_dt_change_mass + total_tank_a92_change_mass + total_tank_a95_change_mass + total_tank_kerosin_change_mass + total_tank_konfiskat_change_mass).toFixed(2));
+
+                    },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
-                        { data: "tank", title: "Резервуар", width: "100px", orderable: true, searchable: false },
+                        { data: "tank", title: "Резервуар", width: "100px", orderable: false, searchable: false },
                         { data: "mass_start", title: "Масса в начале (кг.)", width: "100px", orderable: false, searchable: false },
                         { data: "mass_stop", title: "Масса в конце (кг.)", width: "100px", orderable: false, searchable: false },
                         { data: "change_mass", title: "Разница (кг.)", width: "100px", orderable: false, searchable: false },
@@ -146,8 +291,38 @@
                         var last = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
                             if (last !== group) {
+                                var mass_start;
+                                var mass_stop;
+                                var mass_change;
+                                switch (group) {
+                                    case "ДТ - 107000024":
+                                        mass_start = total_tank_dt_start_mass;
+                                        mass_stop = total_tank_dt_stop_mass;
+                                        mass_change = total_tank_dt_change_mass;
+                                        break;
+                                    case "А92 - 107000022":
+                                        mass_start = total_tank_a92_start_mass;
+                                        mass_stop = total_tank_a92_stop_mass;
+                                        mass_change = total_tank_a92_change_mass;
+                                        break;
+                                    case "А95 - 107000023":
+                                        mass_start = total_tank_a95_start_mass;
+                                        mass_stop = total_tank_a95_stop_mass;
+                                        mass_change = total_tank_a95_change_mass;
+                                        break;
+                                    case "Керосин - 107000027":
+                                        mass_start = total_tank_kerosin_start_mass;
+                                        mass_stop = total_tank_kerosin_stop_mass;
+                                        mass_change = total_tank_kerosin_change_mass;
+                                        break;
+                                    case "Конфискат":
+                                        mass_start = total_tank_konfiskat_start_mass;
+                                        mass_stop = total_tank_konfiskat_stop_mass;
+                                        mass_change = total_tank_konfiskat_change_mass;
+                                        break;
+                                }
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+                                    '<tr class="group"><td colspan="1">' + group + '</td><td>' + mass_start.toFixed(2) + '</td><td>' + mass_stop.toFixed(2) + '</td><td>' + mass_change.toFixed(2) + '</td></tr>'
                                 );
                                 last = group;
                             }
@@ -157,10 +332,16 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'pdfHtml5'
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            customize: function (doc) {
+                                doc.content[0].text = 'Отчет по движению топлива в емкостях АЗС (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                            }
+                        }
                     ]
                 });
-                table_report.groupTable();
+                //table_report.groupTable();
             },
             // Показать таблицу с данными
             viewTable: function (data_refresh) {
@@ -186,11 +367,11 @@
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
                     this.obj.row.add({
-                        "type": outFuelType(data[i].type) + ' - ' + data[i].type,
+                        "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
-                        "mass_start": (data[i].mass_start!==null ? data[i].mass_start.toFixed(2) : null),
-                        "mass_stop": (data[i].mass_stop!==null ? data[i].mass_stop.toFixed(2) : null),
-                        "change_mass": (data[i].mass_start !== null || data[i].mass_stop!==null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null)
+                        "mass_start": (data[i].mass_start !== null ? data[i].mass_start.toFixed(2) : null),
+                        "mass_stop": (data[i].mass_stop !== null ? data[i].mass_stop.toFixed(2) : null),
+                        "change_mass": (data[i].mass_start !== null || data[i].mass_stop !== null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null)
                     });
                 }
                 LockScreenOff();
@@ -221,6 +402,7 @@
     //// Загрузка библиотек
     //loadReference(function (result) {
     table_report.initObject();
+    panel_select_report.viewReport();
     //});
 
 });

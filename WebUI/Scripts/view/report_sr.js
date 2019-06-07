@@ -334,7 +334,13 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'pdfHtml5'
+                       {
+                           extend: 'pdfHtml5',
+                           text: 'PDF',
+                           customize: function (doc) {
+                               doc.content[0].text = 'Сменный отчет ТРК-пистолеты(АС) (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                           }
+                       }
                     ]
                 });
                 //table_report.groupTable();
@@ -639,12 +645,12 @@
                                     return intVal(a) + intVal(b.change_mass);
                                 } else { return intVal(a); }
                             }, 0);
-                        $('td#start-mass-tank').text((total_tank_dt_start_mass+total_tank_a92_start_mass+total_tank_a95_start_mass+total_tank_kerosin_start_mass+total_tank_konfiskat_start_mass).toFixed(2));
-                        $('td#start-volume-tank').text((total_tank_dt_start_valume+total_tank_a92_start_valume+total_tank_a95_start_valume+total_tank_kerosin_start_valume+total_tank_konfiskat_start_valume).toFixed(2));
-                        $('td#stop-mass-tank').text((total_tank_dt_stop_mass+total_tank_a92_stop_mass+total_tank_a95_stop_mass+total_tank_kerosin_stop_mass+total_tank_konfiskat_stop_mass).toFixed(2));
-                        $('td#stop-volume-tank').text((total_tank_dt_stop_valume+total_tank_a92_stop_valume+total_tank_a95_stop_valume+total_tank_kerosin_stop_valume+total_tank_konfiskat_stop_valume).toFixed(2));
-                        $('td#change-mass-tank').text((total_tank_dt_change_mass+total_tank_a92_change_mass+total_tank_a95_change_mass+total_tank_kerosin_change_mass+total_tank_konfiskat_change_mass).toFixed(2));
-                        $('td#change-volume-tank').text((total_tank_dt_change_valume+total_tank_a92_change_valume+total_tank_a95_change_valume+total_tank_kerosin_change_valume+total_tank_konfiskat_change_valume).toFixed(2));
+                        $('td#start-mass-tank').text((total_tank_dt_start_mass + total_tank_a92_start_mass + total_tank_a95_start_mass + total_tank_kerosin_start_mass + total_tank_konfiskat_start_mass).toFixed(2));
+                        $('td#start-volume-tank').text((total_tank_dt_start_valume + total_tank_a92_start_valume + total_tank_a95_start_valume + total_tank_kerosin_start_valume + total_tank_konfiskat_start_valume).toFixed(2));
+                        $('td#stop-mass-tank').text((total_tank_dt_stop_mass + total_tank_a92_stop_mass + total_tank_a95_stop_mass + total_tank_kerosin_stop_mass + total_tank_konfiskat_stop_mass).toFixed(2));
+                        $('td#stop-volume-tank').text((total_tank_dt_stop_valume + total_tank_a92_stop_valume + total_tank_a95_stop_valume + total_tank_kerosin_stop_valume + total_tank_konfiskat_stop_valume).toFixed(2));
+                        $('td#change-mass-tank').text((total_tank_dt_change_mass + total_tank_a92_change_mass + total_tank_a95_change_mass + total_tank_kerosin_change_mass + total_tank_konfiskat_change_mass).toFixed(2));
+                        $('td#change-volume-tank').text((total_tank_dt_change_valume + total_tank_a92_change_valume + total_tank_a95_change_valume + total_tank_kerosin_change_valume + total_tank_konfiskat_change_valume).toFixed(2));
                     },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: false, searchable: false },
@@ -728,7 +734,13 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'pdfHtml5'
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            customize: function (doc) {
+                                doc.content[0].text = 'Сменный отчет емкостя (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                            }
+                        }
                     ]
                 });
                 //table_report_fft.groupTable();
@@ -757,7 +769,7 @@
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
                     this.obj.row.add({
-                        "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type) ,
+                        "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
                         "mass_start": (data[i].mass_start !== null ? data[i].mass_start.toFixed(2) : null),
                         "volume_start": (data[i].volume_start !== null ? data[i].volume_start.toFixed(2) : null),

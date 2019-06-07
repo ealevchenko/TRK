@@ -75,6 +75,10 @@ body{
     background-image: url(../../Images/Report/pattern.png), url(../../Images/Report/fuel_list.png);
 }
 
+.img-header-report {
+    background-image: url(../../Images/Report/pattern.png), url(../../Images/Report/report.jpg);
+}
+
 .container{
 	position:relative;
 }

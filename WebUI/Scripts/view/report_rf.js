@@ -80,16 +80,7 @@
                 this.bt_refresh.text("Показать отчет");
 
                 this.bt_refresh.on('click', function () {
-                    if (panel_select_report.select_sm.val() === "2") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
-                    }
-                    if (panel_select_report.select_sm.val() === "1") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
-                    }
-
-                    tab_type_reports.activeTable(tab_type_reports.active, true);
+                    panel_select_report.viewReport();
                 });
 
                 // Настроим выбор времени
@@ -102,6 +93,7 @@
                     function (event, ui) {
                         event.preventDefault();
                         // Обработать выбор смены
+                        panel_select_report.viewReport();
                     },
                     null);
                 // настроим компонент выбора времени
@@ -118,11 +110,22 @@
                         date_curent = obj.date1;
                     })
                     .bind('datepicker-closed', function () {
-
+                        panel_select_report.viewReport();
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+            },
+            viewReport: function () {
+                if (panel_select_report.select_sm.val() === "2") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+                }
+                if (panel_select_report.select_sm.val() === "1") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
+                }
+                tab_type_reports.activeTable(tab_type_reports.active, true);
             }
         },
         // Таблица 
@@ -153,6 +156,9 @@
                     "footerCallback": function (row, data, start, end, display) {
                         naks = [];
                         tankers = [];
+                        var total_nakl = 0;
+                        var total_manual = 0;
+                        var total_change = 0;
                         data.forEach(function (row, i) {
                             // Сумма по наклодным
                             var nak = getObjects(naks, 'num', row.railway_num_nak);
@@ -168,6 +174,8 @@
                             // Сумма по цистернам
                             var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
                             if (tanker === null || tanker.length === 0) {
+                                total_nakl += row.railway_nak_mass;
+                                total_manual += row.railway_manual_mass;
                                 tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0 });
                             } else {
                                 tankers.forEach(function (row_tank, i) {
@@ -177,25 +185,15 @@
                                 });
                             }
                         });
-                        //    var api = this.api(), data;
-                        //    // Remove the formatting to get integer data for summation
-                        //    var intVal = function (i) {
-                        //        return typeof i === 'string' ?
-                        //            i.replace(/[\$,]/g, '') * 1 :
-                        //            typeof i === 'number' ?
-                        //            i : 0;
-                        //    };
-                        //    var total = [];
 
-                        //    // Total volume start
-                        //    total[b.change_mass] = api
-                        //        .data()
-                        //        .reduce(function (a, b) {
-                        //            if (b.change_mass === "ДТ - 107000024") {
-                        //                return intVal(a) + intVal(b.start_valume);
-                        //            } else { return intVal(a); }
-                        //        }, 0);
 
+                        tankers.forEach(function (row_sum_tanks, i) {
+                            total_change += row_sum_tanks.sum;
+                        });
+                        $('td#total-nakl').text(total_nakl);
+                        $('td#total-manual').text(total_manual);
+                        $('td#total-change').text(total_change);
+                        $('td#razniza-change').text(total_change-total_nakl + '('+(total_change-total_manual)+')');
                     },
                     columns: [
                         { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
@@ -224,7 +222,9 @@
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
                         var last_nak = null;
+
                         api.column([table_report.groupColumn], { page: 'current' }).data().each(function (group, i) {
+
                             var type_fuel = api.column(1).data()[i];
                             var num_nak = api.column(2).data()[i];
                             var nak_mass = api.column(4).data()[i];
@@ -242,6 +242,7 @@
 
                             if (last_nak !== num_nak) {
                                 var nak = getObjects(naks, 'num', num_nak);
+                                
                                 $(rows).eq(i).before(
                                     '<tr class="nakladnaya"><td colspan="10">Тип ГСМ - ' + type_fuel + ' Накладная №' + num_nak + '</td><td>' + nak[0].sum + '</td></tr>'
                                 );
@@ -257,7 +258,7 @@
                                 var raz_treb = Number(tanker[0].sum - Number(nak_mass));
                                 var raz_manual = Number(tanker[0].sum - Number(manual_mass));
                                 $(rows).eq(i).before(
-                                    '<tr class=""><td>' + nak_mass + '</td><td>' + manual_level + '</td><td>' + manual_volume + '</td><td>' + manual_dens + '</td><td>' + manual_mass + '</td><td colspan="5" class="razniza-txt">Расхождения накладная (ручные замеры) :</td><td class="razniza">' + raz_treb + '(' + raz_manual+')' +'</td></tr>'
+                                    '<tr class=""><td>' + nak_mass + '</td><td>' + manual_level + '</td><td>' + manual_volume + '</td><td>' + manual_dens + '</td><td>' + manual_mass + '</td><td colspan="5" class="razniza-txt">Расхождения накладная (ручные замеры) :</td><td class="razniza">' + raz_treb + '(' + raz_manual + ')' + '</td></tr>'
                                 );
                                 last = group;
                             }
@@ -266,6 +267,7 @@
                             );
                             $(rows).eq(i).detach();
                         });
+                        
                     },
                     dom: 'Bfrtip',
                     buttons: [
@@ -344,6 +346,7 @@
     //// Загрузка библиотек
     //loadReference(function (result) {
     table_report.initObject();
+    panel_select_report.viewReport();
     //});
 
 });

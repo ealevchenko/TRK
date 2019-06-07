@@ -108,11 +108,11 @@ table.dataTable tbody tr.nakladnaya {
     border-bottom: 1px solid #0b23a7;
 }
 
-.razniza {
+.table-shift-report td.razniza {
     color:crimson;
     font-weight: bold;
 }
-.razniza-txt {
+.table-shift-report td.razniza-txt {
     text-align:right;
     color:crimson;
     font-style:italic;

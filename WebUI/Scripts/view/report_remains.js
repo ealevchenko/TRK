@@ -2,6 +2,24 @@
 
     var date_curent = new Date(),
         date_start = null,
+        total_tank_dt_volume = 0,
+        total_tank_a92_volume = 0,
+        total_tank_a95_volume = 0,
+        total_tank_kerosin_volume = 0,
+        total_tank_konfiskat_volume = 0,
+
+        total_tank_dt_mass = 0,
+        total_tank_a92_mass = 0,
+        total_tank_a95_mass = 0,
+        total_tank_kerosin_mass = 0,
+        total_tank_konfiskat_mass = 0,
+
+        total_tank_dt_dens = 0,
+        total_tank_a92_dens = 0,
+        total_tank_a95_dens = 0,
+        total_tank_kerosin_dens = 0,
+        total_tank_konfiskat_dens = 0,
+
         //date_stop = null,
         //// Типы отчетов
         tab_type_reports = {
@@ -51,7 +69,7 @@
                     .append(this.span)
                     //.append(this.bt_right)
                     .append(this.select_sm);
-                    //.append(this.bt_refresh);
+                //.append(this.bt_refresh);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
@@ -105,7 +123,7 @@
                 if (panel_select_report.select_sm.val() === "2") {
                     date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
                     //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
-                    
+
                 }
                 if (panel_select_report.select_sm.val() === "1") {
                     date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
@@ -140,6 +158,93 @@
                     "createdRow": function (row, data, index) {
                         //$(row).attr('id', data.id);
                     },
+                    "footerCallback": function (row, data, start, end, display) {
+                        var api = this.api(), data;
+                        // Remove the formatting to get integer data for summation
+                        var intVal = function (i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+
+                        // Total volume start
+                        total_tank_dt_volume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.volume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a92_volume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.volume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a95_volume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.volume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_kerosin_volume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Керосин - 107000027") {
+                                    return intVal(a) + intVal(b.volume);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_konfiskat_volume = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Конфискат") {
+                                    return intVal(a) + intVal(b.volume);
+                                } else { return intVal(a); }
+                            }, 0);
+
+                        // Total mass
+                        total_tank_dt_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "ДТ - 107000024") {
+                                    return intVal(a) + intVal(b.mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a92_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А92 - 107000022") {
+                                    return intVal(a) + intVal(b.mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_a95_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "А95 - 107000023") {
+                                    return intVal(a) + intVal(b.mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_kerosin_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Керосин - 107000027") {
+                                    return intVal(a) + intVal(b.mass);
+                                } else { return intVal(a); }
+                            }, 0);
+                        total_tank_konfiskat_mass = api
+                            .data()
+                            .reduce(function (a, b) {
+                                if (b.type === "Конфискат") {
+                                    return intVal(a) + intVal(b.mass);
+                                } else { return intVal(a); }
+                            }, 0);
+
+                        $('td#total-volume-tank').text((total_tank_dt_volume + total_tank_a92_volume + total_tank_a95_volume + total_tank_kerosin_volume + total_tank_konfiskat_volume).toFixed(2));
+                        $('td#total-mass-tank').text((total_tank_dt_mass + total_tank_a92_mass + total_tank_a95_mass + total_tank_kerosin_mass + total_tank_konfiskat_mass).toFixed(2));
+                    },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
                         { data: "tank", title: "Резервуар", width: "50px", orderable: true, searchable: false },
@@ -158,8 +263,33 @@
                         var last = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
                             if (last !== group) {
+                                var valume;
+                                var mass;
+                                switch (group) {
+                                    case "ДТ - 107000024":
+                                        valume = total_tank_dt_volume;
+                                        mass = total_tank_dt_mass;
+                                        break;
+                                    case "А92 - 107000022":
+                                        valume = total_tank_a92_volume;
+                                        mass = total_tank_a92_mass;
+                                        break;
+                                    case "А95 - 107000023":
+                                        valume = total_tank_a95_volume;
+                                        mass = total_tank_a95_mass;
+                                        break;
+                                    case "Керосин - 107000027":
+                                        valume = total_tank_kerosin_volume;
+                                        mass = total_tank_kerosin_mass;
+                                        break;
+                                    case "Конфискат":
+                                        valume = total_tank_konfiskat_volume;
+                                        mass = total_tank_konfiskat_mass;
+                                        break;
+                                }
+
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="6">' + group + '</td></tr>'
+                                    '<tr class="group"><td colspan="1">' + group + '</td><td></td><td>' + valume.toFixed(2) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
                                 );
                                 last = group;
                             }
@@ -169,7 +299,13 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        'pdfHtml5'
+                         {
+                             extend: 'pdfHtml5',
+                             text: 'PDF',
+                             customize: function (doc) {
+                                 doc.content[0].text = 'Остатки в емкостях АЗС на ' + toISOStringTZ(date_start);
+                             }
+                         }
                     ]
                 });
                 table_report.groupTable();
@@ -198,7 +334,7 @@
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
                     this.obj.row.add({
-                        "type": outFuelType(data[i].type) + ' - ' + data[i].type,
+                        "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
                         "level": (data[i].level !== null ? data[i].level : null),
                         "volume": (data[i].volume !== null ? data[i].volume : null),
