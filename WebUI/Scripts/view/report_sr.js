@@ -371,8 +371,8 @@
                     this.obj.row.add({
                         "type": data[i].type !== 1 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "num": data[i].num,
-                        "start_valume": data[i].type !== 1 ? (data[i].start_valume !== null ? (data[i].start_valume / 100).toFixed(2) : null) : data[i].start_valume.toFixed(2),
-                        "stop_valume": data[i].type !== 1 ? (data[i].stop_valume !== null ? (data[i].stop_valume / 100).toFixed(2) : null): data[i].stop_valume.toFixed(2),
+                        "start_valume": data[i].type !== 1 ? (data[i].start_valume !== null ? (data[i].start_valume / 100).toFixed(2) : null) : data[i].start_valume !== null ? data[i].start_valume.toFixed(2) : null,
+                        "stop_valume": data[i].type !== 1 ? (data[i].stop_valume !== null ? (data[i].stop_valume / 100).toFixed(2) : null) : data[i].stop_valume != null ? data[i].stop_valume.toFixed(2) : null,
                         "change_valume": data[i].type !== 1 ? (data[i].start_valume !== null || data[i].stop_valume !== null ? ((data[i].stop_valume - data[i].start_valume) / 100).toFixed(2) : null) : (data[i].start_valume !== null || data[i].stop_valume !== null ? (data[i].stop_valume - data[i].start_valume).toFixed(2) : null)
                     });
                 }
