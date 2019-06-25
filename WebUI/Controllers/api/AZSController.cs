@@ -232,6 +232,75 @@ namespace WebUI.Controllers.api
         }
         #endregion
 
+        public int addCounters()
+        {
+            try
+            {
+                ClientOPCTRK.ClientTRK client = new ClientOPCTRK.ClientTRK();
+                EFAZS.Concrete.EFGunsCnts ef_gc = new EFAZS.Concrete.EFGunsCnts();
+
+                int res = 0;
+                List<ClientOPCTRK.Gun> guns = client.ReadTagOPCOfGun();
+                if (guns != null)
+                {
+                    EFAZS.Concrete.EFUsersActions efua = new EFAZS.Concrete.EFUsersActions();
+                    UsersActions user_action = efua.GetCurrentUsersActions();
+                    if (user_action != null)
+                    {
+                        GunsCnts gc = new GunsCnts();
+                        gc.ID = 0;
+                        gc.Operator = user_action.UserName;
+                        gc.SmenaID = user_action.SessionID;
+                        gc.TimeStamp = DateTime.Now;
+                        foreach (ClientOPCTRK.Gun g in guns)
+                        {
+                            switch (g.num_gun)
+                            {
+                                case 1: gc.C1_1 = (int?)g.total_volume; break;
+                                case 2: gc.C1_2 = (int?)g.total_volume; break;
+                                case 3: gc.C2_1 = (int?)g.total_volume; break;
+                                case 4: gc.C2_2 = (int?)g.total_volume; break;
+                                case 5: gc.C3_1 = (int?)g.total_volume; break;
+                                case 6: gc.C3_2 = (int?)g.total_volume; break;
+                                case 7: gc.C4_1 = (int?)g.total_volume; break;
+                                case 8: gc.C4_2 = (int?)g.total_volume; break;
+                                case 9: gc.C5_1 = (int?)g.total_volume; break;
+                                case 10: gc.C5_2 = (int?)g.total_volume; break;
+                                case 11: gc.C6_1 = (int?)g.total_volume; break;
+                                case 12: gc.C6_2 = (int?)g.total_volume; break;
+                                case 13: gc.C7_1 = (int?)g.total_volume; break;
+                                case 14: gc.C7_2 = (int?)g.total_volume; break;
+                                case 15: gc.C7_3 = (int?)g.total_volume; break;
+                                case 16: gc.C7_4 = (int?)g.total_volume; break;
+                                case 17: gc.C7_5 = (int?)g.total_volume; break;
+                                case 18: gc.C7_6 = (int?)g.total_volume; break;
+                                case 19: gc.C7_7 = (int?)g.total_volume; break;
+                                case 20: gc.C7_8 = (int?)g.total_volume; break;
+                                case 21: gc.C8_1 = (int?)g.total_volume; break;
+                                case 22: gc.C8_2 = (int?)g.total_volume; break;
+                                case 23: gc.C8_3 = (int?)g.total_volume; break;
+                                case 24: gc.C8_4 = (int?)g.total_volume; break;
+                                case 25: gc.C8_5 = (int?)g.total_volume; break;
+                                case 26: gc.C8_6 = (int?)g.total_volume; break;
+                                case 27: gc.C8_7 = (int?)g.total_volume; break;
+                                case 28: gc.C8_8 = (int?)g.total_volume; break;
+                                case 29: gc.C9_1 = (int?)g.total_volume; break;
+                            }
+                        }
+                        ef_gc.Add(gc);
+                        res = ef_gc.Save();
+                    }
+                }
+                String.Format("Сервис ReportTRKServices - Отработал метод addCounters - Код выполнения:{0}", res).SaveInformation();
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("addCounters()").SaveError(e);
+                return -1;
+            }
+        }
+
         // GET: api/azs/report/shift_report/start/2019-04-15T00:00:00/stop/2019-04-16T06:59:59
         [Route("report/shift_report/start/{start:datetime}/stop/{stop:datetime}")]
         [ResponseType(typeof(SR_Report))]
@@ -239,6 +308,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
+                int res = addCounters();
                 string sql = "EXEC [dbo].[GET_VALUE_GUNS_OF_PERIOD] N'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "', N'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "'";
                 List<SR_Report> list = this.ef_ua.Database.SqlQuery<SR_Report>(sql).ToList();
                 if (list == null)

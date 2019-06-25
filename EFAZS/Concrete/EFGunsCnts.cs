@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFDaily_Report : IRepository<Daily_Report>
+    public class EFGunsCnts : IRepository<GunsCnts>
     {
 
         private EFDbContext db;
 
-        public EFDaily_Report(EFDbContext db)
+        public EFGunsCnts(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFDaily_Report()
+        public EFGunsCnts()
         {
 
             this.db = new EFDbContext();
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<Daily_Report> Get()
+        public IEnumerable<GunsCnts> Get()
         {
             try
             {
-                return db.Select<Daily_Report>();
+                return db.Select<GunsCnts>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public Daily_Report Get(int id)
+        public GunsCnts Get(int id)
         {
             try
             {
-                return db.Select<Daily_Report>(id);
+                return db.Select<GunsCnts>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(Daily_Report item)
+        public void Add(GunsCnts item)
         {
             try
             {
-                db.Insert<Daily_Report>(item);
+                db.Insert<GunsCnts>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(Daily_Report item)
+        public void Update(GunsCnts item)
         {
             try
             {
-                db.Update<Daily_Report>(item);
+                db.Update<GunsCnts>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(Daily_Report item)
+        public void AddOrUpdate(GunsCnts item)
         {
             try
             {
-                Daily_Report dbEntry = db.Daily_Report.Find(item.id);
+                GunsCnts dbEntry = db.GunsCnts.Find(item.ID);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                Daily_Report item = db.Delete<Daily_Report>(id);
+                GunsCnts item = db.Delete<GunsCnts>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public Daily_Report Refresh(Daily_Report item)
+        public GunsCnts Refresh(GunsCnts item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<Daily_Report>(item.id);
+                return db.Select<GunsCnts>(item.ID);
             }
             catch (Exception e)
             {
@@ -160,20 +160,6 @@ namespace EFAZS.Concrete
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public int AddDailyReport() {
-            try
-            {
-                string sql = "EXEC [dbo].[ADD_Daily_Report]";
-                int res = this.db.Database.ExecuteSqlCommand(sql);
-                return res;
-            }
-            catch (Exception e)
-            {
-                String.Format("Ошибка выполнения метода AddDailyReport()").SaveError(e);
-                return -2;
-            }
         }
 
     }

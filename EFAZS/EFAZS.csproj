@@ -60,6 +60,7 @@
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFGunsCnts.cs" />
     <Compile Include="Concrete\EFDaily_Report.cs" />
     <Compile Include="Concrete\EFTDbContext.cs" />
     <Compile Include="Concrete\EFReceivingFuelTanks.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Entities\ReceivingFuelTanks.cs" />
     <Compile Include="Entities\TRKLogs.cs" />
     <Compile Include="Entities\Daily_Report.cs" />
+    <Compile Include="Entities\GunsCnts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
