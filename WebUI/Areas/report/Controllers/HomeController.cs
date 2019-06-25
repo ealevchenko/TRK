@@ -43,11 +43,17 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        // Суточный 
+        public ActionResult Daily()
+        {
+            return View();
+        }
+        // График
         public ActionResult GrafikOld()
         {
             return View();
         }
-
+        // График
         public ActionResult Grafik()
         {
             return View();

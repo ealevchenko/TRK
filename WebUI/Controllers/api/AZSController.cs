@@ -28,12 +28,14 @@ namespace WebUI.Controllers.api
         protected IRepository<Tanks_dt> ef_tdt;
         protected IRepository<Tanks_kerosene> ef_tk;
         protected IUsersActions ef_ua;
+        protected IRepository<Daily_Report> ef_dr;
 
         public AZSController(IUsersActions ua,
             IRepository<Tanks_A92> ta92,
             IRepository<Tanks_A95> ta95,
             IRepository<Tanks_dt> tdt,
-            IRepository<Tanks_kerosene> tk
+            IRepository<Tanks_kerosene> tk, 
+            IRepository<Daily_Report> dr
             )
         {
             this.ef_ua = ua;
@@ -41,6 +43,7 @@ namespace WebUI.Controllers.api
             this.ef_ta95 = ta95;
             this.ef_tdt = tdt;
             this.ef_tk = tk;
+            this.ef_dr = dr;
         }
 
         #region UsersActions
@@ -247,6 +250,30 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:GetReportSR(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // GET: api/azs/report/daily_report/start/2019-05-01T00:00:00/stop/2019-06-25T00:00:00
+        [Route("report/daily_report/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(Daily_Report))]
+        public IHttpActionResult GetReportDR(DateTime start, DateTime stop)
+        {
+            try
+            {
+                List<Daily_Report> list = this.ef_dr
+                    .Get()
+                    .Where(d => d.date_start >= start && d.date_start <= stop)
+                    .ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportDR(start={0}, stop={1})", start, stop).SaveError(e);
                 return NotFound();
             }
         }

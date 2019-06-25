@@ -34,6 +34,8 @@
 
         public virtual DbSet<TRKLogs> TRKLogs { get; set; }
 
+        public virtual DbSet<Daily_Report> Daily_Report { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cat_Werks>()
