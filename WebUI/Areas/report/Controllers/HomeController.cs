@@ -48,6 +48,11 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        // Суточный с приведением до 15
+        public ActionResult Daily15()
+        {
+            return View();
+        }
         // График
         public ActionResult GrafikOld()
         {

@@ -1,0 +1,3 @@
+
+select [ASU_AZSlogs].[dbo].[GET_DENS15](N'107000023', 743.56735, 20.80) 
+select [ASU_AZSlogs].[dbo].[GET_VOLUME15](N'107000023', 743.56735, 20.80, 9024) 

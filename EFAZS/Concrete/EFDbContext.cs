@@ -36,6 +36,8 @@
 
         public virtual DbSet<Daily_Report> Daily_Report { get; set; }
 
+        public virtual DbSet<Daily_Report_15> Daily_Report_15 { get; set; }
+
         public virtual DbSet<GunsCnts> GunsCnts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

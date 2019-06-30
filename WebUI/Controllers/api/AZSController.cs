@@ -29,13 +29,15 @@ namespace WebUI.Controllers.api
         protected IRepository<Tanks_kerosene> ef_tk;
         protected IUsersActions ef_ua;
         protected IRepository<Daily_Report> ef_dr;
+        protected IRepository<Daily_Report_15> ef_dr15;
 
         public AZSController(IUsersActions ua,
             IRepository<Tanks_A92> ta92,
             IRepository<Tanks_A95> ta95,
             IRepository<Tanks_dt> tdt,
             IRepository<Tanks_kerosene> tk, 
-            IRepository<Daily_Report> dr
+            IRepository<Daily_Report> dr,
+            IRepository<Daily_Report_15> dr15
             )
         {
             this.ef_ua = ua;
@@ -44,6 +46,7 @@ namespace WebUI.Controllers.api
             this.ef_tdt = tdt;
             this.ef_tk = tk;
             this.ef_dr = dr;
+            this.ef_dr15 = dr15;
         }
 
         #region UsersActions
@@ -347,6 +350,30 @@ namespace WebUI.Controllers.api
                 return NotFound();
             }
         }
+        // GET: api/azs/report/daily_report15/start/2019-05-01T00:00:00/stop/2019-06-25T00:00:00
+        [Route("report/daily_report15/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(Daily_Report_15))]
+        public IHttpActionResult GetReportDR15(DateTime start, DateTime stop)
+        {
+            try
+            {
+                List<Daily_Report_15> list = this.ef_dr15
+                    .Get()
+                    .Where(d => d.date_start >= start && d.date_start <= stop)
+                    .ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportDR15(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
+
 
     }
 }

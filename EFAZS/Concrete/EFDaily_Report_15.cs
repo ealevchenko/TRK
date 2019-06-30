@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFDaily_Report : IRepository<Daily_Report>
+    public class EFDaily_Report_15 : IRepository<Daily_Report_15>
     {
 
         private EFDbContext db;
 
-        public EFDaily_Report(EFDbContext db)
+        public EFDaily_Report_15(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFDaily_Report()
+        public EFDaily_Report_15()
         {
 
             this.db = new EFDbContext();
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<Daily_Report> Get()
+        public IEnumerable<Daily_Report_15> Get()
         {
             try
             {
-                return db.Select<Daily_Report>();
+                return db.Select<Daily_Report_15>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public Daily_Report Get(int id)
+        public Daily_Report_15 Get(int id)
         {
             try
             {
-                return db.Select<Daily_Report>(id);
+                return db.Select<Daily_Report_15>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(Daily_Report item)
+        public void Add(Daily_Report_15 item)
         {
             try
             {
-                db.Insert<Daily_Report>(item);
+                db.Insert<Daily_Report_15>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(Daily_Report item)
+        public void Update(Daily_Report_15 item)
         {
             try
             {
-                db.Update<Daily_Report>(item);
+                db.Update<Daily_Report_15>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(Daily_Report item)
+        public void AddOrUpdate(Daily_Report_15 item)
         {
             try
             {
-                Daily_Report dbEntry = db.Daily_Report.Find(item.id);
+                Daily_Report_15 dbEntry = db.Daily_Report_15.Find(item.id);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                Daily_Report item = db.Delete<Daily_Report>(id);
+                Daily_Report_15 item = db.Delete<Daily_Report_15>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public Daily_Report Refresh(Daily_Report item)
+        public Daily_Report_15 Refresh(Daily_Report_15 item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<Daily_Report>(item.id);
+                return db.Select<Daily_Report_15>(item.id);
             }
             catch (Exception e)
             {
@@ -172,20 +172,6 @@ namespace EFAZS.Concrete
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода AddDailyReport()").SaveError(e);
-                return -2;
-            }
-        }
-
-        public int AddDailyReport15() {
-            try
-            {
-                string sql = "EXEC [dbo].[ADD_Daily_Report_15]";
-                int res = this.db.Database.ExecuteSqlCommand(sql);
-                return res;
-            }
-            catch (Exception e)
-            {
-                String.Format("Ошибка выполнения метода AddDailyReport15()").SaveError(e);
                 return -2;
             }
         }

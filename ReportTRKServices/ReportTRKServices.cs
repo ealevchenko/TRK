@@ -42,6 +42,7 @@ namespace ReportTRKServices
         EFDaily_Report efdl = new EFDaily_Report();
         EFGunsCnts ef_gc = new EFGunsCnts();
         ClientTRK client = new ClientTRK();
+        EFTRKLogs trk_log = new EFTRKLogs();
 
 
         [StructLayout(LayoutKind.Sequential)]
@@ -159,6 +160,7 @@ namespace ReportTRKServices
         {
             try
             {
+                string log_mes;
                 DateTime dt = DateTime.Now;
                 int h = dt.Hour;
                 int m = dt.Minute;
@@ -166,16 +168,54 @@ namespace ReportTRKServices
                     String.Format("Сервис ReportTRKServices - сработал таймер на 0 часов").SaveInformation();
                     
                     int res = efdl.AddDailyReport();
-                    String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport - Код выполнения:{0}",res).SaveInformation();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport - Код выполнения:{0}", res);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
+                    res = efdl.AddDailyReport15();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport15 - Код выполнения:{0}", res);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
                     time_daily = true;
                 }
                 if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day) {
-                    String.Format("Сервис ReportTRKServices - сработал таймер на 7 часов").SaveInformation();
+                    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 7 часов");
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
                     addCounters();
                     time_sm_day = true;
                 }
                 if (h == 18 && (m >= 58 && m <= 59) && !time_sm_night) {
-                    String.Format("Сервис ReportTRKServices - сработал таймер на 19 часов").SaveInformation();
+                    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 19 часов");
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
                     addCounters();
                     time_sm_night = true;
                 }
@@ -187,7 +227,16 @@ namespace ReportTRKServices
             }
             catch (Exception e)
             {
-                String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()).SaveError(e);
+                string log_mes = String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString());
+                log_mes.SaveError(e);
+                trk_log.AddTRKLogs(new TRKLogs()
+                {
+                    ID = 0,
+                    DateTime = DateTime.Now,
+                    Level = 2,
+                    UserName = "ReportTRKServeces",
+                    Log = log_mes
+                });
             }
         }
     }
