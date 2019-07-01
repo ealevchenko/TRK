@@ -56,7 +56,51 @@ var supply_out =
     ];
 // TODO:!!!ТЕСТ УБРАТЬ
 var reservation_out =
-    { "RSNUM": "0003947680", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "080 ", "UMWRK": "0010", "BDMNG": "0.05", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "TO ", "BWART": "X01" };
+    [
+        {
+            "RSNUM": "0004364606",
+            "RSPOS": "0001",
+            "MATNR": "000000000107000024",
+            "WERKS": "0010",
+            "LGORT": "435 ",
+            "UMLGO": "163 ",
+            "UMWRK": "0010",
+            "BDMNG": "2.9239999999990687",
+            "ENMNG": null,
+            "LGOBE": "Запр.стан.УСХиПП",
+            "MEINS": "KG ",
+            "BWART": "X01"
+        },
+        {
+            "RSNUM": "0004364606",
+            "RSPOS": "0002",
+            "MATNR": "000000000107000024",
+            "WERKS": "0010",
+            "LGORT": "435 ",
+            "UMLGO": "163 ",
+            "UMWRK": "0010",
+            "BDMNG": "3.9279999999998836",
+            "ENMNG": null,
+            "LGOBE": "Запр.стан.УСХиПП",
+            "MEINS": "KG ",
+            "BWART": "X01"
+        },
+        {
+            "RSNUM": "0004364606",
+            "RSPOS": "0003",
+            "MATNR": "000000000107000024",
+            "WERKS": "0010",
+            "LGORT": "435 ",
+            "UMLGO": "163 ",
+            "UMWRK": "0010",
+            "BDMNG": "56864.332",
+            "ENMNG": null,
+            "LGOBE": "Запр.стан.УСХиПП",
+            "MEINS": "KG ",
+            "BWART": "X01"
+        }
+    ];
+ //   { "RSNUM": "0003947680", "RSPOS": "0001", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "080 ", "UMWRK": "0010", "BDMNG": "0.05", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "TO ", "BWART": "X01" };
 //{ "RSNUM": "0003052703", "RSPOS": "0001", "MATNR": "000000000310008399", "WERKS": "0010", "LGORT": "424 ", "UMLGO": "184 ", "UMWRK": "0010", "BDMNG": "0.4", "ENMNG": "0.365", "LGOBE": "ЦС ГСМ", "MEINS": "TO" };
 var reservation_debitor_out =
     { "RSNUM": "0003900524", "RSPOS": "0008", "MATNR": "000000000107000024", "WERKS": "0010", "LGORT": "435 ", "UMLGO": "163 ", "UMWRK": "0010", "BDMNG": "18000.0", "ENMNG": null, "LGOBE": "Запр.стан.УСХиПП", "MEINS": "KG ", "BWART": "X01" };

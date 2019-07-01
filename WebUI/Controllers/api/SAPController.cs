@@ -39,7 +39,7 @@ namespace WebUI.Controllers.api
             }
         }
 
-        // GET: api/sap/reservation_matrn/num/4321863/matrn/000000000107000027/mode/2
+        // GET: api/sap/reservation_matrn/num/4364606/matrn/000000000107000024/mode/2
         [Route("reservation_matrn/num/{num}/matrn/{matrn}/mode/{mode}")]
         [ResponseType(typeof(Reservation))]
         public IHttpActionResult GetReservationMatrn(string num, string matrn, string mode)

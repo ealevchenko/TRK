@@ -1288,12 +1288,12 @@ var confirm_df = {
             valid = valid && confirm_df.checkSelectOfMessage(confirm_df.select_variant, "Выберите и заполните вариант выдачи", 1, 6);
 
             valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num, "Не указан номер (резервирования\ исх.поставки\ требования М-11)");
-            if (variant !== "4" && variant !== "3" && variant !== "2") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
+            if (variant !== "4" && variant !== "3" && variant !== "2" && variant !== "6") valid = valid && confirm_df.checkIsNullOfMessage(confirm_df.input_sap_num_pos, "Не указан номер позиции");
             if (variant === "3") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos, "Выберите номер позиции ИП", 1, 10);
             if (variant === "2") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_num_pos_reserv, "Выберите номер позиции ИП", 1, 10);
             valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_ts, "Номер ТС фактический", 1, 40);
             //if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_num_kpp, "№ КПП", 1, 2);
-            if (variant !== "5") valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
+            if (variant !== "5" && variant !== "6") valid = valid && confirm_df.checkLength(confirm_df.input_sap_name_forwarder, "ФИО экспедитора", 1, 40);
             //Проверка возврата САП
             if (variant !== "4") valid = valid && confirm_df.checkLength(confirm_df.input_sap_ozm, "ОЗМ из (резервирования \ поставки) ", 1, 18);
             if (variant === "4") valid = valid && confirm_df.checkSelectValOfMessage(confirm_df.select_sap_ozm, "Выберите ОЗМ");
@@ -1398,6 +1398,7 @@ var confirm_df = {
                                     variant = "7";
                                 }
                                 if (variant === "1" || variant === "2" || variant === "5") {
+                                    var valid = confirm_df.validationConfirm(variant);
                                     // Проверим на требование
                                     var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
                                     var mass_treb = confirm_df.input_sap_ozm_amount.val() !== null && confirm_df.input_sap_ozm_amount.val() !== "" ? Number((Number(confirm_df.input_sap_ozm_amount.val()) * confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
@@ -1424,33 +1425,6 @@ var confirm_df = {
                                     // Выдадим
                                     confirm_df.StartIssueFuel(variant);
                                 }
-                                //var pos = 0;
-                                //var num_treb = 0;
-
-                                //} else {
-                                //    var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
-                                //    var mass_treb = confirm_df.input_sap_ozm_amount.val() !== null && confirm_df.input_sap_ozm_amount.val() !== "" ? Number((Number(confirm_df.input_sap_ozm_amount.val()) * confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
-                                //    var variant = confirm_df.select_variant.val();
-                                //    var pos = variant === "3" ? confirm_df.select_sap_num_pos.val() : variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : variant !== "4" && variant !== "7" ? confirm_df.input_sap_num_pos.val() : null;
-                                //    var num_treb = confirm_df.input_sap_num.val();
-                                //}
-
-                                //
-                                //getAsyncOpenSAP_BufferOfNum(
-                                //    num_treb,
-                                //    pos,
-                                //    function (sap_buffer_open) {
-                                //        LockScreenOff();
-                                //        if (sap_buffer_open === null || sap_buffer_open.length === 0 || (mass_treb > 500 && sap_buffer_open.length > 0)) {
-
-                                //        } else {
-                                //            confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Найдена не закрытая выдача требование №" + confirm_df.input_sap_num.val() + ", позиция № " + pos + ", текущий остаток ГСМ (" + mass_treb + ") <= 500 кг. Произведите выдачу по другой ведомости, позиции или дождитесь закрытия текущей.");
-
-                                //        }
-                                //    }
-                                //);
-
-
                             } else {
                                 LockScreenOff();
                                 logWarn(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Отмена «Начать выдачу», закройте предыдущую выдачу [id_open_num]=' + id_open_num + '. Проверьте в окне другого оператора. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
@@ -1848,15 +1822,22 @@ var confirm_df = {
                     if (reserv.BWART !== "X01") {
                         OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2, BWART должен содержать X01)");
                     } else {
-                        confirm_df.input_sap_ozm.val(reserv.MATNR);
-                        confirm_df.input_sap_ozm_amount.val(reserv.BDMNG);
-                        confirm_df.input_sap_factory_recipient.val(reserv.WERKS);
-                        confirm_df.sap_ozm_amount_multiplier = ($.trim(reserv.MEINS) === "TO" ? 1000 : 1);
-                        $('#label-sap-ozm-amount').text('Количество ' + reserv.MEINS + ':');
-                        var depots = catalog_depots.get($.trim(reserv.UMLGO));
-                        if (depots) {
-                            confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                        if (Number($.trim(reserv.UMLGO)) !== confirm_df.card.House) {
+                            OnAJAXErrorOfMessage("Шифр цеха "+confirm_df.card.House+" RFID карты, не совпадает с шифром цеха "+reserv.UMLGO+" резервирования.");
+                        } else {
+                            //UMLGO = "163 "
+                            confirm_df.input_sap_num.val(reserv.RSNUM);
+                            confirm_df.input_sap_ozm.val(reserv.MATNR);
+                            confirm_df.input_sap_ozm_amount.val(reserv.BDMNG);
+                            confirm_df.input_sap_factory_recipient.val(reserv.WERKS);
+                            confirm_df.sap_ozm_amount_multiplier = ($.trim(reserv.MEINS) === "TO" ? 1000 : 1);
+                            $('#label-sap-ozm-amount').text('Количество ' + reserv.MEINS + ':');
+                            var depots = catalog_depots.get($.trim(reserv.UMLGO));
+                            if (depots) {
+                                confirm_df.input_sap_stock_recipient.val('(' + depots.id + ') ' + depots.name);
+                            }
                         }
+
                     }
                 } else {
                     OnAJAXErrorOfMessage("По указанной позиции нет данных");
@@ -2212,7 +2193,7 @@ var confirm_df = {
                         ', [Number]=' + confirm_df.card.Number +
                         ', ЛИМИТ ГСМ ([VolumePlan] = ' + (result_plan.length > 0 ? result_plan[0].VolumePlan : null) + ', [VolumeFact]=' + (result_plan.length > 0 ? result_plan[0].VolumeFact : null) + ', [id]=' + (result_plan.length > 0 ? result_plan[0].id : null) + ')');
                     confirm_df.plan = result_plan;
-                    $('th#label-dose').text(result_plan.length > 0 ? "Доза (л), лимит <=[" + result_plan[0].VolumePlan + "] :" : "Доза (л) :");
+                    $('th#label-dose').text(result_plan.length > 0 ? "Доза (л), лимит <=[" + result_plan[0].VolumePlan + "] :" : "Доза (л), лимит не устан. :");
                 });
         }
         // Вывести информацию по карте
@@ -2353,11 +2334,11 @@ var confirm_df = {
                 $('button#button-sap').hide();
                 $('button#button-sap-debitor').hide();
                 $('button#button-sap-ndopusk').show();
-                $('tr#sap-num').show(); $('#label-sap-num').text('*Номер наряд-допуска(резервирования):');
-                $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('*Номер позиции :');
-                $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('*Номер ТС фактический :');
-                $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('*№ КПП :');
-                $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('*ФИО экспедитора :');
+                $('tr#sap-num').show(); $('#label-sap-num').text('*Номер супер – маршрута:');
+                $('tr#sap-num-pos').show(); confirm_df.input_sap_num_pos.show(); $('#label-sap-num-pos').text('Номер позиции :');
+                $('tr#sap-num-ts').show(); $('#label-sap-num-ts').text('Номер ТС фактический :');
+                $('tr#sap-num-kpp').show(); $('#label-sap-num-kpp').text('№ КПП :');
+                $('tr#sap-name-forwarder').show(); $('#label-sap-name-forwarder').text('ФИО экспедитора :');
                 $('tr#sap-ozm').show(); confirm_df.input_sap_ozm.attr('disabled', 'disabled').show(); $('#label-sap-ozm').text('ОЗМ из резервирования :');
                 $('tr#sap-ozm-bak').show(); $('#label-sap-ozm-bak').text('ОЗМ согласно бака :');
                 $('tr#sap-ozm-amount').show(); $('#label-sap-ozm-amount').text('Количество :');
