@@ -1822,7 +1822,7 @@ var confirm_df = {
                     if (reserv.BWART !== "X01") {
                         OnAJAXErrorOfMessage("Вид движения BWART =" + result.BWART + " (В режиме 2, BWART должен содержать X01)");
                     } else {
-                        if (Number($.trim(reserv.UMLGO)) !== confirm_df.card.House) {
+                        if (Number($.trim(reserv.UMLGO)) !== 435 && Number($.trim(reserv.UMLGO)) !== confirm_df.card.House) {
                             OnAJAXErrorOfMessage("Шифр цеха "+confirm_df.card.House+" RFID карты, не совпадает с шифром цеха "+reserv.UMLGO+" резервирования.");
                         } else {
                             //UMLGO = "163 "
