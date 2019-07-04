@@ -336,7 +336,7 @@
                     this.obj.row.add({
                         "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
-                        "level": (data[i].level !== null ? data[i].level : null),
+                        "level": (data[i].level !== null ? Number(data[i].level/1000).toFixed(3) : null),
                         "volume": (data[i].volume !== null ? data[i].volume : null),
                         "dens": (data[i].dens !== null ? data[i].dens.toFixed(5) : null),
                         "mass": (data[i].mass !== null ? data[i].mass.toFixed(2) : null)
