@@ -1385,54 +1385,62 @@ var confirm_df = {
             },
             buttons: {
                 'Начать выдачу': function () {
+                    // Проверка на активный пистолет или НС
                     LockScreen('Подождите... идет проверка введенных данных');
                     logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Начать выдачу» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                    // Проверим по указаному номеру пистолета\НС уже идет выдача?
-                    getAsyncOpenFuelSaleOfNum(confirm_df.open_num,
-                        function (id_open_num) {
-                            LockScreenOff();
-                            if (id_open_num === null || id_open_num === 0) {
-                                var variant = confirm_df.select_variant.val();
-                                // Определим режим пролив
-                                if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
-                                    variant = "7";
-                                }
-                                if (variant === "1" || variant === "2" || variant === "5") {
-                                    var valid = confirm_df.validationConfirm(variant);
-                                    // Проверим на требование
-                                    var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
-                                    var mass_treb = confirm_df.input_sap_ozm_amount.val() !== null && confirm_df.input_sap_ozm_amount.val() !== "" ? Number((Number(confirm_df.input_sap_ozm_amount.val()) * confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
-                                    var pos = variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : confirm_df.input_sap_num_pos.val();
-                                    var num_treb = confirm_df.input_sap_num.val();
-                                    getAsyncCurrentIssueFuelOfNumPos(num_treb, pos,
-                                        function (current) {
-                                            if (current === null) {
-                                                // Выдачи по этому требованию и номеру позиции нет
-                                                confirm_df.StartIssueFuel(variant);
-                                            } else {
-                                                // Есть выдача, по указаному требванию и номеру позиции
-                                                var ost = mass_treb - current; // Остаток
-                                                if (mass_input <= ost) {
-                                                    // Масса затребованая меньше или ровна остатку
+                    if (confirm_df.open_num !== null) {
+                        // Проверим по указаному номеру пистолета\НС уже идет выдача?
+                        getAsyncOpenFuelSaleOfNum(confirm_df.open_num,
+                            function (id_open_num) {
+                                LockScreenOff();
+                                if (id_open_num === null || id_open_num === 0) {
+                                    var variant = confirm_df.select_variant.val();
+                                    // Определим режим пролив
+                                    if (variant === "-1" && confirm_df.checkbox_deliver_Passage.prop('checked')) {
+                                        variant = "7";
+                                    }
+                                    if (variant === "1" || variant === "2" || variant === "5") {
+                                        var valid = confirm_df.validationConfirm(variant);
+                                        // Проверим на требование
+                                        var mass_input = confirm_df.input_deliver_mase_fuel.val() !== null && confirm_df.input_deliver_mase_fuel.val() !== "" ? Number(confirm_df.input_deliver_mase_fuel.val()) : 0;
+                                        var mass_treb = confirm_df.input_sap_ozm_amount.val() !== null && confirm_df.input_sap_ozm_amount.val() !== "" ? Number((Number(confirm_df.input_sap_ozm_amount.val()) * confirm_df.sap_ozm_amount_multiplier).toFixed(2)) : 0;
+                                        var pos = variant === "2" ? confirm_df.select_sap_num_pos_reserv.val() : confirm_df.input_sap_num_pos.val();
+                                        var num_treb = confirm_df.input_sap_num.val();
+                                        getAsyncCurrentIssueFuelOfNumPos(num_treb, pos,
+                                            function (current) {
+                                                if (current === null) {
+                                                    // Выдачи по этому требованию и номеру позиции нет
                                                     confirm_df.StartIssueFuel(variant);
                                                 } else {
-                                                    confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Найдена не закрытая выдача по требованию №" + num_treb + ", позиции № " + pos + ", ожидаемая выдача ГСМ = " + current + " кг. Текущий остаток ГСМ = " + mass_treb + ", остаток с учетом ожидаемой выдачи = " + ost + " кг. < затребованого ГСМ = " + mass_input + " кг. Произведите выдачу по другой ведомости или позиции или дождитесь закрытия текущей выдачи и обновления остатков в САП.");
+                                                    // Есть выдача, по указаному требванию и номеру позиции
+                                                    var ost = mass_treb - current; // Остаток
+                                                    if (mass_input <= ost) {
+                                                        // Масса затребованая меньше или ровна остатку
+                                                        confirm_df.StartIssueFuel(variant);
+                                                    } else {
+                                                        confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Найдена не закрытая выдача по требованию №" + num_treb + ", позиции № " + pos + ", ожидаемая выдача ГСМ = " + current + " кг. Текущий остаток ГСМ = " + mass_treb + ", остаток с учетом ожидаемой выдачи = " + ost + " кг. < затребованого ГСМ = " + mass_input + " кг. Произведите выдачу по другой ведомости или позиции или дождитесь закрытия текущей выдачи и обновления остатков в САП.");
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
 
+                                    } else {
+                                        // Выдадим
+                                        confirm_df.StartIssueFuel(variant);
+                                    }
                                 } else {
-                                    // Выдадим
-                                    confirm_df.StartIssueFuel(variant);
+                                    LockScreenOff();
+                                    logWarn(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Отмена «Начать выдачу», закройте предыдущую выдачу [id_open_num]=' + id_open_num + '. Проверьте в окне другого оператора. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
+                                    confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу=" + id_open_num + ". Проверьте в окне другого оператора");
                                 }
-                            } else {
-                                LockScreenOff();
-                                logWarn(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Отмена «Начать выдачу», закройте предыдущую выдачу [id_open_num]=' + id_open_num + '. Проверьте в окне другого оператора. (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
-                                confirm_df.updateTips("ВЫДАЧА ЗАПРЕЩЕНА. Закройте предыдущую выдачу=" + id_open_num + ". Проверьте в окне другого оператора");
-                            }
-                        });
+                            });
+                    } else {
+                        logWarn(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> ОТМЕНА - выполнения «Начать выдачу» - номер пистолета(НС) не определен (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ') ');
+                        LockScreenOff();
+                    }
+
                 },
                 'Отмена': function () {
+                    logInfo(catalog_user.name_log, 'Окно «Настроить выдачу ГСМ» -> Нажата кнопка «Отмена» (тип = ' + confirm_df.type + ', № пистолета(НС) = ' + confirm_df.open_num + ')');
                     $(this).dialog("close");
                 }
             }
