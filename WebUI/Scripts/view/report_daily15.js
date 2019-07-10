@@ -28,25 +28,6 @@
 
             }
         },
-        //// Загрузка библиотек
-        //loadReference = function (callback) {
-        //    LockScreen('Загрузка справочников...');
-        //    var count = 1;
-        //    // Загрузка списка карточек (common.js)
-        //    getReference_azsCards(function (result) {
-        //        reference_cards = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    })
-        //},
-        //// список карточек
-        //reference_cards = null,
-        // Панель таблицы
         panel_select_report = {
             html_div_panel: $('#table-panel'),
             date_start: new Date(new Date().getFullYear(), new Date().getMonth(), 1, 0, 0, 0),
@@ -234,9 +215,9 @@
                         { data: "mass_consumption", title: "Расход  (кг)", width: "50px", orderable: true, searchable: true },
                         { data: "dens_consumption", title: "Расход плотность (кг)", width: "50px", orderable: true, searchable: true },
                         { data: "temp_consumption", title: "Расход темп.", width: "50px", orderable: true, searchable: true },
-                        { data: "volume_consumption", title: "Расход привед. к 15 град. (л)", width: "50px", orderable: true, searchable: true },
-                        { data: "mass_consumption", title: "Расход привед. к 15 град. (кг)", width: "50px", orderable: true, searchable: true },
-                        { data: "dens_consumption", title: "Расход плотность привед. к 15 град. (кг)", width: "50px", orderable: true, searchable: true },
+                        { data: "volume15_consumption", title: "Расход привед. к 15 град. (л)", width: "50px", orderable: true, searchable: true },
+                        { data: "mass15_consumption", title: "Расход привед. к 15 град. (кг)", width: "50px", orderable: true, searchable: true },
+                        { data: "dens15_consumption", title: "Расход плотность привед. к 15 град. (кг)", width: "50px", orderable: true, searchable: true },
 
                         { data: "volume_stop", title: "Остаток на конец суток(л)", width: "50px", orderable: true, searchable: true },
                         { data: "mass_stop", title: "Остаток на конец суток (кг)", width: "50px", orderable: true, searchable: true },
