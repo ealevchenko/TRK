@@ -190,5 +190,19 @@ namespace EFAZS.Concrete
             }
         }
 
+        public int AddDailyReportDC() {
+            try
+            {
+                string sql = "EXEC [dbo].[ADD_Daily_Report_DC]";
+                int res = this.db.Database.ExecuteSqlCommand(sql);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода AddDailyReportDC()").SaveError(e);
+                return -2;
+            }
+        }
+
     }
 }

@@ -166,18 +166,21 @@ namespace ReportTRKServices
                 int m = dt.Minute;
                 if (h == 1 && (m>=5 && m<=6) && !time_daily) {
                     String.Format("Сервис ReportTRKServices - сработал таймер на 0 часов").SaveInformation();
-                    
-                    int res = efdl.AddDailyReport();
-                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport - Код выполнения:{0}", res);
-                    log_mes.SaveInformation();
-                    trk_log.AddTRKLogs(new TRKLogs()
-                    {
-                        ID = 0,
-                        DateTime = DateTime.Now,
-                        Level = 4,
-                        UserName = "ReportTRKServeces",
-                        Log = log_mes
-                    });
+
+                    int res = 0;
+                    // Суточный
+                    //res = efdl.AddDailyReport();
+                    //log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport - Код выполнения:{0}", res);
+                    //log_mes.SaveInformation();
+                    //trk_log.AddTRKLogs(new TRKLogs()
+                    //{
+                    //    ID = 0,
+                    //    DateTime = DateTime.Now,
+                    //    Level = 4,
+                    //    UserName = "ReportTRKServeces",
+                    //    Log = log_mes
+                    //});
+                    // Суточный с пересчетом к 15 градусам
                     res = efdl.AddDailyReport15();
                     log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport15 - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
@@ -189,6 +192,19 @@ namespace ReportTRKServices
                         UserName = "ReportTRKServeces",
                         Log = log_mes
                     });
+                    // Суточный с переносом в ЦОД
+                    res = efdl.AddDailyReportDC();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReportDC (Перенос данных в ЦОД) - Код выполнения:{0}", res);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
+
                     time_daily = true;
                 }
                 if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day) {
