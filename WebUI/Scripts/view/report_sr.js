@@ -146,6 +146,7 @@
                         panel_select_report.viewTable();
                         $('input#date-start').val('');
                         $('input#date-stop').val('');
+                        panel_select_report.select_sm.selectmenu("enable");
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
@@ -158,7 +159,7 @@
                         separator: '-',
                         autoClose: false,
                         time: {
-                            enabled: false
+                            enabled: true
                         },
                         setValue: function (s, s1, s2) {
                             $('input#date-start').val(s1);
@@ -174,6 +175,7 @@
                     .bind('datepicker-closed', function () {
                         tab_type_reports.activeTable(tab_type_reports.active, true);
                         $('input#date').val('');
+                        panel_select_report.select_sm.selectmenu("disable");
                     });
 
                 //this.obj_date1.data('dateRangePicker').setDateRange(

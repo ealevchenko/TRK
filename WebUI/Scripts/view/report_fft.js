@@ -60,6 +60,10 @@
             span: $('<span id="select-range"></span>'),
             input_date: $('<input id="date" name="date" size="20">'),
             select_sm: $('<select class="ui-widget-content ui-corner-all"></select>'),
+            label1: $('<label for="date" ></label>'),
+            span1: $('<span id="select-range"></span>'),
+            input_data_start: $('<input id="date-start" name="date-start" size="20">'),
+            input_data_stop: $('<input id="date-stop" name="date-stop" size="20">'),
             initObject: function () {
                 this.span.append(this.input_date);
                 obj = this.html_div_panel;
@@ -69,16 +73,18 @@
                     .append(this.span)
                     //.append(this.bt_right)
                     .append(this.select_sm)
-                    .append(this.bt_refresh);
+                    .append(this.label1.text("или выберите период"))
+                    .append(this.span1.append(this.input_data_start).append(' - ').append(this.input_data_stop));
+                    //.append(this.bt_refresh);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
                 //this.bt_right.attr('title',langView('bt_right_title', langs));
-                this.bt_refresh.attr('title', "Обновить отчет");
-                this.bt_refresh.text("Показать отчет");
+                //this.bt_refresh.attr('title', "Обновить отчет");
+                //this.bt_refresh.text("Показать отчет");
 
-                this.bt_refresh.on('click', function () {
-                    panel_select_report.viewReport();
-                });
+                //this.bt_refresh.on('click', function () {
+                //    panel_select_report.viewReport();
+                //});
 
                 // Настроим выбор времени
                 initSelect(
@@ -108,10 +114,37 @@
                     })
                     .bind('datepicker-closed', function () {
                         panel_select_report.viewReport();
+                        $('input#date-start').val('');
+                        $('input#date-stop').val('');
+                        panel_select_report.select_sm.selectmenu("enable");
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+                // настроим компонент выбора времени
+                this.obj_date1 = this.span1.dateRangePicker(
+                    {
+                        language: 'ru',
+                        format: 'DD.MM.YYYY HH:mm',
+                        separator: '-',
+                        autoClose: false,
+                        time: {
+                            enabled: true
+                        },
+                        setValue: function (s, s1, s2) {
+                            $('input#date-start').val(s1);
+                            $('input#date-stop').val(s2);
+                        }
+                    }).
+                    bind('datepicker-change', function (evt, obj) {
+                        date_start = obj.date1;
+                        date_stop = obj.date2;
+                    })
+                    .bind('datepicker-closed', function () {
+                        tab_type_reports.activeTable(tab_type_reports.active, true);
+                        $('input#date').val('');
+                        panel_select_report.select_sm.selectmenu("disable");
+                    });
             },
             viewReport: function () {
                 if (panel_select_report.select_sm.val() === "2") {
