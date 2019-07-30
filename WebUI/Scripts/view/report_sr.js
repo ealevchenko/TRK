@@ -84,6 +84,7 @@
             html_div_panel: $('#table-panel'),
             obj: null,
             obj_date: null,
+            obj_date1: null,
             bt_left: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-w"></span>text</button>'),
             bt_right: $('<button class="ui-button ui-widget ui-corner-all ui-button-icon-only" ><span class="ui-icon ui-icon-circle-triangle-e"></span>text</button>'),
             bt_refresh: $('<button class="ui-button ui-widget ui-corner-all" ><span class="ui-icon ui-icon-refresh"></span>text</button>'),
@@ -91,6 +92,10 @@
             span: $('<span id="select-range"></span>'),
             input_date: $('<input id="date" name="date" size="20">'),
             select_sm: $('<select class="ui-widget-content ui-corner-all"></select>'),
+            label1: $('<label for="date" ></label>'),
+            span1: $('<span id="select-range"></span>'),
+            input_data_start: $('<input id="date-start" name="date-start" size="20">'),
+            input_data_stop: $('<input id="date-stop" name="date-stop" size="20">'),
             initObject: function () {
                 this.span.append(this.input_date);
                 obj = this.html_div_panel;
@@ -99,7 +104,9 @@
                     .append(this.label)
                     .append(this.span)
                     //.append(this.bt_right)
-                    .append(this.select_sm);
+                    .append(this.select_sm)
+                    .append(this.label1.text("или выберите период"))
+                    .append(this.span1.append(this.input_data_start).append(' - ').append(this.input_data_stop));
                 //.append(this.bt_refresh);
                 //this.bt_left.attr('title',(langView('bt_left_title', langs)));
                 this.label.text("Выберите дату");
@@ -137,11 +144,45 @@
                     })
                     .bind('datepicker-closed', function () {
                         panel_select_report.viewTable();
+                        $('input#date-start').val('');
+                        $('input#date-stop').val('');
                     });
                 // Выставим текущую дату
                 var date_curent_set = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 00:00';
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent_set, date_curent_set, true);
+                // настроим компонент выбора времени
+                this.obj_date1 = this.span1.dateRangePicker(
+                    {
+                        language: 'ru',
+                        format: 'DD.MM.YYYY HH:mm',
+                        separator: '-',
+                        autoClose: false,
+                        time: {
+                            enabled: false
+                        },
+                        setValue: function (s, s1, s2) {
+                            $('input#date-start').val(s1);
+                            $('input#date-stop').val(s2);
+                            //panel_select_report.period = s1 + '-' + s2;
+                        }
+                    }).
+                    bind('datepicker-change', function (evt, obj) {
+                        date_start = obj.date1;
+                        date_stop = obj.date2;
+                        //panel_select_report.period = obj.value;
+                    })
+                    .bind('datepicker-closed', function () {
+                        tab_type_reports.activeTable(tab_type_reports.active, true);
+                        $('input#date').val('');
+                    });
+
+                //this.obj_date1.data('dateRangePicker').setDateRange(
+                //    //(date_start.getDate() + '.' + (date_start.getMonth() + 1) + '.' + date_start.getFullYear() + ' ' + date_start.getHours() + ':' + date_start.getMinutes() + ':' + date_start.getSeconds()),
+                //    //(date_stop.getDate() + '.' + (date_stop.getMonth() + 1) + '.' + date_stop.getFullYear() + ' ' + date_stop.getHours() + ':' + date_stop.getMinutes() + ':' + date_stop.getSeconds())
+                //);
+
             },
+
             // вывести отчет
             viewTable: function () {
                 if (panel_select_report.select_sm.val() === "2") {
@@ -276,9 +317,9 @@
                                     return intVal(a) + intVal(b.change_valume);
                                 } else { return intVal(a); }
                             }, 0);
-                        $('td#start-valum').text((total_dt_start_valume + total_a92_start_valume + total_a95_start_valume + total_ns_start_valume).toFixed(2));
-                        $('td#stop-valume').text((total_dt_stop_valume + total_a92_stop_valume + total_a95_stop_valume + total_ns_stop_valume).toFixed(2));
-                        $('td#change-valume').text((total_dt_change_valume + total_a92_change_valume + total_a95_change_valume + total_ns_change_valume).toFixed(2));
+                        $('td#start-valum').text((total_dt_start_valume + total_a92_start_valume + total_a95_start_valume + total_ns_start_valume).toFixed(3));
+                        $('td#stop-valume').text((total_dt_stop_valume + total_a92_stop_valume + total_a95_stop_valume + total_ns_stop_valume).toFixed(3));
+                        $('td#change-valume').text((total_dt_change_valume + total_a92_change_valume + total_a95_change_valume + total_ns_change_valume).toFixed(3));
                     },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: false, searchable: false },
@@ -295,52 +336,68 @@
                         var api = this.api();
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
+                        var type = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
-                            if (last !== group) {
-                                var start_valume;
-                                var stop_valume;
-                                var change_valume;
-                                switch (group) {
-                                    case "ДТ - 107000024":
-                                        start_valume = total_dt_start_valume;
-                                        stop_valume = total_dt_stop_valume;
-                                        change_valume = total_dt_change_valume;
-                                        break;
-                                    case "А92 - 107000022":
-                                        start_valume = total_a92_start_valume;
-                                        stop_valume = total_a92_stop_valume
-                                        change_valume = total_a92_change_valume
-                                        break;
-                                    case "А95 - 107000023":
-                                        start_valume = total_a95_start_valume;
-                                        stop_valume = total_a95_stop_valume;
-                                        change_valume = total_a95_change_valume;
-                                        break;
-                                    case "Наливные стояки":
-                                        start_valume = total_ns_start_valume;
-                                        stop_valume = total_ns_stop_valume;
-                                        change_valume = total_ns_change_valume;
-                                        break;
-                                }
+                            var start_valume;
+                            var stop_valume;
+                            var change_valume;
+                            switch (type) {
+                                case "ДТ - 107000024":
+                                    start_valume = total_dt_start_valume;
+                                    stop_valume = total_dt_stop_valume;
+                                    change_valume = total_dt_change_valume;
+                                    break;
+                                case "А92 - 107000022":
+                                    start_valume = total_a92_start_valume;
+                                    stop_valume = total_a92_stop_valume
+                                    change_valume = total_a92_change_valume
+                                    break;
+                                case "А95 - 107000023":
+                                    start_valume = total_a95_start_valume;
+                                    stop_valume = total_a95_stop_valume;
+                                    change_valume = total_a95_change_valume;
+                                    break;
+                                case "Наливные стояки":
+                                    start_valume = total_ns_start_valume;
+                                    stop_valume = total_ns_stop_valume;
+                                    change_valume = total_ns_change_valume;
+                                    break;
+                            }
 
+                            if (last !== group) {
+
+                                if (type !== null) {
+                                    $(rows).eq(i).before(
+                                        '<tr class="group"><td colspan="1">' + type + ' Итого:</td><td>' + start_valume.toFixed(3) + '</td><td>' + stop_valume.toFixed(3) + '</td><td>' + change_valume.toFixed(3) + '</td></tr>'
+                                    );
+                                }
+                                type = group;
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="1">' + group + '</td><td>' + start_valume.toFixed(2) + '</td><td>' + stop_valume.toFixed(2) + '</td><td>' + change_valume.toFixed(2) + '</td></tr>'
+                                    '<tr class="group1"><td colspan="1">' + group + '</td><td></td><td></td><td></td></tr>'
                                 );
                                 last = group;
                             }
+                            if (i === (rows.length - 1)) {
+                                start_valume = total_ns_start_valume;
+                                stop_valume = total_ns_stop_valume;
+                                change_valume = total_ns_change_valume;
+                                    $(rows).eq(i).after(
+                                        '<tr class="group"><td colspan="1">' + type + ' Итого:</td><td>' + start_valume.toFixed(3) + '</td><td>' + stop_valume.toFixed(3) + '</td><td>' + change_valume.toFixed(3) + '</td></tr>'
+                                    );
+                                }
                         });
                     },
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                       {
-                           extend: 'pdfHtml5',
-                           text: 'PDF',
-                           customize: function (doc) {
-                               doc.content[0].text = 'Сменный отчет ТРК-пистолеты(АС) (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                           }
-                       }
+                       //{
+                       //    extend: 'pdfHtml5',
+                       //    text: 'PDF',
+                       //    customize: function (doc) {
+                       //        doc.content[0].text = 'Сменный отчет ТРК-пистолеты(АС) (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                       //    }
+                       //}
                     ]
                 });
                 //table_report.groupTable();
@@ -371,9 +428,9 @@
                     this.obj.row.add({
                         "type": data[i].type !== 1 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "num": data[i].num,
-                        "start_valume": data[i].type !== 1 ? (data[i].start_valume !== null ? (data[i].start_valume / 100).toFixed(2) : null) : data[i].start_valume !== null ? data[i].start_valume.toFixed(2) : null,
-                        "stop_valume": data[i].type !== 1 ? (data[i].stop_valume !== null ? (data[i].stop_valume / 100).toFixed(2) : null) : data[i].stop_valume != null ? data[i].stop_valume.toFixed(2) : null,
-                        "change_valume": data[i].type !== 1 ? (data[i].start_valume !== null || data[i].stop_valume !== null ? ((data[i].stop_valume - data[i].start_valume) / 100).toFixed(2) : null) : (data[i].start_valume !== null || data[i].stop_valume !== null ? (data[i].stop_valume - data[i].start_valume).toFixed(2) : null)
+                        "start_valume": data[i].type !== 1 ? (data[i].start_valume !== null ? (data[i].start_valume / 100).toFixed(3) : null) : data[i].start_valume !== null ? data[i].start_valume.toFixed(3) : null,
+                        "stop_valume": data[i].type !== 1 ? (data[i].stop_valume !== null ? (data[i].stop_valume / 100).toFixed(3) : null) : data[i].stop_valume != null ? data[i].stop_valume.toFixed(3) : null,
+                        "change_valume": data[i].type !== 1 ? (data[i].start_valume !== null || data[i].stop_valume !== null ? ((data[i].stop_valume - data[i].start_valume) / 100).toFixed(3) : null) : (data[i].start_valume !== null || data[i].stop_valume !== null ? (data[i].stop_valume - data[i].start_valume).toFixed(3) : null)
                     });
                 }
                 LockScreenOff();
@@ -646,11 +703,11 @@
                                 } else { return intVal(a); }
                             }, 0);
                         $('td#start-mass-tank').text((total_tank_dt_start_mass + total_tank_a92_start_mass + total_tank_a95_start_mass + total_tank_kerosin_start_mass + total_tank_konfiskat_start_mass).toFixed(2));
-                        $('td#start-volume-tank').text((total_tank_dt_start_valume + total_tank_a92_start_valume + total_tank_a95_start_valume + total_tank_kerosin_start_valume + total_tank_konfiskat_start_valume).toFixed(2));
+                        $('td#start-volume-tank').text((total_tank_dt_start_valume + total_tank_a92_start_valume + total_tank_a95_start_valume + total_tank_kerosin_start_valume + total_tank_konfiskat_start_valume).toFixed(3));
                         $('td#stop-mass-tank').text((total_tank_dt_stop_mass + total_tank_a92_stop_mass + total_tank_a95_stop_mass + total_tank_kerosin_stop_mass + total_tank_konfiskat_stop_mass).toFixed(2));
-                        $('td#stop-volume-tank').text((total_tank_dt_stop_valume + total_tank_a92_stop_valume + total_tank_a95_stop_valume + total_tank_kerosin_stop_valume + total_tank_konfiskat_stop_valume).toFixed(2));
+                        $('td#stop-volume-tank').text((total_tank_dt_stop_valume + total_tank_a92_stop_valume + total_tank_a95_stop_valume + total_tank_kerosin_stop_valume + total_tank_konfiskat_stop_valume).toFixed(3));
                         $('td#change-mass-tank').text((total_tank_dt_change_mass + total_tank_a92_change_mass + total_tank_a95_change_mass + total_tank_kerosin_change_mass + total_tank_konfiskat_change_mass).toFixed(2));
-                        $('td#change-volume-tank').text((total_tank_dt_change_valume + total_tank_a92_change_valume + total_tank_a95_change_valume + total_tank_kerosin_change_valume + total_tank_konfiskat_change_valume).toFixed(2));
+                        $('td#change-volume-tank').text((total_tank_dt_change_valume + total_tank_a92_change_valume + total_tank_a95_change_valume + total_tank_kerosin_change_valume + total_tank_konfiskat_change_valume).toFixed(3));
                     },
                     columns: [
                         { data: "type", title: "Тип ГСМ", width: "50px", orderable: false, searchable: false },
@@ -670,63 +727,78 @@
                         var api = this.api();
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
+                        var type = null;
                         api.column(table_report_fft.groupColumn, { page: 'current' }).data().each(function (group, i) {
+                            var start_valume;
+                            var start_mass;
+                            var stop_valume;
+                            var stop_mass;
+                            var change_valume;
+                            var change_mass;
+                            switch (type) {
+                                case "ДТ - 107000024":
+                                    start_valume = total_tank_dt_start_valume;
+                                    stop_valume = total_tank_dt_stop_valume;
+                                    change_valume = total_tank_dt_change_valume;
+                                    start_mass = total_tank_dt_start_mass;
+                                    stop_mass = total_tank_dt_stop_mass;
+                                    change_mass = total_tank_dt_change_mass;
+                                    break;
+                                case "А92 - 107000022":
+                                    start_valume = total_tank_a92_start_valume;
+                                    stop_valume = total_tank_a92_stop_valume
+                                    change_valume = total_tank_a92_change_valume
+                                    start_mass = total_tank_a92_start_mass;
+                                    stop_mass = total_tank_a92_stop_mass;
+                                    change_mass = total_tank_a92_change_mass;
+                                    break;
+                                case "А95 - 107000023":
+                                    start_valume = total_tank_a95_start_valume;
+                                    stop_valume = total_tank_a95_stop_valume;
+                                    change_valume = total_tank_a95_change_valume;
+                                    start_mass = total_tank_a95_start_mass;
+                                    stop_mass = total_tank_a95_stop_mass;
+                                    change_mass = total_tank_a95_change_mass;
+                                    break;
+                                case "Керосин - 107000027":
+                                    start_valume = total_tank_kerosin_start_valume;
+                                    stop_valume = total_tank_kerosin_stop_valume;
+                                    change_valume = total_tank_kerosin_change_valume;
+                                    start_mass = total_tank_kerosin_start_mass;
+                                    stop_mass = total_tank_kerosin_stop_mass;
+                                    change_mass = total_tank_kerosin_change_mass;
+                                    break;
+                                case "Конфискат":
+                                    start_valume = total_tank_konfiskat_start_valume;
+                                    stop_valume = total_tank_konfiskat_stop_valume;
+                                    change_valume = total_tank_konfiskat_change_valume;
+                                    start_mass = total_tank_konfiskat_start_mass;
+                                    stop_mass = total_tank_konfiskat_stop_mass;
+                                    change_mass = total_tank_konfiskat_change_mass;
+                                    break;
+                            }
                             if (last !== group) {
-
-                                var start_valume;
-                                var start_mass;
-                                var stop_valume;
-                                var stop_mass;
-                                var change_valume;
-                                var change_mass;
-                                switch (group) {
-                                    case "ДТ - 107000024":
-                                        start_valume = total_tank_dt_start_valume;
-                                        stop_valume = total_tank_dt_stop_valume;
-                                        change_valume = total_tank_dt_change_valume;
-                                        start_mass = total_tank_dt_start_mass;
-                                        stop_mass = total_tank_dt_stop_mass;
-                                        change_mass = total_tank_dt_change_mass;
-                                        break;
-                                    case "А92 - 107000022":
-                                        start_valume = total_tank_a92_start_valume;
-                                        stop_valume = total_tank_a92_stop_valume
-                                        change_valume = total_tank_a92_change_valume
-                                        start_mass = total_tank_a92_start_mass;
-                                        stop_mass = total_tank_a92_stop_mass;
-                                        change_mass = total_tank_a92_change_mass;
-                                        break;
-                                    case "А95 - 107000023":
-                                        start_valume = total_tank_a95_start_valume;
-                                        stop_valume = total_tank_a95_stop_valume;
-                                        change_valume = total_tank_a95_change_valume;
-                                        start_mass = total_tank_a95_start_mass;
-                                        stop_mass = total_tank_a95_stop_mass;
-                                        change_mass = total_tank_a95_change_mass;
-                                        break;
-                                    case "Керосин - 107000027":
-                                        start_valume = total_tank_kerosin_start_valume;
-                                        stop_valume = total_tank_kerosin_stop_valume;
-                                        change_valume = total_tank_kerosin_change_valume;
-                                        start_mass = total_tank_kerosin_start_mass;
-                                        stop_mass = total_tank_kerosin_stop_mass;
-                                        change_mass = total_tank_kerosin_change_mass;
-                                        break;
-                                    case "Конфискат":
-                                        start_valume = total_tank_konfiskat_start_valume;
-                                        stop_valume = total_tank_konfiskat_stop_valume;
-                                        change_valume = total_tank_konfiskat_change_valume;
-                                        start_mass = total_tank_konfiskat_start_mass;
-                                        stop_mass = total_tank_konfiskat_stop_mass;
-                                        change_mass = total_tank_konfiskat_change_mass;
-                                        break;
-
+                                if (type !== null) {
+                                    $(rows).eq(i).before(
+                                        '<tr class="group"><td colspan="1">' + type + ' Итого:</td><td>' + start_mass.toFixed(2) + '</td><td>' + start_valume.toFixed(3) + '</td><td>' + stop_mass.toFixed(2) + '</td><td>' + stop_valume.toFixed(2) + '</td><td>' + change_mass.toFixed(2) + '</td><td>' + change_valume.toFixed(2) + '</td></tr>'
+                                    );
                                 }
-
+                                type = group;
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="1">' + group + '</td><td>' + start_mass.toFixed(2) + '</td><td>' + start_valume.toFixed(2) + '</td><td>' + stop_mass.toFixed(2) + '</td><td>' + stop_valume.toFixed(2) + '</td><td>' + change_mass.toFixed(2) + '</td><td>' + change_valume.toFixed(2) + '</td></tr>'
+                                    '<tr class="group1"><td colspan="1">' + group + '</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
                                 );
                                 last = group;
+                            }
+                            if (i === (rows.length - 1)) {
+                                start_valume = total_tank_konfiskat_start_valume;
+                                stop_valume = total_tank_konfiskat_stop_valume;
+                                change_valume = total_tank_konfiskat_change_valume;
+                                start_mass = total_tank_konfiskat_start_mass;
+                                stop_mass = total_tank_konfiskat_stop_mass;
+                                change_mass = total_tank_konfiskat_change_mass;
+                                $(rows).eq(i).after(
+                                    '<tr class="group"><td colspan="1">' + type + ' Итого:</td><td>' + start_mass.toFixed(2) + '</td><td>' + start_valume.toFixed(3) + '</td><td>' + stop_mass.toFixed(2) + '</td><td>' + stop_valume.toFixed(2) + '</td><td>' + change_mass.toFixed(2) + '</td><td>' + change_valume.toFixed(2) + '</td></tr>'
+                                );
                             }
                         });
                     },
@@ -734,13 +806,13 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            customize: function (doc) {
-                                doc.content[0].text = 'Сменный отчет емкостя (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                            }
-                        }
+                        //{
+                        //    extend: 'pdfHtml5',
+                        //    text: 'PDF',
+                        //    customize: function (doc) {
+                        //        doc.content[0].text = 'Сменный отчет емкостя (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                        //    }
+                        //}
                     ]
                 });
                 //table_report_fft.groupTable();
@@ -772,11 +844,11 @@
                         "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
                         "mass_start": (data[i].mass_start !== null ? data[i].mass_start.toFixed(2) : null),
-                        "volume_start": (data[i].volume_start !== null ? data[i].volume_start.toFixed(2) : null),
+                        "volume_start": (data[i].volume_start !== null ? data[i].volume_start.toFixed(3) : null),
                         "mass_stop": (data[i].mass_stop !== null ? data[i].mass_stop.toFixed(2) : null),
-                        "volume_stop": (data[i].volume_stop !== null ? data[i].volume_stop.toFixed(2) : null),
+                        "volume_stop": (data[i].volume_stop !== null ? data[i].volume_stop.toFixed(3) : null),
                         "change_mass": (data[i].mass_start !== null || data[i].mass_stop !== null ? (data[i].mass_stop - data[i].mass_start).toFixed(2) : null),
-                        "change_volume": (data[i].volume_start !== null || data[i].volume_stop !== null ? (data[i].volume_stop - data[i].volume_start).toFixed(2) : null)
+                        "change_volume": (data[i].volume_start !== null || data[i].volume_stop !== null ? (data[i].volume_stop - data[i].volume_start).toFixed(3) : null)
                     });
                 }
                 LockScreenOff();

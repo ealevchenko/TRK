@@ -98,6 +98,30 @@ tr.group, tr.group:hover {
     font-weight: bold;
 }
 
+#table-report tr.group1 {
+    color: White;
+    background: #4b589d;
+    font-weight: bold;
+}
+
+    #table-report tr.group1, #table-report tr.group1:hover {
+        color: White;
+        background: #0b23a7;
+        font-weight: bold;
+    }
+
+#table-report-fft tr.group1 {
+    color: White;
+    background: #4b589d;
+    font-weight: bold;
+}
+
+    #table-report-fft tr.group1, #table-report-fft tr.group1:hover {
+        color: White;
+        background: #0b23a7;
+        font-weight: bold;
+    }
+
 element.style {
 }
 

@@ -84,7 +84,32 @@
                 initSelect(
                     this.select_sm,
                     { width: 200 },
-                    [{ value: 1, text: "По стоянию на 07:00" }, { value: 2, text: "По состоянию на 19:00" }],
+                    [
+                        { value: 0, text: "По состоянию на 00:00" },
+                        { value: 1, text: "По состоянию на 01:00" },
+                        { value: 2, text: "По состоянию на 02:00" },
+                        { value: 3, text: "По состоянию на 03:00" },
+                        { value: 4, text: "По состоянию на 04:00" },
+                        { value: 5, text: "По состоянию на 05:00" },
+                        { value: 6, text: "По состоянию на 06:00" },
+                        { value: 7, text: "По состоянию на 07:00" },
+                        { value: 8, text: "По состоянию на 08:00" },
+                        { value: 9, text: "По состоянию на 09:00" },
+                        { value: 10, text: "По состоянию на 10:00" },
+                        { value: 11, text: "По состоянию на 11:00" },
+                        { value: 12, text: "По состоянию на 12:00" },
+                        { value: 13, text: "По состоянию на 13:00" },
+                        { value: 14, text: "По состоянию на 14:00" },
+                        { value: 15, text: "По состоянию на 15:00" },
+                        { value: 16, text: "По состоянию на 16:00" },
+                        { value: 17, text: "По состоянию на 17:00" },
+                        { value: 18, text: "По состоянию на 18:00" },
+                        { value: 19, text: "По состоянию на 19:00" },
+                        { value: 20, text: "По состоянию на 20:00" },
+                        { value: 21, text: "По состоянию на 21:00" },
+                        { value: 22, text: "По состоянию на 22:00" },
+                        { value: 23, text: "По состоянию на 23:00" }
+                        ],
                     null,
                     1,
                     function (event, ui) {
@@ -103,7 +128,7 @@
                         showShortcuts: false,
                         singleMonth: true,
                         time: {
-                            enabled: true
+                            enabled: false
                         }
                     }).
                     bind('datepicker-change', function (evt, obj) {
@@ -120,15 +145,21 @@
                 this.obj_date.data('dateRangePicker').setDateRange(date_curent, date_curent, true);
             },
             viewReport: function () {
-                if (panel_select_report.select_sm.val() === "2") {
-                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
-                    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+                //if (panel_select_report.select_sm.val() === "2") {
+                //    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
+                //    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
 
+                //}
+                //if (panel_select_report.select_sm.val() === "1") {
+                //    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
+                //    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
+                //}
+
+                if (panel_select_report.select_sm.val() >= 0 && panel_select_report.select_sm.val() <= 19) {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 0, 0);
+                    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 59, 59);
                 }
-                if (panel_select_report.select_sm.val() === "1") {
-                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
-                    //date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
-                }
+
                 this.obj_date.data('dateRangePicker').setDateRange(date_start, date_start, true);
                 tab_type_reports.activeTable(tab_type_reports.active, true);
             }
@@ -165,7 +196,7 @@
                             return typeof i === 'string' ?
                                 i.replace(/[\$,]/g, '') * 1 :
                                 typeof i === 'number' ?
-                                i : 0;
+                                    i : 0;
                         };
 
                         // Total volume start
@@ -242,7 +273,7 @@
                                 } else { return intVal(a); }
                             }, 0);
 
-                        $('td#total-volume-tank').text((total_tank_dt_volume + total_tank_a92_volume + total_tank_a95_volume + total_tank_kerosin_volume + total_tank_konfiskat_volume).toFixed(2));
+                        $('td#total-volume-tank').text((total_tank_dt_volume + total_tank_a92_volume + total_tank_a95_volume + total_tank_kerosin_volume + total_tank_konfiskat_volume).toFixed(3));
                         $('td#total-mass-tank').text((total_tank_dt_mass + total_tank_a92_mass + total_tank_a95_mass + total_tank_kerosin_mass + total_tank_konfiskat_mass).toFixed(2));
                     },
                     columns: [
@@ -260,38 +291,51 @@
                     "drawCallback": function (settings) {
                         var api = this.api();
                         var rows = api.rows({ page: 'current' }).nodes();
+                        var type = null;
                         var last = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
+                            var valume;
+                            var mass;
+                            switch (type) {
+                                case "ДТ - 107000024":
+                                    valume = total_tank_dt_volume;
+                                    mass = total_tank_dt_mass;
+                                    break;
+                                case "А92 - 107000022":
+                                    valume = total_tank_a92_volume;
+                                    mass = total_tank_a92_mass;
+                                    break;
+                                case "А95 - 107000023":
+                                    valume = total_tank_a95_volume;
+                                    mass = total_tank_a95_mass;
+                                    break;
+                                case "Керосин - 107000027":
+                                    valume = total_tank_kerosin_volume;
+                                    mass = total_tank_kerosin_mass;
+                                    break;
+                                case "Конфискат":
+                                    valume = total_tank_konfiskat_volume;
+                                    mass = total_tank_konfiskat_mass;
+                                    break;
+                            }
                             if (last !== group) {
-                                var valume;
-                                var mass;
-                                switch (group) {
-                                    case "ДТ - 107000024":
-                                        valume = total_tank_dt_volume;
-                                        mass = total_tank_dt_mass;
-                                        break;
-                                    case "А92 - 107000022":
-                                        valume = total_tank_a92_volume;
-                                        mass = total_tank_a92_mass;
-                                        break;
-                                    case "А95 - 107000023":
-                                        valume = total_tank_a95_volume;
-                                        mass = total_tank_a95_mass;
-                                        break;
-                                    case "Керосин - 107000027":
-                                        valume = total_tank_kerosin_volume;
-                                        mass = total_tank_kerosin_mass;
-                                        break;
-                                    case "Конфискат":
-                                        valume = total_tank_konfiskat_volume;
-                                        mass = total_tank_konfiskat_mass;
-                                        break;
+                                if (type !== null) {
+                                    $(rows).eq(i).before(
+                                        '<tr class="group"><td colspan="2">' + type + ' Итого:</td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
+                                    );
                                 }
-
+                                type = group;
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="1">' + group + '</td><td></td><td>' + valume.toFixed(2) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
+                                    '<tr class="group1"><td colspan="1">' + group + '</td><td></td><td></td><td></td><td></td></tr>'
                                 );
                                 last = group;
+                            }
+                            if (i === (rows.length - 1)) {
+                                valume = total_tank_konfiskat_volume;
+                                mass = total_tank_konfiskat_mass;
+                                $(rows).eq(i).after(
+                                    '<tr class="group"><td colspan="2">' + type + ' Итого:</td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
+                                );
                             }
                         });
                     },
@@ -299,16 +343,16 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                         {
-                             extend: 'pdfHtml5',
-                             text: 'PDF',
-                             customize: function (doc) {
-                                 doc.content[0].text = 'Остатки в емкостях АЗС на ' + toISOStringTZ(date_start);
-                             }
-                         }
+                        //{
+                        //    extend: 'pdfHtml5',
+                        //    text: 'PDF',
+                        //    customize: function (doc) {
+                        //        doc.content[0].text = 'Остатки в емкостях АЗС на ' + toISOStringTZ(date_start);
+                        //    }
+                        //}
                     ]
                 });
-                table_report.groupTable();
+                //table_report.groupTable();
             },
             // Показать таблицу с данными
             viewTable: function (data_refresh) {
@@ -336,8 +380,8 @@
                     this.obj.row.add({
                         "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
                         "tank": data[i].tank,
-                        "level": (data[i].level !== null ? Number(data[i].level/1000).toFixed(3) : null),
-                        "volume": (data[i].volume !== null ? data[i].volume : null),
+                        "level": (data[i].level !== null ? Number(data[i].level / 1000).toFixed(3) : null),
+                        "volume": (data[i].volume !== null ? data[i].volume.toFixed(3) : null),
                         "dens": (data[i].dens !== null ? data[i].dens.toFixed(5) : null),
                         "mass": (data[i].mass !== null ? data[i].mass.toFixed(2) : null)
                     });

@@ -258,18 +258,18 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            pageSize: 'LEGAL',
-                            orientation: 'landscape',
-                            customize: function (doc) {
-                                doc.content[0].text = 'Заправочная ведомость (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                                var tblBody = doc.content[1].table.body;
-                                tblBody[0][4].text = 'Тип ГСМ';
-                                tblBody[0][10].text = 'Тип Выдачи';
-                            }
-                        }
+                        //{
+                        //    extend: 'pdfHtml5',
+                        //    text: 'PDF',
+                        //    pageSize: 'LEGAL',
+                        //    orientation: 'landscape',
+                        //    customize: function (doc) {
+                        //        doc.content[0].text = 'Заправочная ведомость (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                        //        var tblBody = doc.content[1].table.body;
+                        //        tblBody[0][4].text = 'Тип ГСМ';
+                        //        tblBody[0][10].text = 'Тип Выдачи';
+                        //    }
+                        //}
                     ]
                     //buttons: [
                     //    {

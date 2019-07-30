@@ -289,12 +289,12 @@
                         var api = this.api();
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
+                        var type = null;
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
-                            if (last !== group) {
                                 var mass_start;
                                 var mass_stop;
                                 var mass_change;
-                                switch (group) {
+                            switch (type) {
                                     case "ДТ - 107000024":
                                         mass_start = total_tank_dt_start_mass;
                                         mass_stop = total_tank_dt_stop_mass;
@@ -321,10 +321,25 @@
                                         mass_change = total_tank_konfiskat_change_mass;
                                         break;
                                 }
+                            if (last !== group) {
+                                if (type !== null) {
+                                    $(rows).eq(i).before(
+                                        '<tr class="group"><td colspan="1">' + type + ' Итого:</td><td>' + mass_start.toFixed(2) + '</td><td>' + mass_stop.toFixed(2) + '</td><td>' + mass_change.toFixed(2) + '</td></tr>'
+                                    );
+                                }
+                                type = group;
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="1">' + group + '</td><td>' + mass_start.toFixed(2) + '</td><td>' + mass_stop.toFixed(2) + '</td><td>' + mass_change.toFixed(2) + '</td></tr>'
+                                    '<tr class="group1"><td colspan="1">' + group + '</td><td></td><td></td><td></td></tr>'
                                 );
                                 last = group;
+                            }
+                            if (i === (rows.length - 1)) {
+                                mass_start = total_tank_konfiskat_start_mass;
+                                mass_stop = total_tank_konfiskat_stop_mass;
+                                mass_change = total_tank_konfiskat_change_mass;
+                                $(rows).eq(i).after(
+                                    '<tr class="group"><td colspan="1">' + type + 'Итого:</td><td>' + mass_start.toFixed(2) + '</td><td>' + mass_stop.toFixed(2) + '</td><td>' + mass_change.toFixed(2) + '</td></tr>'
+                                );
                             }
                         });
                     },
@@ -332,13 +347,13 @@
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            customize: function (doc) {
-                                doc.content[0].text = 'Отчет по движению топлива в емкостях АЗС (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                            }
-                        }
+                        //{
+                        //    extend: 'pdfHtml5',
+                        //    text: 'PDF',
+                        //    customize: function (doc) {
+                        //        doc.content[0].text = 'Отчет по движению топлива в емкостях АЗС (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
+                        //    }
+                        //}
                     ]
                 });
                 //table_report.groupTable();
