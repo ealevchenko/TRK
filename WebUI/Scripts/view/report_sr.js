@@ -144,8 +144,8 @@
                     })
                     .bind('datepicker-closed', function () {
                         panel_select_report.viewTable();
-                        $('input#date-start').val('');
-                        $('input#date-stop').val('');
+                        //$('input#date-start').val('');
+                        //$('input#date-stop').val('');
                         panel_select_report.select_sm.selectmenu("enable");
                     });
                 // Выставим текущую дату
@@ -174,14 +174,12 @@
                     })
                     .bind('datepicker-closed', function () {
                         tab_type_reports.activeTable(tab_type_reports.active, true);
-                        $('input#date').val('');
+                        //$('input#date').val('');
                         panel_select_report.select_sm.selectmenu("disable");
                     });
-
+                //var date_curent_set1 = date_curent.getDate() + '.' + (date_curent.getMonth() + 1) + '.' + date_curent.getFullYear() + ' 23:59';
                 //this.obj_date1.data('dateRangePicker').setDateRange(
-                //    //(date_start.getDate() + '.' + (date_start.getMonth() + 1) + '.' + date_start.getFullYear() + ' ' + date_start.getHours() + ':' + date_start.getMinutes() + ':' + date_start.getSeconds()),
-                //    //(date_stop.getDate() + '.' + (date_stop.getMonth() + 1) + '.' + date_stop.getFullYear() + ' ' + date_stop.getHours() + ':' + date_stop.getMinutes() + ':' + date_stop.getSeconds())
-                //);
+                //    date_curent_set, date_curent_set1, true);
 
             },
 
@@ -190,11 +188,17 @@
                 if (panel_select_report.select_sm.val() === "2") {
                     date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
                     date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+
                 }
                 if (panel_select_report.select_sm.val() === "1") {
                     date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
                     date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
                 }
+
+                var date_curent_start = date_start.getDate() + '.' + (date_start.getMonth() + 1) + '.' + date_start.getFullYear() + ' ' + date_start.getHours() + ':' + date_start.getMinutes();
+                var date_curent_stop = date_stop.getDate() + '.' + (date_stop.getMonth() + 1) + '.' + date_stop.getFullYear() + ' ' + date_stop.getHours() + ':' + date_stop.getMinutes();
+                this.obj_date1.data('dateRangePicker').setDateRange(date_curent_start, date_curent_stop, true);
+
                 tab_type_reports.activeTable(tab_type_reports.active, true);
             }
         },

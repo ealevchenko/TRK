@@ -11,7 +11,7 @@
         public EFDbContext()
             : base("name=AZS")
         {
-
+            //Database.CommandTimeout = 300;
         }
 
         public virtual DbSet<Cat_Depots> Cat_Depots { get; set; }
