@@ -37,7 +37,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                return UsersActions.Where(c => c.Action == "LogON").OrderByDescending(a =>a.TimeStmp).FirstOrDefault();
+                return UsersActions.Where(c => c.Action == "LogON").OrderByDescending(a =>a.SessionID).FirstOrDefault();
             }
             catch (Exception e)
             {

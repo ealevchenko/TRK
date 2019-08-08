@@ -40,6 +40,8 @@
 
         public virtual DbSet<GunsCnts> GunsCnts { get; set; }
 
+        public virtual DbSet<TRK_Сounters> TRK_Сounters { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cat_Werks>()
