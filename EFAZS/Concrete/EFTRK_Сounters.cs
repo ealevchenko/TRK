@@ -10,7 +10,7 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFTRK_Сounters : IRepository<TRK_Сounters>
+    public class EFTRK_Сounters : IRepository<TRK_Counters>
     {
 
         private EFDbContext db;
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<TRK_Сounters> Get()
+        public IEnumerable<TRK_Counters> Get()
         {
             try
             {
-                return db.Select<TRK_Сounters>();
+                return db.Select<TRK_Counters>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public TRK_Сounters Get(int id)
+        public TRK_Counters Get(int id)
         {
             try
             {
-                return db.Select<TRK_Сounters>(id);
+                return db.Select<TRK_Counters>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(TRK_Сounters item)
+        public void Add(TRK_Counters item)
         {
             try
             {
-                db.Insert<TRK_Сounters>(item);
+                db.Insert<TRK_Counters>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(TRK_Сounters item)
+        public void Update(TRK_Counters item)
         {
             try
             {
-                db.Update<TRK_Сounters>(item);
+                db.Update<TRK_Counters>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(TRK_Сounters item)
+        public void AddOrUpdate(TRK_Counters item)
         {
             try
             {
-                TRK_Сounters dbEntry = db.TRK_Сounters.Find(item.ID);
+                TRK_Counters dbEntry = db.TRK_Counters.Find(item.ID);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                TRK_Сounters item = db.Delete<TRK_Сounters>(id);
+                TRK_Counters item = db.Delete<TRK_Counters>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public TRK_Сounters Refresh(TRK_Сounters item)
+        public TRK_Counters Refresh(TRK_Counters item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<TRK_Сounters>(item.ID);
+                return db.Select<TRK_Counters>(item.ID);
             }
             catch (Exception e)
             {

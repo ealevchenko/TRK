@@ -102,7 +102,7 @@
     <Compile Include="Entities\TRKLogs.cs" />
     <Compile Include="Entities\Daily_Report.cs" />
     <Compile Include="Entities\GunsCnts.cs" />
-    <Compile Include="Entities\TRK_Сounters.cs" />
+    <Compile Include="Entities\TRK_Counters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

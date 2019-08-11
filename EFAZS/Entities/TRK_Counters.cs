@@ -6,7 +6,7 @@ namespace EFAZS.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class TRK_Сounters
+    public partial class TRK_Counters
     {
         public int ID { get; set; }
 
@@ -104,11 +104,11 @@ namespace EFAZS.Entities
         [Column("9-1")]
         public int? C9_1 { get; set; }
 
-        public int? as1 { get; set; }
+        public long? as1 { get; set; }
 
-        public int? as2 { get; set; }
+        public long? as2 { get; set; }
 
-        public int? as3 { get; set; }
+        public long? as3 { get; set; }
 
         [StringLength(50)]
         public string note { get; set; }

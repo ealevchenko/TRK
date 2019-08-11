@@ -246,6 +246,8 @@ namespace WebUI.Controllers.api
                 int res = 0;
                 int res1 = 0;
                 List<ClientOPCTRK.Gun> guns = client.ReadTagOPCOfGun();
+                List<ClientOPCTRK.DIORisers> dios = client.ReadTagOPCOfDIORisers();
+
                 if (guns != null)
                 {
                     EFAZS.Concrete.EFUsersActions efua = new EFAZS.Concrete.EFUsersActions();
@@ -253,7 +255,7 @@ namespace WebUI.Controllers.api
                     if (user_action != null)
                     {
                         GunsCnts gc = new GunsCnts();
-                        TRK_Сounters counters = new TRK_Сounters()
+                        TRK_Counters counters = new TRK_Counters()
                         {
                             ID = 0,
                             Operator = user_action.UserName,
@@ -300,6 +302,19 @@ namespace WebUI.Controllers.api
                                 case 29: gc.C9_1 = (int?)g.total_volume; counters.C9_1 = (int?)g.total_volume; break;
                             }
                         }
+                        if (dios != null)
+                        {
+                            foreach (ClientOPCTRK.DIORisers dio in dios)
+                            {
+                                switch (dio.num)
+                                {
+                                    case 1: counters.as1 = (long?)dio.Counter; break;
+                                    case 2: counters.as2 = (long?)dio.Counter; break;
+                                    case 3: counters.as3 = (long?)dio.Counter; break;
+                                }
+                            }
+                        }
+
                         ef_gc.Add(gc);
                         res = ef_gc.Save();
 

@@ -41,7 +41,9 @@ namespace ReportTRKServices
 
 
         EFTRKLogs trk_log = new EFTRKLogs();
-
+        ClientTRK client = new ClientTRK();
+        EFGunsCnts ef_gc = new EFGunsCnts();
+        EFTRK_Сounters ef_trkc = new EFTRK_Сounters();
 
         [StructLayout(LayoutKind.Sequential)]
         public struct ServiceStatus
@@ -160,13 +162,10 @@ namespace ReportTRKServices
         {
             try
             {
-                ClientTRK client = new ClientTRK();
-                EFGunsCnts ef_gc = new EFGunsCnts();
-                EFTRK_Сounters ef_trkc = new EFTRK_Сounters();
-
                 int res = 0;
                 int res1 = 0;
-                List<ClientOPCTRK.Gun> guns = client.ReadTagOPCOfGun();
+                List<Gun> guns = client.ReadTagOPCOfGun();
+                List<DIORisers> dios = client.ReadTagOPCOfDIORisers();
                 if (guns != null)
                 {
                     EFUsersActions efua = new EFUsersActions();
@@ -174,7 +173,7 @@ namespace ReportTRKServices
                     if (user_action != null)
                     {
                         GunsCnts gc = new GunsCnts();
-                        TRK_Сounters counters = new TRK_Сounters()
+                        TRK_Counters counters = new TRK_Counters()
                         {
                             ID = 0,
                             Operator = user_action.UserName,
@@ -186,7 +185,7 @@ namespace ReportTRKServices
                         gc.Operator = user_action.UserName;
                         gc.SmenaID = user_action.SessionID;
                         gc.TimeStamp = DateTime.Now;
-                        foreach (ClientOPCTRK.Gun g in guns)
+                        foreach (Gun g in guns)
                         {
                             switch (g.num_gun)
                             {
@@ -221,6 +220,19 @@ namespace ReportTRKServices
                                 case 29: gc.C9_1 = (int?)g.total_volume; counters.C9_1 = (int?)g.total_volume; break;
                             }
                         }
+                        if (dios != null)
+                        {
+                            foreach (DIORisers dio in dios)
+                            {
+                                switch (dio.num)
+                                {
+                                    case 1: counters.as1 = (long?)dio.Counter; break;
+                                    case 2: counters.as2 = (long?)dio.Counter; break;
+                                    case 3: counters.as3 = (long?)dio.Counter; break;
+                                }
+                            }
+                        }
+
                         ef_gc.Add(gc);
                         res = ef_gc.Save();
 
@@ -248,7 +260,8 @@ namespace ReportTRKServices
                 DateTime dt = DateTime.Now;
                 int h = dt.Hour;
                 int m = dt.Minute;
-                if (h == 1 && (m>=5 && m<=6) && !time_daily) {
+                if (h == 1 && (m >= 5 && m <= 6) && !time_daily)
+                {
                     String.Format("Сервис ReportTRKServices - сработал таймер на 0 часов").SaveInformation();
 
                     int res = 0;
@@ -291,7 +304,8 @@ namespace ReportTRKServices
 
                     time_daily = true;
                 }
-                if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day) {
+                if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day)
+                {
                     log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 7 часов");
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
@@ -305,7 +319,8 @@ namespace ReportTRKServices
                     addCounters();
                     time_sm_day = true;
                 }
-                if (h == 18 && (m >= 58 && m <= 59) && !time_sm_night) {
+                if (h == 18 && (m >= 58 && m <= 59) && !time_sm_night)
+                {
                     log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 19 часов");
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
@@ -319,7 +334,8 @@ namespace ReportTRKServices
                     addCounters();
                     time_sm_night = true;
                 }
-                if (h == 23 && ( time_daily || time_sm_day || time_sm_night)) {
+                if (h == 23 && (time_daily || time_sm_day || time_sm_night))
+                {
                     time_daily = false;
                     time_sm_day = false;
                     time_sm_night = false;

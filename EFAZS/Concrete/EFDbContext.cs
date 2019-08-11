@@ -40,7 +40,7 @@
 
         public virtual DbSet<GunsCnts> GunsCnts { get; set; }
 
-        public virtual DbSet<TRK_Сounters> TRK_Сounters { get; set; }
+        public virtual DbSet<TRK_Counters> TRK_Counters { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
