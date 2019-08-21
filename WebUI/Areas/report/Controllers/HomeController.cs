@@ -63,5 +63,10 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        public ActionResult StatusTanks()
+        {
+            return View();
+        }
+
     }
 }

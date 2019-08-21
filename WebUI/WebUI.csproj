@@ -455,6 +455,7 @@
     <Content Include="Content\report\global.css" />
     <Content Include="Content\report\homemenu.css" />
     <Content Include="Content\report\report.css" />
+    <Content Include="Content\report\staustanks.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -510,6 +511,9 @@
     <Content Include="Images\amk_logo.png" />
     <Content Include="Images\not_active.png" />
     <Content Include="Images\null_active.png" />
+    <Content Include="Images\Report\1zwge3s.png" />
+    <Content Include="Images\Report\290tvnk.png" />
+    <Content Include="Images\Report\minc5g.png" />
     <Content Include="Images\Report\report.jpg" />
     <Content Include="Images\Report\fuel_list.jpg" />
     <Content Include="Images\Report\fuel_list.png" />
@@ -572,6 +576,7 @@
     <Content Include="Areas\report\Views\Home\Grafik.cshtml" />
     <Content Include="Areas\report\Views\Home\Daily.cshtml" />
     <Content Include="Areas\report\Views\Home\Daily15.cshtml" />
+    <Content Include="Areas\report\Views\Home\StatusTanks.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Scripts\d3\d3.js" />
     <Content Include="Scripts\d3\d3.min.js" />
@@ -723,6 +728,7 @@
     <Content Include="Scripts\view\report_logs.js" />
     <Content Include="Scripts\view\report_fft.js" />
     <Content Include="Scripts\view\report_rf.js" />
+    <Content Include="Scripts\view\report_statustanks.js" />
     <Content Include="Scripts\view\rf.js" />
     <Content Include="Scripts\view\trk.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
