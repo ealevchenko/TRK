@@ -538,28 +538,1644 @@
                 </div>
                 <div class="cls"></div>
             </div>
-
-
-
-
-
-
-
-
-            @*<div id="slider"></div>
-            <br><br>
-
-            <div class="progressbar">
-                <span class="progressbar-value">
-                    <em class="progressbar-cover"></em>
-                </span>
-            </div>*@
         </div>
         <div id="tabs-report-2">
-
+            <div class="tanks-all">
+                <div class="tanks-fuel">
+                    <fieldset>
+                        <legend> ДТ </legend>
+                        <div>
+                            @* 01 *@
+                            <div class="tank" id="tank-01">
+                                <fieldset>
+                                    <legend> Емкость 01 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-01-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-01-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-01-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-01-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-01-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-01-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-01-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-01-value">
+                                                <em class="progressbar-cover" id="pb-01-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 02 *@
+                            <div class="tank" id="tank-02">
+                                <fieldset>
+                                    <legend> Емкость 02 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-02-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-02-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-02-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-02-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-02-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-02-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-02-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-02-value">
+                                                <em class="progressbar-cover" id="pb-02-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 03 *@
+                            <div class="tank" id="tank-03">
+                                <fieldset>
+                                    <legend> Емкость 03 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-03-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-03-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-03-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-03-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-03-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-03-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-03-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-03-value">
+                                                <em class="progressbar-cover" id="pb-03-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 04 *@
+                            <div class="tank" id="tank-04">
+                                <fieldset>
+                                    <legend> Емкость 04 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-04-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-04-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-04-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-04-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-04-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-04-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-04-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-04-value">
+                                                <em class="progressbar-cover" id="pb-04-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 05 *@
+                            <div class="tank" id="tank-05">
+                                <fieldset>
+                                    <legend> Емкость 05 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-05-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-05-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-05-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-05-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-05-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-05-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-05-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-05-value">
+                                                <em class="progressbar-cover" id="pb-05-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 06 *@
+                            <div class="tank" id="tank-06">
+                                <fieldset>
+                                    <legend> Емкость 06 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-06-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-06-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-06-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-06-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-06-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-06-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-06-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-06-value">
+                                                <em class="progressbar-cover" id="pb-06-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 07 *@
+                            <div class="tank" id="tank-07">
+                                <fieldset>
+                                    <legend> Емкость 07 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-07-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-07-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-07-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-07-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-07-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-07-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-07-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-07-value">
+                                                <em class="progressbar-cover" id="pb-07-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 08 *@
+                            <div class="tank" id="tank-08">
+                                <fieldset>
+                                    <legend> Емкость 08 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-08-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-08-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-08-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-08-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-08-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-08-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-08-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-08-value">
+                                                <em class="progressbar-cover" id="pb-08-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 09 *@
+                            <div class="tank" id="tank-09">
+                                <fieldset>
+                                    <legend> Емкость 09 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-09-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-09-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-09-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-09-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-09-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-09-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-09-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-09-value">
+                                                <em class="progressbar-cover" id="pb-09-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 10 *@
+                            <div class="tank" id="tank-10">
+                                <fieldset>
+                                    <legend> Емкость 10 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-10-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-10-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-10-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-10-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-10-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-10-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-10-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-10-value">
+                                                <em class="progressbar-cover" id="pb-10-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 11 *@
+                            <div class="tank" id="tank-11">
+                                <fieldset>
+                                    <legend> Емкость 11 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-11-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-11-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-11-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-11-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-11-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-11-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-11-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-11-value">
+                                                <em class="progressbar-cover" id="pb-11-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 12 *@
+                            <div class="tank" id="tank-12">
+                                <fieldset>
+                                    <legend> Емкость 12 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-12-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-12-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-12-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-12-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-12-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-12-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-12-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-12-value">
+                                                <em class="progressbar-cover" id="pb-12-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 13 *@
+                            <div class="tank" id="tank-13">
+                                <fieldset>
+                                    <legend> Емкость 13 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-13-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-13-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-13-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-13-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-13-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-13-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-13-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-13-value">
+                                                <em class="progressbar-cover" id="pb-13-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 14 *@
+                            <div class="tank" id="tank-14">
+                                <fieldset>
+                                    <legend> Емкость 14 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-14-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-14-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-14-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-14-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-14-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-14-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-14-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-14-value">
+                                                <em class="progressbar-cover" id="pb-14-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 15 *@
+                            <div class="tank" id="tank-15">
+                                <fieldset>
+                                    <legend> Емкость 15 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-15-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-15-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-15-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-15-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-15-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-15-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-15-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-15-value">
+                                                <em class="progressbar-cover" id="pb-15-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 16 *@
+                            <div class="tank" id="tank-16">
+                                <fieldset>
+                                    <legend> Емкость 16 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-16-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-16-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-16-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-16-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-16-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-16-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-16-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-16-value">
+                                                <em class="progressbar-cover" id="pb-16-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 17 *@
+                            <div class="tank" id="tank-17">
+                                <fieldset>
+                                    <legend> Емкость 17 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-17-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-17-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-17-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-17-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-17-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-17-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-17-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-17-value">
+                                                <em class="progressbar-cover" id="pb-17-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 18 *@
+                            <div class="tank" id="tank-18">
+                                <fieldset>
+                                    <legend> Емкость 18 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-18-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-18-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-18-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-18-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-18-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-18-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-18-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-18-value">
+                                                <em class="progressbar-cover" id="pb-18-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 19 *@
+                            <div class="tank" id="tank-19">
+                                <fieldset>
+                                    <legend> Емкость 19 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-19-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-19-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-19-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-19-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-19-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-19-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-19-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-19-value">
+                                                <em class="progressbar-cover" id="pb-19-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 20 *@
+                            <div class="tank" id="tank-20">
+                                <fieldset>
+                                    <legend> Емкость 20 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-20-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-20-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-20-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-20-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-20-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-20-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-20-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-20-value">
+                                                <em class="progressbar-cover" id="pb-20-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 21 *@
+                            <div class="tank" id="tank-21">
+                                <fieldset>
+                                    <legend> Емкость 21 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-21-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-21-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-21-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-21-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-21-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-21-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-21-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-21-value">
+                                                <em class="progressbar-cover" id="pb-21-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 22 *@
+                            <div class="tank" id="tank-22">
+                                <fieldset>
+                                    <legend> Емкость 22 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-22-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-22-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-22-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-22-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-22-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-22-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-22-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-22-value">
+                                                <em class="progressbar-cover" id="pb-22-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 23 *@
+                            <div class="tank" id="tank-23">
+                                <fieldset>
+                                    <legend> Емкость 23 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-23-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-23-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-23-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-23-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-23-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-23-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-23-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-23-value">
+                                                <em class="progressbar-cover" id="pb-23-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 24 *@
+                            <div class="tank" id="tank-24">
+                                <fieldset>
+                                    <legend> Емкость 24 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-24-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-24-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-24-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-24-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-24-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-24-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-24-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-24-value">
+                                                <em class="progressbar-cover" id="pb-24-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 25 *@
+                            <div class="tank" id="tank-25">
+                                <fieldset>
+                                    <legend> Емкость 25 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-25-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-25-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-25-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-25-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-25-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-25-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-25-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-25-value">
+                                                <em class="progressbar-cover" id="pb-25-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 26 *@
+                            <div class="tank" id="tank-26">
+                                <fieldset>
+                                    <legend> Емкость 26 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-26-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-26-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-26-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-26-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-26-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-26-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-26-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-26-value">
+                                                <em class="progressbar-cover" id="pb-26-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 27 *@
+                            <div class="tank" id="tank-27">
+                                <fieldset>
+                                    <legend> Емкость 27 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-27-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-27-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-27-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-27-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-27-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-27-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-27-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-27-value">
+                                                <em class="progressbar-cover" id="pb-27-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 28 *@
+                            <div class="tank" id="tank-28">
+                                <fieldset>
+                                    <legend> Емкость 28 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-28-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-28-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-28-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-28-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-28-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-28-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-28-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-28-value">
+                                                <em class="progressbar-cover" id="pb-28-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 29 *@
+                            <div class="tank" id="tank-29">
+                                <fieldset>
+                                    <legend> Емкость 29 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-29-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-29-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-29-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-29-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-29-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-29-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-29-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-29-value">
+                                                <em class="progressbar-cover" id="pb-29-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 30 *@
+                            <div class="tank" id="tank-30">
+                                <fieldset>
+                                    <legend> Емкость 30 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-30-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-30-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-30-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-30-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-30-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-30-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-30-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-30-value">
+                                                <em class="progressbar-cover" id="pb-30-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 31 *@
+                            <div class="tank" id="tank-31">
+                                <fieldset>
+                                    <legend> Емкость 31 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-31-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-31-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-31-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-31-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-31-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-31-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-31-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-31-value">
+                                                <em class="progressbar-cover" id="pb-31-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 32 *@
+                            <div class="tank" id="tank-32">
+                                <fieldset>
+                                    <legend> Емкость 32 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-32-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-32-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-32-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-32-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-32-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-32-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-32-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-32-value">
+                                                <em class="progressbar-cover" id="pb-32-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                        <div class="cls"></div>
+                    </fieldset>
+                </div>
+                <div class="cls"></div>
+            </div>
         </div>
         <div id="tabs-report-3">
-
+            <div class="tanks-all">
+                <div class="tanks-fuel">
+                    <fieldset>
+                        <legend> Керосин </legend>
+                        <div>
+                            @* 33 *@
+                            <div class="tank" id="tank-33">
+                                <fieldset>
+                                    <legend> Емкость 33 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-33-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-33-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-33-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-33-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-33-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-33-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-33-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-33-value">
+                                                <em class="progressbar-cover" id="pb-33-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 38 *@
+                            <div class="tank" id="tank-38">
+                                <fieldset>
+                                    <legend> Емкость 38 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-38-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-38-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-38-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-38-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-38-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-38-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-38-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-38-value">
+                                                <em class="progressbar-cover" id="pb-38-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            @* 39 *@
+                            <div class="tank" id="tank-39">
+                                <fieldset>
+                                    <legend> Емкость 39 </legend>
+                                    <div class="tank-value">
+                                        <table class="table-tank">
+                                            <tr>
+                                                <th>H(%):</th>
+                                                <td><input id="tank-39-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>H(см):</th>
+                                                <td><input id="tank-39-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>W(см):</th>
+                                                <td><input id="tank-39-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>V(м3):</th>
+                                                <td><input id="tank-39-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pд(кг/м3):</th>
+                                                <td><input id="tank-39-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Pс(кг/м3):</th>
+                                                <td><input id="tank-39-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>T(°С):</th>
+                                                <td><input id="tank-39-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="tank-pb">
+                                        <div class="progressbar">
+                                            <span class="progressbar-value" id="pb-39-value">
+                                                <em class="progressbar-cover" id="pb-39-cover"></em>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                </fieldset>
+                            </div>
+                            <div class="cls"></div>
+                        </div>
+                        <div class="cls"></div>
+                    </fieldset>
+                </div>
+                <div class="cls"></div>
+            </div>
         </div>
     </div>
 
