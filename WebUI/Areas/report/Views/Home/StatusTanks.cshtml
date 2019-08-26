@@ -40,6 +40,7 @@
 
 <div id="report" class="report-wide">
     <div id="table-panel">
+        Текущее время :<label id="date-value"></label>
     </div>
     <div id="tabs-reports">
         <ul>
@@ -74,6 +75,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-b02-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b02-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -122,6 +127,10 @@
                                                 <td><input id="tank-b03-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b03-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-b03-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -145,46 +154,50 @@
                                     <div class="cls"></div>
                                 </fieldset>
                             </div>
-                            @* b06 *@
-                            <div class="tank" id="tank-b06">
+                            @* b09 *@
+                            <div class="tank" id="tank-b09">
                                 <fieldset>
-                                    <legend> Емкость 06 </legend>
+                                    <legend> Емкость 09 </legend>
                                     <div class="tank-value">
                                         <table class="table-tank">
                                             <tr>
                                                 <th>H(%):</th>
-                                                <td><input id="tank-b06-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-hp" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>H(см):</th>
-                                                <td><input id="tank-b06-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-h" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>W(см):</th>
-                                                <td><input id="tank-b06-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-w" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>V(м3):</th>
-                                                <td><input id="tank-b06-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b09-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
-                                                <td><input id="tank-b06-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pс(кг/м3):</th>
-                                                <td><input id="tank-b06-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-ps" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>T(°С):</th>
-                                                <td><input id="tank-b06-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                                <td><input id="tank-b09-t" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                         </table>
                                     </div>
                                     <div class="tank-pb">
                                         <div class="progressbar">
-                                            <span class="progressbar-value" id="pb-b06-value">
-                                                <em class="progressbar-cover" id="pb-b06-cover"></em>
+                                            <span class="progressbar-value" id="pb-b09-value">
+                                                <em class="progressbar-cover" id="pb-b09-cover"></em>
                                             </span>
                                         </div>
                                     </div>
@@ -212,6 +225,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-b11-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b11-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -258,6 +275,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-b16-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b16-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -315,6 +336,10 @@
                                                 <td><input id="tank-b13-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b13-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-b13-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -370,6 +395,10 @@
                                                 <td><input id="tank-b17-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b17-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-b17-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -414,6 +443,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-b18-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b18-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -462,6 +495,10 @@
                                                 <td><input id="tank-b19-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b19-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-b19-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -506,6 +543,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-b20-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-b20-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -568,6 +609,10 @@
                                                 <td><input id="tank-01-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-01-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-01-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -612,6 +657,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-02-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-02-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -660,6 +709,10 @@
                                                 <td><input id="tank-03-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-03-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-03-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -704,6 +757,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-04-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-04-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -752,6 +809,10 @@
                                                 <td><input id="tank-05-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-05-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-05-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -796,6 +857,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-06-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-06-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -844,6 +909,10 @@
                                                 <td><input id="tank-07-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-07-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-07-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -888,6 +957,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-08-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-08-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -936,6 +1009,10 @@
                                                 <td><input id="tank-09-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-09-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-09-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -980,6 +1057,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-10-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-10-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1028,6 +1109,10 @@
                                                 <td><input id="tank-11-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-11-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-11-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1072,6 +1157,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-12-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-12-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1120,6 +1209,10 @@
                                                 <td><input id="tank-13-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-13-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-13-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1164,6 +1257,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-14-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-14-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1212,6 +1309,10 @@
                                                 <td><input id="tank-15-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-15-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-15-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1256,6 +1357,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-16-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-16-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1304,6 +1409,10 @@
                                                 <td><input id="tank-17-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-17-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-17-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1348,6 +1457,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-18-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-18-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1396,6 +1509,10 @@
                                                 <td><input id="tank-19-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-19-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-19-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1440,6 +1557,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-20-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-20-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1488,6 +1609,10 @@
                                                 <td><input id="tank-21-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-21-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-21-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1532,6 +1657,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-22-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-22-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1580,6 +1709,10 @@
                                                 <td><input id="tank-23-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-23-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-23-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1624,6 +1757,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-24-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-24-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1672,6 +1809,10 @@
                                                 <td><input id="tank-25-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-25-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-25-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1716,6 +1857,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-26-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-26-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1764,6 +1909,10 @@
                                                 <td><input id="tank-27-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-27-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-27-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1808,6 +1957,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-28-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-28-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1856,6 +2009,10 @@
                                                 <td><input id="tank-29-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-29-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-29-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1900,6 +2057,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-30-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-30-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -1948,6 +2109,10 @@
                                                 <td><input id="tank-31-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-31-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-31-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -1992,6 +2157,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-32-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-32-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>
@@ -2054,6 +2223,10 @@
                                                 <td><input id="tank-33-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-33-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-33-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -2100,6 +2273,10 @@
                                                 <td><input id="tank-38-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-38-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
                                                 <th>Pд(кг/м3):</th>
                                                 <td><input id="tank-38-pd" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
@@ -2144,6 +2321,10 @@
                                             <tr>
                                                 <th>V(м3):</th>
                                                 <td><input id="tank-39-v" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th>M(т):</th>
+                                                <td><input id="tank-39-m" type="number" disabled="disabled" class="ui-widget-content ui-corner-all input-tank-volume" /></td>
                                             </tr>
                                             <tr>
                                                 <th>Pд(кг/м3):</th>

@@ -1,4 +1,35 @@
-﻿$(function () {
+﻿var showView = function () {
+    // Время
+    var d = new Date();
+    $('#date-value').text(toISOStringTZ(d));
+    // Обновим данные
+    getAsyncViewReportTSOfDateTime(
+        function (result) {
+            for (ir = 0, count_ir = result.length; ir < count_ir; ir++) {
+                var tank = result[ir].tank;
+                var hp = result[ir].fill_percent !== null ? Number(result[ir].fill_percent).toFixed(2) : 0.00;
+                var h = result[ir].level !== null ? Number(result[ir].level).toFixed(2) : 0.00;
+                var w = result[ir].water_leve !== null ? Number(result[ir].water_leve).toFixed(2) : 0.00;
+                var v = result[ir].volume !== null ? Number(result[ir].volume).toFixed(3) : 0.000;
+                var m = result[ir].mass !== null ? Number(result[ir].mass).toFixed(3) : 0.000;
+                var pd = result[ir].dens !== null ? Number(result[ir].dens).toFixed(5) : 0.00000; //?????
+                var ps = result[ir].mass !== null && result[ir].volume !== null && result[ir].volume > 0 ? (Number(result[ir].mass) / Number(result[ir].volume) *1000).toFixed(5) : 0.00000; //?????
+                var t = result[ir].temp !== null ? (Number(result[ir].temp)/10).toFixed(2) : 0.00;
+                $('input#tank-' + tank + '-hp').val(hp);
+                $('#pb-' + tank + '-cover').css('bottom', hp+'%');  // the cover controls the bar height
+                $('#pb-' + tank + '-value').css('backgroundColor', (hp > 25 ? '#0f0' : '#f00')); // value contains the bar color
+                $('input#tank-' + tank + '-h').val(h);
+                $('input#tank-' + tank + '-w').val(w);
+                $('input#tank-' + tank + '-v').val(v);
+                $('input#tank-' + tank + '-m').val(m);
+                $('input#tank-' + tank + '-pd').val(pd);
+                $('input#tank-' + tank + '-ps').val(ps);
+                $('input#tank-' + tank + '-t').val(t);
+            }
+        });
+};
+
+$(function () {
 
     var
         // Типы отчетов
@@ -19,18 +50,19 @@
                 //this.activeTable(this.active, true);
             },
             activeTable: function (active, data_refresh) {
-                if (active === 0) {
-                    //table_report.viewTable(data_refresh);
-                }
-                if (active === 1) {
-                    //table_report_fft.viewTable(data_refresh);
-                }
-                if (active === 2) {
-                    //table_report_fft.viewTable(data_refresh);
-                }
+                //if (active === 0) {
+
+                //}
+                //if (active === 1) {
+
+                //}
+                //if (active === 2) {
+
+                //}
             }
 
         };
+
 
     //-----------------------------------------------------------------------------------------
     // Функции
@@ -39,33 +71,9 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
-    //panel_select_report.initObject();
-    tab_type_reports.initObject();
-    //// Загрузка библиотек
-    //loadReference(function (result) {
-    //table_report.initObject();
-    //table_report_fft.initObject();
-    //panel_select_report.viewTable();
-    //});
-
-    $('#pb-b02-cover').css('bottom', '50%');  // the cover controls the bar height
-    $('#pb-b02-value').css('backgroundColor', '#0f0'); // value contains the bar color
-    $('#pb-b03-cover').css('bottom', '20%');  // the cover controls the bar height
-    $('#pb-b03-value').css('backgroundColor', '#0f0'); // value contains the bar color
-    //$(function () {
-    //    var bkcolor;
-    //    $('#slider').slider({
-    //        max: 100,
-    //        value: 0,
-    //        slide: function (event, ui) {
-    //            //bkcolor = (ui.value < 25) ? '#0f0' : '#ff0';
-    //            //if (ui.value > 75) { bkcolor = '#f00'; }
-    //            //bkcolor = '#f00';
-    //            //$('.progressbar-cover').css('/*b*/ottom', ui.value + '%');  // the cover controls the bar height
-    //            $('.progressbar-cover').css('bottom', '50%');  // the cover controls the bar height
-    //            $('.progressbar-value').css('backgroundColor', bkcolor); // value contains the bar color
-    //        }
-    //    });
-    //});
-
+    $(document).ready(function () {
+        tab_type_reports.initObject();
+        showView();
+        setInterval('showView()', 10000);
+    });
 });

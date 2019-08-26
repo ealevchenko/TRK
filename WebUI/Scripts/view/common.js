@@ -332,7 +332,640 @@ var all_tags =
     ],
     "dios": null
 };
+// TODO:!!!ТЕСТ УБРАТЬ
+var tanks_status = [
 
+    {
+        "id": 1,
+        "typefuel": 107000022,
+        "tank": "b02",
+        "timestamp": "2019-08-14T10:50:13.333",
+        "fill_percent": 7.8703443626762537,
+        "level": 37465.0,
+        "volume": 5604.0,
+        "dens": 747.604058,
+        "mass": 0.0,
+        "temp": 247.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 2,
+        "typefuel": 107000022,
+        "tank": "b03",
+        "timestamp": "2019-08-23T11:28:56.41",
+        "fill_percent": 8.83805526407835,
+        "level": 40392.0,
+        "volume": 6317.0,
+        "dens": 728.862162,
+        "mass": 4671.07,
+        "temp": 262.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 3,
+        "typefuel": 107000022,
+        "tank": "b09",
+        "timestamp": "2019-08-14T10:50:06.967",
+        "fill_percent": 8.0031395854065348,
+        "level": 36858.0,
+        "volume": 5710.0,
+        "dens": 743.753402,
+        "mass": 4238.07,
+        "temp": 247.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 4,
+        "typefuel": 107000022,
+        "tank": "b11",
+        "timestamp": "2019-08-26T21:49:02.877",
+        "fill_percent": 66.63182132817245,
+        "level": 176581.0,
+        "volume": 47168.0,
+        "dens": 735.662916,
+        "mass": 34709.07,
+        "temp": 280.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 5,
+        "typefuel": 107000022,
+        "tank": "b16",
+        "timestamp": "2019-08-23T11:28:59.433",
+        "fill_percent": 9.6559254178448448,
+        "level": 42818.0,
+        "volume": 6898.0,
+        "dens": 735.449508,
+        "mass": 5057.07,
+        "temp": 259.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 6,
+        "typefuel": 107000023,
+        "tank": "b17",
+        "timestamp": "2019-08-23T11:28:58.91",
+        "fill_percent": 29.836995038979449,
+        "level": 92629.0,
+        "volume": 21471.0,
+        "dens": 751.616343,
+        "mass": 16172.07,
+        "temp": 257.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 7,
+        "typefuel": 107000023,
+        "tank": "b18",
+        "timestamp": "2019-08-16T09:23:17.84",
+        "fill_percent": 7.8176895810656175,
+        "level": 35984.0,
+        "volume": 5602.0,
+        "dens": 746.381823,
+        "mass": 4194.07,
+        "temp": 204.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 8,
+        "typefuel": 107000023,
+        "tank": "b19",
+        "timestamp": "2019-08-23T13:46:45.927",
+        "fill_percent": 9.81105765878826,
+        "level": 42493.0,
+        "volume": 7036.0,
+        "dens": 735.38128,
+        "mass": 5182.07,
+        "temp": 268.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 9,
+        "typefuel": 107000023,
+        "tank": "b20",
+        "timestamp": "2019-08-26T21:48:56.33",
+        "fill_percent": 88.497911632000225,
+        "level": 227257.0,
+        "volume": 63353.0,
+        "dens": 737.596945,
+        "mass": 46788.07,
+        "temp": 280.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 10,
+        "typefuel": 107000022,
+        "tank": "b13",
+        "timestamp": "2019-08-23T11:29:00.907",
+        "fill_percent": 2.0250615350190198,
+        "level": 14677.0,
+        "volume": 1448.0,
+        "dens": 829.975766,
+        "mass": 0.0,
+        "temp": 286.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 11,
+        "typefuel": 107000024,
+        "tank": "01",
+        "timestamp": "2019-08-26T21:48:56.203",
+        "fill_percent": 100.0,
+        "level": 268335.0,
+        "volume": 72751.0,
+        "dens": 825.509195,
+        "mass": 60119.08,
+        "temp": 299.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 12,
+        "typefuel": 107000024,
+        "tank": "02",
+        "timestamp": "2019-08-26T21:48:55.75",
+        "fill_percent": 100.0,
+        "level": 269612.0,
+        "volume": 72759.0,
+        "dens": 824.990134,
+        "mass": 60038.08,
+        "temp": 297.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 13,
+        "typefuel": 107000024,
+        "tank": "03",
+        "timestamp": "2019-08-26T21:49:03.73",
+        "fill_percent": 100.0,
+        "level": 264910.0,
+        "volume": 72344.0,
+        "dens": 827.057618,
+        "mass": 59844.08,
+        "temp": 296.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 14,
+        "typefuel": 107000024,
+        "tank": "04",
+        "timestamp": "2019-08-26T21:49:01.927",
+        "fill_percent": 96.414638938003421,
+        "level": 248516.0,
+        "volume": 68707.0,
+        "dens": 827.220617,
+        "mass": 56799.08,
+        "temp": 293.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 15,
+        "typefuel": 107000024,
+        "tank": "05",
+        "timestamp": "2019-08-26T21:49:03.23",
+        "fill_percent": 11.097880447725649,
+        "level": 46529.0,
+        "volume": 7922.0,
+        "dens": 827.749561,
+        "mass": 6561.08,
+        "temp": 281.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 16,
+        "typefuel": 107000024,
+        "tank": "06",
+        "timestamp": "2019-08-26T21:48:56.583",
+        "fill_percent": 99.051452767640754,
+        "level": 258740.0,
+        "volume": 71113.0,
+        "dens": 825.568492,
+        "mass": 58849.08,
+        "temp": 297.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 17,
+        "typefuel": 107000024,
+        "tank": "07",
+        "timestamp": "2019-08-26T21:48:54.917",
+        "fill_percent": 10.715731576228833,
+        "level": 45255.0,
+        "volume": 7676.0,
+        "dens": 825.269554,
+        "mass": 6341.08,
+        "temp": 282.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 18,
+        "typefuel": 107000024,
+        "tank": "08",
+        "timestamp": "2019-08-26T21:49:03.18",
+        "fill_percent": 10.837183979450812,
+        "level": 45814.0,
+        "volume": 7763.0,
+        "dens": 825.215803,
+        "mass": 6411.08,
+        "temp": 282.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 19,
+        "typefuel": 107000024,
+        "tank": "09",
+        "timestamp": "2019-08-26T21:48:55.443",
+        "fill_percent": 10.164699229518625,
+        "level": 45116.0,
+        "volume": 7190.0,
+        "dens": 825.8941,
+        "mass": 5947.08,
+        "temp": 282.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 20,
+        "typefuel": 107000024,
+        "tank": "10",
+        "timestamp": "2019-08-26T21:49:03.58",
+        "fill_percent": 11.721544915052119,
+        "level": 48972.0,
+        "volume": 8355.0,
+        "dens": 826.490207,
+        "mass": 6908.08,
+        "temp": 279.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 21,
+        "typefuel": 117000024,
+        "tank": "11",
+        "timestamp": "2019-08-26T21:49:03.47",
+        "fill_percent": 10.586051221467448,
+        "level": 47427.0,
+        "volume": 7527.0,
+        "dens": 824.814137,
+        "mass": 6216.08,
+        "temp": 279.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 22,
+        "typefuel": 107000024,
+        "tank": "12",
+        "timestamp": "2019-08-26T21:49:02.847",
+        "fill_percent": 93.8108689236477,
+        "level": 241308.0,
+        "volume": 66753.0,
+        "dens": 829.248083,
+        "mass": 55324.08,
+        "temp": 285.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 23,
+        "typefuel": 107000024,
+        "tank": "13",
+        "timestamp": "2019-08-26T21:48:54.243",
+        "fill_percent": 12.073450436339225,
+        "level": 49490.0,
+        "volume": 8633.0,
+        "dens": 823.899964,
+        "mass": 7109.08,
+        "temp": 276.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 24,
+        "typefuel": 107000024,
+        "tank": "14",
+        "timestamp": "2019-08-26T21:49:02.677",
+        "fill_percent": 13.542106299766466,
+        "level": 53491.0,
+        "volume": 9626.0,
+        "dens": 824.159011,
+        "mass": 7950.08,
+        "temp": 291.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 25,
+        "typefuel": 107000024,
+        "tank": "15",
+        "timestamp": "2019-08-26T21:48:56.173",
+        "fill_percent": 29.128252193622849,
+        "level": 91276.0,
+        "volume": 20947.0,
+        "dens": 824.715585,
+        "mass": 17297.08,
+        "temp": 284.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 26,
+        "typefuel": 107000024,
+        "tank": "16",
+        "timestamp": "2019-08-26T21:49:02.653",
+        "fill_percent": 100.0,
+        "level": 268332.0,
+        "volume": 72898.0,
+        "dens": 823.93274,
+        "mass": 60101.08,
+        "temp": 291.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 27,
+        "typefuel": 107000024,
+        "tank": "17",
+        "timestamp": "2019-08-26T21:49:03.51",
+        "fill_percent": 100.0,
+        "level": 268225.0,
+        "volume": 72217.0,
+        "dens": 825.710783,
+        "mass": 59692.08,
+        "temp": 289.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 28,
+        "typefuel": 107000024,
+        "tank": "18",
+        "timestamp": "2019-08-26T21:49:02.69",
+        "fill_percent": 94.857456758127213,
+        "level": 244472.0,
+        "volume": 67345.0,
+        "dens": 826.222175,
+        "mass": 55665.08,
+        "temp": 279.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 29,
+        "typefuel": 107000024,
+        "tank": "19",
+        "timestamp": "2019-08-26T21:49:01.873",
+        "fill_percent": 100.0,
+        "level": 268379.0,
+        "volume": 72840.0,
+        "dens": 820.375946,
+        "mass": 59783.08,
+        "temp": 289.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 30,
+        "typefuel": 107000024,
+        "tank": "20",
+        "timestamp": "2019-08-26T21:48:59.897",
+        "fill_percent": 100.0,
+        "level": 269509.0,
+        "volume": 73105.0,
+        "dens": 820.308344,
+        "mass": 60019.08,
+        "temp": 289.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 31,
+        "typefuel": 107000024,
+        "tank": "21",
+        "timestamp": "2019-08-26T21:49:03.41",
+        "fill_percent": 100.0,
+        "level": 269009.0,
+        "volume": 72580.0,
+        "dens": 821.264777,
+        "mass": 59663.08,
+        "temp": 289.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 32,
+        "typefuel": 107000024,
+        "tank": "22",
+        "timestamp": "2019-08-26T21:48:58.13",
+        "fill_percent": 100.0,
+        "level": 269234.0,
+        "volume": 72547.0,
+        "dens": 819.935399,
+        "mass": 59464.08,
+        "temp": 288.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 33,
+        "typefuel": 107000024,
+        "tank": "23",
+        "timestamp": "2019-08-26T21:48:55.533",
+        "fill_percent": 100.0,
+        "level": 267897.0,
+        "volume": 72243.0,
+        "dens": 824.549908,
+        "mass": 59532.08,
+        "temp": 291.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 34,
+        "typefuel": 107000024,
+        "tank": "24",
+        "timestamp": "2019-08-26T21:49:03.987",
+        "fill_percent": 100.0,
+        "level": 267747.0,
+        "volume": 72305.0,
+        "dens": 824.236897,
+        "mass": 59547.08,
+        "temp": 290.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 35,
+        "typefuel": 107000024,
+        "tank": "25",
+        "timestamp": "2019-08-26T21:48:56.583",
+        "fill_percent": 100.0,
+        "level": 267227.0,
+        "volume": 72746.0,
+        "dens": 823.3488,
+        "mass": 59835.08,
+        "temp": 288.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 36,
+        "typefuel": 107000024,
+        "tank": "26",
+        "timestamp": "2019-08-26T21:49:03.08",
+        "fill_percent": 55.23509214490926,
+        "level": 151099.0,
+        "volume": 39413.0,
+        "dens": 823.74599,
+        "mass": 32484.08,
+        "temp": 287.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 37,
+        "typefuel": 107000024,
+        "tank": "27",
+        "timestamp": "2019-08-16T10:10:04.73",
+        "fill_percent": 10.931610878367964,
+        "level": 46263.0,
+        "volume": 7802.0,
+        "dens": 825.7817,
+        "mass": 0.0,
+        "temp": 227.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 38,
+        "typefuel": 107000024,
+        "tank": "28",
+        "timestamp": "2019-08-16T10:09:51.59",
+        "fill_percent": 11.779367902202679,
+        "level": 48441.0,
+        "volume": 8412.0,
+        "dens": 825.836272,
+        "mass": 6939.08,
+        "temp": 220.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 39,
+        "typefuel": 107000024,
+        "tank": "29",
+        "timestamp": "2019-08-16T10:10:00.597",
+        "fill_percent": 11.782743846089222,
+        "level": 49835.0,
+        "volume": 8415.0,
+        "dens": 828.130808,
+        "mass": 0.0,
+        "temp": 220.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 40,
+        "typefuel": 107000024,
+        "tank": "30",
+        "timestamp": "2019-08-16T10:09:51.027",
+        "fill_percent": 12.834458174235273,
+        "level": 53357.0,
+        "volume": 9109.0,
+        "dens": 829.040893,
+        "mass": 7547.08,
+        "temp": 220.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 41,
+        "typefuel": 107000024,
+        "tank": "31",
+        "timestamp": "2019-08-23T09:46:56.247",
+        "fill_percent": 35.238162048404071,
+        "level": 107552.0,
+        "volume": 25116.0,
+        "dens": 824.203311,
+        "mass": 0.0,
+        "temp": 254.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 42,
+        "typefuel": 107000024,
+        "tank": "32",
+        "timestamp": "2019-08-23T09:46:47.153",
+        "fill_percent": 10.020578724119105,
+        "level": 43367.0,
+        "volume": 7158.0,
+        "dens": 823.414126,
+        "mass": 5917.08,
+        "temp": 253.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 43,
+        "typefuel": 107000027,
+        "tank": "33",
+        "timestamp": "2019-08-23T09:46:46.987",
+        "fill_percent": 27.554551035214018,
+        "level": 88944.0,
+        "volume": 19750.0,
+        "dens": 796.441402,
+        "mass": 15737.08,
+        "temp": 259.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 44,
+        "typefuel": 107000027,
+        "tank": "38",
+        "timestamp": "2019-08-12T12:10:26.647",
+        "fill_percent": 14.875522748322995,
+        "level": 58597.0,
+        "volume": 10600.0,
+        "dens": 793.377478,
+        "mass": 8416.07,
+        "temp": 225.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 45,
+        "typefuel": 107000027,
+        "tank": "39",
+        "timestamp": "2019-08-12T12:10:37.83",
+        "fill_percent": 12.358670099630583,
+        "level": 51287.0,
+        "volume": 8832.0,
+        "dens": 802.955266,
+        "mass": 0.0,
+        "temp": 229.0,
+        "water_leve": 0.0,
+        "water_volume": 0.0
+    }
+];
 
 //=========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================================================
 var ntanks_alarm_high = Number(tanks_alarm_high);       //Аварийная уставка высокий
@@ -707,42 +1340,6 @@ var getTanksTags = function (nums, callback) {
         }
     });
 };
-//// Прочесть теги пистолетов
-//var getGunTags = function (callback) {
-//    $.ajax({
-//        type: 'GET',
-//        url: '/api/trk/guns',
-//        async: true,
-//        dataType: 'json',
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function (data) {
-//            if (typeof callback === 'function') {
-//                // TODO:!!!ТЕСТ УБРАТЬ
-//                if (ntype_test == 1) {
-//                    callback(guns_out);
-//                } else {
-//                    callback(data);
-//                }
-//            }
-//        },
-//        error: function (x, y, z) {
-//            // TODO:!!!ТЕСТ УБРАТЬ
-//            if (ntype_test == 2) {
-//                if (typeof callback === 'function') {
-//                    callback(guns_out);
-//                }
-//            } else {
-//                OnAJAXError(x, y, z);
-//            }
-
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        },
-//    });
-//};
 // Прочесть теги rfid
 var getRFIDTags = function (callback) {
     $.ajax({
@@ -2645,6 +3242,39 @@ var getAsyncViewReportDR15OfDateTime = function (start, stop, callback) {
         },
     });
 };
+// Состояние емкостей
+var getAsyncViewReportTSOfDateTime = function (callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/it/report/tanks_status/current',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test === 2 || ntype_test === 1) {
+                if (typeof callback === 'function') {
+                    callback(tanks_status);
+                }
+            } else {
+                OnFunctionAJAXError('getAsyncViewReportTSOfDateTime', x, y, z);
+            }
+
+
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+
 
 //-------ГРАФИКИ-----------------------------------------------
 // График по емкостям

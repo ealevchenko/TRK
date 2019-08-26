@@ -45,6 +45,23 @@ namespace WebUI.Controllers.api
 
     }
 
+    public class TS_Report
+    {
+        public int id { get; set; }
+        public int typefuel { get; set; }
+        public string tank { get; set; }
+        public DateTime? timestamp { get; set; }
+        public double? fill_percent { get; set; }
+        public double? level { get; set; }
+        public double? volume { get; set; }
+        public double? dens { get; set; }
+        public double? mass { get; set; }
+        public double? temp { get; set; }
+        public double? water_leve { get; set; }
+        public double? water_volume { get; set; }
+
+    }
+
     [RoutePrefix("api/it")]
     public class TLController : ApiController
     {
@@ -118,6 +135,29 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:GetReportTG(table={0}, tank={1}, start={2}, stop={3})",table, tank, start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
+
+        // Текущий статус
+        // GET: api/it/report/tanks_status/current
+        [Route("report/tanks_status/current")]
+        [ResponseType(typeof(TS_Report))]
+        public IHttpActionResult GetReportTS()
+        {
+            try
+            {
+                string sql = "EXEC [dbo].[GET_CURRENT_TANKS_VALUE]";
+                List<TS_Report> list = this.ef_it.Database.SqlQuery<TS_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportTS()").SaveError(e);
                 return NotFound();
             }
         }

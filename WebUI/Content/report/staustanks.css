@@ -67,12 +67,12 @@ div.tank-value {
 
 .input-tank-volume {
     width: 60px;
-    margin: 3px 0px;
+    margin: 2px 0px;
 }
 
 div.tank-pb {
     float: left;
-    padding: 3px;
+    padding: 4px 2px;
 }
 
 div.cls {
