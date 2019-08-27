@@ -43,7 +43,7 @@ namespace ReportTRKServices
         EFTRKLogs trk_log = new EFTRKLogs();
         ClientTRK client = new ClientTRK();
         EFGunsCnts ef_gc = new EFGunsCnts();
-        EFTRK_Сounters ef_trkc = new EFTRK_Сounters();
+        EFTRK_Counters ef_trkc = new EFTRK_Counters();
 
         [StructLayout(LayoutKind.Sequential)]
         public struct ServiceStatus

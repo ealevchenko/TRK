@@ -241,7 +241,7 @@ namespace WebUI.Controllers.api
             {
                 ClientOPCTRK.ClientTRK client = new ClientOPCTRK.ClientTRK();
                 EFAZS.Concrete.EFGunsCnts ef_gc = new EFAZS.Concrete.EFGunsCnts();
-                EFAZS.Concrete.EFTRK_Сounters ef_trkc = new EFAZS.Concrete.EFTRK_Сounters();
+                EFAZS.Concrete.EFTRK_Counters ef_trkc = new EFAZS.Concrete.EFTRK_Counters();
 
                 int res = 0;
                 int res1 = 0;
@@ -319,6 +319,43 @@ namespace WebUI.Controllers.api
                         res = ef_gc.Save();
 
                         ef_trkc.Add(counters);
+
+                        String.Format("AZSController - Отработал метод addCounters - counters.Operator:{0}", counters.Operator).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.SmenaID:{0}", counters.SmenaID).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.TimeStamp:{0}", counters.TimeStamp).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C1_1:{0}", counters.C1_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C1_2:{0}", counters.C1_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C2_1:{0}", counters.C2_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C2_2:{0}", counters.C2_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C3_1:{0}", counters.C3_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C3_2:{0}", counters.C3_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C4_1:{0}", counters.C4_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C4_2:{0}", counters.C4_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C5_1:{0}", counters.C5_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C5_2:{0}", counters.C5_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C6_1:{0}", counters.C6_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C6_2:{0}", counters.C6_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_1:{0}", counters.C7_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_2:{0}", counters.C7_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_3:{0}", counters.C7_3).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_4:{0}", counters.C7_4).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_5:{0}", counters.C7_5).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_6:{0}", counters.C7_6).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_7:{0}", counters.C7_7).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C7_8:{0}", counters.C7_8).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_1:{0}", counters.C8_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_2:{0}", counters.C8_2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_3:{0}", counters.C8_3).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_4:{0}", counters.C8_4).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_5:{0}", counters.C8_5).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_6:{0}", counters.C8_6).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_7:{0}", counters.C8_7).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C8_8:{0}", counters.C8_8).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.C9_1:{0}", counters.C9_1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.as1:{0}", counters.as1).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.as2:{0}", counters.as2).SaveInformation();
+                        String.Format("AZSController - Отработал метод addCounters - counters.as3:{0}", counters.as3).SaveInformation();
+
                         res1 = ef_trkc.Save();
                     }
                 }

@@ -61,7 +61,7 @@
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFDaily_Report_15.cs" />
-    <Compile Include="Concrete\EFTRK_Сounters.cs" />
+    <Compile Include="Concrete\EFTRK_Counters.cs" />
     <Compile Include="Concrete\EFGunsCnts.cs" />
     <Compile Include="Concrete\EFDaily_Report.cs" />
     <Compile Include="Concrete\EFTDbContext.cs" />

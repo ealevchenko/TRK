@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFTRK_Сounters : IRepository<TRK_Counters>
+    public class EFTRK_Counters : IRepository<TRK_Counters>
     {
 
         private EFDbContext db;
 
-        public EFTRK_Сounters(EFDbContext db)
+        public EFTRK_Counters(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFTRK_Сounters()
+        public EFTRK_Counters()
         {
 
             this.db = new EFDbContext();
@@ -124,6 +124,8 @@ namespace EFAZS.Concrete
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода Save()").SaveError(e);
+                String.Format("Ошибка InnerException выполнения метода Save()").SaveError(e.InnerException);
+                String.Format("Ошибка InnerException1 выполнения метода Save()").SaveError(e.InnerException.InnerException);
                 return -1;
             }
         }

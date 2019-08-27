@@ -112,5 +112,6 @@ namespace EFAZS.Entities
 
         [StringLength(50)]
         public string note { get; set; }
+        
     }
 }
