@@ -42,7 +42,6 @@ namespace ReportTRKServices
 
         EFTRKLogs trk_log = new EFTRKLogs();
         ClientTRK client = new ClientTRK();
-        EFGunsCnts ef_gc = new EFGunsCnts();
         EFTRK_Counters ef_trkc = new EFTRK_Counters();
 
         [StructLayout(LayoutKind.Sequential)]
@@ -163,7 +162,6 @@ namespace ReportTRKServices
             try
             {
                 int res = 0;
-                int res1 = 0;
                 List<Gun> guns = client.ReadTagOPCOfGun();
                 List<DIORisers> dios = client.ReadTagOPCOfDIORisers();
                 if (guns != null)
@@ -172,7 +170,6 @@ namespace ReportTRKServices
                     UsersActions user_action = efua.GetCurrentUsersActions();
                     if (user_action != null)
                     {
-                        GunsCnts gc = new GunsCnts();
                         TRK_Counters counters = new TRK_Counters()
                         {
                             ID = 0,
@@ -181,43 +178,39 @@ namespace ReportTRKServices
                             TimeStamp = DateTime.Now,
                             note = "Services"
                         };
-                        gc.ID = 0;
-                        gc.Operator = user_action.UserName;
-                        gc.SmenaID = user_action.SessionID;
-                        gc.TimeStamp = DateTime.Now;
                         foreach (Gun g in guns)
                         {
                             switch (g.num_gun)
                             {
-                                case 1: gc.C1_1 = (int?)g.total_volume; counters.C1_1 = (int?)g.total_volume; break;
-                                case 2: gc.C1_2 = (int?)g.total_volume; counters.C1_2 = (int?)g.total_volume; break;
-                                case 3: gc.C2_1 = (int?)g.total_volume; counters.C2_1 = (int?)g.total_volume; break;
-                                case 4: gc.C2_2 = (int?)g.total_volume; counters.C2_2 = (int?)g.total_volume; break;
-                                case 5: gc.C3_1 = (int?)g.total_volume; counters.C3_1 = (int?)g.total_volume; break;
-                                case 6: gc.C3_2 = (int?)g.total_volume; counters.C3_2 = (int?)g.total_volume; break;
-                                case 7: gc.C4_1 = (int?)g.total_volume; counters.C4_1 = (int?)g.total_volume; break;
-                                case 8: gc.C4_2 = (int?)g.total_volume; counters.C4_2 = (int?)g.total_volume; break;
-                                case 9: gc.C5_1 = (int?)g.total_volume; counters.C5_1 = (int?)g.total_volume; break;
-                                case 10: gc.C5_2 = (int?)g.total_volume; counters.C5_2 = (int?)g.total_volume; break;
-                                case 11: gc.C6_1 = (int?)g.total_volume; counters.C6_1 = (int?)g.total_volume; break;
-                                case 12: gc.C6_2 = (int?)g.total_volume; counters.C6_2 = (int?)g.total_volume; break;
-                                case 13: gc.C7_1 = (int?)g.total_volume; counters.C7_1 = (int?)g.total_volume; break;
-                                case 14: gc.C7_2 = (int?)g.total_volume; counters.C7_2 = (int?)g.total_volume; break;
-                                case 15: gc.C7_3 = (int?)g.total_volume; counters.C7_3 = (int?)g.total_volume; break;
-                                case 16: gc.C7_4 = (int?)g.total_volume; counters.C7_4 = (int?)g.total_volume; break;
-                                case 17: gc.C7_5 = (int?)g.total_volume; counters.C7_5 = (int?)g.total_volume; break;
-                                case 18: gc.C7_6 = (int?)g.total_volume; counters.C7_6 = (int?)g.total_volume; break;
-                                case 19: gc.C7_7 = (int?)g.total_volume; counters.C7_7 = (int?)g.total_volume; break;
-                                case 20: gc.C7_8 = (int?)g.total_volume; counters.C7_8 = (int?)g.total_volume; break;
-                                case 21: gc.C8_1 = (int?)g.total_volume; counters.C8_1 = (int?)g.total_volume; break;
-                                case 22: gc.C8_2 = (int?)g.total_volume; counters.C8_2 = (int?)g.total_volume; break;
-                                case 23: gc.C8_3 = (int?)g.total_volume; counters.C8_3 = (int?)g.total_volume; break;
-                                case 24: gc.C8_4 = (int?)g.total_volume; counters.C8_4 = (int?)g.total_volume; break;
-                                case 25: gc.C8_5 = (int?)g.total_volume; counters.C8_5 = (int?)g.total_volume; break;
-                                case 26: gc.C8_6 = (int?)g.total_volume; counters.C8_6 = (int?)g.total_volume; break;
-                                case 27: gc.C8_7 = (int?)g.total_volume; counters.C8_7 = (int?)g.total_volume; break;
-                                case 28: gc.C8_8 = (int?)g.total_volume; counters.C8_8 = (int?)g.total_volume; break;
-                                case 29: gc.C9_1 = (int?)g.total_volume; counters.C9_1 = (int?)g.total_volume; break;
+                                case 1: counters.C1_1 = (int?)g.total_volume; break;
+                                case 2: counters.C1_2 = (int?)g.total_volume; break;
+                                case 3: counters.C2_1 = (int?)g.total_volume; break;
+                                case 4: counters.C2_2 = (int?)g.total_volume; break;
+                                case 5: counters.C3_1 = (int?)g.total_volume; break;
+                                case 6: counters.C3_2 = (int?)g.total_volume; break;
+                                case 7: counters.C4_1 = (int?)g.total_volume; break;
+                                case 8: counters.C4_2 = (int?)g.total_volume; break;
+                                case 9: counters.C5_1 = (int?)g.total_volume; break;
+                                case 10: counters.C5_2 = (int?)g.total_volume; break;
+                                case 11: counters.C6_1 = (int?)g.total_volume; break;
+                                case 12: counters.C6_2 = (int?)g.total_volume; break;
+                                case 13: counters.C7_1 = (int?)g.total_volume; break;
+                                case 14: counters.C7_2 = (int?)g.total_volume; break;
+                                case 15: counters.C7_3 = (int?)g.total_volume; break;
+                                case 16: counters.C7_4 = (int?)g.total_volume; break;
+                                case 17: counters.C7_5 = (int?)g.total_volume; break;
+                                case 18: counters.C7_6 = (int?)g.total_volume; break;
+                                case 19: counters.C7_7 = (int?)g.total_volume; break;
+                                case 20: counters.C7_8 = (int?)g.total_volume; break;
+                                case 21: counters.C8_1 = (int?)g.total_volume; break;
+                                case 22: counters.C8_2 = (int?)g.total_volume; break;
+                                case 23: counters.C8_3 = (int?)g.total_volume; break;
+                                case 24: counters.C8_4 = (int?)g.total_volume; break;
+                                case 25: counters.C8_5 = (int?)g.total_volume; break;
+                                case 26: counters.C8_6 = (int?)g.total_volume; break;
+                                case 27: counters.C8_7 = (int?)g.total_volume; break;
+                                case 28: counters.C8_8 = (int?)g.total_volume; break;
+                                case 29: counters.C9_1 = (int?)g.total_volume; break;
                             }
                         }
                         if (dios != null)
@@ -233,14 +226,11 @@ namespace ReportTRKServices
                             }
                         }
 
-                        ef_gc.Add(gc);
-                        res = ef_gc.Save();
-
                         ef_trkc.Add(counters);
-                        res1 = ef_trkc.Save();
+                        res = ef_trkc.Save();
                     }
                 }
-                String.Format("Сервис ReportTRKServices - Отработал метод addCounters - Код выполнения-1:{0}, Код выполнения-2:{1}", res, res1).SaveInformation();
+                String.Format("Сервис ReportTRKServices - Отработал метод addCounters - Код выполнения-1:{0}", res).SaveInformation();
                 return res;
             }
             catch (Exception e)

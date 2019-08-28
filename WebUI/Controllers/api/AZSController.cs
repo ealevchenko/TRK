@@ -240,11 +240,9 @@ namespace WebUI.Controllers.api
             try
             {
                 ClientOPCTRK.ClientTRK client = new ClientOPCTRK.ClientTRK();
-                EFAZS.Concrete.EFGunsCnts ef_gc = new EFAZS.Concrete.EFGunsCnts();
                 EFAZS.Concrete.EFTRK_Counters ef_trkc = new EFAZS.Concrete.EFTRK_Counters();
 
                 int res = 0;
-                int res1 = 0;
                 List<ClientOPCTRK.Gun> guns = client.ReadTagOPCOfGun();
                 List<ClientOPCTRK.DIORisers> dios = client.ReadTagOPCOfDIORisers();
 
@@ -254,7 +252,6 @@ namespace WebUI.Controllers.api
                     UsersActions user_action = efua.GetCurrentUsersActions();
                     if (user_action != null)
                     {
-                        GunsCnts gc = new GunsCnts();
                         TRK_Counters counters = new TRK_Counters()
                         {
                             ID = 0,
@@ -263,43 +260,39 @@ namespace WebUI.Controllers.api
                             TimeStamp = DateTime.Now,
                             note = "AZSController"
                         };
-                        gc.ID = 0;
-                        gc.Operator = user_action.UserName;
-                        gc.SmenaID = user_action.SessionID;
-                        gc.TimeStamp = DateTime.Now;
                         foreach (ClientOPCTRK.Gun g in guns)
                         {
                             switch (g.num_gun)
                             {
-                                case 1: gc.C1_1 = (int?)g.total_volume; counters.C1_1 = (int?)g.total_volume; break;
-                                case 2: gc.C1_2 = (int?)g.total_volume; counters.C1_2 = (int?)g.total_volume;  break;
-                                case 3: gc.C2_1 = (int?)g.total_volume; counters.C2_1 = (int?)g.total_volume; break;
-                                case 4: gc.C2_2 = (int?)g.total_volume; counters.C2_2 = (int?)g.total_volume; break;
-                                case 5: gc.C3_1 = (int?)g.total_volume; counters.C3_1 = (int?)g.total_volume; break;
-                                case 6: gc.C3_2 = (int?)g.total_volume; counters.C3_2 = (int?)g.total_volume; break;
-                                case 7: gc.C4_1 = (int?)g.total_volume; counters.C4_1 = (int?)g.total_volume; break;
-                                case 8: gc.C4_2 = (int?)g.total_volume; counters.C4_2 = (int?)g.total_volume; break;
-                                case 9: gc.C5_1 = (int?)g.total_volume; counters.C5_1 = (int?)g.total_volume; break;
-                                case 10: gc.C5_2 = (int?)g.total_volume; counters.C5_2 = (int?)g.total_volume; break;
-                                case 11: gc.C6_1 = (int?)g.total_volume; counters.C6_1 = (int?)g.total_volume; break;
-                                case 12: gc.C6_2 = (int?)g.total_volume; counters.C6_2 = (int?)g.total_volume; break;
-                                case 13: gc.C7_1 = (int?)g.total_volume; counters.C7_1 = (int?)g.total_volume; break;
-                                case 14: gc.C7_2 = (int?)g.total_volume; counters.C7_2 = (int?)g.total_volume; break;
-                                case 15: gc.C7_3 = (int?)g.total_volume; counters.C7_3 = (int?)g.total_volume; break;
-                                case 16: gc.C7_4 = (int?)g.total_volume; counters.C7_4 = (int?)g.total_volume; break;
-                                case 17: gc.C7_5 = (int?)g.total_volume; counters.C7_5 = (int?)g.total_volume; break;
-                                case 18: gc.C7_6 = (int?)g.total_volume; counters.C7_6 = (int?)g.total_volume; break;
-                                case 19: gc.C7_7 = (int?)g.total_volume; counters.C7_7 = (int?)g.total_volume; break;
-                                case 20: gc.C7_8 = (int?)g.total_volume; counters.C7_8 = (int?)g.total_volume; break;
-                                case 21: gc.C8_1 = (int?)g.total_volume; counters.C8_1 = (int?)g.total_volume; break;
-                                case 22: gc.C8_2 = (int?)g.total_volume; counters.C8_2 = (int?)g.total_volume; break;
-                                case 23: gc.C8_3 = (int?)g.total_volume; counters.C8_3 = (int?)g.total_volume; break;
-                                case 24: gc.C8_4 = (int?)g.total_volume; counters.C8_4 = (int?)g.total_volume; break;
-                                case 25: gc.C8_5 = (int?)g.total_volume; counters.C8_5 = (int?)g.total_volume; break;
-                                case 26: gc.C8_6 = (int?)g.total_volume; counters.C8_6 = (int?)g.total_volume; break;
-                                case 27: gc.C8_7 = (int?)g.total_volume; counters.C8_7 = (int?)g.total_volume; break;
-                                case 28: gc.C8_8 = (int?)g.total_volume; counters.C8_8 = (int?)g.total_volume; break;
-                                case 29: gc.C9_1 = (int?)g.total_volume; counters.C9_1 = (int?)g.total_volume; break;
+                                case 1: counters.C1_1 = (int?)g.total_volume; break;
+                                case 2: counters.C1_2 = (int?)g.total_volume;  break;
+                                case 3: counters.C2_1 = (int?)g.total_volume; break;
+                                case 4: counters.C2_2 = (int?)g.total_volume; break;
+                                case 5: counters.C3_1 = (int?)g.total_volume; break;
+                                case 6: counters.C3_2 = (int?)g.total_volume; break;
+                                case 7: counters.C4_1 = (int?)g.total_volume; break;
+                                case 8: counters.C4_2 = (int?)g.total_volume; break;
+                                case 9: counters.C5_1 = (int?)g.total_volume; break;
+                                case 10: counters.C5_2 = (int?)g.total_volume; break;
+                                case 11: counters.C6_1 = (int?)g.total_volume; break;
+                                case 12: counters.C6_2 = (int?)g.total_volume; break;
+                                case 13: counters.C7_1 = (int?)g.total_volume; break;
+                                case 14: counters.C7_2 = (int?)g.total_volume; break;
+                                case 15: counters.C7_3 = (int?)g.total_volume; break;
+                                case 16: counters.C7_4 = (int?)g.total_volume; break;
+                                case 17: counters.C7_5 = (int?)g.total_volume; break;
+                                case 18: counters.C7_6 = (int?)g.total_volume; break;
+                                case 19: counters.C7_7 = (int?)g.total_volume; break;
+                                case 20: counters.C7_8 = (int?)g.total_volume; break;
+                                case 21: counters.C8_1 = (int?)g.total_volume; break;
+                                case 22: counters.C8_2 = (int?)g.total_volume; break;
+                                case 23: counters.C8_3 = (int?)g.total_volume; break;
+                                case 24: counters.C8_4 = (int?)g.total_volume; break;
+                                case 25: counters.C8_5 = (int?)g.total_volume; break;
+                                case 26: counters.C8_6 = (int?)g.total_volume; break;
+                                case 27: counters.C8_7 = (int?)g.total_volume; break;
+                                case 28: counters.C8_8 = (int?)g.total_volume; break;
+                                case 29: counters.C9_1 = (int?)g.total_volume; break;
                             }
                         }
                         if (dios != null)
@@ -315,51 +308,48 @@ namespace WebUI.Controllers.api
                             }
                         }
 
-                        ef_gc.Add(gc);
-                        res = ef_gc.Save();
-
                         ef_trkc.Add(counters);
 
-                        String.Format("AZSController - Отработал метод addCounters - counters.Operator:{0}", counters.Operator).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.SmenaID:{0}", counters.SmenaID).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.TimeStamp:{0}", counters.TimeStamp).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C1_1:{0}", counters.C1_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C1_2:{0}", counters.C1_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C2_1:{0}", counters.C2_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C2_2:{0}", counters.C2_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C3_1:{0}", counters.C3_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C3_2:{0}", counters.C3_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C4_1:{0}", counters.C4_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C4_2:{0}", counters.C4_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C5_1:{0}", counters.C5_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C5_2:{0}", counters.C5_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C6_1:{0}", counters.C6_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C6_2:{0}", counters.C6_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_1:{0}", counters.C7_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_2:{0}", counters.C7_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_3:{0}", counters.C7_3).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_4:{0}", counters.C7_4).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_5:{0}", counters.C7_5).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_6:{0}", counters.C7_6).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_7:{0}", counters.C7_7).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C7_8:{0}", counters.C7_8).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_1:{0}", counters.C8_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_2:{0}", counters.C8_2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_3:{0}", counters.C8_3).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_4:{0}", counters.C8_4).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_5:{0}", counters.C8_5).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_6:{0}", counters.C8_6).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_7:{0}", counters.C8_7).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C8_8:{0}", counters.C8_8).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.C9_1:{0}", counters.C9_1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.as1:{0}", counters.as1).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.as2:{0}", counters.as2).SaveInformation();
-                        String.Format("AZSController - Отработал метод addCounters - counters.as3:{0}", counters.as3).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.Operator:{0}", counters.Operator).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.SmenaID:{0}", counters.SmenaID).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.TimeStamp:{0}", counters.TimeStamp).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C1_1:{0}", counters.C1_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C1_2:{0}", counters.C1_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C2_1:{0}", counters.C2_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C2_2:{0}", counters.C2_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C3_1:{0}", counters.C3_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C3_2:{0}", counters.C3_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C4_1:{0}", counters.C4_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C4_2:{0}", counters.C4_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C5_1:{0}", counters.C5_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C5_2:{0}", counters.C5_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C6_1:{0}", counters.C6_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C6_2:{0}", counters.C6_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_1:{0}", counters.C7_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_2:{0}", counters.C7_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_3:{0}", counters.C7_3).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_4:{0}", counters.C7_4).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_5:{0}", counters.C7_5).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_6:{0}", counters.C7_6).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_7:{0}", counters.C7_7).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C7_8:{0}", counters.C7_8).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_1:{0}", counters.C8_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_2:{0}", counters.C8_2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_3:{0}", counters.C8_3).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_4:{0}", counters.C8_4).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_5:{0}", counters.C8_5).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_6:{0}", counters.C8_6).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_7:{0}", counters.C8_7).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C8_8:{0}", counters.C8_8).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.C9_1:{0}", counters.C9_1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.as1:{0}", counters.as1).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.as2:{0}", counters.as2).SaveInformation();
+                        //String.Format("AZSController - Отработал метод addCounters - counters.as3:{0}", counters.as3).SaveInformation();
 
-                        res1 = ef_trkc.Save();
+                        res = ef_trkc.Save();
                     }
                 }
-                String.Format("AZSController - Отработал метод addCounters - Код выполнения-1:{0}, Код выполнения-2:{1}", res, res1).SaveInformation();
+                String.Format("AZSController - Отработал метод addCounters - Код выполнения-1:{0}", res).SaveInformation();
                 return res;
             }
             catch (Exception e)

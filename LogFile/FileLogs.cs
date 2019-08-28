@@ -34,6 +34,7 @@ namespace MessageLog
 
         public static void SaveError(this string message, Exception ex)
         {
+            if (ex.InnerException != null) SaveError(message, ex.InnerException);
             Log.Error(message, ex);
         }
 

@@ -179,7 +179,7 @@ namespace EFAZS.Concrete
         public int AddDailyReport15() {
             try
             {
-                string sql = "EXEC [dbo].[ADD_Daily_Report_15]";
+                string sql = "EXEC [dbo].[ADD_DailyFuelResidues]";
                 int res = this.db.Database.ExecuteSqlCommand(sql);
                 return res;
             }
@@ -193,7 +193,7 @@ namespace EFAZS.Concrete
         public int AddDailyReportDC() {
             try
             {
-                string sql = "EXEC [dbo].[ADD_Daily_Report_DC]";
+                string sql = "EXEC [dbo].[ADD_DailyFuelResidues_DC]";
                 int res = this.db.Database.ExecuteSqlCommand(sql);
                 return res;
             }

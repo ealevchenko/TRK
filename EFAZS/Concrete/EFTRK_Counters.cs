@@ -124,8 +124,8 @@ namespace EFAZS.Concrete
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода Save()").SaveError(e);
-                String.Format("Ошибка InnerException выполнения метода Save()").SaveError(e.InnerException);
-                String.Format("Ошибка InnerException1 выполнения метода Save()").SaveError(e.InnerException.InnerException);
+                //String.Format("Ошибка InnerException выполнения метода Save()").SaveError(e.InnerException);
+                //String.Format("Ошибка InnerException1 выполнения метода Save()").SaveError(e.InnerException.InnerException);
                 return -1;
             }
         }
