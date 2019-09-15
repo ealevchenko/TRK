@@ -53,6 +53,11 @@ namespace WebUI.Areas.report.Controllers
         {
             return View();
         }
+        // Суточный(Налоговый) отчет (новый)
+        public ActionResult DailyAccountingReport()
+        {
+            return View();
+        }
         // График
         public ActionResult GrafikOld()
         {

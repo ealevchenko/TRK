@@ -3275,6 +3275,30 @@ var getAsyncViewReportTSOfDateTime = function (callback) {
     });
 };
 
+// Суточный репорт (новый)
+var getAsyncViewDailyAccountingReportOfDateTime = function (start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/dar/report/daily_accounting/start/' + toISOStringTZ(start).substring(0, 19) + '/stop/' + toISOStringTZ(stop).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
+
 
 //-------ГРАФИКИ-----------------------------------------------
 // График по емкостям

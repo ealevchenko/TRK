@@ -42,8 +42,18 @@
 
         public virtual DbSet<TRK_Counters> TRK_Counters { get; set; }
 
+        public virtual DbSet<Daily_Accounting_Report> Daily_Accounting_Report { get; set; }
+        public virtual DbSet<DeliveryTank> DeliveryTanks { get; set; }
+        public virtual DbSet<ReceivingTank> ReceivingTanks { get; set; }
+        public virtual DbSet<RemainsTank> RemainsTanks { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DeliveryTank>()
+            .Property(e => e.passage)
+            .IsFixedLength()
+            .IsUnicode(false);
+
             modelBuilder.Entity<Cat_Werks>()
             .HasMany(e => e.Cat_Depots)
             .WithRequired(e => e.Cat_Werks)

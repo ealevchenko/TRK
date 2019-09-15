@@ -3,9 +3,9 @@ USE [ASU_AZSoperations]
 
 
 
-declare @date_start datetime = CONVERT(DATETIME, '2019-08-01 00:00:00', 102);
+declare @date_start datetime = CONVERT(DATETIME, '2019-09-15 00:00:00', 102);
 --> проверка через функцию
---select * from get_tanks_value_calc15(@date_start)
+select * from get_tanks_value_remains_calc15(@date_start)
 
 		--*************************************************************
 		--> Определим параметры трубопровода

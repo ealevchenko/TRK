@@ -245,6 +245,7 @@ namespace ReportTRKServices
             try
             {
                 EFDaily_Report efdl = new EFDaily_Report();
+                EFDaily_Accounting_Report ef_dar = new EFDaily_Accounting_Report();
 
                 string log_mes;
                 DateTime dt = DateTime.Now;
@@ -268,8 +269,9 @@ namespace ReportTRKServices
                     //    Log = log_mes
                     //});
                     // Суточный с пересчетом к 15 градусам
-                    res = efdl.AddDailyReport15();
-                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport15 - Код выполнения:{0}", res);
+                    //res = efdl.AddDailyReport15();
+                    res = ef_dar.AddDaily_Accounting_Report();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
                     {
@@ -279,9 +281,23 @@ namespace ReportTRKServices
                         UserName = "ReportTRKServeces",
                         Log = log_mes
                     });
+                    // Суточный детально по емкостям
+                    res = ef_dar.AddDaily_Accounting_Detali_Report();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Detali_Report - Код выполнения:{0}", res);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
+
                     // Суточный с переносом в ЦОД
-                    res = efdl.AddDailyReportDC();
-                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReportDC (Перенос данных в ЦОД) - Код выполнения:{0}", res);
+                    //res = efdl.AddDailyReportDC();
+                    res = ef_dar.AddDaily_Accounting_Report_DC();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report_DC (Перенос данных в ЦОД) - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
                     {
