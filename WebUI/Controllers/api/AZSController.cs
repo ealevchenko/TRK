@@ -20,6 +20,25 @@ namespace WebUI.Controllers.api
         public int? stop_valume { get; set; }
     }
 
+    public class TS_Report
+    {
+        public int id { get; set; }
+        public int id_table { get; set; }
+        public DateTime? dt { get; set; }
+        public int fuel_type { get; set; }
+        public string tank { get; set; }
+
+        public double? fill_percent { get; set; }
+        public double? level { get; set; }
+        public double? volume { get; set; }
+        public double? mass { get; set; }
+        public double? dens { get; set; }
+        public double? dens_avg { get; set; }
+        public double? temp { get; set; }
+        public double? water_level { get; set; }
+        public double? water_volume { get; set; }
+    }
+
     [RoutePrefix("api/azs")]
     public class AZSController : ApiController
     {
@@ -425,6 +444,30 @@ namespace WebUI.Controllers.api
             catch (Exception e)
             {
                 String.Format("Ошибка выполнения метода API:GetReportDR15(start={0}, stop={1})", start, stop).SaveError(e);
+                return NotFound();
+            }
+        }
+
+
+
+        // GET: api/azs/report/tanks_status/current
+        [Route("report/tanks_status/current")]
+        [ResponseType(typeof(TS_Report))]
+        public IHttpActionResult GetCurrentTanksValue()
+        {
+            try
+            {
+                string sql = "select  * from  get_all_tank_value_less_date(getdate()) order by fuel_type, tank";
+                List<TS_Report> list = this.ef_ua.Database.SqlQuery<TS_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportTS()").SaveError(e);
                 return NotFound();
             }
         }

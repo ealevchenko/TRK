@@ -1,30 +1,45 @@
 ﻿var showView = function () {
     // Время
     var d = new Date();
-    $('#date-value').text(toISOStringTZ(d));
+    $('#date-value').text(toISOStringTZ(d)         );
     // Обновим данные
     getAsyncViewReportTSOfDateTime(
         function (result) {
             for (ir = 0, count_ir = result.length; ir < count_ir; ir++) {
-                var tank = result[ir].tank;
+                var tank = $.trim(result[ir].tank);
                 var hp = result[ir].fill_percent !== null ? Number(result[ir].fill_percent).toFixed(2) : 0.00;
-                var h = result[ir].level !== null ? Number(result[ir].level).toFixed(2) : 0.00;
-                var w = result[ir].water_leve !== null ? Number(result[ir].water_leve).toFixed(2) : 0.00;
+                var h = result[ir].level !== null ? Number(result[ir].level/1000).toFixed(2) : 0.00;
+                var w = result[ir].water_level !== null ? Number(result[ir].water_level).toFixed(2) : 0.00;
                 var v = result[ir].volume !== null ? Number(result[ir].volume).toFixed(3) : 0.000;
                 var m = result[ir].mass !== null ? Number(result[ir].mass).toFixed(3) : 0.000;
                 var pd = result[ir].dens !== null ? Number(result[ir].dens).toFixed(5) : 0.00000; //?????
-                var ps = result[ir].mass !== null && result[ir].volume !== null && result[ir].volume > 0 ? (Number(result[ir].mass) / Number(result[ir].volume) *1000).toFixed(5) : 0.00000; //?????
-                var t = result[ir].temp !== null ? (Number(result[ir].temp)/10).toFixed(2) : 0.00;
+                var ps = result[ir].dens_avg !== null ? Number(result[ir].dens_avg).toFixed(5) : 0.00000;
+                var t = result[ir].temp !== null ? (Number(result[ir].temp)).toFixed(2) : 0.00;
                 $('input#tank-' + tank + '-hp').val(hp);
                 $('#pb-' + tank + '-cover').css('bottom', hp+'%');  // the cover controls the bar height
                 $('#pb-' + tank + '-value').css('backgroundColor', (hp > 25 ? '#0f0' : '#f00')); // value contains the bar color
                 $('input#tank-' + tank + '-h').val(h);
                 $('input#tank-' + tank + '-w').val(w);
+                if (w > 0) {
+                    $('input#tank-' + tank + '-w').addClass('water-error');
+                } else {
+                    $('input#tank-' + tank + '-w').removeClass('water-error');
+                }
                 $('input#tank-' + tank + '-v').val(v);
                 $('input#tank-' + tank + '-m').val(m);
                 $('input#tank-' + tank + '-pd').val(pd);
                 $('input#tank-' + tank + '-ps').val(ps);
                 $('input#tank-' + tank + '-t').val(t);
+                if (result[ir].dt !== null) {
+                    var seconds = parseInt((new Date() - StringToDate(result[ir].dt)) / 1000);
+                    if (seconds > 3000) {
+                        $('div#tank-' + result[ir].tank).addClass('error').attr('title', result[ir].dt);
+                    } else {
+                        $('div#tank-' + result[ir].tank).removeClass('error').attr('title', result[ir].dt);
+                    }
+                }
+                
+
             }
         });
 };
