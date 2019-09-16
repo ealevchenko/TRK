@@ -178,7 +178,7 @@ namespace EFAZS.Concrete
         public int AddDaily_Accounting_Detali_Report() {
             try
             {
-                string sql = "EXEC [dbo].[Daily_Accounting_Detali_Report]";
+                string sql = "EXEC [dbo].[ADD_Daily_Accounting_Detali_Report]";
                 int res = this.db.Database.ExecuteSqlCommand(sql);
                 return res;
             }
