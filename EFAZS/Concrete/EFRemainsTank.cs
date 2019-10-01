@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFRemainsTank : IRepository<RemainsTank>
+    public class EFRemainsTanks : IRepository<RemainsTanks>
     {
 
         private EFDbContext db;
 
-        public EFRemainsTank(EFDbContext db)
+        public EFRemainsTanks(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFRemainsTank()
+        public EFRemainsTanks()
         {
 
             this.db = new EFDbContext();
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<RemainsTank> Get()
+        public IEnumerable<RemainsTanks> Get()
         {
             try
             {
-                return db.Select<RemainsTank>();
+                return db.Select<RemainsTanks>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public RemainsTank Get(int id)
+        public RemainsTanks Get(int id)
         {
             try
             {
-                return db.Select<RemainsTank>(id);
+                return db.Select<RemainsTanks>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(RemainsTank item)
+        public void Add(RemainsTanks item)
         {
             try
             {
-                db.Insert<RemainsTank>(item);
+                db.Insert<RemainsTanks>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(RemainsTank item)
+        public void Update(RemainsTanks item)
         {
             try
             {
-                db.Update<RemainsTank>(item);
+                db.Update<RemainsTanks>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(RemainsTank item)
+        public void AddOrUpdate(RemainsTanks item)
         {
             try
             {
-                RemainsTank dbEntry = db.RemainsTanks.Find(item.id);
+                RemainsTanks dbEntry = db.RemainsTanks.Find(item.id);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                RemainsTank item = db.Delete<RemainsTank>(id);
+                RemainsTanks item = db.Delete<RemainsTanks>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public RemainsTank Refresh(RemainsTank item)
+        public RemainsTanks Refresh(RemainsTanks item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<RemainsTank>(item.id);
+                return db.Select<RemainsTanks>(item.id);
             }
             catch (Exception e)
             {

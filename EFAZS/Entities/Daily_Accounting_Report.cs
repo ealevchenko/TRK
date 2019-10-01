@@ -12,6 +12,12 @@ namespace EFAZS.Entities
 
         public int? type { get; set; }
 
+        [StringLength(10)]
+        public string ukt_zed { get; set; }
+
+        [StringLength(30)]
+        public string fuel_name { get; set; }
+
         public DateTime? date_start { get; set; }
 
         public DateTime? date_stop { get; set; }
@@ -72,6 +78,8 @@ namespace EFAZS.Entities
 
         public double? dens15_stop { get; set; }
 
-        public double? permissible_error { get; set; }
+        public double? permissible_volume15_error { get; set; }
+
+        public double? permissible_mass15_error { get; set; }
     }
 }

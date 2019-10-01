@@ -60,6 +60,7 @@
     <Compile Include="Abstract\ICat_Depots.cs" />
     <Compile Include="Abstract\ICat_OZM.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFDaily_Accounting_Detali_Report.cs" />
     <Compile Include="Concrete\EFRemainsTank.cs" />
     <Compile Include="Concrete\EFReceivingTank.cs" />
     <Compile Include="Concrete\EFDeliveryTank.cs" />
@@ -108,9 +109,10 @@
     <Compile Include="Entities\GunsCnts.cs" />
     <Compile Include="Entities\TRK_Counters.cs" />
     <Compile Include="Entities\Daily_Accounting_Report.cs" />
-    <Compile Include="Entities\DeliveryTank.cs" />
-    <Compile Include="Entities\ReceivingTank.cs" />
-    <Compile Include="Entities\RemainsTank.cs" />
+    <Compile Include="Entities\DeliveryTanks.cs" />
+    <Compile Include="Entities\ReceivingTanks.cs" />
+    <Compile Include="Entities\RemainsTanks.cs" />
+    <Compile Include="Entities\Daily_Accounting_Detali_Report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

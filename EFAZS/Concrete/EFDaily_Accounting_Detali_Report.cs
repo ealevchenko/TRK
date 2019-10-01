@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFDeliveryTanks : IRepository<DeliveryTanks>
+    public class EFDaily_Accounting_Detali_Report : IRepository<Daily_Accounting_Detali_Report>
     {
 
         private EFDbContext db;
 
-        public EFDeliveryTanks(EFDbContext db)
+        public EFDaily_Accounting_Detali_Report(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFDeliveryTanks()
+        public EFDaily_Accounting_Detali_Report()
         {
 
             this.db = new EFDbContext();
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<DeliveryTanks> Get()
+        public IEnumerable<Daily_Accounting_Detali_Report> Get()
         {
             try
             {
-                return db.Select<DeliveryTanks>();
+                return db.Select<Daily_Accounting_Detali_Report>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public DeliveryTanks Get(int id)
+        public Daily_Accounting_Detali_Report Get(int id)
         {
             try
             {
-                return db.Select<DeliveryTanks>(id);
+                return db.Select<Daily_Accounting_Detali_Report>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(DeliveryTanks item)
+        public void Add(Daily_Accounting_Detali_Report item)
         {
             try
             {
-                db.Insert<DeliveryTanks>(item);
+                db.Insert<Daily_Accounting_Detali_Report>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(DeliveryTanks item)
+        public void Update(Daily_Accounting_Detali_Report item)
         {
             try
             {
-                db.Update<DeliveryTanks>(item);
+                db.Update<Daily_Accounting_Detali_Report>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(DeliveryTanks item)
+        public void AddOrUpdate(Daily_Accounting_Detali_Report item)
         {
             try
             {
-                DeliveryTanks dbEntry = db.DeliveryTanks.Find(item.id);
+                Daily_Accounting_Detali_Report dbEntry = db.Daily_Accounting_Detali_Report.Find(item.id);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                DeliveryTanks item = db.Delete<DeliveryTanks>(id);
+                Daily_Accounting_Detali_Report item = db.Delete<Daily_Accounting_Detali_Report>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public DeliveryTanks Refresh(DeliveryTanks item)
+        public Daily_Accounting_Detali_Report Refresh(Daily_Accounting_Detali_Report item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<DeliveryTanks>(item.id);
+                return db.Select<Daily_Accounting_Detali_Report>(item.id);
             }
             catch (Exception e)
             {
@@ -162,19 +162,18 @@ namespace EFAZS.Concrete
             GC.SuppressFinalize(this);
         }
 
-        public int ADD_DeliveryTanks_Report() {
+        public int AddDailyAccountingDetaliReport() {
             try
             {
-                string sql = "EXEC [dbo].[ADD_DeliveryTanks]";
+                string sql = "EXEC [dbo].[ADD_DailyAccountingDetaliReport]";
                 int res = this.db.Database.ExecuteSqlCommand(sql);
                 return res;
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода ADD_DeliveryTanks_Report()").SaveError(e);
+                String.Format("Ошибка выполнения метода AddDaily_Accounting_Detali_Report()").SaveError(e);
                 return -2;
             }
         }
-
     }
 }

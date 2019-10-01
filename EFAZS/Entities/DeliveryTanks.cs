@@ -6,7 +6,7 @@ namespace EFAZS.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class DeliveryTank
+    public partial class DeliveryTanks
     {
         public int id { get; set; }
 
@@ -20,7 +20,25 @@ namespace EFAZS.Entities
 
         public int num { get; set; }
 
+        [StringLength(20)]
+        public string name_trk { get; set; }
+
+        [StringLength(50)]
+        public string name_gas_station { get; set; }
+
+        [StringLength(10)]
+        public string serial_number_flowmeter { get; set; }
+
+        [StringLength(10)]
+        public string identification_number_flowmeter { get; set; }
+
         public int fuel_type { get; set; }
+
+        [StringLength(10)]
+        public string ukt_zed { get; set; }
+
+        [StringLength(30)]
+        public string fuel_name { get; set; }
 
         [Required]
         [StringLength(200)]

@@ -246,6 +246,7 @@ namespace ReportTRKServices
             {
                 EFDaily_Report efdl = new EFDaily_Report();
                 EFDaily_Accounting_Report ef_dar = new EFDaily_Accounting_Report();
+                EFDaily_Accounting_Detali_Report ef_adr = new EFDaily_Accounting_Detali_Report();
 
                 string log_mes;
                 DateTime dt = DateTime.Now;
@@ -270,7 +271,7 @@ namespace ReportTRKServices
                     //});
                     // Суточный с пересчетом к 15 градусам
                     //res = efdl.AddDailyReport15();
-                    res = ef_dar.AddDaily_Accounting_Report();
+                    res = ef_dar.AddDailyAccountingReport();
                     log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
@@ -282,7 +283,7 @@ namespace ReportTRKServices
                         Log = log_mes
                     });
                     // Суточный детально по емкостям
-                    res = ef_dar.AddDaily_Accounting_Detali_Report();
+                    res = ef_adr.AddDailyAccountingDetaliReport();
                     log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Detali_Report - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
@@ -296,7 +297,7 @@ namespace ReportTRKServices
 
                     // Суточный с переносом в ЦОД
                     //res = efdl.AddDailyReportDC();
-                    res = ef_dar.AddDaily_Accounting_Report_DC();
+                    res = ef_dar.AddDailyAccountingReport_DC();
                     log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report_DC (Перенос данных в ЦОД) - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()

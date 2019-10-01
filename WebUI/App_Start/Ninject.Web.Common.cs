@@ -91,9 +91,10 @@ namespace WebUI.App_Start
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Daily_Report_15>>().To<EFAZS.Concrete.EFDaily_Report_15>();
 
             kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Daily_Accounting_Report>>().To<EFAZS.Concrete.EFDaily_Accounting_Report>();
-            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.DeliveryTank>>().To<EFAZS.Concrete.EFDeliveryTank>();
-            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.ReceivingTank>>().To<EFAZS.Concrete.EFReceivingTank>();
-            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.RemainsTank>>().To<EFAZS.Concrete.EFRemainsTank>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.Daily_Accounting_Detali_Report>>().To<EFAZS.Concrete.EFDaily_Accounting_Detali_Report>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.DeliveryTanks>>().To<EFAZS.Concrete.EFDeliveryTanks>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.ReceivingTanks>>().To<EFAZS.Concrete.EFReceivingTanks>();
+            kernel.Bind<EFAZS.Abstract.IRepository<EFAZS.Entities.RemainsTanks>>().To<EFAZS.Concrete.EFRemainsTanks>();
 
         kernel.Bind<ITRKLogs>().To<EFTRKLogs>();
             kernel.Bind<ITanksLog>().To<EFTanksLog>();

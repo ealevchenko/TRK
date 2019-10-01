@@ -155,4 +155,32 @@ table.dataTable tbody tr.nakladnaya {
     font-weight: bold;
 }
 
+/*Показывает или прячить детали*/
+td.details-control {
+    background: url('../../Content/DataTables/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../../Content/DataTables/images/details_close.png') no-repeat center center;
+}
+
+.detali-operation {
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
+    text-align: left;
+}
+
+table.dataTable tbody tr.total-issue {
+    background-color: lightsalmon;
+}
+
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.total-issue {
+    background-color: lightsalmon;
+}
 

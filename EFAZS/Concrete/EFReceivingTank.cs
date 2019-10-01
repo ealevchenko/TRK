@@ -10,18 +10,18 @@ using MessageLog;
 
 namespace EFAZS.Concrete
 {
-    public class EFReceivingTank : IRepository<ReceivingTank>
+    public class EFReceivingTanks : IRepository<ReceivingTanks>
     {
 
         private EFDbContext db;
 
-        public EFReceivingTank(EFDbContext db)
+        public EFReceivingTanks(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFReceivingTank()
+        public EFReceivingTanks()
         {
 
             this.db = new EFDbContext();
@@ -32,11 +32,11 @@ namespace EFAZS.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<ReceivingTank> Get()
+        public IEnumerable<ReceivingTanks> Get()
         {
             try
             {
-                return db.Select<ReceivingTank>();
+                return db.Select<ReceivingTanks>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public ReceivingTank Get(int id)
+        public ReceivingTanks Get(int id)
         {
             try
             {
-                return db.Select<ReceivingTank>(id);
+                return db.Select<ReceivingTanks>(id);
             }
             catch (Exception e)
             {
@@ -58,11 +58,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Add(ReceivingTank item)
+        public void Add(ReceivingTanks item)
         {
             try
             {
-                db.Insert<ReceivingTank>(item);
+                db.Insert<ReceivingTanks>(item);
             }
             catch (Exception e)
             {
@@ -70,11 +70,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void Update(ReceivingTank item)
+        public void Update(ReceivingTanks item)
         {
             try
             {
-                db.Update<ReceivingTank>(item);
+                db.Update<ReceivingTanks>(item);
             }
             catch (Exception e)
             {
@@ -82,11 +82,11 @@ namespace EFAZS.Concrete
             }
         }
 
-        public void AddOrUpdate(ReceivingTank item)
+        public void AddOrUpdate(ReceivingTanks item)
         {
             try
             {
-                ReceivingTank dbEntry = db.ReceivingTanks.Find(item.id);
+                ReceivingTanks dbEntry = db.ReceivingTanks.Find(item.id);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -107,7 +107,7 @@ namespace EFAZS.Concrete
         {
             try
             {
-                ReceivingTank item = db.Delete<ReceivingTank>(id);
+                ReceivingTanks item = db.Delete<ReceivingTanks>(id);
             }
             catch (Exception e)
             {
@@ -128,12 +128,12 @@ namespace EFAZS.Concrete
             }
         }
 
-        public ReceivingTank Refresh(ReceivingTank item)
+        public ReceivingTanks Refresh(ReceivingTanks item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<ReceivingTank>(item.id);
+                return db.Select<ReceivingTanks>(item.id);
             }
             catch (Exception e)
             {

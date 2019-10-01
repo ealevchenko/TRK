@@ -162,7 +162,7 @@ namespace EFAZS.Concrete
             GC.SuppressFinalize(this);
         }
 
-        public int AddDaily_Accounting_Report() {
+        public int AddDailyAccountingReport() {
             try
             {
                 string sql = "EXEC [dbo].[ADD_DailyAccountingReport]";
@@ -171,24 +171,11 @@ namespace EFAZS.Concrete
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода AddDaily_Accounting_Report()").SaveError(e);
+                String.Format("Ошибка выполнения метода AddDailyAccountingReport()").SaveError(e);
                 return -2;
             }
         }
-        public int AddDaily_Accounting_Detali_Report() {
-            try
-            {
-                string sql = "EXEC [dbo].[ADD_Daily_Accounting_Detali_Report]";
-                int res = this.db.Database.ExecuteSqlCommand(sql);
-                return res;
-            }
-            catch (Exception e)
-            {
-                String.Format("Ошибка выполнения метода AddDaily_Accounting_Detali_Report()").SaveError(e);
-                return -2;
-            }
-        }
-        public int AddDaily_Accounting_Report_DC() {
+        public int AddDailyAccountingReport_DC() {
             try
             {
                 string sql = "EXEC [dbo].[ADD_DailyAccountingReport_DC]";
@@ -197,7 +184,7 @@ namespace EFAZS.Concrete
             }
             catch (Exception e)
             {
-                String.Format("Ошибка выполнения метода AddDaily_Accounting_Report_DC()").SaveError(e);
+                String.Format("Ошибка выполнения метода AddDailyAccountingReport_DC()").SaveError(e);
                 return -2;
             }
         }
