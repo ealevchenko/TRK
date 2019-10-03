@@ -17,7 +17,7 @@
                 var t = result[ir].temp !== null ? (Number(result[ir].temp)).toFixed(2) : 0.00;
                 $('input#tank-' + tank + '-hp').val(hp);
                 $('#pb-' + tank + '-cover').css('bottom', hp+'%');  // the cover controls the bar height
-                $('#pb-' + tank + '-value').css('backgroundColor', (hp > 25 ? '#0f0' : '#f00')); // value contains the bar color
+                $('#pb-' + tank + '-value').css('backgroundColor', (h > 47.0 ? '#0f0' : '#f00')); // value contains the bar color
                 $('input#tank-' + tank + '-h').val(h);
                 $('input#tank-' + tank + '-w').val(w);
                 if (w > 0) {

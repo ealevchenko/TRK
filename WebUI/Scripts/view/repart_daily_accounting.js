@@ -169,11 +169,12 @@
                             //    }
                             //}
 
-                            //customize: function (xlsx) {
-                            //    var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                            //    $('row:first c', sheet).attr('s', '42');
-
-                            //}
+                            customize: function (xlsx) {
+                                //var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                //sheet = 'sheet2.xml';
+                                //$('cellXfs', sheet).append('<xf ... />');
+                                //$('row:first c', sheet).append($('<div>rrrrrrrrrrrrrrr</div>'));
+                            }
 
                         }
                     ]
