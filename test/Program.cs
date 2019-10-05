@@ -88,11 +88,20 @@ namespace test
                 #endregion
 
                 #region TEST SAP
-                testSAP test_sap = new testSAP();
+                //testSAP test_sap = new testSAP();
                 //test_sap.Test_ClientSAP_GetReservation();
                 //test_sap.Test_ClientSAP_GetSupply();
                 //test_sap.Test_ClientSAP_GetReservationOfDebitor();
                 //test_sap.Test_ClientSAP_GetReservationOfValumeMassDebitor();
+                #endregion
+
+                #region TEST Transfer
+                testTransfer test_tr = new testTransfer();
+                //test_tr.Test_Transfer_DeliveryTanksToDC();
+                //test_tr.Test_Transfer_RemainsTanksToDC();
+                //test_tr.Test_Transfer_ReceivingTanksToDC();
+                //test_tr.Test_Transfer_Daily_Accounting_Detali_ReportToDC();
+                test_tr.Test_Transfer_Daily_Accounting_ReportToDC();
                 #endregion
 
             }

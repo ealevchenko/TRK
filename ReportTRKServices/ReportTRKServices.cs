@@ -13,6 +13,7 @@ using ClientOPCTRK;
 using EFAZS.Concrete;
 using EFAZS.Entities;
 using System.Data.SqlClient;
+using TransferDC;
 
 namespace ReportTRKServices
 {
@@ -88,74 +89,6 @@ namespace ReportTRKServices
             timer_services.Stop();
             String.Format("Сервис ReportTRKServices - стоп").SaveInformation();
         }
-
-        //public int addCounters()
-        //{
-        //    try
-        //    {
-        //        EFGunsCnts ef_gc = new EFGunsCnts();
-        //        ClientTRK client = new ClientTRK();
-        //        int res = 0;
-        //        List<Gun> guns = client.ReadTagOPCOfGun();
-        //        if (guns != null)
-        //        {
-        //            EFUsersActions efua = new EFUsersActions();
-        //            UsersActions user_action = efua.GetCurrentUsersActions();
-        //            if (user_action != null)
-        //            {
-        //                GunsCnts gc = new GunsCnts();
-        //                gc.ID = 0;
-        //                gc.Operator = user_action.UserName;
-        //                gc.SmenaID = user_action.SessionID;
-        //                gc.TimeStamp = DateTime.Now;
-        //                foreach (Gun g in guns)
-        //                {
-        //                    switch (g.num_gun)
-        //                    {
-        //                        case 1: gc.C1_1 = (int?)g.total_volume; break;
-        //                        case 2: gc.C1_2 = (int?)g.total_volume; break;
-        //                        case 3: gc.C2_1 = (int?)g.total_volume; break;
-        //                        case 4: gc.C2_2 = (int?)g.total_volume; break;
-        //                        case 5: gc.C3_1 = (int?)g.total_volume; break;
-        //                        case 6: gc.C3_2 = (int?)g.total_volume; break;
-        //                        case 7: gc.C4_1 = (int?)g.total_volume; break;
-        //                        case 8: gc.C4_2 = (int?)g.total_volume; break;
-        //                        case 9: gc.C5_1 = (int?)g.total_volume; break;
-        //                        case 10: gc.C5_2 = (int?)g.total_volume; break;
-        //                        case 11: gc.C6_1 = (int?)g.total_volume; break;
-        //                        case 12: gc.C6_2 = (int?)g.total_volume; break;
-        //                        case 13: gc.C7_1 = (int?)g.total_volume; break;
-        //                        case 14: gc.C7_2 = (int?)g.total_volume; break;
-        //                        case 15: gc.C7_3 = (int?)g.total_volume; break;
-        //                        case 16: gc.C7_4 = (int?)g.total_volume; break;
-        //                        case 17: gc.C7_5 = (int?)g.total_volume; break;
-        //                        case 18: gc.C7_6 = (int?)g.total_volume; break;
-        //                        case 19: gc.C7_7 = (int?)g.total_volume; break;
-        //                        case 20: gc.C7_8 = (int?)g.total_volume; break;
-        //                        case 21: gc.C8_1 = (int?)g.total_volume; break;
-        //                        case 22: gc.C8_2 = (int?)g.total_volume; break;
-        //                        case 23: gc.C8_3 = (int?)g.total_volume; break;
-        //                        case 24: gc.C8_4 = (int?)g.total_volume; break;
-        //                        case 25: gc.C8_5 = (int?)g.total_volume; break;
-        //                        case 26: gc.C8_6 = (int?)g.total_volume; break;
-        //                        case 27: gc.C8_7 = (int?)g.total_volume; break;
-        //                        case 28: gc.C8_8 = (int?)g.total_volume; break;
-        //                        case 29: gc.C9_1 = (int?)g.total_volume; break;
-        //                    }
-        //                }
-        //                ef_gc.Add(gc);
-        //                res = ef_gc.Save();
-        //            }
-        //        }
-        //        String.Format("Сервис ReportTRKServices - Отработал метод addCounters - Код выполнения:{0}", res).SaveInformation();
-        //        return res;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        String.Format("addCounters()").SaveError(e);
-        //        return -1;
-        //    }
-        //}
 
         public int addCounters()
         {
@@ -247,6 +180,7 @@ namespace ReportTRKServices
                 EFDaily_Report efdl = new EFDaily_Report();
                 EFDaily_Accounting_Report ef_dar = new EFDaily_Accounting_Report();
                 EFDaily_Accounting_Detali_Report ef_adr = new EFDaily_Accounting_Detali_Report();
+                Transfer tr = new Transfer();
 
                 string log_mes;
                 DateTime dt = DateTime.Now;
@@ -257,20 +191,7 @@ namespace ReportTRKServices
                     String.Format("Сервис ReportTRKServices - сработал таймер на 0 часов").SaveInformation();
 
                     int res = 0;
-                    // Суточный
-                    //res = efdl.AddDailyReport();
-                    //log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDailyReport - Код выполнения:{0}", res);
-                    //log_mes.SaveInformation();
-                    //trk_log.AddTRKLogs(new TRKLogs()
-                    //{
-                    //    ID = 0,
-                    //    DateTime = DateTime.Now,
-                    //    Level = 4,
-                    //    UserName = "ReportTRKServeces",
-                    //    Log = log_mes
-                    //});
                     // Суточный с пересчетом к 15 градусам
-                    //res = efdl.AddDailyReport15();
                     res = ef_dar.AddDailyAccountingReport();
                     log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report - Код выполнения:{0}", res);
                     log_mes.SaveInformation();
@@ -296,9 +217,14 @@ namespace ReportTRKServices
                     });
 
                     // Суточный с переносом в ЦОД
-                    //res = efdl.AddDailyReportDC();
-                    res = ef_dar.AddDailyAccountingReport_DC();
-                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод AddDaily_Accounting_Report_DC (Перенос данных в ЦОД) - Код выполнения:{0}", res);
+                    int res_rt = tr.RemainsTanksToDC();
+                    int res_rect = tr.ReceivingTanksToDC();
+                    int res_dt = tr.DeliveryTanksToDC();
+                    int res_radr = tr.Daily_Accounting_Detali_ReportToDC();
+                    int res_dar = tr.Daily_Accounting_ReportToDC();
+
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработали методы переноса в ЦОД - Коды выполнения RemainsTanksToDC:{0}, ReceivingTanksToDC:{1}, DeliveryTanksToDC:{2}, Daily_Accounting_Detali_ReportToDC:{3}, Daily_Accounting_ReportToDC:{4}", 
+                        res_rt,res_rect,res_dt,res_radr,res_dar);
                     log_mes.SaveInformation();
                     trk_log.AddTRKLogs(new TRKLogs()
                     {
