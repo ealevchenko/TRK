@@ -1,4 +1,5 @@
 ﻿using EFAZS.Abstract;
+using MessageLog;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -27,6 +28,21 @@ namespace EFAZS.Concrete
         public Database Database
         {
             get { return this.db.Database; }
+        }
+
+        public int Delete_Tanks()
+        {
+            try
+            {
+                string sql = "EXEC [dbo].[Delete_Tanks]";
+                int res = this.db.Database.ExecuteSqlCommand(sql);
+                return res;
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода Delete_Tanks()").SaveError(e);
+                return -2;
+            }
         }
     }
 }
