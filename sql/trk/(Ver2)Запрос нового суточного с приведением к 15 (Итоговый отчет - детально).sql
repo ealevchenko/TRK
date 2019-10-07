@@ -71,7 +71,13 @@ declare @temp_report table(
 	[dt_start] [datetime] NULL,
 	[dt_stop] [datetime] NULL,
 	[fuel_type] [int] NULL,
+	[ukt_zed] [nvarchar](10) NULL,
 	[tank] [nvarchar](11) NULL,
+	[serial_number] [nvarchar](10) NULL,
+	[unified_tank_number] [nvarchar](21) NULL,
+	[type_name] [nvarchar](100) NULL,
+	[level_meters_model] [nvarchar](50) NULL,
+	[level_meters_serial_number] [nvarchar](10) NULL,
 	[dt_actual_remains_start] [datetime] NULL,
 	[level_remains_start] [float] NULL,
 	[volume_remains_start] [float] NULL,
@@ -113,7 +119,8 @@ declare @temp_report table(
 	[dens15_remains_stop] [float] NULL,
 	[volume15_remains_stop] [float] NULL,
 	[mass15_remains_stop] [float] NULL,
-	[permissible_error] [float] NULL)
+	[permissible_volume15_error] [float] NULL,
+	[permissible_mass15_error] [float] NULL)
 
   insert @temp_report
    ([dt_start]
@@ -215,59 +222,71 @@ SELECT   [dt_start] = @date_start
   order by rt.[fuel_type], rt.[tank]
 
   insert @daily_accounting_detali
-     ([dt_start]
-           ,[dt_stop]
-           ,[fuel_type]
-           ,[tank]
-           ,[dt_actual_remains_start]
-           ,[level_remains_start]
-           ,[volume_remains_start]
-           ,[dens_remains_start]
-           ,[dens_avg_remains_start]
-           ,[mass_remains_start]
-           ,[temp_remains_start]
-           ,[relation_remains_start]
-           ,[ratio_vd_remains_start]
-           ,[ratio_tv_remains_start]
-           ,[dens15_remains_start]
-           ,[volume15_remains_start]
-           ,[mass15_remains_start]
-           ,[volume_received]
-           ,[mass_received]
-           ,[dens_received]
-           ,[temp_received]
-           ,[volume15_received]
-           ,[mass15_received]
-           ,[dens15_received]
-           ,[count_tanks_delivery]
-           ,[volume_delivery]
-           ,[mass_delivery]
-           ,[dens_delivery]
-           ,[temp_delivery]
-           ,[volume15_delivery]
-           ,[mass15_delivery]
-           ,[dens15_delivery]
-           ,[dt_actual_remains_stop]
-           ,[level_remains_stop]
-           ,[volume_remains_stop]
-           ,[dens_remains_stop]
-           ,[dens_avg_remains_stop]
-           ,[mass_remains_stop]
-           ,[temp_remains_stop]
-           ,[relation_remains_stop]
-           ,[ratio_vd_remains_stop]
-           ,[ratio_tv_remains_stop]
-           ,[dens15_remains_stop]
-           ,[volume15_remains_stop]
-           ,[mass15_remains_stop]
-		   ,permissible_error
-		   )
+    ([dt_start],
+	[dt_stop],
+	[fuel_type],
+	[ukt_zed],
+	[tank],
+	[serial_number],
+	[unified_tank_number],
+	[type_name],
+	[level_meters_model],
+	[level_meters_serial_number],
+	[dt_actual_remains_start],
+	[level_remains_start],
+	[volume_remains_start],
+	[dens_remains_start],
+	[dens_avg_remains_start],
+	[mass_remains_start],
+	[temp_remains_start],
+	[relation_remains_start],
+	[ratio_vd_remains_start],
+	[ratio_tv_remains_start],
+	[dens15_remains_start],
+	[volume15_remains_start],
+	[mass15_remains_start],
+	[volume_received],
+	[mass_received],
+	[dens_received],
+	[temp_received],
+	[volume15_received],
+	[mass15_received],
+	[dens15_received],
+	[count_tanks_delivery],
+	[volume_delivery],
+	[mass_delivery],
+	[dens_delivery],
+	[temp_delivery],
+	[volume15_delivery],
+	[mass15_delivery],
+	[dens15_delivery],
+	[dt_actual_remains_stop],
+	[level_remains_stop],
+	[volume_remains_stop],
+	[dens_remains_stop],
+	[dens_avg_remains_stop],
+	[mass_remains_stop],
+	[temp_remains_stop],
+	[relation_remains_stop],
+	[ratio_vd_remains_stop],
+	[ratio_tv_remains_stop],
+	[dens15_remains_stop],
+	[volume15_remains_stop],
+	[mass15_remains_stop],
+	[permissible_volume15_error],
+	[permissible_mass15_error])
   select 
 	[dt_start]
            ,[dt_stop]
            ,[fuel_type]
+		   ,[ukt_zed] = (select [ukt_zed] FROM [ASU_AZSoperations].[dbo].[Cat_Fuel] where [type_fuel]=[fuel_type])
            ,[tank]
-           ,[dt_actual_remains_start]
+		   ,[serial_number] = (select [serial_number] FROM [ASU_AZSoperations].[dbo].[Cat_Tanks] where [id] = [tank])
+		   ,[unified_tank_number] = (select [uniform_umber_tank] + '/' + [unified_number] FROM [ASU_AZSoperations].[dbo].[Cat_Tanks] where [id] = [tank])
+           ,[type_name] = (select [type_name] FROM [ASU_AZSoperations].[dbo].[Cat_Tanks] where [id] = [tank])
+		   ,[level_meters_model] = (select [level_meters_model] FROM [ASU_AZSoperations].[dbo].[Cat_Tanks] where [id] = [tank])
+		   ,[level_meters_serial_number] = (select [level_meters_serial_number] FROM [ASU_AZSoperations].[dbo].[Cat_Tanks] where [id] = [tank])
+		   ,[dt_actual_remains_start]
            ,[level_remains_start]
            ,[volume_remains_start]
            ,[dens_remains_start]
@@ -308,7 +327,12 @@ SELECT   [dt_start] = @date_start
            ,[dens15_remains_stop]
            ,[volume15_remains_stop]
            ,[mass15_remains_stop]
-		   ,permissible_error = CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END
+		   ,permissible_volume15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN 0 ELSE (CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END) END)
+		   ,permissible_mass15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN 0 ELSE (CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_start])*100 ELSE 0 END) END)
+
+		   ,permissible_volume15_error_ = CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END
+		   ,permissible_mass15_error_ = CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_start])*100 ELSE 0 END
+  --into daily_accounting_detali
   from @temp_report as tr
 
   select *from  @daily_accounting_detali

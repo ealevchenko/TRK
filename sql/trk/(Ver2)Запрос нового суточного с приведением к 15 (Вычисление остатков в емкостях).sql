@@ -182,8 +182,10 @@ select * from get_tanks_value_remains_calc15(@date_start)
 					 ELSE 0 
 				  END)
 				  ,[dens15] = [ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])
-				  ,[volume15] = CASE WHEN [dens_avg] > 0 THEN ([mass]/[ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*1000) ELSE 0 END
-				  ,[mass15] = [mass]
+				  ,[volume15] = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN [volume] ELSE (CASE WHEN [dens_avg] > 0 THEN ([mass]/[ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*1000) ELSE 0 END) END)
+				  ,[mass15] = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN ([ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*[volume]*0.001) ELSE [mass] END)			  
+				  --,[volume15_] = CASE WHEN [dens_avg] > 0 THEN ([mass]/[ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*1000) ELSE 0 END
+				  --,[mass15_] = [mass]
 
 			  FROM @REMAINS_CURRENT
 			  --*************************************************************

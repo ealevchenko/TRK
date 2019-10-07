@@ -42,7 +42,7 @@ DELETE FROM [dbo].[BT11]
       WHERE [OWN_tank08_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT09]
       WHERE [OWN_tank09_dens_TIMESTAMP]<@date
-	DELETE FROM [dbo].[DT10]
+	  DELETE FROM [dbo].[DT10]
       WHERE [OWN_tank10_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT11]
       WHERE [OWN_tank11_dens_TIMESTAMP]<@date
@@ -62,7 +62,7 @@ DELETE FROM [dbo].[BT11]
       WHERE [OWN_tank18_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT19]
       WHERE [OWN_tank19_dens_TIMESTAMP]<@date
-	DELETE FROM [dbo].[DT20]
+	 DELETE FROM [dbo].[DT20]
       WHERE [OWN_tank20_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT21]
       WHERE [OWN_tank21_dens_TIMESTAMP]<@date
@@ -82,7 +82,7 @@ DELETE FROM [dbo].[BT11]
       WHERE [OWN_tank28_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT29]
       WHERE [OWN_tank29_dens_TIMESTAMP]<@date
-	DELETE FROM [dbo].[DT30]
+	  DELETE FROM [dbo].[DT30]
       WHERE [OWN_tank30_dens_TIMESTAMP]<@date
 	  DELETE FROM [dbo].[DT31]
       WHERE [OWN_tank31_dens_TIMESTAMP]<@date
