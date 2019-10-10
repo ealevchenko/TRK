@@ -46,8 +46,8 @@ SELECT
       ,[stop_mass]
       ,[stop_temp]
       ,[stop_water_level]
-	  ,[volume_received] = ([stop_mass]-[start_mass])/(([stop_mass]/([stop_volume]*10))*1000.0)*1000.0
-	  ,[dens_received] = ([stop_mass]/([stop_volume]*10))*1000.0
+	  ,[volume_received] = (([stop_volume]*10)-([start_volume]*10))
+	  ,[dens_received] = (([stop_mass]-[start_mass])  / (([stop_volume]*10)-([start_volume]*10)))*1000.0
 	  ,[mass_received] = [stop_mass]-[start_mass]
 	  ,[temp_received] = [stop_temp]
 	-- Нужно только для проверки

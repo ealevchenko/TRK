@@ -37,16 +37,22 @@ select * from get_tanks_value_remains_calc15(@date_start)
 		--> ПРОВЕРКА!
 		select * from @value_pipeline
 
+	--	3. По трубам сделать статическую массу и плотность везде (при текущей температуре и при 15 С):
+	--- А-92 - m=3447,4 кг,  p=753,2 кг/м3;
+	--- А-95 - m=2975.47 кг,  p=762.16 кг/м3;
+	--- Дизель - m=5704,3 кг,  p=842,46 кг/м3;
+	--- Керосин - m=2149,9 кг,  p=804 кг/м3;
+
 		--> Получим плотность по каждому трубопроводу из плотности резервуараиз которого была выдача
-		declare @pipeline_dens_107000022 float = (select dens_avg from @value_pipeline where fuel_type = 107000022)
-		declare @pipeline_dens_107000023 float = (select dens_avg from @value_pipeline where fuel_type = 107000023)
-		declare @pipeline_dens_107000024 float = (select dens_avg from @value_pipeline where fuel_type = 107000024)
-		declare @pipeline_dens_107000027 float = (select dens_avg from @value_pipeline where fuel_type = 107000027)
+		declare @pipeline_dens_107000022 float = 753.2;--(select dens_avg from @value_pipeline where fuel_type = 107000022)
+		declare @pipeline_dens_107000023 float = 762.16;--(select dens_avg from @value_pipeline where fuel_type = 107000023)
+		declare @pipeline_dens_107000024 float = 842.46;--(select dens_avg from @value_pipeline where fuel_type = 107000024)
+		declare @pipeline_dens_107000027 float = 804.0;--(select dens_avg from @value_pipeline where fuel_type = 107000027)
 		--> Получим массу в трубопроводе через плотность и объем v*pl*0,001
-		declare @pipeline_mass_107000022 float = @pipeline_volume_107000022 * @pipeline_dens_107000022 * 0.001;
-		declare @pipeline_mass_107000023 float = @pipeline_volume_107000023 * @pipeline_dens_107000023 * 0.001;
-		declare @pipeline_mass_107000024 float = @pipeline_volume_107000024 * @pipeline_dens_107000024 * 0.001;
-		declare @pipeline_mass_107000027 float = @pipeline_volume_107000027 * @pipeline_dens_107000027 * 0.001;
+		declare @pipeline_mass_107000022 float =  3447.4;--@pipeline_volume_107000022 * @pipeline_dens_107000022 * 0.001;
+		declare @pipeline_mass_107000023 float = 2975.47;--@pipeline_volume_107000023 * @pipeline_dens_107000023 * 0.001;
+		declare @pipeline_mass_107000024 float = 5704.3;-- @pipeline_volume_107000024 * @pipeline_dens_107000024 * 0.001;
+		declare @pipeline_mass_107000027 float = 2149.9;-- @pipeline_volume_107000027 * @pipeline_dens_107000027 * 0.001;
 		--> Определим температуру по всем трубопроводам из температуры резервуара из которого была выдача
 		declare @pipeline_temp_107000022 float  = (select temp from @value_pipeline where fuel_type = 107000022);
 		declare @pipeline_temp_107000023 float  = (select temp from @value_pipeline where fuel_type = 107000023);
@@ -181,9 +187,9 @@ select * from get_tanks_value_remains_calc15(@date_start)
 					 WHEN 107000027 THEN [volume]/@sum_volume_107000027 
 					 ELSE 0 
 				  END)
-				  ,[dens15] = [ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])
+				  ,[dens15] = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN [dens_avg] ELSE [ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp]) END)
 				  ,[volume15] = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN [volume] ELSE (CASE WHEN [dens_avg] > 0 THEN ([mass]/[ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*1000) ELSE 0 END) END)
-				  ,[mass15] = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN ([ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*[volume]*0.001) ELSE [mass] END)			  
+				  ,[mass15] = [mass]		  
 				  --,[volume15_] = CASE WHEN [dens_avg] > 0 THEN ([mass]/[ASU_AZSlogs].[dbo].[GET_DENS15]([fuel_type], [dens_avg], [temp])*1000) ELSE 0 END
 				  --,[mass15_] = [mass]
 

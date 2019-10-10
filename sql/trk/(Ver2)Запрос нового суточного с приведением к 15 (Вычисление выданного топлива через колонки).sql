@@ -3,7 +3,7 @@ USE [ASU_AZSoperations]
 
 
 
-declare @date_start datetime = CONVERT(DATETIME, '2019-08-23 00:00:00', 102);
+declare @date_start datetime = CONVERT(DATETIME, '2019-10-09 00:00:00', 102);
 
 --> Получим дату конца выдачи
 declare @date_stop datetime = CONVERT(DATETIME, CONVERT(char(11), @date_start ,20) + '23:59:59', 102)
@@ -113,7 +113,7 @@ FETCH NEXT FROM fs_cursor INTO @id, @fuel_type, @tank_num, @start_datetime, @sto
 WHILE @@FETCH_STATUS=0
 BEGIN
 	--> !!! Проверка
-    --SELECT  @id, @fuel_type, @tank_num, @start_datetime, @stop_datetime
+   --SELECT  @id, @fuel_type, @tank_num, @start_datetime, @stop_datetime
 	--> Вставим данные
 	insert @tank_value
 	select @id,@start_datetime, N'Start', [id_table],[dt],[fuel_type],[tank],[fill_percent],[level],[volume],[mass],[dens],[dens_avg],[temp],[water_level],[water_volume] from get_tanks_value_less_of_date_nums_tank(@start_datetime, @tank_num)
@@ -126,15 +126,50 @@ CLOSE fs_cursor
 DEALLOCATE fs_cursor
 	--> !!! Проверка
 	--select * from @tank_value
---> Определим сумма по объему выдачи по каждому типу топлива
-declare @sum_volume_107000022 float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
-	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000022)
+--> Определим сумма по объему выдачи по каждому типу топлива (пистолеты отдельно, НС отдельно)
+declare @sum_volume_107000022_gun float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000022 AND [trk_num]<=9)
+if (@sum_volume_107000022_gun is null) set @sum_volume_107000022_gun = 0;
+
+declare @sum_volume_107000022_ns float  = (select sum((fs.[stop_counter] - fs.[start_counter])) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000022 AND [trk_num]>9)
+if (@sum_volume_107000022_ns is null) set @sum_volume_107000022_ns = 0;
+
+declare @sum_volume_107000022 float = @sum_volume_107000022_gun+@sum_volume_107000022_ns;
+if (@sum_volume_107000022 is null) set @sum_volume_107000022 = 0;
+
 declare @sum_volume_107000023 float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
 	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000023)
-declare @sum_volume_107000024 float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
-	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000024)
-declare @sum_volume_107000027 float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
-	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000027)
+if (@sum_volume_107000023 is null) set @sum_volume_107000023 = 0;
+
+declare @sum_volume_107000024_gun float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000024 AND [trk_num]<=9)
+if (@sum_volume_107000024_gun is null) set @sum_volume_107000024_gun = 0;
+
+declare @sum_volume_107000024_ns float  = (select sum((fs.[stop_counter] - fs.[start_counter])) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000024 AND [trk_num]>9)
+if (@sum_volume_107000024_ns is null) set @sum_volume_107000024_ns = 0;
+
+declare @sum_volume_107000024 float = @sum_volume_107000024_gun + @sum_volume_107000024_ns;
+if (@sum_volume_107000024 is null) set @sum_volume_107000024 = 0;
+
+declare @sum_volume_107000027_gun float  = (select sum((fs.[stop_counter] - fs.[start_counter])/100.0) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000027 AND [trk_num]<=9)
+if (@sum_volume_107000027_gun is null) set @sum_volume_107000027_gun = 0;
+
+declare @sum_volume_107000027_ns float  = (select sum((fs.[stop_counter] - fs.[start_counter])) 
+	FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs 
+	where fs.[stop_datetime] is not null AND fs.[start_datetime] >= @date_start AND fs.[start_datetime] <= @date_stop AND [fuel_type]=107000027 AND [trk_num]>9)
+if (@sum_volume_107000027_ns is null) set @sum_volume_107000027_ns = 0;
+
+declare @sum_volume_107000027 float = @sum_volume_107000027_gun + @sum_volume_107000027_ns;
+if (@sum_volume_107000027 is null) set @sum_volume_107000027 = 0;
+
 --> !!! Проверка
 --select  @sum_volume_107000022,@sum_volume_107000023,@sum_volume_107000024,@sum_volume_107000027
 --> Произведем расчет средней плотности, объема и массы выдачи
@@ -165,8 +200,8 @@ SELECT fs.[id]
       ,fs.[stop_counter]
 	  ,[dens_avg_delivery] = (CASE WHEN (select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')<>0 THEN ((select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')*1000+(select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')*1000)/2 ELSE 0 END)
 	  --,[dens_avg_delivery] = ((select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')*1000+(select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')*1000)/2
-	  ,[volume_delivery] = (fs.[stop_counter] - fs.[start_counter])/100.0
-	  ,[mass_delivery] = (CASE WHEN (select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')<>0 THEN ((fs.[stop_counter] - fs.[start_counter])/100.0)*(((select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')*1000+(select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')*1000)/2)*0.001 ELSE 0 END)
+	  ,[volume_delivery] = (case when fs.[trk_num]>9 then (fs.[stop_counter] - fs.[start_counter]) else (fs.[stop_counter] - fs.[start_counter])/100.0 end)
+	  ,[mass_delivery] = (CASE WHEN (select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')<>0 THEN (case when fs.[trk_num]>9 then (fs.[stop_counter] - fs.[start_counter]) else (fs.[stop_counter] - fs.[start_counter])/100.0 end)*(((select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')*1000+(select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')*1000)/2)*0.001 ELSE 0 END)
 	  --,[mass_delivery] = ((fs.[stop_counter] - fs.[start_counter])/100.0)*(((select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Start')*1000+(select sum(tv.mass) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')/(select sum(tv.volume) from @tank_value as tv where tv.id_event = fs.id and tv.[event]=N'Stop')*1000)/2)*0.001
 	  ,[temp_delivery] = (fs.[start_temp]+fs.[stop_temp])/2
   FROM [ASU_AZSoperations].[dbo].[FuelSale] as fs
