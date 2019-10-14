@@ -5,26 +5,7 @@
         date_stop = null,
         naks = [],
         tankers = [],
-        //langs = $.extend(true, $.extend(true, getLanguages($.Text_View, lang), getLanguages($.Text_Common, lang)), getLanguages($.Text_Table, lang)),
-        // Загрузка библиотек
-        //loadReference = function (callback) {
-        //    LockScreen("Загрузка справочников...");
-        //    var count = 1;
-        //    // Загрузка списка карточек (common.js)
-        //    getReference_azsCards(function (result) {
-        //        reference_cards = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    })
-        //},
-        // список карточек
-        //reference_cards = null,
-        //// Типы отчетов
+        // Типы отчетов
         tab_type_reports = {
             html_div: $("#tabs-reports"),
             active: 0,
@@ -136,6 +117,8 @@
             select_id: null,
             list: [],
             groupColumn: 0,
+            table_html: "",
+            table_foot_html: "",
             // Инициализировать таблицу
             initObject: function () {
                 this.obj = this.html_table.DataTable({
@@ -163,11 +146,12 @@
                             // Сумма по наклодным
                             var nak = getObjects(naks, 'num', row.railway_num_nak);
                             if (nak === null || nak.length === 0) {
-                                naks.push({ 'num': row.railway_num_nak, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0 });
+                                naks.push({ 'num': row.railway_num_nak, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
                             } else {
                                 naks.forEach(function (row_nak, i) {
                                     if (row_nak.num === row.railway_num_nak) {
-                                        naks[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0
+                                        naks[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0;
+                                        naks[i].count += 1;
                                     }
                                 });
                             }
@@ -176,11 +160,12 @@
                             if (tanker === null || tanker.length === 0) {
                                 total_nakl += row.railway_nak_mass;
                                 total_manual += row.railway_manual_mass;
-                                tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0 });
+                                tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
                             } else {
                                 tankers.forEach(function (row_tank, i) {
                                     if (row_tank.num === row.railway_num_tanker) {
-                                        tankers[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0
+                                        tankers[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0;
+                                        tankers[i].count += 1;
                                     }
                                 });
                             }
@@ -190,10 +175,28 @@
                         tankers.forEach(function (row_sum_tanks, i) {
                             total_change += row_sum_tanks.sum;
                         });
+
+                        table_report.table_foot_html = "<tfoot>" +
+                            "<tr>" +
+                            "<td class='total-footr numbe'>" + total_nakl + "</td>" +
+                            "<td colspan='3'></td>" +
+                            "<td class='total-foot numbe'>" + total_manual + "</td>" +
+                            "<td colspan='5'></td>" +
+                            "<td class='total-foot numbe'>" + total_change + "</td>" +
+                            "<td class='total-foot numbe'>" + total_change + "</td>" +
+                            "<td class='total-foot numbe'>" + (total_change !== 0 ? Number(((total_manual - total_change) / total_change) * 100.0).toFixed(3) : 0) + "</td>" +
+                            "<td class='total-foot numbe'>" + (total_change !== 0 ? Number(((total_nakl - total_change) / total_change) * 100.0).toFixed(3) : 0) + "</td>" +
+                            "<td class='total-foot numbe'>" + (total_nakl !== 0 ? Number(((total_manual - total_nakl) / total_nakl) * 100.0).toFixed(3) : 0) + "</td>" +
+                            "</tr>" +
+                            "</tfoot>";
+
                         $('td#total-nakl').text(total_nakl);
                         $('td#total-manual').text(total_manual);
                         $('td#total-change').text(total_change);
-                        $('td#razniza-change').text(total_change-total_nakl + '('+(total_change-total_manual)+')');
+                        $('td#total-change-all').text(total_change);
+                        $('td#total-deviation-manual-sys').text(total_change !== 0 ? Number(((total_manual - total_change) / total_change) * 100.0).toFixed(3) : 0);
+                        $('td#total-deviation-nakl-sys').text(total_change !== 0 ? Number(((total_nakl - total_change) / total_change) * 100.0).toFixed(3) : 0);
+                        $('td#total-deviation-manual-nakl').text(total_nakl !== 0 ? Number(((total_manual - total_nakl) / total_nakl) * 100.0).toFixed(3) : 0);
                     },
                     columns: [
                         { data: "group", title: "Группа", width: "50px", orderable: true, searchable: false },
@@ -212,6 +215,11 @@
                         { data: "stop_tank", title: "Конец", width: "150px", orderable: false, searchable: false },
                         { data: "stop_mass", title: "Масса в конце (кг.)", width: "50px", orderable: false, searchable: false },
                         { data: "change_mass", title: "Приняли (кг.)", width: "50px", orderable: false, searchable: false },
+                        { data: "change_mass_all", title: "Приняли итого (кг.)", width: "50px", orderable: false, searchable: false },
+                        { data: "deviation_manual_sys", title: "Погрешности массы ручного замера и системы (%)", width: "50px", orderable: false, searchable: false },
+                        { data: "deviation_nakl_sys", title: "Погрешности массы по накладной и системы (%)", width: "50px", orderable: false, searchable: false },
+                        { data: "deviation_manual_nakl", title: "Погрешности массы ручной замер и накладная (%)", width: "50px", orderable: false, searchable: false },
+
                     ],
                     "columnDefs": [
                         { "visible": false, "targets": table_report.groupColumn }
@@ -222,7 +230,7 @@
                         var rows = api.rows({ page: 'current' }).nodes();
                         var last = null;
                         var last_nak = null;
-
+                        table_report.table_html = "";
                         api.column([table_report.groupColumn], { page: 'current' }).data().each(function (group, i) {
 
                             var type_fuel = api.column(1).data()[i];
@@ -242,10 +250,12 @@
 
                             if (last_nak !== num_nak) {
                                 var nak = getObjects(naks, 'num', num_nak);
-                                
+
                                 $(rows).eq(i).before(
-                                    '<tr class="nakladnaya"><td colspan="10">Тип ГСМ - ' + type_fuel + ' Накладная №' + num_nak + '</td><td>' + nak[0].sum + '</td></tr>'
+                                    '<tr class="nakladnaya"><td colspan="10" class="left">Тип ГСМ - ' + type_fuel + ' Накладная №' + num_nak + '</td><td>' + nak[0].sum + '</td><td></td><td></td><td></td><td></td></tr>'
                                 );
+                                table_report.table_html += '<tr class="nakladnaya"><td colspan="10" class="left">Тип ГСМ - ' + type_fuel + ' Накладная №' + num_nak + '</td><td class="number">' + nak[0].sum + '</td><td></td><td></td><td></td><td></td></tr>';
+
                                 last_nak = num_nak;
                             }
 
@@ -253,38 +263,51 @@
                                 var num_tanker = api.column(3).data()[i];
                                 var tanker = getObjects(tankers, 'num', num_tanker);
                                 $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="10"> Цистерна №' + num_tanker + '</td><td>' + tanker[0].sum + '</td></tr>'
+                                    //'<tr class="group"><td colspan="10"> Цистерна №' + num_tanker + '</td><td>' + tanker[0].sum + '</td><td></td><td></td><td></td><td></td></tr>'
+                                    '<tr class="group"><td colspan="15" class="left"> Цистерна №' + num_tanker + '</td></tr>'
                                 );
+                                table_report.table_html += '<tr class="group"><td colspan="15" class="left"> Цистерна №' + num_tanker + '</td></tr>';
                                 var raz_treb = Number(tanker[0].sum - Number(nak_mass));
                                 var raz_manual = Number(tanker[0].sum - Number(manual_mass));
                                 $(rows).eq(i).before(
-                                    '<tr class=""><td>' + nak_mass + '</td><td>' + manual_level + '</td><td>' + manual_volume + '</td><td>' + manual_dens + '</td><td>' + manual_mass + '</td><td colspan="5" class="razniza-txt">Расхождения накладная (ручные замеры) :</td><td class="razniza">' + raz_treb + '(' + raz_manual + ')' + '</td></tr>'
+                                    //'<tr class=""><td rowspan="' + nak[0].count + '">' + nak_mass + '</td><td rowspan="' + nak[0].count + '">' + manual_level + '</td><td rowspan="' + nak[0].count + '">' + manual_volume + '</td><td rowspan="' + nak[0].count + '">' + manual_dens + '</td><td rowspan="' + nak[0].count +'">' + manual_mass + '</td><td colspan="5" class="razniza-txt">Расхождения накладная (ручные замеры) :</td><td class="razniza">' + raz_treb + '(' + raz_manual + ')' + '</td></tr>'
+                                    '<tr class=""><td rowspan="' + tanker[0].count + '">' + nak_mass + '</td><td rowspan="' + tanker[0].count + '">' + manual_level + '</td><td rowspan="' + tanker[0].count + '">' + manual_volume + '</td><td rowspan="' + tanker[0].count + '">' + manual_dens + '</td><td rowspan="' + tanker[0].count + '">' + manual_mass + '</td><td>' + num + '</td><td>' + start_tank + '</td><td>' + start_mass + '</td><td>' + stop_tank + '</td><td>' + stop_mass + '</td><td>' + change_mass + '</td><td rowspan="' + tanker[0].count + '">' + tanker[0].sum + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '">' + Number(((manual_mass - tanker[0].sum) / tanker[0].sum) * 100.0).toFixed(3) + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '">' + Number(((nak_mass - tanker[0].sum) / tanker[0].sum) * 100.0).toFixed(3) + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '">' + Number(((manual_mass - nak_mass) / nak_mass) * 100.0).toFixed(3) + '</td></tr>'
                                 );
+                                table_report.table_html += '<tr class=""><td rowspan="' + tanker[0].count + '" class="number">' + nak_mass + '</td><td rowspan="' + tanker[0].count + '" class="number">' + manual_level + '</td><td rowspan="' + tanker[0].count + '" class="number">' + manual_volume + '</td><td rowspan="' + tanker[0].count + '" class="number">' + manual_dens + '</td><td rowspan="' + tanker[0].count + '" class="number">' + manual_mass + '</td><td>' + num + '</td><td>' + start_tank + '</td><td class="number">' + start_mass + '</td><td>' + stop_tank + '</td><td class="number">' + stop_mass + '</td><td class="number">' + change_mass + '</td><td rowspan="' + tanker[0].count + '" class="number">' + tanker[0].sum + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '" class="number">' + Number(((manual_mass - tanker[0].sum) / tanker[0].sum) * 100.0).toFixed(3) + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '" class="number">' + Number(((nak_mass - tanker[0].sum) / tanker[0].sum) * 100.0).toFixed(3) + '</td>' +
+                                    '<td rowspan="' + tanker[0].count + '" class="number">' + Number(((manual_mass - nak_mass) / nak_mass) * 100.0).toFixed(3) + '</td></tr>'
                                 last = group;
+                            } else {
+                                $(rows).eq(i).before(
+                                    //'<tr class=""><td colspan="5"></td><td>' + num + '</td><td>' + start_tank + '</td><td>' + start_mass + '</td><td>' + stop_tank + '</td><td>' + stop_mass + '</td><td>' + change_mass + '</td></tr>'
+                                    '<tr class=""><td>' + num + '</td><td>' + start_tank + '</td><td>' + start_mass + '</td><td>' + stop_tank + '</td><td>' + stop_mass + '</td><td>' + change_mass + '</td></tr>'
+                                );
+                                table_report.table_html += '<tr class=""><td>' + num + '</td><td>' + start_tank + '</td><td class="number">' + start_mass + '</td><td>' + stop_tank + '</td><td class="number">' + stop_mass + '</td><td class="number">' + change_mass + '</td></tr>';
                             }
-                            $(rows).eq(i).before(
-                                '<tr class=""><td colspan="5"></td><td>' + num + '</td><td>' + start_tank + '</td><td>' + start_mass + '</td><td>' + stop_tank + '</td><td>' + stop_mass + '</td><td>' + change_mass + '</td></tr>'
-                            );
+
                             $(rows).eq(i).detach();
                         });
-                        
+
                     },
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                        //{
-                        //    extend: 'pdfHtml5',
-                        //    text: 'PDF',
-                        //    pageSize: 'LEGAL',
-                        //    orientation: 'landscape',
-                        //    customize: function (doc) {
-                        //        doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                        //        //var tblBody = doc.content[1].table.body;
-                        //        //tblBody[0][2].text = 'Тип ГСМ';
-                        //        //tblBody[0][8].text = 'Тип Выдачи';
-                        //    }
-                        //}
+                        //'excelHtml5',
+                        {
+
+                            text: 'Excel',
+
+                            action: function (e, dt, node, conf) {
+
+                                table_report.exportTable();
+
+                            }
+
+                        }
                     ]
                 });
             },
@@ -323,14 +346,54 @@
                         "railway_manual_dens": data[i].railway_manual_dens,
                         "railway_manual_mass": data[i].railway_manual_mass,
                         "num": data[i].num,
-                        "start_tank": data[i].start_tank,
-                        "start_mass": data[i].start_mass != null ? data[i].start_mass.toFixed(2) : null,
-                        "stop_tank": data[i].stop_tank,
-                        "stop_mass": data[i].stop_mass != null ? data[i].stop_mass.toFixed(2) : null,
-                        "change_mass": data[i].start_mass != null && data[i].stop_mass != null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ'
+                        "start_tank": toCorrectDateTime(data[i].start_tank),
+                        "start_mass": data[i].start_mass !== null ? data[i].start_mass.toFixed(2) : null,
+                        "stop_tank": toCorrectDateTime(data[i].stop_tank),
+                        "stop_mass": data[i].stop_mass !== null ? data[i].stop_mass.toFixed(2) : null,
+                        "change_mass": data[i].start_mass !== null && data[i].stop_mass !== null ? (data[i].stop_mass - data[i].start_mass).toFixed(2) : 'Прием ГСМ',
+                        "change_mass_all": null,
+                        "deviation_manual_sys": null,
+                        "deviation_nakl_sys": null,
+                        "deviation_manual_nakl": null
                     });
                 }
                 LockScreenOff();
+            },
+            // Экспорт в excel
+            exportTable: function () {
+                var css = "table {border-collapse: collapse;border: 1px solid black; font-size:14px;}" +
+                    "table caption {font-weight:bold; font-size:14px;}" +
+                    "tr { height: auto }" +
+                    "th { border: 1px solid black;}" +
+                    "td { border: 1px solid black;}" +
+                    "table td {text-align: right;border: 1px solid black;}" +
+                    "table td.left, .table-shift-report th.title-foot {text-align: left;}" +
+                    "table th.title-foot, .table-shift-report td.total-foot {color:#0b23a7;font-weight: bold;}" +
+                    "table td.number {mso-displayed-decimal-separator:'\,'; mso-number-format: '0.000';}";
+
+                var tab = "<table>" +
+                    "<caption>" + "Сменный отчёт приёма топлива в резервуары с " + toISOStringTZ(date_start).substring(0, 19) + " по " + toISOStringTZ(date_stop).substring(0, 19) + "</caption>"+
+                    "<thead>" +
+                    "<tr>" +
+                    "<th>Масса по накл (кг.)</th>" +
+                    "<th>Уровень р.з.</th>" +
+                    "<th>Объем р.з.</th>" +
+                    "<th>Плотность р.з.</th>" +
+                    "<th>Масса р.з.</th>" +
+                    "<th>Резервуар</th>" +
+                    "<th>Начало</th>" +
+                    "<th>Масса в начале (кг.)</th>" +
+                    "<th>Конец</th>" +
+                    "<th>Масса в конце (кг.)</th>" +
+                    "<th>Приняли (кг.)</th>" +
+                    "<th>Приняли итого (кг.)</th>" +
+                    "<th>Погрешности массы ручного замера и системы (%)</th>" +
+                    "<th>Погрешности массы по накладной и системы (%)</th>" +
+                    "<th>Погрешности массы ручной замер и накладная (%)</th>" +
+                    "</tr>" +
+                    "</thead>" +
+                    "<tbody>" + table_report.table_html + "</tbody>" + table_report.table_foot_html + "</table>";
+                fnExcelReport1("Отчет", tab, css, "Сменный отчёт приёма топлива в резервуары с " + toISOStringTZ(date_start).substring(0, 19) + " по "+toISOStringTZ(date_stop).substring(0, 19)); //
             }
         };
 
@@ -343,10 +406,7 @@
     //-----------------------------------------------------------------------------------------
     panel_select_report.initObject();
     tab_type_reports.initObject();
-    //// Загрузка библиотек
-    //loadReference(function (result) {
     table_report.initObject();
     panel_select_report.viewReport();
-    //});
 
 });

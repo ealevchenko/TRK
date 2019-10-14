@@ -34,7 +34,7 @@ namespace WebUI.Controllers.api
         public string operator_name { get; set; }
         public int smena_num { get; set; }
         public DateTime smena_datetime { get; set; }
-        public int? railway_num_nak { get; set; }
+        public string railway_num_nak { get; set; }
         public int? railway_num_tanker { get; set; }
         public string railway_provider { get; set; }
         public string railway_type_capacity { get; set; }
@@ -361,7 +361,6 @@ namespace WebUI.Controllers.api
                     "FROM dbo.ReceivingFuel as rf INNER JOIN dbo.ReceivingFuelTanks as rft ON rf.id = rft.id_receiving_fuel " +
                     "where rf.type = " + type.ToString() + " and rf.start_datetime >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and rf.start_datetime <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
                     "ORDER BY rft.fuel, rf.start_datetime, rft.num";
-
                 List<RF_Report> list = this.ef_rf.Database.SqlQuery<RF_Report>(sql).ToList();
                 if (list == null)
                 {

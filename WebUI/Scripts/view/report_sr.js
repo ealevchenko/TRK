@@ -396,14 +396,13 @@
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                       //{
-                       //    extend: 'pdfHtml5',
-                       //    text: 'PDF',
-                       //    customize: function (doc) {
-                       //        doc.content[0].text = 'Сменный отчет ТРК-пистолеты(АС) (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                       //    }
-                       //}
+                        {
+                            extend: 'excelHtml5',
+                            sheetName: 'ТРК отчет',
+                            messageTop: function () {
+                                return 'Период отчета с ' + (date_start !== null ? toISOStringTZ(date_start).split('T').join(' ') : '') + ' по ' + (date_stop !== null ? toISOStringTZ(date_stop).split('T').join(' ') : '');
+                            }
+                        }
                     ]
                 });
                 //table_report.groupTable();
@@ -811,14 +810,13 @@
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                        //{
-                        //    extend: 'pdfHtml5',
-                        //    text: 'PDF',
-                        //    customize: function (doc) {
-                        //        doc.content[0].text = 'Сменный отчет емкостя (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                        //    }
-                        //}
+                        {
+                            extend: 'excelHtml5',
+                            sheetName: 'Емкости отчет',
+                            messageTop: function () {
+                                return 'Период отчета с ' + (date_start !== null ? toISOStringTZ(date_start).split('T').join(' ') : '') + ' по ' + (date_stop !== null ? toISOStringTZ(date_stop).split('T').join(' ') : '');
+                            }
+                        }
                     ]
                 });
                 //table_report_fft.groupTable();

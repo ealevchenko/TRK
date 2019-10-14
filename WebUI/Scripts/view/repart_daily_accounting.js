@@ -146,36 +146,12 @@
                     //dom: 'Bftripl',
                     buttons: [
                         'copyHtml5',
-                        //'excelHtml5',
                         {
                             extend: 'excelHtml5',
-                            //title: 'Заголовок_title',
-                            message: 'Заголовок_message',
-                            //text: 'Save as Excel',
-
-                            //exportOptions: {
-                            //    modifier: {
-                            //        page: 'all'
-                            //    },
-                            //    format: {
-                            //        header: function (data, columnIdx) {
-                            //            if (columnIdx == 1) {
-                            //                return 'column_1_header';
-                            //            }
-                            //            else {
-                            //                return data;
-                            //            }
-                            //        }
-                            //    }
-                            //}
-
-                            customize: function (xlsx) {
-                                //var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                                //sheet = 'sheet2.xml';
-                                //$('cellXfs', sheet).append('<xf ... />');
-                                //$('row:first c', sheet).append($('<div>rrrrrrrrrrrrrrr</div>'));
+                            sheetName: 'Суточный',
+                            messageTop: function () {
+                                return 'Период отчета с ' + (panel_select_report.date_start !== null ? toISOStringTZ(panel_select_report.date_start).split('T').join(' ') : '') + ' по ' + (panel_select_report.date_stop !== null ? toISOStringTZ(panel_select_report.date_stop).split('T').join(' ') : '');
                             }
-
                         }
                     ]
                 });
@@ -340,7 +316,11 @@
                     dom: 'Blftipr',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
+                        {
+                            extend: 'excelHtml5',
+                            sheetName: 'Суточный детально',
+                            messageTop: 'Период отчета за ' + (data.date_start !== null ? data.date_start.split('T').join(' ') : ''),
+                        }
                     ]
                 });
 

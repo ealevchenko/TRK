@@ -294,19 +294,13 @@
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                        //{
-                        //    extend: 'pdfHtml5',
-                        //    text: 'PDF',
-                        //    pageSize: 'LEGAL',
-                        //    orientation: 'landscape',
-                        //    customize: function (doc) {
-                        //        doc.content[0].text = 'Заправочная ведомость (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                        //        var tblBody = doc.content[1].table.body;
-                        //        tblBody[0][4].text = 'Тип ГСМ';
-                        //        tblBody[0][10].text = 'Тип Выдачи';
-                        //    }
-                        //}
+                        {
+                            extend: 'excelHtml5',
+                            sheetName: 'Заправочная ведомость',
+                            messageTop: function () {
+                                return 'Период отчета с ' + (date_start !== null ? toISOStringTZ(date_start).split('T').join(' ') : '') + ' по ' + (date_stop !== null ? toISOStringTZ(date_stop).split('T').join(' ') : '');
+                            }
+                        }
                     ]
                     //buttons: [
                     //    {

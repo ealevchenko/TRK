@@ -109,7 +109,7 @@
                         { value: 21, text: "По состоянию на 21:00" },
                         { value: 22, text: "По состоянию на 22:00" },
                         { value: 23, text: "По состоянию на 23:00" }
-                        ],
+                    ],
                     null,
                     1,
                     function (event, ui) {
@@ -203,35 +203,35 @@
                         total_tank_dt_volume = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "ДТ - 107000024") {
+                                if (b.fuel_type === "ДТ - 107000024") {
                                     return intVal(a) + intVal(b.volume);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_a92_volume = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "А92 - 107000022") {
+                                if (b.fuel_type === "А92 - 107000022") {
                                     return intVal(a) + intVal(b.volume);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_a95_volume = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "А95 - 107000023") {
+                                if (b.fuel_type === "А95 - 107000023") {
                                     return intVal(a) + intVal(b.volume);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_kerosin_volume = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "Керосин - 107000027") {
+                                if (b.fuel_type === "Керосин - 107000027") {
                                     return intVal(a) + intVal(b.volume);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_konfiskat_volume = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "Конфискат") {
+                                if (b.fuel_type === "Конфискат") {
                                     return intVal(a) + intVal(b.volume);
                                 } else { return intVal(a); }
                             }, 0);
@@ -240,35 +240,35 @@
                         total_tank_dt_mass = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "ДТ - 107000024") {
+                                if (b.fuel_type === "ДТ - 107000024") {
                                     return intVal(a) + intVal(b.mass);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_a92_mass = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "А92 - 107000022") {
+                                if (b.fuel_type === "А92 - 107000022") {
                                     return intVal(a) + intVal(b.mass);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_a95_mass = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "А95 - 107000023") {
+                                if (b.fuel_type === "А95 - 107000023") {
                                     return intVal(a) + intVal(b.mass);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_kerosin_mass = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "Керосин - 107000027") {
+                                if (b.fuel_type === "Керосин - 107000027") {
                                     return intVal(a) + intVal(b.mass);
                                 } else { return intVal(a); }
                             }, 0);
                         total_tank_konfiskat_mass = api
                             .data()
                             .reduce(function (a, b) {
-                                if (b.type === "Конфискат") {
+                                if (b.fuel_type === "Конфискат") {
                                     return intVal(a) + intVal(b.mass);
                                 } else { return intVal(a); }
                             }, 0);
@@ -277,11 +277,11 @@
                         $('td#total-mass-tank').text((total_tank_dt_mass + total_tank_a92_mass + total_tank_a95_mass + total_tank_kerosin_mass + total_tank_konfiskat_mass).toFixed(2));
                     },
                     columns: [
-                        { data: "type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
+                        { data: "fuel_type", title: "Тип ГСМ", width: "50px", orderable: true, searchable: false },
                         { data: "tank", title: "Резервуар", width: "50px", orderable: true, searchable: false },
                         { data: "level", title: "Уровень (см)", width: "100px", orderable: false, searchable: false },
                         { data: "volume", title: "Объем (л)", width: "100px", orderable: false, searchable: false },
-                        { data: "dens", title: "Плотность (кг/м3)", width: "100px", orderable: false, searchable: false },
+                        { data: "dens_avg", title: "Плотность (кг/м3)", width: "100px", orderable: false, searchable: false },
                         { data: "mass", title: "Масса (кг)", width: "100px", orderable: false, searchable: false },
                     ],
                     "columnDefs": [
@@ -296,32 +296,61 @@
                         api.column(table_report.groupColumn, { page: 'current' }).data().each(function (group, i) {
                             var valume;
                             var mass;
+                            var tr_volume;
+                            var tr_mass;
+                            var tr_dens;
+                            //- А - 92 - m=3447, 4 кг, p = 753, 2 кг / м3;
+                            //- А - 95 - m=2975.47 кг, p = 762.16 кг / м3;
+                            //- Дизель - m=5704,3 кг, p = 842, 46 кг / м3;
+                            //- Керосин - m=2149, 9 кг, p = 804 кг / м3;
+                            //declare @pipeline_volume_107000022 int = 4577;
+                            //declare @pipeline_volume_107000023 int = 3904;
+                            //declare @pipeline_volume_107000024 int = 6771;
+                            //declare @pipeline_volume_107000027 int = 2674;
                             switch (type) {
                                 case "ДТ - 107000024":
+                                    //tr_volume = 6771.0;
+                                    //tr_mass = 5704.3;
+                                    //tr_dens = 842.46;
                                     valume = total_tank_dt_volume;
                                     mass = total_tank_dt_mass;
                                     break;
                                 case "А92 - 107000022":
+                                    //tr_volume = 4577.0;
+                                    //tr_mass = 3447.4;
+                                    //tr_dens = 753.2;
                                     valume = total_tank_a92_volume;
                                     mass = total_tank_a92_mass;
                                     break;
                                 case "А95 - 107000023":
+                                    //tr_volume = 3904.0;
+                                    //tr_mass = 2975.47;
+                                    //tr_dens = 762.16;
                                     valume = total_tank_a95_volume;
                                     mass = total_tank_a95_mass;
                                     break;
                                 case "Керосин - 107000027":
+                                    //tr_volume = 2674.0;
+                                    //tr_mass = 2149.9;
+                                    //tr_dens = 804;
                                     valume = total_tank_kerosin_volume;
                                     mass = total_tank_kerosin_mass;
                                     break;
                                 case "Конфискат":
-                                    valume = total_tank_konfiskat_volume;
+                                    //tr_volume = 0.0;
+                                    //tr_mass = 0.0;
+                                    //tr_dens = 0.0;
+                                    valume = total_tank_konfiskat_volum;
                                     mass = total_tank_konfiskat_mass;
                                     break;
                             }
                             if (last !== group) {
                                 if (type !== null) {
+                                    //$(rows).eq(i).before(
+                                    //    '<tr class=""><td colspan="1">Трубопровод:</td><td></td><td>' + tr_volume.toFixed(3) + '</td><td>' + tr_dens.toFixed(5)+'</td><td>' + tr_mass.toFixed(2)+'</td></tr>'
+                                    //);
                                     $(rows).eq(i).before(
-                                        '<tr class="group"><td colspan="2">' + type + ' Итого:</td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
+                                        '<tr class="group"><td colspan="1">' + type + ' Итого:<td></td></td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
                                     );
                                 }
                                 type = group;
@@ -334,22 +363,25 @@
                                 valume = total_tank_konfiskat_volume;
                                 mass = total_tank_konfiskat_mass;
                                 $(rows).eq(i).after(
-                                    '<tr class="group"><td colspan="2">' + type + ' Итого:</td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
+                                    '<tr class="group"><td colspan="1">' + type + ' Итого:<td></td></td><td>' + valume.toFixed(3) + '</td><td></td><td>' + mass.toFixed(2) + '</td></tr>'
                                 );
+                                //$(rows).eq(i).after(
+                                //    '<tr class=""><td colspan="1">Трубопровод:</td><td></td><td></td><td></td><td></td></tr>'
+                                //);
                             }
                         });
                     },
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                        //{
-                        //    extend: 'pdfHtml5',
-                        //    text: 'PDF',
-                        //    customize: function (doc) {
-                        //        doc.content[0].text = 'Остатки в емкостях АЗС на ' + toISOStringTZ(date_start);
-                        //    }
-                        //}
+                        {
+                            extend: 'excelHtml5',
+                            sheetName: 'Остатки',
+                            messageTop: function () {
+                                return 'По сотоянию на ' + (date_start !== null ? toISOStringTZ(date_start).split('T').join(' ') : '');
+
+                            }
+                        }
                     ]
                 });
                 //table_report.groupTable();
@@ -359,7 +391,8 @@
                 LockScreen('Мы обрабатываем ваш запрос...');
                 if (this.list === null | data_refresh === true) {
                     // Обновим данные
-                    getAsyncViewReportTROfDateTime(
+                    //getAsyncViewReportTROfDateTime(
+                    getAsyncViewReportTSOfDate(
                         date_start,
                         function (result) {
                             table_report.list = result;
@@ -378,12 +411,20 @@
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
                     this.obj.row.add({
-                        "type": data[i].type !== 0 ? outFuelType(data[i].type) + ' - ' + data[i].type : outFuelType(data[i].type),
-                        "tank": data[i].tank,
+                        "id": data[i].id,
+                        "id_table": data[i].id_table,
+                        "dt": data[i].dt,
+                        "fuel_type": data[i].fuel_type !== 0 ? outFuelType(data[i].fuel_type) + ' - ' + data[i].fuel_type : outFuelType(data[i].fuel_type),
+                        "tank": $.trim(data[i].tank) === "PL" ? "Трубопровод" : data[i].tank,
+                        "fill_percent": data[i].fill_percent,
                         "level": (data[i].level !== null ? Number(data[i].level / 1000).toFixed(3) : null),
                         "volume": (data[i].volume !== null ? data[i].volume.toFixed(3) : null),
-                        "dens": (data[i].dens !== null ? data[i].dens.toFixed(5) : null),
-                        "mass": (data[i].mass !== null ? data[i].mass.toFixed(2) : null)
+                        "mass": (data[i].mass !== null ? data[i].mass.toFixed(2) : null),
+                        "dens": data[i].dens,
+                        "dens_avg": (data[i].dens_avg !== null ? data[i].dens_avg.toFixed(5) : null),
+                        "temp": data[i].temp,
+                        "water_leve": data[i].water_leve,
+                        "water_volume": data[i].water_volume,
                     });
                 }
                 LockScreenOff();

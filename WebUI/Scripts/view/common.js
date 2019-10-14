@@ -1056,6 +1056,793 @@ var tanks_status = [
         "water_volume": 0.0
     }
 ];
+// TODO:!!!ТЕСТ УБРАТЬ
+var tanks_status_pl = [
+    {
+        "id": 1,
+        "id_table": 2347522,
+        "dt": "2019-10-13T23:59:50.037",
+        "fuel_type": 0,
+        "tank": "B13",
+        "fill_percent": 2.5886663683150593,
+        "level": 17349.0,
+        "volume": 1851.0,
+        "mass": 1544.08,
+        "dens": 829.975766,
+        "dens_avg": 834.18692598595351,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 5,
+        "id_table": 2924364,
+        "dt": "2019-10-13T23:59:51.467",
+        "fuel_type": 107000022,
+        "tank": "B11",
+        "fill_percent": 23.563315816240042,
+        "level": 81890.0,
+        "volume": 16680.0,
+        "mass": 12547.07,
+        "dens": 748.963561,
+        "dens_avg": 752.22242206235012,
+        "temp": 14.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 6,
+        "id_table": 2670605,
+        "dt": "2019-10-13T23:59:51.943",
+        "fuel_type": 107000022,
+        "tank": "B16",
+        "fill_percent": 0.0,
+        "level": 0.0,
+        "volume": 0.0,
+        "mass": 0.0,
+        "dens": 0.0,
+        "dens_avg": 0.0,
+        "temp": 0.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 2,
+        "id_table": 2889605,
+        "dt": "2019-10-13T23:59:51.363",
+        "fuel_type": 107000022,
+        "tank": "B2 ",
+        "fill_percent": 98.9284309870232,
+        "level": 257246.0,
+        "volume": 70441.0,
+        "mass": 52671.07,
+        "dens": 747.058765,
+        "dens_avg": 747.73313837111914,
+        "temp": 14.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 3,
+        "id_table": 2966456,
+        "dt": "2019-10-13T23:59:51.023",
+        "fuel_type": 107000022,
+        "tank": "B3 ",
+        "fill_percent": 61.366911507520115,
+        "level": 164128.0,
+        "volume": 43862.0,
+        "mass": 32805.07,
+        "dens": 749.705786,
+        "dens_avg": 747.91550772878566,
+        "temp": 13.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 4,
+        "id_table": 2592639,
+        "dt": "2019-10-13T23:59:51.477",
+        "fuel_type": 107000022,
+        "tank": "B9 ",
+        "fill_percent": 0.0,
+        "level": 0.0,
+        "volume": 0.0,
+        "mass": 0.0,
+        "dens": 0.0,
+        "dens_avg": 0.0,
+        "temp": 0.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 46,
+        "id_table": 107000022,
+        "dt": "2019-10-14T00:00:00",
+        "fuel_type": 107000022,
+        "tank": "PL ",
+        "fill_percent": null,
+        "level": null,
+        "volume": 4577.0,
+        "mass": 3447.4,
+        "dens": 753.2,
+        "dens_avg": 753.2,
+        "temp": null,
+        "water_level": null,
+        "water_volume": null
+    },
+    {
+        "id": 7,
+        "id_table": 2670605,
+        "dt": "2019-10-13T23:59:51.03",
+        "fuel_type": 107000023,
+        "tank": "B17",
+        "fill_percent": 0.0,
+        "level": 0.0,
+        "volume": 0.0,
+        "mass": 0.0,
+        "dens": 0.0,
+        "dens_avg": 0.0,
+        "temp": 0.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 8,
+        "id_table": 2906142,
+        "dt": "2019-10-13T23:59:50.63",
+        "fuel_type": 107000023,
+        "tank": "B18",
+        "fill_percent": 98.545870663429071,
+        "level": 256585.0,
+        "volume": 70616.0,
+        "mass": 53508.07,
+        "dens": 757.864957,
+        "dens_avg": 757.732950039651,
+        "temp": 13.1,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 9,
+        "id_table": 2967899,
+        "dt": "2019-10-13T23:59:51.487",
+        "fuel_type": 107000023,
+        "tank": "B19",
+        "fill_percent": 68.402705152339124,
+        "level": 178621.0,
+        "volume": 49055.0,
+        "mass": 37145.07,
+        "dens": 756.947456,
+        "dens_avg": 757.21272041585974,
+        "temp": 12.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 10,
+        "id_table": 2940514,
+        "dt": "2019-10-13T23:59:51.673",
+        "fuel_type": 107000023,
+        "tank": "B20",
+        "fill_percent": 10.824742268041238,
+        "level": 45942.0,
+        "volume": 7749.0,
+        "mass": 5878.07,
+        "dens": 759.607708,
+        "dens_avg": 758.55852368047488,
+        "temp": 13.8,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 47,
+        "id_table": 107000023,
+        "dt": "2019-10-14T00:00:00",
+        "fuel_type": 107000023,
+        "tank": "PL ",
+        "fill_percent": null,
+        "level": null,
+        "volume": 3904.0,
+        "mass": 2975.47,
+        "dens": 762.16,
+        "dens_avg": 762.16,
+        "temp": null,
+        "water_level": null,
+        "water_volume": null
+    },
+    {
+        "id": 11,
+        "id_table": 2976775,
+        "dt": "2019-10-13T23:59:50.93",
+        "fuel_type": 107000024,
+        "tank": "01 ",
+        "fill_percent": 15.663913462747892,
+        "level": 58514.0,
+        "volume": 11208.0,
+        "mass": 9354.08,
+        "dens": 834.106166,
+        "dens_avg": 834.589578872234,
+        "temp": 15.7,
+        "water_level": 66.0,
+        "water_volume": 5.0
+    },
+    {
+        "id": 12,
+        "id_table": 2976405,
+        "dt": "2019-10-13T23:59:51.433",
+        "fuel_type": 107000024,
+        "tank": "02 ",
+        "fill_percent": 13.935565382185724,
+        "level": 55406.0,
+        "volume": 9927.0,
+        "mass": 8271.08,
+        "dens": 833.747049,
+        "dens_avg": 833.1902891105068,
+        "temp": 14.9,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 13,
+        "id_table": 2941973,
+        "dt": "2019-10-13T23:59:50.437",
+        "fuel_type": 107000024,
+        "tank": "03 ",
+        "fill_percent": 13.637691440971498,
+        "level": 52197.0,
+        "volume": 9804.0,
+        "mass": 8188.08,
+        "dens": 835.725884,
+        "dens_avg": 835.17747858017128,
+        "temp": 14.8,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 14,
+        "id_table": 2976207,
+        "dt": "2019-10-13T23:59:51.923",
+        "fuel_type": 107000024,
+        "tank": "04 ",
+        "fill_percent": 13.408079929276061,
+        "level": 53209.0,
+        "volume": 9554.0,
+        "mass": 7989.08,
+        "dens": 836.529449,
+        "dens_avg": 836.20263763868536,
+        "temp": 14.6,
+        "water_level": 12.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 15,
+        "id_table": 2942215,
+        "dt": "2019-10-13T23:59:51.497",
+        "fuel_type": 107000024,
+        "tank": "05 ",
+        "fill_percent": 12.907835198856871,
+        "level": 51728.0,
+        "volume": 9214.0,
+        "mass": 7694.08,
+        "dens": 835.354208,
+        "dens_avg": 835.04232689385719,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 16,
+        "id_table": 2949297,
+        "dt": "2019-10-13T23:59:51.177",
+        "fuel_type": 107000024,
+        "tank": "06 ",
+        "fill_percent": 13.033304082570725,
+        "level": 51457.0,
+        "volume": 9357.0,
+        "mass": 7825.08,
+        "dens": 837.179367,
+        "dens_avg": 836.28085924975949,
+        "temp": 14.7,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 17,
+        "id_table": 2950626,
+        "dt": "2019-10-13T23:59:51.983",
+        "fuel_type": 107000024,
+        "tank": "07 ",
+        "fill_percent": 12.16059637317996,
+        "level": 49474.0,
+        "volume": 8711.0,
+        "mass": 7279.08,
+        "dens": 836.122866,
+        "dens_avg": 835.61933187923307,
+        "temp": 14.8,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 18,
+        "id_table": 2949294,
+        "dt": "2019-10-13T23:59:51.497",
+        "fuel_type": 107000024,
+        "tank": "08 ",
+        "fill_percent": 13.385079294170204,
+        "level": 53146.0,
+        "volume": 9588.0,
+        "mass": 8016.08,
+        "dens": 835.540852,
+        "dens_avg": 836.05340008343762,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 19,
+        "id_table": 2949307,
+        "dt": "2019-10-13T23:59:51.61",
+        "fuel_type": 107000024,
+        "tank": "09 ",
+        "fill_percent": 13.255107089842369,
+        "level": 54037.0,
+        "volume": 9376.0,
+        "mass": 7845.08,
+        "dens": 836.981546,
+        "dens_avg": 836.71928327645048,
+        "temp": 14.7,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 20,
+        "id_table": 2949475,
+        "dt": "2019-10-13T23:59:51.527",
+        "fuel_type": 107000024,
+        "tank": "10 ",
+        "fill_percent": 13.543771043771043,
+        "level": 54115.0,
+        "volume": 9654.0,
+        "mass": 8070.08,
+        "dens": 836.532469,
+        "dens_avg": 835.93122021959812,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 21,
+        "id_table": 2952595,
+        "dt": "2019-10-13T23:59:51.727",
+        "fuel_type": 107000024,
+        "tank": "11 ",
+        "fill_percent": 12.652068126520682,
+        "level": 53414.0,
+        "volume": 8996.0,
+        "mass": 7509.08,
+        "dens": 835.297307,
+        "dens_avg": 834.71320586927527,
+        "temp": 14.6,
+        "water_level": 104.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 22,
+        "id_table": 2943022,
+        "dt": "2019-10-13T23:59:50.323",
+        "fuel_type": 107000024,
+        "tank": "12 ",
+        "fill_percent": 13.48145649760389,
+        "level": 54328.0,
+        "volume": 9593.0,
+        "mass": 8005.08,
+        "dens": 832.84557,
+        "dens_avg": 834.47096841446887,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 23,
+        "id_table": 2946558,
+        "dt": "2019-10-13T23:59:51.947",
+        "fuel_type": 107000024,
+        "tank": "13 ",
+        "fill_percent": 50.059438065535709,
+        "level": 139046.0,
+        "volume": 35794.0,
+        "mass": 29974.08,
+        "dens": 836.758233,
+        "dens_avg": 837.40515170140247,
+        "temp": 13.3,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 24,
+        "id_table": 2933834,
+        "dt": "2019-10-13T23:59:50.323",
+        "fuel_type": 107000024,
+        "tank": "14 ",
+        "fill_percent": 14.114485882700505,
+        "level": 55069.0,
+        "volume": 10033.0,
+        "mass": 8353.08,
+        "dens": 832.894903,
+        "dens_avg": 832.56055018439145,
+        "temp": 15.9,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 25,
+        "id_table": 2933909,
+        "dt": "2019-10-13T23:59:51.043",
+        "fuel_type": 107000024,
+        "tank": "15 ",
+        "fill_percent": 14.047724997218824,
+        "level": 53589.0,
+        "volume": 10102.0,
+        "mass": 8406.08,
+        "dens": 832.202911,
+        "dens_avg": 832.12037220352408,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 26,
+        "id_table": 2932899,
+        "dt": "2019-10-13T23:59:51.413",
+        "fuel_type": 107000024,
+        "tank": "16 ",
+        "fill_percent": 12.287970092623592,
+        "level": 49640.0,
+        "volume": 8809.0,
+        "mass": 7325.08,
+        "dens": 831.576396,
+        "dens_avg": 831.545010784425,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 27,
+        "id_table": 2933850,
+        "dt": "2019-10-13T23:59:50.417",
+        "fuel_type": 107000024,
+        "tank": "17 ",
+        "fill_percent": 11.883401766128579,
+        "level": 50759.0,
+        "volume": 8451.0,
+        "mass": 7022.08,
+        "dens": 831.16888,
+        "dens_avg": 830.91705123654,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 28,
+        "id_table": 2975231,
+        "dt": "2019-10-13T23:59:51.777",
+        "fuel_type": 107000024,
+        "tank": "18 ",
+        "fill_percent": 12.227621663497429,
+        "level": 51006.0,
+        "volume": 8681.0,
+        "mass": 7242.08,
+        "dens": 832.972902,
+        "dens_avg": 834.24490266098371,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 29,
+        "id_table": 2975218,
+        "dt": "2019-10-13T23:59:51.3",
+        "fuel_type": 107000024,
+        "tank": "19 ",
+        "fill_percent": 12.155397208316483,
+        "level": 50135.0,
+        "volume": 8717.0,
+        "mass": 7229.08,
+        "dens": 829.417748,
+        "dens_avg": 829.30824825054492,
+        "temp": 14.2,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 30,
+        "id_table": 2975504,
+        "dt": "2019-10-13T23:59:51.933",
+        "fuel_type": 107000024,
+        "tank": "20 ",
+        "fill_percent": 11.153342800657145,
+        "level": 47116.0,
+        "volume": 8011.0,
+        "mass": 6651.08,
+        "dens": 830.066478,
+        "dens_avg": 830.243415303957,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 31,
+        "id_table": 2975734,
+        "dt": "2019-10-13T23:59:51.31",
+        "fuel_type": 107000024,
+        "tank": "21 ",
+        "fill_percent": 10.770160666844717,
+        "level": 46946.0,
+        "volume": 7662.0,
+        "mass": 6372.08,
+        "dens": 833.003256,
+        "dens_avg": 831.647089532759,
+        "temp": 14.6,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 32,
+        "id_table": 2975234,
+        "dt": "2019-10-13T23:59:52.003",
+        "fuel_type": 107000024,
+        "tank": "22 ",
+        "fill_percent": 12.04282268643243,
+        "level": 50097.0,
+        "volume": 8538.0,
+        "mass": 7067.08,
+        "dens": 827.387795,
+        "dens_avg": 827.72077769969542,
+        "temp": 14.3,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 33,
+        "id_table": 2976237,
+        "dt": "2019-10-13T23:59:51.517",
+        "fuel_type": 107000024,
+        "tank": "23 ",
+        "fill_percent": 11.661305795384008,
+        "level": 50326.0,
+        "volume": 8266.0,
+        "mass": 6888.08,
+        "dens": 833.14798,
+        "dens_avg": 833.30268570045973,
+        "temp": 14.7,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 34,
+        "id_table": 2976243,
+        "dt": "2019-10-13T23:59:51.747",
+        "fuel_type": 107000024,
+        "tank": "24 ",
+        "fill_percent": 12.011020058192655,
+        "level": 49642.0,
+        "volume": 8545.0,
+        "mass": 7112.08,
+        "dens": 832.841673,
+        "dens_avg": 832.30895260386194,
+        "temp": 14.7,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 35,
+        "id_table": 2973578,
+        "dt": "2019-10-13T23:59:51.61",
+        "fuel_type": 107000024,
+        "tank": "25 ",
+        "fill_percent": 12.335785785087046,
+        "level": 50354.0,
+        "volume": 8836.0,
+        "mass": 7369.08,
+        "dens": 833.06931,
+        "dens_avg": 833.9837030330466,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 36,
+        "id_table": 2932457,
+        "dt": "2019-10-13T23:59:51.467",
+        "fuel_type": 107000024,
+        "tank": "26 ",
+        "fill_percent": 13.231027958797561,
+        "level": 53834.0,
+        "volume": 9441.0,
+        "mass": 7851.08,
+        "dens": 833.452086,
+        "dens_avg": 831.59411079334814,
+        "temp": 14.4,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 37,
+        "id_table": 2883514,
+        "dt": "2019-10-13T23:59:51.487",
+        "fuel_type": 107000024,
+        "tank": "27 ",
+        "fill_percent": 12.212414179627295,
+        "level": 49977.0,
+        "volume": 8716.0,
+        "mass": 7287.08,
+        "dens": 835.441615,
+        "dens_avg": 836.05782469022483,
+        "temp": 15.9,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 38,
+        "id_table": 2883522,
+        "dt": "2019-10-13T23:59:51.547",
+        "fuel_type": 107000024,
+        "tank": "28 ",
+        "fill_percent": 11.153431448055676,
+        "level": 46623.0,
+        "volume": 7965.0,
+        "mass": 6633.08,
+        "dens": 832.90429,
+        "dens_avg": 832.77840552416831,
+        "temp": 14.8,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 39,
+        "id_table": 2883641,
+        "dt": "2019-10-13T23:59:51.923",
+        "fuel_type": 107000024,
+        "tank": "29 ",
+        "fill_percent": 11.189055980285081,
+        "level": 48110.0,
+        "volume": 7991.0,
+        "mass": 6702.08,
+        "dens": 836.648191,
+        "dens_avg": 838.7035414841697,
+        "temp": 14.5,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 40,
+        "id_table": 2883522,
+        "dt": "2019-10-13T23:59:51.61",
+        "fuel_type": 107000024,
+        "tank": "30 ",
+        "fill_percent": 13.041395440583877,
+        "level": 53940.0,
+        "volume": 9256.0,
+        "mass": 7719.08,
+        "dens": 834.747537,
+        "dens_avg": 833.95419187554023,
+        "temp": 14.0,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 41,
+        "id_table": 2943842,
+        "dt": "2019-10-13T23:59:51.767",
+        "fuel_type": 107000024,
+        "tank": "31 ",
+        "fill_percent": 12.862855138547879,
+        "level": 52951.0,
+        "volume": 9168.0,
+        "mass": 7649.08,
+        "dens": 834.820295,
+        "dens_avg": 834.32373472949382,
+        "temp": 13.9,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 42,
+        "id_table": 2943838,
+        "dt": "2019-10-13T23:59:50.383",
+        "fuel_type": 107000024,
+        "tank": "32 ",
+        "fill_percent": 11.954193557419048,
+        "level": 49044.0,
+        "volume": 8539.0,
+        "mass": 7120.08,
+        "dens": 833.180489,
+        "dens_avg": 833.83065932779016,
+        "temp": 14.1,
+        "water_level": 57.0,
+        "water_volume": 1.0
+    },
+    {
+        "id": 48,
+        "id_table": 107000024,
+        "dt": "2019-10-14T00:00:00",
+        "fuel_type": 107000024,
+        "tank": "PL ",
+        "fill_percent": null,
+        "level": null,
+        "volume": 6771.0,
+        "mass": 5704.3,
+        "dens": 842.46,
+        "dens_avg": 842.46,
+        "temp": null,
+        "water_level": null,
+        "water_volume": null
+    },
+    {
+        "id": 43,
+        "id_table": 2967909,
+        "dt": "2019-10-13T23:59:51.83",
+        "fuel_type": 107000027,
+        "tank": "33 ",
+        "fill_percent": 12.498081618416464,
+        "level": 50577.0,
+        "volume": 8958.0,
+        "mass": 7137.07,
+        "dens": 796.719688,
+        "dens_avg": 796.72583165885237,
+        "temp": 14.1,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 44,
+        "id_table": 2875324,
+        "dt": "2019-10-13T23:59:50.99",
+        "fuel_type": 107000027,
+        "tank": "38 ",
+        "fill_percent": 100.0,
+        "level": 264412.0,
+        "volume": 71840.0,
+        "mass": 57445.07,
+        "dens": 799.417585,
+        "dens_avg": 799.62513919821822,
+        "temp": 13.3,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 45,
+        "id_table": 2875273,
+        "dt": "2019-10-13T23:59:51.693",
+        "fuel_type": 107000027,
+        "tank": "39 ",
+        "fill_percent": 33.805832307175642,
+        "level": 104273.0,
+        "volume": 24159.0,
+        "mass": 19348.07,
+        "dens": 799.462865,
+        "dens_avg": 800.86386025911668,
+        "temp": 13.4,
+        "water_level": 0.0,
+        "water_volume": 0.0
+    },
+    {
+        "id": 49,
+        "id_table": 107000027,
+        "dt": "2019-10-14T00:00:00",
+        "fuel_type": 107000027,
+        "tank": "PL ",
+        "fill_percent": null,
+        "level": null,
+        "volume": 2674.0,
+        "mass": 2149.9,
+        "dens": 842.46,
+        "dens_avg": 804.0,
+        "temp": null,
+        "water_level": null,
+        "water_volume": null
+    }
+];
 
 //=========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================================================
 var ntanks_alarm_high = Number(tanks_alarm_high);       //Аварийная уставка высокий
@@ -1113,7 +1900,7 @@ var ozm_bak = {
         },
         {
             type: 107000027, // Керосин
-            tanks: [{ value: '33', text: '3' }, { value: '38', text: '38' }, { value: '39', text: '39' }]
+            tanks: [{ value: '33', text: '33' }, { value: '38', text: '38' }, { value: '39', text: '39' }]
         }
     ],
     // Вернуть список емкостей по типу
@@ -1198,10 +1985,33 @@ var getChildObjects = function (obj, key, val) {
 /* ----------------------------------------------------------
     Общие спомогательные функции
 -------------------------------------------------------------*/
+//------------------------------------------------------------------------
+// Определение параметров переданных по url
+$.extend({
+    getUrlVars: function () {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    },
+    getUrlVar: function (name) {
+        return $.getUrlVars()[name];
+    }
+});
+
 // Коррекция вывода даты с учетом зоны
 var toISOStringTZ = function (date) {
     return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
 };
+
+var toCorrectDateTime = function (datetime) {
+    return datetime.split('T').join(' ');
+};
+
 var StringToDate = function (datestring) {
     //yyyy-mm-ddThh:mm:ss
     //0123456789012345678
@@ -1266,7 +2076,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
     if (value_select == -1) {
         options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
     }
-    if (data != null) {
+    if (data !== null) {
         for (i = 0, count_data_select = data.length; i < count_data_select; i++) {
             var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled }
             // Преобразовать формат
@@ -1289,7 +2099,7 @@ var initSelect = function (obj_select, property, data, callback_option, value_se
         icons: { button: "ui-icon ui-icon-circle-triangle-s" },
         width: property.width,
         change: event_change,
-    }).selectmenu("menuWidget").addClass("overflow");;
+    }).selectmenu("menuWidget").addClass("overflow");
     // Заполним селект 
     obj_select.append(options.join(""))
         .val(value_select)
@@ -3379,6 +4189,38 @@ var getAsyncViewReportTSOfDateTime = function (callback) {
         }
     });
 };
+// Состояние емкостей
+var getAsyncViewReportTSOfDate = function (date, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/azs/report/tanks_status/date/' + toISOStringTZ(date).substring(0, 19),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            // TODO:!!!ТЕСТ УБРАТЬ
+            if (ntype_test === 2 || ntype_test === 1) {
+                if (typeof callback === 'function') {
+                    callback(tanks_status_pl);
+                }
+            } else {
+                OnFunctionAJAXError('getAsyncViewReportTSOfDateTime', x, y, z);
+            }
+
+
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+};
 
 // Суточный репорт (новый)
 var getAsyncViewDailyAccountingReportOfDateTime = function (start, stop, callback) {
@@ -3517,6 +4359,57 @@ function fnExcelReport(tab, name_file) {
         }
     } else {
         $('#test').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+        $('#test').attr('download', file_name);
+    }
+}
+
+//-------------------------------------------------------------------------
+// Экспорт отчетов в Excel
+function fnExcelReport1(name_tab, tab, css, name_file) {
+    var file_name = name_file + '.xls';
+    var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+    tab_text = tab_text + '<head>';
+    tab_text = tab_text + '<xml>';
+    tab_text = tab_text + '<x:ExcelWorkbook>';
+    tab_text = tab_text + '<x:ExcelWorksheets>';
+    tab_text = tab_text + '<x:ExcelWorksheet>';
+    tab_text = tab_text + '<x:Name>' + name_tab + '</x:Name>';
+    tab_text = tab_text + '<x:WorksheetOptions>';
+    tab_text = tab_text + '<x:Panes></x:Panes>';
+    tab_text = tab_text + '</x:WorksheetOptions>';
+    tab_text = tab_text + '</x:ExcelWorksheet>';
+    tab_text = tab_text + '</x:ExcelWorksheets>';
+
+    tab_text = tab_text + '</x:ExcelWorkbook>';
+    tab_text = tab_text + '</xml>';
+
+    tab_text = tab_text + '<style>' + css + '</style>';
+
+    tab_text = tab_text + '</head><body>';
+
+    //tab_text = tab_text + "<table>";
+    //var tab = $('#table-list-wagons-tracking').html();
+    tab_text = tab_text + tab;
+    //tab_text = tab_text + '</table>';
+
+    tab_text = tab_text + '</body></html>';
+
+    tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+    tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        if (window.navigator.msSaveBlob) {
+            var blob = new Blob([tab_text], {
+                type: "application/csv;charset=utf-8;"
+            });
+            navigator.msSaveOrOpenBlob(blob, file_name);
+        }
+    } else {
+        $('#test').attr('href', 'data:application/vnd.ms-excel' + ', ' + encodeURIComponent(tab_text));
         $('#test').attr('download', file_name);
     }
 }

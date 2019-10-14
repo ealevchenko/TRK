@@ -457,7 +457,7 @@ namespace WebUI.Controllers.api
         {
             try
             {
-                string sql = "select  * from  get_all_tank_value_less_date(getdate()) order by fuel_type, tank";
+                string sql = "select  * from  get_all_tank_value_less_date(getdate(),0) order by fuel_type, tank";
                 List<TS_Report> list = this.ef_ua.Database.SqlQuery<TS_Report>(sql).ToList();
                 if (list == null)
                 {
@@ -472,6 +472,27 @@ namespace WebUI.Controllers.api
             }
         }
 
+        // GET: api/azs/report/tanks_status/date/2019-10-14T00:00:00
+        [Route("report/tanks_status/date/{date:datetime}")]
+        [ResponseType(typeof(TS_Report))]
+        public IHttpActionResult GetCurrentTanksValue(DateTime date)
+        {
+            try
+            {
+                string sql = "select  * from  get_all_tank_value_less_date('"+date.ToString("yyyy-MM-dd HH:mm:ss") +"',1) order by fuel_type, tank";
+                List<TS_Report> list = this.ef_ua.Database.SqlQuery<TS_Report>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода API:GetReportTS()").SaveError(e);
+                return NotFound();
+            }
+        }
 
     }
 }

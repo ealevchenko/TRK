@@ -29,7 +29,8 @@ namespace EFAZS.Entities
 
         public int fuel { get; set; }
 
-        public int? truck_num_nak { get; set; }
+        [StringLength(20)]
+        public string truck_num_nak { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? truck_weight { get; set; }
@@ -37,7 +38,8 @@ namespace EFAZS.Entities
         [StringLength(200)]
         public string truck_provider { get; set; }
 
-        public int? railway_num_nak { get; set; }
+        [StringLength(20)]
+        public string railway_num_nak { get; set; }
 
         public int? railway_num_tanker { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿var showView = function () {
     // Время
     var d = new Date();
-    $('#date-value').text(toISOStringTZ(d)         );
+    $('#date-value').text(toISOStringTZ(d));
     // Обновим данные
     getAsyncViewReportTSOfDateTime(
         function (result) {

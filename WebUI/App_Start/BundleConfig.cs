@@ -41,6 +41,7 @@ namespace WebUI
                 "~/Scripts/pdfmake/pdfmake.min.js",
                 "~/Scripts/pdfmake/vfs_fonts.js"
                 ));
+
             // Плагин таблицы
             bundles.Add(new StyleBundle("~/DataTables/css").Include(
                 "~/Content/DataTables/css/jquery.dataTables.min.css",

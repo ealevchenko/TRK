@@ -1,5 +1,6 @@
 ﻿$(function () {
 
+    allVars = $.getUrlVars();   // Получить параметры get запроса
     var date_curent = new Date(),
         date_start = null,
         date_stop = null,
@@ -49,7 +50,25 @@
             select_sm: $('<select class="ui-widget-content ui-corner-all"></select>'),
             select_type: $('<select id="type-fuel" class="ui-widget-content ui-corner-all"></select>'),
             select_tanks: $('<select id="tanks" class="ui-widget-content ui-corner-all"></select>'),
-            initObject: function () {
+            // Показать график
+            viewGrafik: function () {
+                var d = panel_select_report.select_sm.val();
+                if (panel_select_report.select_sm.val() === "Н") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
+                }
+                if (panel_select_report.select_sm.val() === "Д") {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
+                }
+                if (panel_select_report.select_sm.val() >= 0 && panel_select_report.select_sm.val() <= 23) {
+                    date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 0, 0);
+                    date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 59, 59);
+                }
+                tab_type_reports.activeTable(tab_type_reports.active, true);
+            },
+            // Инициализировать обект
+            initObject: function (type, tank) {
                 this.span.append(this.input_date);
                 obj = this.html_div_panel;
                 obj
@@ -70,20 +89,7 @@
                 this.bt_refresh.text("Обновить...");
 
                 this.bt_refresh.on('click', function () {
-                    if (panel_select_report.select_sm.val() === "Н") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 19, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate() + 1, 6, 59, 59);
-                    }
-                    if (panel_select_report.select_sm.val() === "Д") {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 7, 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), 18, 59, 59);
-                    }
-                    if (panel_select_report.select_sm.val() >= 0 && panel_select_report.select_sm.val() <= 19) {
-                        date_start = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 0, 0);
-                        date_stop = new Date(date_curent.getFullYear(), date_curent.getMonth(), date_curent.getDate(), panel_select_report.select_sm.val(), 59, 59);
-                    }
-
-                    tab_type_reports.activeTable(tab_type_reports.active, true);
+                    panel_select_report.viewGrafik();
                 });
 
                 // Настроим выбор времени
@@ -119,7 +125,7 @@
                         { value: 23, text: "23:00 - 23:59" }
                     ],
                     null,
-                    "Д",
+                    type !== null && tank !== null ? (new Date().getHours()) : "Д",
                     function (event, ui) {
                         event.preventDefault();
                         // Обработать выбор смены
@@ -131,7 +137,7 @@
                     { width: 120 },
                     [{ value: '107000022', text: 'А92' }, { value: '107000023', text: 'А95' }, { value: '107000024', text: 'ДТ' }, { value: '107000027', text: 'Керосин' }],
                     null,
-                    -1,
+                    type !== null ? type : -1,
                     function (event, ui) {
                         event.preventDefault();
 
@@ -144,12 +150,11 @@
                 initSelect(
                     this.select_tanks,
                     { width: 120 },
-                    [],
+                    type !== null ? ozm_bak.getTanks(type) : [],//[],
                     null,
-                    -1,
+                    type !== null && tank !== null ? tank : -1,
                     function (event, ui) {
                         event.preventDefault();
-
                         if (ui.item.value !== '-1') {
                             //
                         }
@@ -219,7 +224,7 @@
                     // Create series
                     function createAxisAndSeries(field, name, opposite, bullet) {
                         var valueAxis = trend_tank.chart.yAxes.push(new am4charts.ValueAxis());
-                        switch(field){
+                        switch (field) {
                             case "level":
                                 valueAxis.min = 0;
                                 valueAxis.max = 3000;
@@ -357,19 +362,7 @@
                     dom: 'Bfrtip',
                     buttons: [
                         'copyHtml5',
-                        'excelHtml5',
-                        //{
-                        //    extend: 'pdfHtml5',
-                        //    text: 'PDF',
-                        //    pageSize: 'LEGAL',
-                        //    //orientation: 'landscape',
-                        //    customize: function (doc) {
-                        //        //doc.content[0].text = 'Прием ГСМ (' + toISOStringTZ(date_start) + ' - ' + toISOStringTZ(date_stop) + ').';
-                        //        //var tblBody = doc.content[1].table.body;
-                        //        //tblBody[0][2].text = 'Тип ГСМ';
-                        //        //tblBody[0][8].text = 'Тип Выдачи';
-                        //    }
-                        //}
+                        'excelHtml5'
                     ]
                 });
 
@@ -443,13 +436,20 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
-    panel_select_report.initObject();
-    tab_type_reports.initObject();
-    //// Загрузка библиотек
-    //loadReference(function (result) {
-    //table_report.initObject();
-    //});
+    if (allVars.type !== undefined && allVars.tank !== undefined) {
+        panel_select_report.initObject(allVars.type, allVars.tank);
+        tab_type_reports.initObject();
+        trend_tank.init();
+        panel_select_report.viewGrafik();
+    } else {
+        panel_select_report.initObject(null, null);
+        tab_type_reports.initObject();
+        trend_tank.init();
 
-    trend_tank.init();
+    }
+
+
+
+
 
 });
