@@ -2545,12 +2545,14 @@ var confirm_df = {
             dens += list_tags[ip].dens;
             water_level += list_tags[ip].water_level;
         }
-        dens = (volume!== 0 ? Number(mass) / Number(volume) * 1000.0 : 0);
+        volume = volume > 0 ? volume * 10 : volume; // скорректируем объем * 10
         volume_sum = volume;
         level = level / count;
-        //mass = mass / count;
+        mass = mass / count;
         temp = temp / count;
         volume = volume / count;
+
+        dens = (volume > 0 ? Number(mass) / Number(volume) * 1000.0 : 0);
         //dens = dens / count;
         water_level = water_level / count;
 
