@@ -181,6 +181,8 @@ namespace ReportTRKServices
                 EFDaily_Accounting_Report ef_dar = new EFDaily_Accounting_Report();
                 EFDaily_Accounting_Detali_Report ef_adr = new EFDaily_Accounting_Detali_Report();
                 Transfer tr = new Transfer();
+                EFTanksLog ef_tl = new EFTanksLog();
+
 
                 string log_mes;
                 DateTime dt = DateTime.Now;
@@ -234,7 +236,18 @@ namespace ReportTRKServices
                         UserName = "ReportTRKServeces",
                         Log = log_mes
                     });
-
+                    // Чистка базы
+                    res = ef_tl.Delete_Tanks();
+                    log_mes = String.Format("Сервис ReportTRKServices - Отработал метод Delete_Tanks - Код выполнения:{0}", res);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
                     time_daily = true;
                 }
                 if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day)
