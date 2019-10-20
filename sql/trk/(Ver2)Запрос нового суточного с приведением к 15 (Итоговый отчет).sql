@@ -2,7 +2,7 @@ USE [ASU_AZSoperations]
 
 
 
-declare @date_start datetime = CONVERT(DATETIME, '2019-07-01 00:00:00', 102);
+declare @date_start datetime = CONVERT(DATETIME, '2019-10-10 00:00:00', 102);
 --> Производить после выполнения ХП 
 --[dbo].[ADD_DeliveryTanks] - выдачи
 --[dbo].[ADD_ReceivingTanks] - Прием
@@ -67,6 +67,7 @@ declare @temp_delivery float
 declare @volume15_delivery float
 declare @mass15_delivery float
 declare @dens15_delivery float
+
 -----------------------------------------------------------------------------------------------------------------------------------
 -->Просчитаем по 107000022
 set @fuel_type = 107000022
@@ -85,6 +86,7 @@ set @temp_delivery =  (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[De
 set @volume15_delivery = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) 
 set @mass15_delivery = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) 
 set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type)*1000
+
 --> Добавим строку
 	insert @Daily_Accounting_Report
 	select 
@@ -123,7 +125,7 @@ set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[De
         ,temp_stop = (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,volume15_stop = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,mass15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) 
-		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) *1000
+		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type) *1000
 		,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 		,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 
@@ -186,7 +188,7 @@ set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[De
         ,temp_stop = (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,volume15_stop = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,mass15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) 
-		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) *1000
+		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type) *1000
 		,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 		,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 
@@ -249,7 +251,7 @@ set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[De
         ,temp_stop = (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,volume15_stop = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,mass15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) 
-		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) *1000
+		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type) *1000
 		,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 		,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 
@@ -274,6 +276,7 @@ set @temp_delivery =  (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[De
 set @volume15_delivery = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) 
 set @mass15_delivery = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) 
 set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[DeliveryTanks] where [dt] = @date_start and [fuel_type]=@fuel_type)*1000
+
 --> Добавим строку
 	insert @Daily_Accounting_Report
 	select 
@@ -312,9 +315,11 @@ set @dens15_delivery = 	(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[De
         ,temp_stop = (select sum([ratio_tv]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,volume15_stop = (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type)
 		,mass15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) 
-		,dens15_stop = (select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) / (select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type) *1000
-		,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
-		,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
+
+
+		,dens15_stop =  (( cast((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) as float)  / cast((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start)	 and [fuel_type]=@fuel_type) as float) ) * 1000.0)
+		,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
+		,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type and [tank] not Like(N'PL%'))-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type and [tank] not Like(N'PL%')))*100.0
 
 		--,permissible_volume15_error = (((select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type)-(CASE WHEN @volume15_delivery is not null THEN @volume15_delivery ELSE 0 END)+(CASE WHEN @volume15_received is not null THEN @volume15_received ELSE 0 END)-(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type))/(select sum([volume15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type))*100.0
 		--,permissible_mass15_error = (((select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type)-(CASE WHEN @mass15_delivery is not null THEN @mass15_delivery ELSE 0 END)+(CASE WHEN @mass15_received is not null THEN @mass15_received ELSE 0 END)-(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = DATEADD(day,+1,@date_start) and [fuel_type]=@fuel_type))/(select sum([mass15]) FROM [ASU_AZSoperations].[dbo].[RemainsTanks] where [dt] = @date_start and [fuel_type]=@fuel_type))*100.0

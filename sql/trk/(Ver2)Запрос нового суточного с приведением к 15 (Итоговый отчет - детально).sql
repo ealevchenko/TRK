@@ -2,7 +2,7 @@ USE [ASU_AZSoperations]
 
 
 
-declare @date_start datetime = CONVERT(DATETIME, '2019-08-13 00:00:00', 102);
+declare @date_start datetime = CONVERT(DATETIME, '2019-08-12 00:00:00', 102);
 --> Производить после выполнения ХП 
 --[dbo].[ADD_DeliveryTanks] - выдачи
 --[dbo].[ADD_ReceivingTanks] - Прием
@@ -221,60 +221,60 @@ SELECT   [dt_start] = @date_start
   where rt.[dt] = @date_start
   order by rt.[fuel_type], rt.[tank]
 
-  insert @daily_accounting_detali
-    ([dt_start],
-	[dt_stop],
-	[fuel_type],
-	[ukt_zed],
-	[tank],
-	[serial_number],
-	[unified_tank_number],
-	[type_name],
-	[level_meters_model],
-	[level_meters_serial_number],
-	[dt_actual_remains_start],
-	[level_remains_start],
-	[volume_remains_start],
-	[dens_remains_start],
-	[dens_avg_remains_start],
-	[mass_remains_start],
-	[temp_remains_start],
-	[relation_remains_start],
-	[ratio_vd_remains_start],
-	[ratio_tv_remains_start],
-	[dens15_remains_start],
-	[volume15_remains_start],
-	[mass15_remains_start],
-	[volume_received],
-	[mass_received],
-	[dens_received],
-	[temp_received],
-	[volume15_received],
-	[mass15_received],
-	[dens15_received],
-	[count_tanks_delivery],
-	[volume_delivery],
-	[mass_delivery],
-	[dens_delivery],
-	[temp_delivery],
-	[volume15_delivery],
-	[mass15_delivery],
-	[dens15_delivery],
-	[dt_actual_remains_stop],
-	[level_remains_stop],
-	[volume_remains_stop],
-	[dens_remains_stop],
-	[dens_avg_remains_stop],
-	[mass_remains_stop],
-	[temp_remains_stop],
-	[relation_remains_stop],
-	[ratio_vd_remains_stop],
-	[ratio_tv_remains_stop],
-	[dens15_remains_stop],
-	[volume15_remains_stop],
-	[mass15_remains_stop],
-	[permissible_volume15_error],
-	[permissible_mass15_error])
+ -- insert @daily_accounting_detali
+ --   ([dt_start],
+	--[dt_stop],
+	--[fuel_type],
+	--[ukt_zed],
+	--[tank],
+	--[serial_number],
+	--[unified_tank_number],
+	--[type_name],
+	--[level_meters_model],
+	--[level_meters_serial_number],
+	--[dt_actual_remains_start],
+	--[level_remains_start],
+	--[volume_remains_start],
+	--[dens_remains_start],
+	--[dens_avg_remains_start],
+	--[mass_remains_start],
+	--[temp_remains_start],
+	--[relation_remains_start],
+	--[ratio_vd_remains_start],
+	--[ratio_tv_remains_start],
+	--[dens15_remains_start],
+	--[volume15_remains_start],
+	--[mass15_remains_start],
+	--[volume_received],
+	--[mass_received],
+	--[dens_received],
+	--[temp_received],
+	--[volume15_received],
+	--[mass15_received],
+	--[dens15_received],
+	--[count_tanks_delivery],
+	--[volume_delivery],
+	--[mass_delivery],
+	--[dens_delivery],
+	--[temp_delivery],
+	--[volume15_delivery],
+	--[mass15_delivery],
+	--[dens15_delivery],
+	--[dt_actual_remains_stop],
+	--[level_remains_stop],
+	--[volume_remains_stop],
+	--[dens_remains_stop],
+	--[dens_avg_remains_stop],
+	--[mass_remains_stop],
+	--[temp_remains_stop],
+	--[relation_remains_stop],
+	--[ratio_vd_remains_stop],
+	--[ratio_tv_remains_stop],
+	--[dens15_remains_stop],
+	--[volume15_remains_stop],
+	--[mass15_remains_stop],
+	--[permissible_volume15_error],
+	--[permissible_mass15_error])
   select 
 	[dt_start]
            ,[dt_stop]
@@ -327,12 +327,12 @@ SELECT   [dt_start] = @date_start
            ,[dens15_remains_stop]
            ,[volume15_remains_stop]
            ,[mass15_remains_stop]
-		   ,permissible_volume15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN 0 ELSE (CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END) END)
-		   ,permissible_mass15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027') THEN 0 ELSE (CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_start])*100 ELSE 0 END) END)
+		   ,permissible_volume15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027' OR [volume15_remains_stop]=0) THEN 0 ELSE (CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_stop])*100 ELSE 0 END) END)
+		   ,permissible_mass15_error = (CASE WHEN ([tank]=N'PL107000022' OR [tank]=N'PL107000023' OR [tank]=N'PL107000024' OR [tank]=N'PL107000027' OR [mass15_remains_stop]=0) THEN 0 ELSE (CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_stop])*100 ELSE 0 END) END)
 
-		   ,permissible_volume15_error_ = CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END
-		   ,permissible_mass15_error_ = CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_start])*100 ELSE 0 END
+		   --,permissible_volume15_error_ = CASE WHEN [volume15_remains_start] <>0 THEN (([volume15_remains_start] - [volume15_delivery]+[volume15_received]-[volume15_remains_stop])/[volume15_remains_start])*100 ELSE 0 END
+		   --,permissible_mass15_error_ = CASE WHEN [mass15_remains_start] <>0 THEN (([mass15_remains_start] - [mass15_delivery]+[mass15_received]-[mass15_remains_stop])/[mass15_remains_start])*100 ELSE 0 END
   --into daily_accounting_detali
   from @temp_report as tr
 
-  select *from  @daily_accounting_detali
+  --select *from  @daily_accounting_detali
