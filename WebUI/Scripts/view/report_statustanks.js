@@ -9,7 +9,7 @@
                 var tank = $.trim(result[ir].tank);
                 var hp = result[ir].fill_percent !== null ? Number(result[ir].fill_percent).toFixed(2) : 0.00;
                 var h = result[ir].level !== null ? Number(result[ir].level/1000).toFixed(2) : 0.00;
-                var w = result[ir].water_level !== null ? Number(result[ir].water_level).toFixed(2) : 0.00;
+                var w = result[ir].water_level !== null ? Number(result[ir].water_level/100).toFixed(2) : 0.00;
                 var v = result[ir].volume !== null ? Number(result[ir].volume).toFixed(3) : 0.000;
                 var m = result[ir].mass !== null ? Number(result[ir].mass).toFixed(3) : 0.000;
                 var pd = result[ir].dens !== null ? Number(result[ir].dens).toFixed(5) : 0.00000; //?????
