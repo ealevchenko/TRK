@@ -101,7 +101,8 @@ namespace test
                 //test_tr.Test_Transfer_RemainsTanksToDC();
                 //test_tr.Test_Transfer_ReceivingTanksToDC();
                 //test_tr.Test_Transfer_Daily_Accounting_Detali_ReportToDC();
-                test_tr.Test_Transfer_Daily_Accounting_ReportToDC();
+                //test_tr.Test_Transfer_Daily_Accounting_ReportToDC();
+                test_tr.Test_Delete();
                 #endregion
 
             }

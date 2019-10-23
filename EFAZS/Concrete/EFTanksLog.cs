@@ -35,7 +35,9 @@ namespace EFAZS.Concrete
             try
             {
                 string sql = "EXEC [dbo].[Delete_Tanks]";
+                this.db.Database.CommandTimeout = 15 * 60;
                 int res = this.db.Database.ExecuteSqlCommand(sql);
+                this.db.Database.CommandTimeout = null;
                 return res;
             }
             catch (Exception e)

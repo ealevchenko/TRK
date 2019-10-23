@@ -354,8 +354,11 @@ namespace WebUI.Controllers.api
 
             try
             {
-                string sql = "SELECT rf.id as id_rf, rf.operator_name, rf.smena_num, rf.smena_datetime, rf.railway_num_nak, rf.railway_num_tanker, rf.railway_provider, rf.railway_type_capacity, " +
-                "rf.railway_nak_volume, rf.railway_nak_dens, rf.railway_nak_mass, rf.railway_manual_level, rf.railway_manual_volume, rf.railway_manual_dens, rf.railway_manual_mass, rf.start_datetime, " +
+                string sql = "SELECT rf.id as id_rf, rf.operator_name, rf.smena_num, rf.smena_datetime, " +
+                    (type==1 ? "rf.railway_num_nak" : "rf.truck_num_nak AS railway_num_nak") +
+                    ", rf.railway_num_tanker, rf.railway_provider, rf.railway_type_capacity, rf.railway_nak_volume, rf.railway_nak_dens, " +
+                    (type==1 ? "rf.railway_nak_mass" : "rf.truck_weight AS railway_nak_mass") +
+                ", rf.railway_manual_level, rf.railway_manual_volume, rf.railway_manual_dens, rf.railway_manual_mass, rf.start_datetime, " +
                 "rf.stop_datetime, rf.[close] as close_rf, rft.id AS id_rft, rft.num, rft.fuel, rft.start_datetime AS start_tank, rft.start_level, rft.start_volume, rft.start_density, rft.start_mass, " +
                 "rft.start_temp, rft.start_water_level, rft.stop_datetime AS stop_tank, rft.stop_level, rft.stop_volume, rft.stop_density, rft.stop_mass, rft.stop_temp, rft.stop_water_level, rft.[close] AS close_rft " +
                     "FROM dbo.ReceivingFuel as rf INNER JOIN dbo.ReceivingFuelTanks as rft ON rf.id = rft.id_receiving_fuel " +

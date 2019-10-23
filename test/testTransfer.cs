@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EFAZS.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,12 @@ namespace test
         {
             Transfer tr = new Transfer();
             int res = tr.Daily_Accounting_ReportToDC();
+        }
+
+        public void Test_Delete()
+        {
+            EFTanksLog tr = new EFTanksLog();
+            int res = tr.Delete_Tanks();
         }
     }
 }
