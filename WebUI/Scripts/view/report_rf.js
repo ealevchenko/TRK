@@ -442,20 +442,19 @@
                                     }
                                 });
                             }
-                            //// Сумма по цистернам
-                            //var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
-                            //if (tanker === null || tanker.length === 0) {
-                            //    total_nakl += row.railway_nak_mass;
-                            //    total_manual += row.railway_manual_mass;
-                            //    tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
-                            //} else {
-                            //    tankers.forEach(function (row_tank, i) {
-                            //        if (row_tank.num === row.railway_num_tanker) {
-                            //            tankers[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0;
-                            //            tankers[i].count += 1;
-                            //        }
-                            //    });
-                            //}
+                            // Сумма по цистернам
+                            var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
+                            if (tanker === null || tanker.length === 0) {
+                                total_nakl += row.railway_nak_mass;
+                                tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
+                            } else {
+                                tankers.forEach(function (row_tank, i) {
+                                    if (row_tank.num === row.railway_num_tanker) {
+                                        tankers[i].sum += row.change_mass !== null ? Number(row.change_mass) : 0;
+                                        tankers[i].count += 1;
+                                    }
+                                });
+                            }
                         });
 
 
