@@ -433,6 +433,7 @@
                             // Сумма по наклодным
                             var nak = getObjects(naks, 'num', row.railway_num_nak);
                             if (nak === null || nak.length === 0) {
+                                total_nakl += row.railway_nak_mass;
                                 naks.push({ 'num': row.railway_num_nak, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
                             } else {
                                 naks.forEach(function (row_nak, i) {
@@ -445,7 +446,7 @@
                             // Сумма по цистернам
                             var tanker = getObjects(tankers, 'num', row.railway_num_tanker);
                             if (tanker === null || tanker.length === 0) {
-                                total_nakl += row.railway_nak_mass;
+                                //total_nakl += row.railway_nak_mass;
                                 tankers.push({ 'num': row.railway_num_tanker, 'sum': row.change_mass !== null ? Number(row.change_mass) : 0, 'count': 1 });
                             } else {
                                 tankers.forEach(function (row_tank, i) {
@@ -458,9 +459,9 @@
                         });
 
 
-                        //tankers.forEach(function (row_sum_tanks, i) {
-                        //    total_change += row_sum_tanks.sum;
-                        //});
+                        tankers.forEach(function (row_sum_tanks, i) {
+                            total_change += row_sum_tanks.sum;
+                        });
 
                         table_report_car.table_foot_html = "<tfoot>" +
                             "<tr>" +
