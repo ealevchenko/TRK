@@ -52,7 +52,7 @@ namespace WebUI
             // Календарь
             bundles.Add(new ScriptBundle("~/bundles/DateTime").Include(
                 "~/Scripts/DateTime/moment.min.js"
-                , "~/Scripts/DateTime/jquery.daterangepicker.js"
+                , "~/Scripts/DateTime/jquery.daterangepicker.min.js"
                 ));
 
             bundles.Add(new StyleBundle("~/DateTime/css").Include("~/Content/DateTime/daterangepicker.css"));
