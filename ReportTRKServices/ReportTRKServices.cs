@@ -32,13 +32,11 @@ namespace ReportTRKServices
             SERVICE_PAUSED = 0x00000007,
         }
 
-        //private bool[] guns_taken = new bool[32] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
-        //private bool[,] trk_rfid = new bool[12, 2]; 
-
+        private bool[] jobs = new bool[24] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
         private bool time_daily = false;
-        private bool time_sm_day = false;
-        private bool time_sm_night = false;
+        //private bool time_sm_day = false;
+        //private bool time_sm_night = false;
 
 
         EFTRKLogs trk_log = new EFTRKLogs();
@@ -183,11 +181,35 @@ namespace ReportTRKServices
                 Transfer tr = new Transfer();
                 EFTanksLog ef_tl = new EFTanksLog();
 
-
                 string log_mes;
                 DateTime dt = DateTime.Now;
                 int h = dt.Hour;
                 int m = dt.Minute;
+                //  В 0:5 сбосить тригеры отработки заданий
+                if (h == 0 && (m >= 5 && m <= 6)) {
+                    // обнулим события
+                    for (int i = 0; i < 24; i++)
+                    {
+                        jobs[i] = false;
+                    }
+                    time_daily = false;
+                }
+                // Сработка события каждый час
+                if (!jobs[h] && (m >= 58 && m <= 59)) {
+                    jobs[h] = true;
+                    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на {0} часов",h);
+                    log_mes.SaveInformation();
+                    trk_log.AddTRKLogs(new TRKLogs()
+                    {
+                        ID = 0,
+                        DateTime = DateTime.Now,
+                        Level = 4,
+                        UserName = "ReportTRKServeces",
+                        Log = log_mes
+                    });
+                    addCounters();
+                }
+
                 if (h == 1 && (m >= 5 && m <= 6) && !time_daily)
                 {
                     String.Format("Сервис ReportTRKServices - сработал таймер на 0 часов").SaveInformation();
@@ -250,42 +272,42 @@ namespace ReportTRKServices
                     });
                     time_daily = true;
                 }
-                if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day)
-                {
-                    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 7 часов");
-                    log_mes.SaveInformation();
-                    trk_log.AddTRKLogs(new TRKLogs()
-                    {
-                        ID = 0,
-                        DateTime = DateTime.Now,
-                        Level = 4,
-                        UserName = "ReportTRKServeces",
-                        Log = log_mes
-                    });
-                    addCounters();
-                    time_sm_day = true;
-                }
-                if (h == 18 && (m >= 58 && m <= 59) && !time_sm_night)
-                {
-                    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 19 часов");
-                    log_mes.SaveInformation();
-                    trk_log.AddTRKLogs(new TRKLogs()
-                    {
-                        ID = 0,
-                        DateTime = DateTime.Now,
-                        Level = 4,
-                        UserName = "ReportTRKServeces",
-                        Log = log_mes
-                    });
-                    addCounters();
-                    time_sm_night = true;
-                }
-                if (h == 23 && (time_daily || time_sm_day || time_sm_night))
-                {
-                    time_daily = false;
-                    time_sm_day = false;
-                    time_sm_night = false;
-                }
+                //if (h == 6 && (m >= 58 && m <= 59) && !time_sm_day)
+                //{
+                //    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 7 часов");
+                //    log_mes.SaveInformation();
+                //    trk_log.AddTRKLogs(new TRKLogs()
+                //    {
+                //        ID = 0,
+                //        DateTime = DateTime.Now,
+                //        Level = 4,
+                //        UserName = "ReportTRKServeces",
+                //        Log = log_mes
+                //    });
+                //    addCounters();
+                //    time_sm_day = true;
+                //}
+                //if (h == 18 && (m >= 58 && m <= 59) && !time_sm_night)
+                //{
+                //    log_mes = String.Format("Сервис ReportTRKServices - сработал таймер на 19 часов");
+                //    log_mes.SaveInformation();
+                //    trk_log.AddTRKLogs(new TRKLogs()
+                //    {
+                //        ID = 0,
+                //        DateTime = DateTime.Now,
+                //        Level = 4,
+                //        UserName = "ReportTRKServeces",
+                //        Log = log_mes
+                //    });
+                //    addCounters();
+                //    time_sm_night = true;
+                //}
+                //if (h == 23 && (time_daily || time_sm_day || time_sm_night))
+                //{
+                //    time_daily = false;
+                //    //time_sm_day = false;
+                //    //time_sm_night = false;
+                //}
             }
             catch (Exception e)
             {
