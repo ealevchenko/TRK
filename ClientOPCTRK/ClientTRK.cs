@@ -380,6 +380,60 @@ namespace ClientOPCTRK
             }
         }
         /// <summary>
+        /// Добавить строки тегов датчика счетчика оборотов наливных стояка №3
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="i"></param>
+        public void AddDIORisers3(ref Opc.Da.Item[] items, ref int i)
+        {
+            try
+            {
+                int num = 3;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "Akon.C" + num + ".Counter"; //UInt16[4]
+                i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".CounterResetable"; //UInt16[4]
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".CountOn"; //UInt16[2]
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".Error"; //UInt16
+                //i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "Akon.C" + num + ".Flow"; //UInt16[2]
+                i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".Flow2"; //float
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".Freq"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".PiontsCount"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".Status"; //UInt16
+                //i++;
+                //items[i] = new Opc.Da.Item();
+                //items[i].ItemName = "Akon.C" + num + ".Temp"; //float
+                //i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "Akon.C" + num + ".TimerLiveOn"; //UInt16[4]
+                i++;
+                items[i] = new Opc.Da.Item();
+                items[i].ItemName = "Akon.C" + num + ".TimerOn"; //UInt16[2]
+                i++;
+
+            }
+            catch (Exception e)
+            {
+                String.Format("Ошибка выполнения метода AddDIORisers(items={0}, i={1}, num={2})", items, i, 3).SaveError(e);
+            }
+        }
+
+        /// <summary>
         /// Добавить строки тегов контакторов наливных стояков 
         /// </summary>
         /// <param name="items"></param>
@@ -1157,7 +1211,7 @@ namespace ClientOPCTRK
                 int i = 0;
                 AddDIORisers(ref items, ref i, 1);
                 AddDIORisers(ref items, ref i, 2);
-                AddDIORisers(ref items, ref i, 3);
+                AddDIORisers3(ref items, ref i); // Переделан на другой стояк
 
                 items = group.AddItems(items);
 
